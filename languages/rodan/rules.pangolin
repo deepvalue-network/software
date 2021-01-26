@@ -25,8 +25,8 @@ LOG_AND: '&&';
 LOG_OR: '||';
 
 // tokens:
-QUOTATION_MARK: '"';
-EVERYTHING_EXCEPT_QUOTATION: ([^"]*);
+QUOTATION_MARK: '+';
+EVERYTHING_EXCEPT_QUOTATION: ([^+]*);
 DOT: '.';
 FIRST_ASSIGN: ':=';
 ASSIGN: '=';

@@ -30,9 +30,9 @@ main:
 tests:
     firstTest:
         decl: myInput|string.
-        assign: myInput, "some value".
+        assign: myInput, "+some value+".
         match: myInput, $stringValue.
-        print: StringValue.
+        print: myInput.
         stop.
     .
 .
