@@ -1,0 +1,202 @@
+codes
+    : code+
+    ;
+
+code
+    : assignment
+    | ifStatement
+    | loop
+    | constants
+    ;
+
+// assignment
+assignment
+    : standardAssignment
+    | unaryAssignment
+    ;
+
+standardAssignment
+    : assignedIDs assignmentOP assignables
+    ;
+
+unaryAssignment
+    : referenceChain unaryOP
+    ;
+
+assignedIDs
+    : assignedID commaAssignedID*
+    ;
+
+commaAssignedID
+    : COMMA assignedID
+    ;
+
+assignmentOP
+    : FIRST_ASSIGN
+    | ASSIGN
+    ;
+
+assignables
+    : assignable commaAssignable*
+    ;
+
+commaAssignable
+    : COMMA assignable
+    ;
+
+referenceChain
+    : ID dotID*
+    ;
+
+dotID
+    : DOT ID
+    ;
+
+unaryOP
+    : PLUS_PLUS
+    | MINUS_MINUS
+    ;
+
+assignedID
+    : referenceChain
+    | valueAtIndex
+    | OMIT
+    | ERR
+    ;
+
+assignable
+    : operationable
+    | statement
+    | listStatement
+    | mapStatement
+    | errorStatement
+    ;
+
+valueAtIndex
+    : referenceChain SQUARE_BRACKET_OPEN statement? SQUARE_BRACKET_CLOSE
+    ;
+
+operationable
+    : value
+    | NIL
+    ;
+
+statement
+    : operationable statementSuffix*
+    | statement statementSuffix+
+    | PARENTHESIS_OPEN statement PARENTHESIS_CLOSE
+    ;
+
+listStatement
+    : SQUARE_BRACKET_OPEN assignables? SQUARE_BRACKET_CLOSE
+    ;
+
+mapStatement
+    : BRACKET_OPEN mapParams? BRACKET_CLOSE
+    ;
+
+errorStatement
+    : ERROR mapStatementReference
+    ;
+
+value
+    : primitive
+    | referenceChain
+    | valueAtIndex
+    | ERR
+    ;
+
+statementSuffix
+    : operator operationable
+    | operator statement
+    ;
+
+mapParams
+    : mapParam commaMapParam*
+    ;
+
+commaMapParam
+    : COMMA mapParam
+    ;
+
+mapStatementReference
+    : referenceChain
+    | mapStatement
+    ;
+
+primitive
+    : INT
+    | FLOAT
+    | BOOL
+    | STRING
+    | UUID
+    ;
+
+operator
+    : arythmeticOP
+    | relationalOP
+    | logicalOP
+    ;
+
+arythmeticOP
+    : PLUS
+    | MINUS
+    | MUL
+    | DIV
+    | MOD
+    ;
+
+relationalOP
+    : LESSER_THAN
+    | LESSER_THAN_OR_EQUAL
+    | GREATER_THAN
+    | GREATER_THAN_OR_EQUAL
+    | EQUAL
+    | NOT_EQUAL
+    ;
+
+logicalOP
+    : AND
+    | OR
+    ;
+
+mapParam
+    : ID COLON assignable
+    ;
+
+// if statement
+ifStatement
+    : IF statement bracketCodes
+    ;
+
+bracketCodes
+    : BRACKET_OPEN bracketCode+ BRACKET_CLOSE
+    ;
+
+bracketCode
+    : code
+    | RETURN assignables
+    ;
+
+// loop
+loop
+    : FOR forStatement? bracketCodes
+    ;
+
+forStatement
+    : forIterator
+    | forListMapStatement
+    ;
+
+forIterator
+    : assignment SEMICOLON statement SEMICOLON assignment
+    ;
+
+forListMapStatement
+    : ID COMMA ID FIRST_ASSIGN standardAssignable
+    ;
+
+// constants
+constants
+    : CONSTANT mapStatementReference
+    ;

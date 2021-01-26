@@ -1,0 +1,3 @@
+myLabel:
+    assign: myVariable, 43.
+.

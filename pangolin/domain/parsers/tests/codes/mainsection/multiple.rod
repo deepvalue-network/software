@@ -1,0 +1,6 @@
+main:
+    add: answer, first, second.
+    print: myVariable.
+    push.
+    assign: myVariable, 43.
+.

@@ -1,0 +1,13 @@
+language:
+    root: myPattern.
+    tokens: "./my/tokens.json".
+    rules: "./my/rules.json".
+    logic: "./my/logic.json".
+    in: MyInputVar.
+    out: MyOutputVar.
+    matches:
+        myFirst: MyTokenVariable, |myExit.
+        mySecond: MyTokenVariable, myEnter|myExit.
+        myThird: MyTokenVariable, myEnter.
+    .
+.

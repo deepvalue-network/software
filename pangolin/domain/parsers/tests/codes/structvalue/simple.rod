@@ -1,0 +1,3 @@
+struct
+    first|int32, 45
+    second|string, "my-string"

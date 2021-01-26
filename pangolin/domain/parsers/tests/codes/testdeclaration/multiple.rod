@@ -1,0 +1,4 @@
+myTest:
+    match: myInput, $myPattern.
+    stop.
+.

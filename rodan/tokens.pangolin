@@ -1,0 +1,98 @@
+program
+    : printCommand
+    | assignment
+    ;
+
+printCommand
+    : CMD_PRINT assignable
+    ;
+
+assignment
+    : assignee assignSymbol assignable
+    ;
+
+assignee
+    : VAL_VARIABLE_PATTERN
+    ;
+
+assignable
+    : logicalOperation
+    | relationalOperation
+    | arythmeticOperation
+    | value
+    ;
+
+logicalOperation
+    : relationalOperation logicalSymbol relationalOperation
+    | OPEN_PARENTHESIS logicalOperation CLOSE_PARENTHESIS
+    ;
+
+relationalOperation
+    : decimalRelationalOperation
+    | intRelationalOperation
+    | OPEN_PARENTHESIS relationalOperation CLOSE_PARENTHESIS
+    ;
+
+decimalRelationalOperation
+    : decimalValue relationalSymbol decimalValue
+    ;
+
+intRelationalOperation
+    : VAL_INT relationalSymbol VAL_INT
+    ;
+
+arythmeticOperation
+    : decimalArythmeticOperation
+    | intArythmeticOperation
+    | OPEN_PARENTHESIS arythmeticOperation CLOSE_PARENTHESIS
+    ;
+
+decimalArythmeticOperation
+    : decimalValue arythmeticSymbol decimalValue
+    ;
+
+intArythmeticOperation
+    : VAL_INT arythmeticSymbol VAL_INT
+    ;
+
+arythmeticSymbol
+    : ARY_ADD
+    | ARY_SUB
+    | ARY_MUL
+    | ARY_DIV
+    | ARY_MOD
+    ;
+
+relationalSymbol
+    : REL_LESS_THAN
+    | REL_LESS_THAN_OR_EQUAL
+    | REL_BIGGER_THAN
+    | REL_BIGGER_THAN_OR_EQUAL
+    | REL_EQUAL
+    | REL_NOT_EQUAL
+    ;
+
+logicalSymbol
+    : LOG_AND
+    | LOG_OR
+    ;
+
+assignSymbol
+    : FIRST_ASSIGN
+    | ASSIGN
+    ;
+
+value
+    : VAL_VARIABLE_PATTERN
+    | VAL_INT
+    | decimalValue
+    | stringValue
+    ;
+
+decimalValue
+    : VAL_INT DOT VAL_INT
+    ;
+
+stringValue
+    : QUOTATION_MARK EVERYTHING_EXCEPT_QUOTATION QUOTATION_MARK
+    ;

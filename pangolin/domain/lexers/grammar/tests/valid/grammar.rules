@@ -1,0 +1,67 @@
+// rules:
+ID: [a-zA-Z]+;
+UUID: [a-f0-9]{8}'-'[a-f0-9]{4}'-'[a-f0-9]{4}'-'[a-f0-9]{4}'-'[a-f0-9]{12};
+INT: [0-9]+;
+
+// constants:
+RETURN: 'return';
+ERROR: 'error';
+CONSTANT: 'constant';
+IF: 'if';
+FOR: 'for';
+
+COMMA: ',';
+DOT: '.';
+SQUARE_BRACKET_OPEN: '[';
+SQUARE_BRACKET_CLOSE: ']';
+BRACKET_OPEN: '{';
+BRACKET_CLOSE: '}';
+PARENTHESIS_OPEN: '(';
+PARENTHESIS_CLOSE: ')';
+COLON: ':';
+SEMICOLON: ';';
+
+// assignment operators:
+ASSIGN: '=';
+FIRST_ASSIGN: ':' ASSIGN;
+
+// variables and primitives:
+ERR: 'err';
+NIL: 'nil';
+FLOAT: INT '.' INT;
+STRING: '"' ([^"]*) '"';
+BOOL: 'true'|'false';
+
+// unary operators:
+PLUS_PLUS: PLUS PLUS;
+MINUS_MINUS: MINUS MINUS;
+
+// arythmetic operators:
+PLUS: '+';
+MINUS: '-';
+MUL: '*';
+DIV: '/';
+MOD: '%';
+
+// relational operators:
+LESSER_THAN: '<';
+LESSER_THAN_OR_EQUAL: '<=';
+GREATER_THAN: '>';
+GREATER_THAN_OR_EQUAL: '>=';
+EQUAL: '==';
+NOT_EQUAL: '!=';
+
+// logical operators:
+AND: '&&';
+OR: '||';
+NOT: '!';
+
+// omit an element:
+OMIT: '_';
+
+// spaces:
+WHITESPACE: [ \t\r\n]+;
+
+// comments:
+SINGLE_LINE_COMMENT: '//' ([^\n]*);
+MULTI_LINE_COMMENT: '/*' ([^(*/)]*) '*/';

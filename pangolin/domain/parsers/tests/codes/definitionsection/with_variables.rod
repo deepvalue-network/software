@@ -1,0 +1,6 @@
+variables:
+    MyVariable|int32.
+    MySecond|string.
+    Third|float64.
+    MyStackframe|stackframe.
+.

@@ -1,0 +1,25 @@
+head:
+    name: my_name.
+    version: 2020.03.04.
+.
+
+main:
+    add: answer, first, second.
+    print: myVariable.
+    push.
+    assign: myVariable, 43.
+    match: myInput, $myPattern.
+    assign: myVariable, 43.
+.
+
+tests:
+    firstTest:
+        match: myInput, $myPattern.
+        stop.
+    .
+
+    secondTest:
+        match: myInput, $myPattern.
+        stop.
+    .
+.

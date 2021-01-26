@@ -1,0 +1,13 @@
+language:
+    root: program.
+    tokens: "./tokens.pangolin".
+    rules: "./rules.pangolin".
+    logic: "./logic.pangolin".
+    in: Input.
+    out: Output.
+    matches:
+        program: CurrentToken, |exitProgram.
+        printCommand: CurrentToken, |exitPrintCommand.
+        stringValue: CurrentToken, |exitStringValue.
+    .
+.

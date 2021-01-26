@@ -1,0 +1,6 @@
+{
+    "root": "program",
+    "tokens": "grammar.tokens",
+    "channels": "grammar.channels",
+    "rules": "grammar.rules"
+}

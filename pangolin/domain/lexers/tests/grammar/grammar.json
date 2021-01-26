@@ -1,0 +1,7 @@
+{
+    "name": "grammar",
+    "root": "codes",
+    "tokens": "grammar.tokens",
+    "channels": "grammar.channels",
+    "rules": "grammar.rules"
+}

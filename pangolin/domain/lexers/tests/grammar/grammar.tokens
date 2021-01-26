@@ -1,0 +1,7 @@
+codes
+    : code+
+    ;
+
+code
+    : ID ASSIGN INT
+    ;

@@ -1,0 +1,28 @@
+head:
+    name: my_name.
+    version: 2020.03.04.
+.
+
+variables:
+    MyVariable|int32.
+    MySecond|string.
+    Third|float64.
+.
+
+labels:
+    myLabel:
+        assign: myVariable, 43.
+    .
+
+    myLabelAgain:
+        print: myVariable.
+        ret.
+    .
+.
+
+main:
+    add: answer, first, second.
+    print: myVariable.
+    push.
+    assign: myVariable, 43.
+.

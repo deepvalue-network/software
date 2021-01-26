@@ -1,0 +1,63 @@
+package linkers
+
+type program struct {
+	app    Application
+	lang   LanguageReference
+	script Script
+}
+
+func createProgramWithApplication(app Application) Program {
+	return createProgramInternally(app, nil, nil)
+}
+
+func createProgramWithLanguage(lang LanguageReference) Program {
+	return createProgramInternally(nil, lang, nil)
+}
+
+func createProgramWithScript(script Script) Program {
+	return createProgramInternally(nil, nil, script)
+}
+
+func createProgramInternally(
+	app Application,
+	lang LanguageReference,
+	script Script,
+) Program {
+	out := program{
+		app:    app,
+		lang:   lang,
+		script: script,
+	}
+
+	return &out
+}
+
+// IsApplication returns true if there is an application, false otherwise
+func (obj *program) IsApplication() bool {
+	return obj.app != nil
+}
+
+// Application returns the application
+func (obj *program) Application() Application {
+	return obj.app
+}
+
+// IsLanguage returns true if there is a language, false otherwise
+func (obj *program) IsLanguage() bool {
+	return obj.lang != nil
+}
+
+// Language returns the language, if any
+func (obj *program) Language() LanguageReference {
+	return obj.lang
+}
+
+// IsScript returns true if there is a script, false otherwise
+func (obj *program) IsScript() bool {
+	return obj.script != nil
+}
+
+// Script returns the script, if any
+func (obj *program) Script() Script {
+	return obj.script
+}

@@ -1,0 +1,3 @@
+constants:
+    assign: MY_FIRST|int32, 32.
+.

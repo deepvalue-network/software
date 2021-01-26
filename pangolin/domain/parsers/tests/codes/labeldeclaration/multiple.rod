@@ -1,0 +1,5 @@
+myLabelAgain:
+    assign: myVariable, 43.
+    print: myVariable.
+    ret.
+.

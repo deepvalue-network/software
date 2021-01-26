@@ -1,0 +1,34 @@
+// commands:
+CMD_PRINT: '#';
+
+// values:
+VAL_VARIABLE_PATTERN: [a-z]{1}[a-zA-Z]+;
+VAL_INT: [0-9]+;
+
+// arythmetic operations:
+ARY_ADD: '+';
+ARY_SUB: '-';
+ARY_MUL: '*';
+ARY_DIV: '/';
+ARY_MOD: '%';
+
+// relational operations:
+REL_LESS_THAN: '<';
+REL_LESS_THAN_OR_EQUAL: '<=';
+REL_BIGGER_THAN: '>';
+REL_BIGGER_THAN_OR_EQUAL: '>=';
+REL_EQUAL: '==';
+REL_NOT_EQUAL: '!=';
+
+// logical operations:
+LOG_AND: '&&';
+LOG_OR: '||';
+
+// tokens:
+QUOTATION_MARK: '"';
+EVERYTHING_EXCEPT_QUOTATION: ([^"]*);
+DOT: '.';
+FIRST_ASSIGN: ':=';
+ASSIGN: '=';
+OPEN_PARENTHESIS: '(';
+CLOSE_PARENTHESIS: '(';

@@ -1,0 +1,365 @@
+program
+    : application
+    | language
+    | script
+    ;
+
+script
+    : SCRIPT COLON scriptValue+ DOT
+    ;
+
+scriptValue
+    : SCRIPT_NAME COLON NAME_PATTERN DOT
+    | SCRIPT_VERSION COLON VERSION_PATTERN DOT
+    | SCRIPT_SCRIPT COLON relativePath DOT
+    | SCRIPT_LANGUAGE COLON relativePath DOT
+    ;
+
+language
+    : LANGUAGE COLON languageValue+ DOT
+    ;
+
+languageValue
+    : LANG_ROOT COLON PATTERN_PATTERN DOT
+    | LANG_TOKENS COLON relativePath DOT
+    | LANG_CHANNELS COLON relativePath DOT
+    | LANG_RULES COLON relativePath DOT
+    | LANG_LOGIC COLON relativePath DOT
+    | IN COLON GLOBAL_VARIABLE_PATTERN DOT
+    | OUT COLON GLOBAL_VARIABLE_PATTERN DOT
+    | EXTENDS COLON singleExtend+ DOT
+    | LANG_PATTERN_MATCHES COLON patternMatch+ DOT
+    ;
+
+singleExtend
+    : relativePath DOT
+    ;
+
+patternMatch
+    : PATTERN_PATTERN COLON GLOBAL_VARIABLE_PATTERN COMMA patternLabels DOT
+    ;
+
+patternLabels
+    : patternLabelEnter patternLabelExit
+    | patternLabelEnter? patternLabelExit
+    | patternLabelEnter patternLabelExit?
+    ;
+
+patternLabelEnter
+    : LABEL_PATTERN
+    ;
+
+patternLabelExit
+    : PIPE LABEL_PATTERN
+    ;
+
+relativePath
+    : QUOTATION folderSection+ QUOTATION
+    ;
+
+folderSection
+    : folderName SLASH
+    | FILE_PATTERN
+    ;
+
+folderName
+    : DOT
+    | DOT DOT
+    | FILE_PATTERN
+    ;
+
+application
+    : headSection definitionSection? labelSection? mainSection testSection?
+    ;
+
+testSection
+    : TESTS COLON testDeclaration+ DOT
+    ;
+
+testDeclaration
+    : TEST_NAME_PATTERN COLON testInstruction+ DOT
+    ;
+
+testInstruction
+    : instruction
+    | START DOT
+    | STOP DOT
+    ;
+
+headSection
+    : HEAD COLON headValue+ DOT
+    ;
+
+headValue
+    : NAME COLON NAME_PATTERN DOT
+    | VERSION COLON VERSION_PATTERN DOT
+    | IMPORTS COLON importSingle+ DOT
+    ;
+
+importSingle
+    : NAME_PATTERN COLON relativePath DOT
+    ;
+
+definitionSection
+    : constantSection variableSection
+    | variableSection
+    | constantSection
+    ;
+
+constantSection
+    : CONSTANTS COLON constantDeclaration+ DOT
+    ;
+
+constantDeclaration
+    : ASSIGN COLON CONSTANT_PATTERN PIPE type COMMA value DOT
+    ;
+
+variableSection
+    : VARIABLES COLON variableDeclaration+ DOT
+    ;
+
+variableDeclaration
+    : variableDirection? GLOBAL_VARIABLE_PATTERN PIPE type DOT
+    ;
+
+variableDirection
+    : variableIncoming
+    | OUT
+    | variableIncoming AND_SIGN OUT
+    | OUT AND_SIGN variableIncoming
+    ;
+
+variableIncoming
+    : IN QUESTION_MARK value
+    | IN
+    ;
+
+labelSection
+    : LABELS COLON labelDeclaration+ DOT
+    ;
+
+labelDeclaration
+    : LABEL_PATTERN COLON labelInstruction+ DOT
+    ;
+
+labelInstruction
+    : instruction
+    | RET DOT
+    ;
+
+mainSection
+    : MAIN COLON instruction+ DOT
+    ;
+
+instruction
+    : variable DOT
+    | operation DOT
+    | print DOT
+    | stackFrame DOT
+    | jump DOT
+    | match DOT
+    | exit DOT
+    | call DOT
+    | token DOT
+    ;
+
+token
+    : CODE_MATCH COLON codeMatch
+    | CODE COLON tokenSection
+    ;
+
+codeMatch
+    : variableName COMMA variableName COMMA GLOBAL_VARIABLE_PATTERN COMMA callPatterns
+    ;
+
+tokenSection
+    : specificTokenCodeWithAmount
+    | specificTokenCode
+    | tokenCode
+    ;
+
+specificTokenCodeWithAmount
+    : variableName COMMA variableName COMMA GLOBAL_VARIABLE_PATTERN COMMA callPattern
+    ;
+
+specificTokenCode
+    : tokenCode COMMA callPattern
+    ;
+
+tokenCode
+    : variableName COMMA GLOBAL_VARIABLE_PATTERN
+    ;
+
+callPatterns
+    : callPattern pipeCallPattern*
+    ;
+
+pipeCallPattern
+    : PIPE callPattern
+    ;
+
+callPattern
+    : COMMERCIAL_A patternOrRule
+    ;
+
+patternOrRule
+    : RULE_PATTERN
+    | PATTERN_PATTERN
+    ;
+
+variable
+    : declaration
+    | assignment
+    | concatenation
+    | DELETE COLON variableName
+    ;
+
+concatenation
+    : CONCAT COLON standardOperation
+    ;
+
+declaration
+    : DECLARE COLON LOCAL_VARIABLE_PATTERN PIPE type
+    ;
+
+assignment
+    : ASSIGN COLON variableName COMMA value
+    ;
+
+value
+    : numericValue
+    | boolValue
+    | stringValue
+    | NIL
+    | variableName
+    ;
+
+numericValue
+    : MINUS? INT
+    | MINUS? floatValue
+    ;
+
+boolValue
+    : TRUE
+    | FALSE
+    ;
+
+floatValue
+    : INT DOT INT
+    ;
+
+stringValue
+    : QUOTATION EVERYTHING_EXCEPT_QUOTATION QUOTATION
+    ;
+
+type
+    : NIL
+    | BOOL
+    | INT_HEIGHT
+    | INT_SIXTEEN
+    | INT_THIRTY_TWO
+    | INT_SIXTY_FOUR
+    | FLOAT_THIRTY_TWO
+    | FLOAT_SIXTY_FOUR
+    | UINT_HEIGHT
+    | UINT_SIXTEEN
+    | UINT_THIRTY_TWO
+    | UINT_SIXTY_FOUR
+    | STRING
+    | STACKFRAME
+    | FRAME
+    | TOKEN
+    ;
+
+operation
+    : arythmetic
+    | relational
+    | logical
+    ;
+
+arythmetic
+    : ADD COLON standardOperation
+    | SUB COLON standardOperation
+    | MUL COLON standardOperation
+    | DIV COLON remainingOperation
+    ;
+
+relational
+    : LESS_THAN COLON standardOperation
+    | EQUAL_INS COLON standardOperation
+    | NOT_EQUAL_INS COLON standardOperation
+    ;
+
+logical
+    : AND COLON standardOperation
+    | OR COLON standardOperation
+    ;
+
+transformOperation
+    : variableName COMMA identifier
+    ;
+
+standardOperation
+    : variableName COMMA identifier COMMA identifier
+    ;
+
+remainingOperation
+    : variableName COMMA variableName COMMA identifier COMMA identifier
+    ;
+
+print
+    : PRINT COLON value
+    ;
+
+match
+    : MATCH COLON identifier matchPattern?
+    ;
+
+matchPattern
+    : COMMA DOLLAR_SIGN PATTERN_PATTERN
+    ;
+
+jump
+    : JUMP COLON PERCENT LABEL_PATTERN
+    | JUMP_IF COLON identifier COMMA PERCENT LABEL_PATTERN
+    ;
+
+exit
+    : EXIT
+    | EXIT_IF COLON identifier
+    ;
+
+call
+    : CALL COLON NAME_PATTERN
+    | CALL_IF COLON identifier COMMA NAME_PATTERN
+    ;
+
+stackFrame
+    : push
+    | pop
+    | frameAssignment
+    ;
+
+push
+    : PUSH COLON variableName
+    | PUSH
+    ;
+
+pop
+    : POP COLON transformOperation
+    | POP
+    ;
+
+frameAssignment
+    : FRAME_ASSIGN COLON standardOperation
+    ;
+
+identifier
+    : variableName
+    | CONSTANT_PATTERN
+    ;
+
+variableName
+    : GLOBAL_VARIABLE_PATTERN
+    | LOCAL_VARIABLE_PATTERN
+    ;

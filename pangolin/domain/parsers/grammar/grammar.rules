@@ -1,0 +1,158 @@
+// rules:
+NAME_PATTERN: [a-z_]+;
+CUSTOM_KEYWORD_PATTERN: [a-z_]+;
+LABEL_PATTERN: [a-zA-Z]+;
+CONSTANT_PATTERN: [A-Z_]+;
+GLOBAL_VARIABLE_PATTERN: [A-Z]{1}[a-z]{1}[a-zA-Z]+;
+LOCAL_VARIABLE_PATTERN: [a-z]{1}[a-zA-Z]+;
+VERSION_PATTERN: [0-9]{4} '.' [0-9]{2} '.' [0-9]{2};
+USER_PATTERN: [0-9a-f]{128};
+LANGUAGE_NAME_PATTERN: [a-z_]+;
+TEST_NAME_PATTERN: [a-zA-Z]+;
+INT: [0-9]+;
+NAME: [a-zA-Z0-9 ]+;
+VERSION: [0-9]{4} '.' [0-9]{2} '.' [0-f9]{2};
+EVERYTHING_EXCEPT_QUOTATION: ([^"]*);
+EXTENSION_PATTERN: [a-z0-9]+;
+EXTENDS_VARIABLE_NAME: [a-z_]+;
+PATTERN_PATTERN: [a-z]{1}[a-zA-Z]+;
+RULE_PATTERN: [A-Z_]+;
+EVERYTHING_EXCEPT_DOT_OR_QUOTATION: ([^."]+);
+EVERYTHING_EXCEPT_DOT: ([^.]+);
+SCRIPT_ANYTHING: ((?s).*);
+RELATIVE_PATH: (/[^/^.]+)+;
+FILE_PATTERN: [^/^"]+;
+
+// file extensions:
+LANG_EXT: [a-z0-9]+;
+
+// variable direction:
+IN: 'in';
+OUT: 'out';
+
+// section:
+HEAD: 'head';
+REUSE: 'reuse';
+VERSION: 'version';
+LANGUAGE: 'language';
+SCRIPT: 'script';
+USER: 'user';
+NAME: 'name';
+CONSTANTS: 'constants';
+VARIABLES: 'variables';
+PARAMETERS: 'parameters';
+LABELS: 'labels';
+SEARCH: 'search';
+EXTENDS: 'extends';
+IMPORTS: 'imports';
+PATTERNS: 'patterns';
+CHANNELS: 'channels';
+RULES: 'rules';
+MAIN: 'main';
+TESTS: 'tests';
+TEST: 'test';
+
+// instructions:
+DELETE: 'del';
+ADD: 'add';
+SUB: 'sub';
+MUL: 'mul';
+DIV: 'div';
+LESS_THAN: 'less_than';
+EQUAL_INS: 'equal';
+NOT_EQUAL_INS: 'not_equal';
+AND: 'and';
+OR: 'or';
+RET: 'ret';
+STOP: 'stop';
+START: 'start';
+LABEL: 'label';
+PRINT: 'print';
+JUMP: 'jump';
+JUMP_IF: 'jump_if';
+PUSH: 'push';
+POP: 'pop';
+ASSIGN: 'assign';
+FRAME_ASSIGN: 'frame_assign';
+DECLARE: 'decl';
+CONCAT: 'concat';
+MATCH: 'match';
+DEEP_MATCH: 'deep_match';
+DEEP_MATCH_IF: 'deep_match_if';
+EXIT: 'exit';
+EXIT_IF: 'exit_if';
+CALL: 'call';
+CALL_IF: 'call_if';
+CODE: 'code';
+CODE_MATCH: 'code_match';
+
+// synco instructions
+ADD_FILE: 'add_file';
+DELETE_FILE: 'delete_file';
+COMMIT: 'commit';
+REVERSE_COMMIT: 'reverse_commit';
+PUSH: 'push';
+DOWNLOAD: 'download';
+
+// languages
+LANG_ROOT: 'root';
+LANG_TOKENS: 'tokens';
+LANG_CHANNELS: 'channels';
+LANG_RULES: 'rules';
+LANG_LOGIC: 'logic';
+LANG_PATTERN_MATCHES: 'matches';
+
+// script
+SCRIPT_NAME: 'name';
+SCRIPT_VERSION: 'version';
+SCRIPT_SCRIPT: 'script';
+SCRIPT_LANGUAGE: 'language';
+
+
+// types:
+NIL: 'nil';
+BOOL: 'bool';
+INT_HEIGHT: 'int8';
+INT_SIXTEEN: 'int16';
+INT_THIRTY_TWO: 'int32';
+INT_SIXTY_FOUR: 'int64';
+FLOAT_THIRTY_TWO: 'float32';
+FLOAT_SIXTY_FOUR: 'float64';
+UINT_HEIGHT: 'uint8';
+UINT_SIXTEEN: 'uint16';
+UINT_THIRTY_TWO: 'uint32';
+UINT_SIXTY_FOUR: 'uint64';
+STRING: 'string';
+STACKFRAME: 'stackframe';
+FRAME: 'frame';
+TOKEN: 'token';
+
+// symbols:
+PERCENT: '%';
+DOLLAR_SIGN: '$';
+COMMERCIAL_A: '@';
+QUOTATION: '"';
+DOT: '.';
+MINUS: '-';
+COMMA: ',';
+COLON: ':';
+PIPE: '|';
+AND_SIGN: '&';
+STAR: '*';
+PLUS: '+';
+QUESTION_MARK: '?';
+SLASH: '/';
+LOWER_THAN: '<';
+SEMICOLON: ';';
+
+// words:
+TRUE: 'true';
+FALSE: 'false';
+NIL: 'nil';
+
+// spaces:
+WHITESPACE: [ \t\r\n]+;
+
+// comments:
+SINGLE_LINE_COMMENT: '//' ([^\n]*);
+MULTI_LINE_COMMENT: '/*' ([^(*/)]*) '*/';

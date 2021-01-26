@@ -1,0 +1,13 @@
+// rules:
+ID: [a-zA-Z]+;
+INT: [0-9]+;
+
+// constants:
+ASSIGN: ':=';
+
+// spaces:
+WHITESPACE: [ \t\r\n]+;
+
+// comments:
+SINGLE_LINE_COMMENT: '//' ([^\n]*);
+MULTI_LINE_COMMENT: '/*' ([^(*/)]*) '*/';

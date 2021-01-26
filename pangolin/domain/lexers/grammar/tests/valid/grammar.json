@@ -1,0 +1,7 @@
+{
+    "name": "grammar",
+    "root": "referenceChain",
+    "tokens": "grammar.tokens",
+    "channels": "grammar.channels",
+    "rules": "grammar.rules"
+}

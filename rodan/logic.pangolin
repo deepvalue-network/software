@@ -1,0 +1,38 @@
+head:
+    name: pangolin.
+    version: 2020.09.03.
+.
+
+variables:
+    in Input|string.
+    out Output|string.
+    Program|string.
+    PrintCommand|string.
+    StringValue|string.
+    CurrentToken|token.
+.
+
+labels:
+    exitProgram:
+        print: "program".
+    .
+    exitPrintCommand:
+        print: "printCommand".
+    .
+    exitStringValue:
+        code: StringValue, CurrentToken, @EVERYTHING_EXCEPT_QUOTATION.
+    .
+.
+main:
+    assign: Output, "output code".
+    match: Input.
+.
+tests:
+    firstTest:
+        decl: myInput|string.
+        assign: myInput, "some value".
+        match: myInput, $stringValue.
+        print: StringValue.
+        stop.
+    .
+.

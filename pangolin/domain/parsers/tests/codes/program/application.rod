@@ -1,0 +1,44 @@
+head:
+    name: my_name.
+    version: 2020.03.04.
+    imports:
+        first: "./this/is/my/first.json".
+        second: "./this/is/my/second.json".
+    .
+.
+
+constants:
+    assign: MY_FIRST|int32, 32.
+    assign: MY_SECOND|string, "works".
+    assign: THIRD|float64, 3.23.
+.
+
+labels:
+    myLabel:
+        assign: myVariable, 43.
+    .
+
+    myLabelAgain:
+        print: myVariable.
+        ret.
+    .
+.
+
+main:
+    add: answer, first, second.
+    print: myVariable.
+    push.
+    assign: myVariable, 43.
+.
+
+tests:
+    firstTest:
+        match: myInput, $myPattern.
+        stop.
+    .
+
+    secondTest:
+        match: myInput, $myPattern.
+        stop.
+    .
+.

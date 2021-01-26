@@ -1,0 +1,3 @@
+myTest:
+    match: myInput, $myPattern.
+.

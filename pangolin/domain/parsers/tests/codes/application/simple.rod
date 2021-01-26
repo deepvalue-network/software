@@ -1,0 +1,17 @@
+head:
+    name: my_name.
+    version: 2020.03.04.
+    imports:
+        first: "./this/is/my/first.json".
+        second: "./this/is/my/second.json".
+    .
+.
+
+main:
+    add: answer, first, second.
+    print: myVariable.
+    push.
+    assign: myVariable, 43.
+    match: myInput.
+    assign: myVariable, 43.
+.

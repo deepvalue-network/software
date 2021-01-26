@@ -1,0 +1,4 @@
+imports:
+    first: "./this/is/my/first.json".
+    second: "./this/is/my/second.json".
+.

@@ -1,0 +1,13 @@
+# go.dedis.ch/fixbuf v1.0.3
+go.dedis.ch/fixbuf
+# go.dedis.ch/kyber/v3 v3.0.13
+go.dedis.ch/kyber/v3
+go.dedis.ch/kyber/v3/group/edwards25519
+go.dedis.ch/kyber/v3/group/internal/marshalling
+go.dedis.ch/kyber/v3/group/mod
+go.dedis.ch/kyber/v3/util/random
+go.dedis.ch/kyber/v3/xof/blake2xb
+# golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+golang.org/x/crypto/blake2b
+# golang.org/x/sys v0.0.0-20210119212857-b64e53b001e4
+golang.org/x/sys/cpu
