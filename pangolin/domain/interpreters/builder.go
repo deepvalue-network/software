@@ -57,7 +57,7 @@ func (app *builder) Now() (Interpreter, error) {
 
 	if app.program.IsLanguage() {
 		linkedLang := app.program.Language().Language()
-		lang := createLanguage(app.machineBuilder, linkedLang)
+		lang := createLanguage(app.machineBuilder, app.valueBuilder, linkedLang)
 		return createInterpreterWithLanguage(lang), nil
 	}
 

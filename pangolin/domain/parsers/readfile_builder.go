@@ -35,7 +35,7 @@ func (app *readFileBuilder) WithPath(path RelativePath) ReadFileBuilder {
 
 // Now builds a new ReadFile instance
 func (app *readFileBuilder) Now() (ReadFile, error) {
-	if app.variable != nil {
+	if app.variable == nil {
 		return nil, errors.New("the Variablename is mandatory in order to build a ReadFile instance")
 	}
 

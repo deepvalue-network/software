@@ -30,7 +30,7 @@ main:
 tests:
     firstTest:
         decl: myInput|string.
-        assign: myInput, "+some value+".
+        read: myInput, "./test_files/stringValue.rod".
         match: myInput, $stringValue.
         print: myInput.
         stop.

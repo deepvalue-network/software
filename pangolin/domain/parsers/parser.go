@@ -1176,23 +1176,17 @@ func (app *parser) exitTestInstruction(tree lexers.NodeTree) (interface{}, error
 
 func (app *parser) exitReadFile(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.readFileBuilder.Create()
-	section, code := tree.BestMatchFromNames([]string{
-		"variableName",
-		"relativePath",
-	})
 
-	switch section {
-	case "variableName":
-		if name, ok := app.variableName[code]; ok {
+	nameCode := tree.CodeFromName("variableName")
+	if nameCode != "" {
+		if name, ok := app.variableName[nameCode]; ok {
 			builder.WithVariable(name)
 		}
-		break
-	case "relativePath":
-		if path, ok := app.relativePath[code]; ok {
-			builder.WithPath(path)
-		}
+	}
 
-		break
+	relPathCode := tree.CodeFromName("relativePath")
+	if relPath, ok := app.relativePath[relPathCode]; ok {
+		builder.WithPath(relPath)
 	}
 
 	ins, err := builder.Now()
