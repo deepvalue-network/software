@@ -3,7 +3,7 @@ package middle
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/pangolin/libs/hash"
+	"github.com/steve-care-software/products/libs/hash"
 )
 
 type externalBuilder struct {

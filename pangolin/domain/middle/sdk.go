@@ -10,7 +10,7 @@ import (
 	test_instruction "github.com/steve-care-software/products/pangolin/domain/middle/tests/test/instructions/instruction"
 	"github.com/steve-care-software/products/pangolin/domain/middle/variables"
 	"github.com/steve-care-software/products/pangolin/domain/parsers"
-	"github.com/steve-care-software/products/pangolin/libs/hash"
+	"github.com/steve-care-software/products/libs/hash"
 )
 
 // NewAdapter creates a new adapter instance
