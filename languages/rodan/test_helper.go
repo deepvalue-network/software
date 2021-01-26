@@ -11,7 +11,7 @@ import (
 
 func create(dirPath string) (scripts.ParserLinker, interpreters.Builder, error) {
 	name := "pangolin"
-	grammarFile := "../pangolin/domain/parsers/grammar/grammar.json"
+	grammarFile := "../../pangolin/domain/parsers/grammar/grammar.json"
 	wsEvent, err := parsers.NewWhiteSpaceEvent("_whiteSpace")
 	if err != nil {
 		return nil, nil, err
