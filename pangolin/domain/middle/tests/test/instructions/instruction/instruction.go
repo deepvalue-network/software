@@ -3,32 +3,39 @@ package instruction
 import ins "github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction"
 
 type instruction struct {
-	isStart bool
-	isStop  bool
-	ins     ins.Instruction
+	isStart  bool
+	isStop   bool
+	readFile ReadFile
+	ins      ins.Instruction
 }
 
 func createInstructionWithStart() Instruction {
-	return createInstructionInternally(true, false, nil)
+	return createInstructionInternally(true, false, nil, nil)
 }
 
 func createInstructionWithStop() Instruction {
-	return createInstructionInternally(false, true, nil)
+	return createInstructionInternally(false, true, nil, nil)
+}
+
+func createInstructionWithReadFile(readFile ReadFile) Instruction {
+	return createInstructionInternally(false, false, readFile, nil)
 }
 
 func createInstructionWithInstruction(ins ins.Instruction) Instruction {
-	return createInstructionInternally(false, false, ins)
+	return createInstructionInternally(false, false, nil, ins)
 }
 
 func createInstructionInternally(
 	isStart bool,
 	isStop bool,
+	readFile ReadFile,
 	inst ins.Instruction,
 ) Instruction {
 	out := instruction{
-		isStart: isStart,
-		isStop:  isStop,
-		ins:     inst,
+		isStart:  isStart,
+		isStop:   isStop,
+		readFile: readFile,
+		ins:      inst,
 	}
 
 	return &out
@@ -42,6 +49,16 @@ func (obj *instruction) IsStart() bool {
 // IsStop returns true if the instruction is stop
 func (obj *instruction) IsStop() bool {
 	return obj.isStop
+}
+
+// IsReadFile returns true if there is a readFile, false otherwise
+func (obj *instruction) IsReadFile() bool {
+	return obj.readFile != nil
+}
+
+// ReadFile returns the readFile, if any
+func (obj *instruction) ReadFile() ReadFile {
+	return obj.readFile
 }
 
 // IsInstruction returns true if there is an instruction

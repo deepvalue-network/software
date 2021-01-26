@@ -7,16 +7,18 @@ import (
 )
 
 type builder struct {
-	isStart bool
-	isStop  bool
-	ins     ins.Instruction
+	isStart  bool
+	isStop   bool
+	readFile ReadFile
+	ins      ins.Instruction
 }
 
 func createBuilder() Builder {
 	out := builder{
-		isStart: false,
-		isStop:  false,
-		ins:     nil,
+		isStart:  false,
+		isStop:   false,
+		readFile: nil,
+		ins:      nil,
 	}
 
 	return &out
@@ -45,6 +47,12 @@ func (app *builder) WithInstruction(ins ins.Instruction) Builder {
 	return app
 }
 
+// WithReadFile adds a readFile to the builder
+func (app *builder) WithReadFile(readFile ReadFile) Builder {
+	app.readFile = readFile
+	return app
+}
+
 // Now builds a new Instruction instance
 func (app *builder) Now() (Instruction, error) {
 	if app.isStart {
@@ -53,6 +61,10 @@ func (app *builder) Now() (Instruction, error) {
 
 	if app.isStop {
 		return createInstructionWithStop(), nil
+	}
+
+	if app.readFile != nil {
+		return createInstructionWithReadFile(app.readFile), nil
 	}
 
 	if app.ins != nil {

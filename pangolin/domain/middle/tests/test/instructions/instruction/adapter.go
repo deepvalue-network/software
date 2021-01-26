@@ -7,15 +7,18 @@ import (
 
 type adapter struct {
 	builder            Builder
+	readFileBuilder    ReadFileBuilder
 	instructionAdapter ins.Adapter
 }
 
 func createAdapter(
 	builder Builder,
+	readFileBuilder ReadFileBuilder,
 	instructionAdapter ins.Adapter,
 ) Adapter {
 	out := adapter{
 		builder:            builder,
+		readFileBuilder:    readFileBuilder,
 		instructionAdapter: instructionAdapter,
 	}
 
@@ -41,6 +44,18 @@ func (app *adapter) ToInstruction(testInstruction parsers.TestInstruction) (Inst
 		}
 
 		builder.WithInstruction(ins)
+	}
+
+	if testInstruction.IsReadFile() {
+		parsedReadFile := testInstruction.ReadFile()
+		variable := parsedReadFile.Variable().String()
+		path := parsedReadFile.Path().String()
+		ins, err := app.readFileBuilder.Create().WithVariable(variable).WithPath(path).Now()
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithReadFile(ins)
 	}
 
 	return builder.Now()
