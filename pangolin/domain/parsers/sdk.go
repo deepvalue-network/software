@@ -30,6 +30,7 @@ func NewParserBuilder() ParserBuilder {
 	testSectionBuilder := createTestSectionBuilder()
 	testDeclarationBuilder := createTestDeclarationBuilder()
 	testInstructionBuilder := createTestInstructionBuilder()
+	readFileBuilder := createReadFileBuilder()
 	headSectionBuilder := createHeadSectionBuilder()
 	headValueBuilder := createHeadValueBuilder()
 	importSingleBuilder := createImportSingleBuilder()
@@ -94,6 +95,7 @@ func NewParserBuilder() ParserBuilder {
 		testSectionBuilder,
 		testDeclarationBuilder,
 		testInstructionBuilder,
+		readFileBuilder,
 		headSectionBuilder,
 		headValueBuilder,
 		importSingleBuilder,
@@ -436,6 +438,7 @@ type TestDeclaration interface {
 type TestInstructionBuilder interface {
 	Create() TestInstructionBuilder
 	WithInstruction(ins Instruction) TestInstructionBuilder
+	WithReadFile(readFile ReadFile) TestInstructionBuilder
 	IsStart() TestInstructionBuilder
 	IsStop() TestInstructionBuilder
 	Now() (TestInstruction, error)
@@ -445,8 +448,24 @@ type TestInstructionBuilder interface {
 type TestInstruction interface {
 	IsStart() bool
 	IsStop() bool
+	IsReadFile() bool
+	ReadFile() ReadFile
 	IsInstruction() bool
 	Instruction() Instruction
+}
+
+// ReadFileBuilder represents a readfile builder
+type ReadFileBuilder interface {
+	Create() ReadFileBuilder
+	WithVariable(variable VariableName) ReadFileBuilder
+	WithPath(path RelativePath) ReadFileBuilder
+	Now() (ReadFile, error)
+}
+
+// ReadFile represents a reafile instruction
+type ReadFile interface {
+	Variable() VariableName
+	Path() RelativePath
 }
 
 // HeadSectionBuilder represents the headSection builder

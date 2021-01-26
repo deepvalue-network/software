@@ -85,6 +85,7 @@ CALL: 'call';
 CALL_IF: 'call_if';
 CODE: 'code';
 CODE_MATCH: 'code_match';
+READ: 'read';
 
 // synco instructions
 ADD_FILE: 'add_file';

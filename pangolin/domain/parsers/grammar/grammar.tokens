@@ -82,8 +82,13 @@ testDeclaration
 
 testInstruction
     : instruction
+    | readFile DOT
     | START DOT
     | STOP DOT
+    ;
+
+readFile
+    : READ COLON variableName COMMA relativePath
     ;
 
 headSection
