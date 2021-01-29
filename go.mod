@@ -3,6 +3,7 @@ module github.com/steve-care-software/products
 go 1.13
 
 require (
+	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a // indirect
 	github.com/alecthomas/gocyclo v0.0.0-20150208221726-aa8f8b160214 // indirect
 	github.com/alexkohler/nakedret v1.0.0 // indirect
 	github.com/client9/misspell v0.3.4 // indirect
