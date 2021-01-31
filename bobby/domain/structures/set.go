@@ -10,6 +10,18 @@ type set struct {
 	set    sets.Set
 }
 
+func createSetWithSchema(
+	schema set_schemas.Schema,
+) Set {
+	return createSetInternally(schema, nil)
+}
+
+func createSetWithSet(
+	set sets.Set,
+) Set {
+	return createSetInternally(nil, set)
+}
+
 func createSetInternally(
 	schema set_schemas.Schema,
 	st sets.Set,

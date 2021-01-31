@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"time"
-
 	uuid "github.com/satori/go.uuid"
 	"github.com/steve-care-software/products/bobby/domain/selectors"
 	"github.com/steve-care-software/products/bobby/domain/structures/graphbases"
@@ -31,29 +29,17 @@ type Builder interface {
 	WithTableElement(tableElement elements.Element) Builder
 	WithTableRow(tableRow rows.Row) Builder
 	WithTable(table tables.Table) Builder
-	ExecutesOn(executesOn time.Time) Builder
-	ExpiresOn(expiresOn time.Time) Builder
-	IsDeleted() Builder
 	Now() (Structure, error)
 }
 
 // Structure represents a structure
 type Structure interface {
-	Content() Content
-	IsActive() bool
-	IsDeleted() bool
-	HasExecutesOn() bool
-	ExecutesOn() *time.Time
-	HasExpiresOn() bool
-	ExpiresOn() *time.Time
-}
-
-// Content represents a structure content
-type Content interface {
 	IsGraphbase() bool
 	Graphbase() graphbases.Graphbase
 	IsIdentity() bool
 	Identity() identities.Identity
+	IsTable() bool
+	Table() Table
 	IsSet() bool
 	Set() Set
 }
