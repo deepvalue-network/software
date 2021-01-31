@@ -2,8 +2,8 @@ package transactions
 
 import (
 	uuid "github.com/satori/go.uuid"
+	"github.com/steve-care-software/products/bobby/domain/structures"
 	"github.com/steve-care-software/products/bobby/domain/transactions/bodies"
-	"github.com/steve-care-software/products/bobby/domain/transactions/structures"
 	"github.com/steve-care-software/products/libs/cryptography/pk/signature"
 	"github.com/steve-care-software/products/libs/hash"
 )
