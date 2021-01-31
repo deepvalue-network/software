@@ -3,7 +3,7 @@ package overviews
 import (
 	"github.com/steve-care-software/products/blockchain/domain/blocks"
 	"github.com/steve-care-software/products/blockchain/domain/chains"
-	"github.com/steve-care-software/products/bobby/domain/errors"
+	domain_errors "github.com/steve-care-software/products/bobby/domain/errors"
 	"github.com/steve-care-software/products/bobby/domain/structures"
 	"github.com/steve-care-software/products/bobby/domain/transactions"
 )
@@ -28,14 +28,14 @@ type Overview interface {
 type InvalidTransactionBuilder interface {
 	Create() InvalidTransactionBuilder
 	WithTransaction(trx transactions.Transaction) InvalidTransactionBuilder
-	WithError(err errors.Error) InvalidTransactionBuilder
+	WithError(err domain_errors.Error) InvalidTransactionBuilder
 	Now() (InvalidTransaction, error)
 }
 
 // InvalidTransaction represents an invalid transaction
 type InvalidTransaction interface {
 	Transaction() transactions.Transaction
-	Error() errors.Error
+	Error() domain_errors.Error
 }
 
 // ValidTransactionBuilder represents a valid transaction builder
