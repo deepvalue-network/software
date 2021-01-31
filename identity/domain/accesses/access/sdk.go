@@ -6,6 +6,13 @@ import (
 	"github.com/steve-care-software/products/libs/cryptography/pk/signature"
 )
 
+// NewFactory creates a new factory instance
+func NewFactory(encPkBitrate int) Factory {
+	sigPkFactory := signature.NewPrivateKeyFactory()
+	encPkFactory := encryption.NewFactory(encPkBitrate)
+	return createFactory(encPkFactory, sigPkFactory)
+}
+
 // Factory represents an access factory
 type Factory interface {
 	Create() (Access, error)
