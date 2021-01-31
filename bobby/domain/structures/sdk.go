@@ -15,6 +15,11 @@ import (
 	"github.com/steve-care-software/products/libs/hash"
 )
 
+// NewBuilder creates a new builder
+func NewBuilder() Builder {
+	return createBuilder()
+}
+
 // Builder represents a structure builder
 type Builder interface {
 	Create() Builder
