@@ -1,93 +1,93 @@
 package structures
 
-import (
-	"github.com/steve-care-software/products/bobby/domain/structures/graphbases"
-	"github.com/steve-care-software/products/bobby/domain/structures/identities"
-)
+import "time"
 
 type structure struct {
-	graph    graphbases.Graphbase
-	identity identities.Identity
-	tb       Table
-	set      Set
+	content    Content
+	isDeleted  bool
+	executesOn *time.Time
+	expiresOn  *time.Time
 }
 
-func createStructureWithGraph(
-	graph graphbases.Graphbase,
+func createStructure(
+	content Content,
+	isDeleted bool,
 ) Structure {
-	return createStructureInternally(graph, nil, nil, nil)
+	return createStructureInternally(content, isDeleted, nil, nil)
 }
 
-func createStructureWithIdentity(
-	identity identities.Identity,
+func createStructureWithExecutesOn(
+	content Content,
+	isDeleted bool,
+	executesOn *time.Time,
 ) Structure {
-	return createStructureInternally(nil, identity, nil, nil)
+	return createStructureInternally(content, isDeleted, executesOn, nil)
 }
 
-func createStructureWithTable(
-	tb Table,
+func createStructureWithExpiresOn(
+	content Content,
+	isDeleted bool,
+	expiresOn *time.Time,
 ) Structure {
-	return createStructureInternally(nil, nil, tb, nil)
+	return createStructureInternally(content, isDeleted, nil, expiresOn)
 }
 
-func createStructureWithSet(
-	set Set,
+func createStructureWithExecutesOnAndExpiresOn(
+	content Content,
+	isDeleted bool,
+	executesOn *time.Time,
+	expiresOn *time.Time,
 ) Structure {
-	return createStructureInternally(nil, nil, nil, set)
+	return createStructureInternally(content, isDeleted, executesOn, expiresOn)
 }
 
 func createStructureInternally(
-	graph graphbases.Graphbase,
-	identity identities.Identity,
-	tb Table,
-	set Set,
+	content Content,
+	isDeleted bool,
+	executesOn *time.Time,
+	expiresOn *time.Time,
 ) Structure {
 	out := structure{
-		graph:    graph,
-		identity: identity,
-		tb:       tb,
-		set:      set,
+		content:    content,
+		isDeleted:  isDeleted,
+		executesOn: executesOn,
+		expiresOn:  expiresOn,
 	}
 
 	return &out
 }
 
-// IsGraphbase returns true if there is a graphbase, false otherwise
-func (obj *structure) IsGraphbase() bool {
-	return obj.graph != nil
+// Content returns the content
+func (obj *structure) Content() Content {
+	return obj.content
 }
 
-// Graphbase returns the graphbase, if any
-func (obj *structure) Graphbase() graphbases.Graphbase {
-	return obj.graph
+// IsActive returns true if the structure is active, false otherwise
+func (obj *structure) IsActive() bool {
+	return true
 }
 
-// IsIdentity returns true if there is an identity, false otherwise
-func (obj *structure) IsIdentity() bool {
-	return obj.identity != nil
+// IsDeleted returns true if the structure is deleted
+func (obj *structure) IsDeleted() bool {
+	return obj.isDeleted
 }
 
-// Identity returns the identity, if any
-func (obj *structure) Identity() identities.Identity {
-	return obj.identity
+// HasExecutesOn returns true if the structure has an execution time, false otherwise
+func (obj *structure) HasExecutesOn() bool {
+	return obj.executesOn != nil
 }
 
-// IsTable returns true if there is a table, false otherwise
-func (obj *structure) IsTable() bool {
-	return obj.tb != nil
+// ExecutesOn returns the execution time, if any
+func (obj *structure) ExecutesOn() *time.Time {
+	return obj.executesOn
 }
 
-// Table returns the table, if any
-func (obj *structure) Table() Table {
-	return obj.tb
+// HasExpiresOn returns true if the structure has an expiration time, false otherwise
+func (obj *structure) HasExpiresOn() bool {
+	return obj.expiresOn != nil
 }
 
-// IsSet returns true if there is a set, false otherwise
-func (obj *structure) IsSet() bool {
-	return obj.set != nil
-}
-
-// Set returns the set, if any
-func (obj *structure) Set() Set {
-	return obj.set
+// ExpiresOn returns the expiration time, if any
+func (obj *structure) ExpiresOn() *time.Time {
+	return obj.expiresOn
 }

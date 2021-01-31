@@ -2,6 +2,7 @@ package structures
 
 import (
 	"errors"
+	"time"
 
 	"github.com/steve-care-software/products/bobby/domain/structures/graphbases"
 	"github.com/steve-care-software/products/bobby/domain/structures/identities"
@@ -26,6 +27,9 @@ type builder struct {
 	tableElement          elements.Element
 	tableRow              rows.Row
 	table                 tables.Table
+	isDeleted             bool
+	executesOn            *time.Time
+	expiresOn             *time.Time
 }
 
 func createBuilder() Builder {
@@ -41,6 +45,9 @@ func createBuilder() Builder {
 		tableElement:          nil,
 		tableRow:              nil,
 		table:                 nil,
+		isDeleted:             false,
+		executesOn:            nil,
+		expiresOn:             nil,
 	}
 
 	return &out
@@ -117,6 +124,24 @@ func (app *builder) WithTable(table tables.Table) Builder {
 	return app
 }
 
+// ExecutesOn adds an execution time to the builder
+func (app *builder) ExecutesOn(executesOn time.Time) Builder {
+	app.executesOn = &executesOn
+	return app
+}
+
+// ExpiresOn adds an expiration time to the builder
+func (app *builder) ExpiresOn(expiresOn time.Time) Builder {
+	app.expiresOn = &expiresOn
+	return app
+}
+
+// IsDeleted flags the builder as deleted
+func (app *builder) IsDeleted() Builder {
+	app.isDeleted = true
+	return app
+}
+
 // Now builds a new Structure instance
 func (app *builder) Now() (Structure, error) {
 
@@ -169,23 +194,40 @@ func (app *builder) Now() (Structure, error) {
 		}
 	}
 
+	var content Content
 	if table != nil || set != nil || app.graphbase != nil || app.identity != nil {
 		if table != nil {
-			return createStructureWithTable(table), nil
+			content = createContentWithTable(table)
 		}
 
 		if set != nil {
-			return createStructureWithSet(set), nil
+			content = createContentWithSet(set)
 		}
 
 		if app.graphbase != nil {
-			return createStructureWithGraph(app.graphbase), nil
+			content = createContentWithGraph(app.graphbase)
 		}
 
 		if app.identity != nil {
-			return createStructureWithIdentity(app.identity), nil
+			content = createContentWithIdentity(app.identity)
 		}
 	}
 
-	return nil, errors.New("the Structure instance is invalid")
+	if content == nil {
+		return nil, errors.New("the structure is invalid, its content cannot be built")
+	}
+
+	if app.executesOn != nil && app.expiresOn != nil {
+		return createStructureWithExecutesOnAndExpiresOn(content, app.isDeleted, app.executesOn, app.expiresOn), nil
+	}
+
+	if app.executesOn != nil {
+		return createStructureWithExecutesOn(content, app.isDeleted, app.executesOn), nil
+	}
+
+	if app.expiresOn != nil {
+		return createStructureWithExpiresOn(content, app.isDeleted, app.expiresOn), nil
+	}
+
+	return createStructure(content, app.isDeleted), nil
 }
