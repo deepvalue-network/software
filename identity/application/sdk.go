@@ -2,6 +2,16 @@ package application
 
 import "github.com/steve-care-software/products/identity/domain/users"
 
+// NewApplication creates a new application instance
+func NewApplication(
+	repository users.Repository,
+	service users.Service,
+	encPkBitrate int,
+) Application {
+	builder := users.NewBuilder(encPkBitrate)
+	return createApplication(repository, service, builder)
+}
+
 // NewUpdateBuilder creates a new update builder instance
 func NewUpdateBuilder() UpdateBuilder {
 	return createUpdateBuilder()
