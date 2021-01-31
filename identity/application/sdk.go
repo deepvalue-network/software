@@ -2,6 +2,11 @@ package application
 
 import "github.com/steve-care-software/products/identity/domain/users"
 
+// NewUpdateBuilder creates a new update builder instance
+func NewUpdateBuilder() UpdateBuilder {
+	return createUpdateBuilder()
+}
+
 // Application represents an identity application
 type Application interface {
 	List() ([]string, error)
