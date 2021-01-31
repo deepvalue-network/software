@@ -8,12 +8,27 @@ import (
 	"github.com/steve-care-software/products/bobby/domain/transactions"
 )
 
-// OverviewBuilder represents the overview builder
-type OverviewBuilder interface {
-	Create() OverviewBuilder
-	WithValid(valid []ValidTransaction) OverviewBuilder
-	WithInvalid(invalid []InvalidTransaction) OverviewBuilder
-	CanBeSaved() OverviewBuilder
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	return createBuilder()
+}
+
+// NewInvalidTransactionBuilder creates a new invalid transation builder
+func NewInvalidTransactionBuilder() InvalidTransactionBuilder {
+	return createInvalidTransactionBuilder()
+}
+
+// NewValidTransactionBuilder creates a new valid transaction builder
+func NewValidTransactionBuilder() ValidTransactionBuilder {
+	return createValidTransactionBuilder()
+}
+
+// Builder represents the overview builder
+type Builder interface {
+	Create() Builder
+	WithValid(valid []ValidTransaction) Builder
+	WithInvalid(invalid []InvalidTransaction) Builder
+	CanBeSaved() Builder
 	Now() (Overview, error)
 }
 

@@ -1,13 +1,13 @@
 package overviews
 
-type overviewBuilder struct {
+type builder struct {
 	valid      []ValidTransaction
 	invalid    []InvalidTransaction
 	canBeSaved bool
 }
 
-func createOverviewBuilder() OverviewBuilder {
-	out := overviewBuilder{
+func createBuilder() Builder {
+	out := builder{
 		valid:      nil,
 		invalid:    nil,
 		canBeSaved: false,
@@ -17,30 +17,30 @@ func createOverviewBuilder() OverviewBuilder {
 }
 
 // Create initializes the builder
-func (app *overviewBuilder) Create() OverviewBuilder {
-	return createOverviewBuilder()
+func (app *builder) Create() Builder {
+	return createBuilder()
 }
 
 // WithValid adds valid transactions to the builder
-func (app *overviewBuilder) WithValid(valid []ValidTransaction) OverviewBuilder {
+func (app *builder) WithValid(valid []ValidTransaction) Builder {
 	app.valid = valid
 	return app
 }
 
 // WithInvalid adds invalid transactions to the builder
-func (app *overviewBuilder) WithInvalid(invalid []InvalidTransaction) OverviewBuilder {
+func (app *builder) WithInvalid(invalid []InvalidTransaction) Builder {
 	app.invalid = invalid
 	return app
 }
 
 // CanBeSaved flags the builder as canBeSaved
-func (app *overviewBuilder) CanBeSaved() OverviewBuilder {
+func (app *builder) CanBeSaved() Builder {
 	app.canBeSaved = true
 	return app
 }
 
 // Now builds a new Overview instance
-func (app *overviewBuilder) Now() (Overview, error) {
+func (app *builder) Now() (Overview, error) {
 	if app.valid == nil {
 		app.valid = []ValidTransaction{}
 	}

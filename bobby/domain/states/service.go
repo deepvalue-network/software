@@ -22,7 +22,7 @@ type service struct {
 	errorBuilder      derrors.Builder
 	validTrxBuilder   overviews.ValidTransactionBuilder
 	invalidTrxBuilder overviews.InvalidTransactionBuilder
-	overviewBuilder   overviews.OverviewBuilder
+	overviewBuilder   overviews.Builder
 	structureService  structures.Service
 	trxProc           transactions.TransactionProcessor
 	hydroAdapter      hydro.Adapter
@@ -37,7 +37,7 @@ func createService(
 	errorBuilder derrors.Builder,
 	validTrxBuilder overviews.ValidTransactionBuilder,
 	invalidTrxBuilder overviews.InvalidTransactionBuilder,
-	overviewBuilder overviews.OverviewBuilder,
+	overviewBuilder overviews.Builder,
 	structureService structures.Service,
 	trxProc transactions.TransactionProcessor,
 	hydroAdapter hydro.Adapter,
