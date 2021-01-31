@@ -2,6 +2,12 @@ package users
 
 import "github.com/steve-care-software/products/identity/domain/accesses"
 
+// NewBuilder creates a new builder instance
+func NewBuilder(encPkBitrate int) Builder {
+	accessesFactory := accesses.NewFactory(encPkBitrate)
+	return createBuilder(accessesFactory)
+}
+
 // Builder represents a user builder
 type Builder interface {
 	Create() Builder
