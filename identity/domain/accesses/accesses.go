@@ -9,7 +9,7 @@ import (
 
 type accesses struct {
 	accessFactory access.Factory
-	mp            map[string]access.Access
+	mp            map[string]access.Access `hydro:"All, List"`
 }
 
 func createAccesses(

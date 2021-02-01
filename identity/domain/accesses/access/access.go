@@ -7,9 +7,9 @@ import (
 )
 
 type access struct {
-	id  *uuid.UUID
-	sig signature.PrivateKey
-	enc encryption.PrivateKey
+	id  *uuid.UUID            `hydro:"ID, ID"`
+	sig signature.PrivateKey  `hydro:"Signature, SigPK"`
+	enc encryption.PrivateKey `hydro:"Encryption, EncPK"`
 }
 
 func createAccess(

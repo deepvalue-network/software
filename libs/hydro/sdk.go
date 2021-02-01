@@ -1,5 +1,7 @@
 package hydro
 
+const doubleStringPattern = "%s/%s"
+
 // EventFn represents an event func
 type EventFn func(ins interface{}, fieldName string, structName string) (interface{}, error)
 
@@ -45,10 +47,10 @@ type Manager interface {
 // BridgeBuilder represents a bridge builder
 type BridgeBuilder interface {
 	Create() BridgeBuilder
-	WithPointer(pointer interface{}) BridgeBuilder
-	WithConstructor(constructorFn interface{}) BridgeBuilder
-	WithInterfaceName(interfaceName string) BridgeBuilder
-	WithStructName(structName string) BridgeBuilder
+	WithDehydratedInterface(dehydratedInterface interface{}) BridgeBuilder
+	WithDehydratedConstructor(dehydratedConstructor interface{}) BridgeBuilder
+	WithDehydratedPointer(dehydratedPointer interface{}) BridgeBuilder
+	WithHydratedPointer(hydratedPointer interface{}) BridgeBuilder
 	OnHydrate(onHydrateFn EventFn) BridgeBuilder
 	OnDehydrate(onDehydrateFn EventFn) BridgeBuilder
 	Now() (Bridge, error)
@@ -56,18 +58,22 @@ type BridgeBuilder interface {
 
 // Bridge represents a bridge
 type Bridge interface {
-	ConstructorFn() interface{}
-	Pointer() interface{}
-	Interface() string
-	Struct() string
-	HasEvents() bool
-	Events() Events
+	Hydrated() Hydrated
+	Dehydrated() Dehydrated
 }
 
-// Events represents bridge events
-type Events interface {
-	HasOnHydrate() bool
-	OnHydrate() EventFn
-	HasOnDehydrate() bool
-	OnDehydrate() EventFn
+// Hydrated represents an hydrated bridge
+type Hydrated interface {
+	Pointer() interface{}
+	HasEvent() bool
+	Event() EventFn
+}
+
+// Dehydrated represents a dehydrated bridge
+type Dehydrated interface {
+	Interface() interface{}
+	ConstructorFn() interface{}
+	Pointer() interface{}
+	HasEvent() bool
+	Event() EventFn
 }

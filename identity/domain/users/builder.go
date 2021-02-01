@@ -10,6 +10,7 @@ type builder struct {
 	accessesFactory accesses.Factory
 	name            string
 	seed            string
+	accesses        accesses.Accesses
 }
 
 func createBuilder(accessesFactory accesses.Factory) Builder {
@@ -17,6 +18,7 @@ func createBuilder(accessesFactory accesses.Factory) Builder {
 		accessesFactory: accessesFactory,
 		name:            "",
 		seed:            "",
+		accesses:        nil,
 	}
 
 	return &out
@@ -39,6 +41,12 @@ func (app *builder) WithSeed(seed string) Builder {
 	return app
 }
 
+// WithAccesses add accesses to the builder
+func (app *builder) WithAccesses(accesses accesses.Accesses) Builder {
+	app.accesses = accesses
+	return app
+}
+
 // Now builds a new User instance
 func (app *builder) Now() (User, error) {
 	if app.name == "" {
@@ -49,6 +57,14 @@ func (app *builder) Now() (User, error) {
 		return nil, errors.New("the seed is mandatory in order to build a User instance")
 	}
 
-	accesses := app.accessesFactory.Create()
-	return createUser(app.name, app.seed, accesses), nil
+	if app.accesses == nil {
+		accesses, err := app.accessesFactory.Create()
+		if err != nil {
+			return nil, err
+		}
+
+		app.accesses = accesses
+	}
+
+	return createUser(app.name, app.seed, app.accesses), nil
 }

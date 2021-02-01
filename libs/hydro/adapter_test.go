@@ -1,8 +1,6 @@
 package hydro
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
 
 	"github.com/steve-care-software/products/libs/hash"
@@ -20,10 +18,10 @@ func TestHydrate_Success(t *testing.T) {
 
 	// create simple bridge:
 	simpleBridge, err := NewBridgeBuilder().Create().
-		WithConstructor(internals.NewSimple).
-		WithPointer(new(internals.HydrateSimpleStruct)).
-		WithInterfaceName("github.com/steve-care-software/products/libs/hydro/internals/SimpleInterface").
-		WithStructName("github.com/steve-care-software/products/libs/hydro/internals/dehydrateSimpleStruct").
+		WithDehydratedInterface((*internals.SimpleInterface)(nil)).
+		WithDehydratedConstructor(internals.NewSimple).
+		WithDehydratedPointer(new(internals.DehydrateSimpleStruct)).
+		WithHydratedPointer(new(internals.HydrateSimpleStruct)).
 		Now()
 
 	if err != nil {
@@ -33,10 +31,10 @@ func TestHydrate_Success(t *testing.T) {
 
 	// create complex bridge:
 	complexBridge, err := NewBridgeBuilder().Create().
-		WithConstructor(internals.NewComplex).
-		WithPointer(new(internals.HydrateComplexStruct)).
-		WithInterfaceName("github.com/steve-care-software/products/libs/hydro/internals/ComplexInterface").
-		WithStructName("github.com/steve-care-software/products/libs/hydro/internals/dehydrateComplexStruct").
+		WithDehydratedInterface((*internals.ComplexInterface)(nil)).
+		WithDehydratedConstructor(internals.NewComplex).
+		WithDehydratedPointer(new(internals.DehydrateComplexStruct)).
+		WithHydratedPointer(new(internals.HydrateComplexStruct)).
 		OnHydrate(internals.ComplexStructOnHydrateEventFn).
 		OnDehydrate(internals.ComplexStructOnDehydrateEventFn).
 		Now()
@@ -60,42 +58,6 @@ func TestHydrate_Success(t *testing.T) {
 		return
 	}
 
-	// hydrates:
-	hydrate, err := adapter.Hydrate(complex)
-	if err != nil {
-		t.Errorf("the returned error was expected to be nil, error returned: %s", err.Error())
-		return
-	}
-
-	// convert to json:
-	js, err := json.Marshal(hydrate)
-	if err != nil {
-		t.Errorf("the returned error was expected to be nil, error returned: %s", err.Error())
-		return
-	}
-
-	// dehydrates:
-	dehydrate, err := adapter.Dehydrate(hydrate)
-	if err != nil {
-		t.Errorf("the returned error was expected to be nil, error returned: %s", err.Error())
-		return
-	}
-
-	// hydrates again:
-	reHydrate, err := adapter.Hydrate(dehydrate)
-	if err != nil {
-		t.Errorf("the returned error was expected to be nil, error returned: %s", err.Error())
-		return
-	}
-
-	reJS, err := json.Marshal(reHydrate)
-	if err != nil {
-		t.Errorf("the returned error was expected to be nil, error returned: %s", err.Error())
-		return
-	}
-
-	if bytes.Compare(js, reJS) != 0 {
-		t.Errorf("the conversions failed: \n1): %s\n2): %s\n", js, reJS)
-		return
-	}
+	// execute:
+	VerifyAdapterUsingJSForTests(adapter, complex, t)
 }

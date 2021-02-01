@@ -9,15 +9,18 @@ import (
 type factory struct {
 	encPkFactory encryption.Factory
 	sigPkFactory signature.PrivateKeyFactory
+	builder      Builder
 }
 
 func createFactory(
 	encPkFactory encryption.Factory,
 	sigPkFactory signature.PrivateKeyFactory,
+	builder Builder,
 ) Factory {
 	out := factory{
 		encPkFactory: encPkFactory,
 		sigPkFactory: sigPkFactory,
+		builder:      builder,
 	}
 
 	return &out
@@ -32,5 +35,5 @@ func (app *factory) Create() (Access, error) {
 	}
 
 	sig := app.sigPkFactory.Create()
-	return createAccess(&id, sig, enc), nil
+	return app.builder.Create().WithID(&id).WithEncryption(enc).WithSignature(sig).Now()
 }

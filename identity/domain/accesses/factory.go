@@ -3,21 +3,21 @@ package accesses
 import "github.com/steve-care-software/products/identity/domain/accesses/access"
 
 type factory struct {
-	accessFactory access.Factory
+	builder Builder
 }
 
 func createFactory(
-	accessFactory access.Factory,
+	builder Builder,
 ) Factory {
 	out := factory{
-		accessFactory: accessFactory,
+		builder: builder,
 	}
 
 	return &out
 }
 
 // Create creates an accesses instance
-func (app *factory) Create() Accesses {
+func (app *factory) Create() (Accesses, error) {
 	mp := map[string]access.Access{}
-	return createAccesses(app.accessFactory, mp)
+	return app.builder.Create().WithMap(mp).Now()
 }

@@ -33,14 +33,24 @@ func (app *manager) Fetch(pkg string, name string) (Bridge, error) {
 
 // Register registers a bridge
 func (app *manager) Register(bridge Bridge) {
-	in := bridge.Interface()
-	app.mp[in] = bridge
+	// hydrated:
+	hydrated := bridge.Hydrated()
 
-	strctName := bridge.Struct()
-	app.mp[strctName] = bridge
+	// hydrated pointer:
+	hydratedPtrType := reflect.Indirect(reflect.ValueOf(hydrated.Pointer())).Type()
+	hydratedPtrName := fmt.Sprintf(doubleStringPattern, hydratedPtrType.PkgPath(), hydratedPtrType.Name())
+	app.mp[hydratedPtrName] = bridge
 
-	ptr := bridge.Pointer()
-	ptrType := reflect.Indirect(reflect.ValueOf(ptr)).Type()
-	ptrName := fmt.Sprintf("%s/%s", ptrType.PkgPath(), ptrType.Name())
-	app.mp[ptrName] = bridge
+	// dehydrated:
+	dehyrated := bridge.Dehydrated()
+
+	// dehydrated interface:
+	dehyratedInterfaceType := reflect.TypeOf(dehyrated.Interface())
+	dehyratedInterfaceName := fmt.Sprintf(doubleStringPattern, dehyratedInterfaceType.PkgPath(), dehyratedInterfaceType.Name())
+	app.mp[dehyratedInterfaceName] = bridge
+
+	// dehydrated pointer:
+	dehydratedPtrType := reflect.Indirect(reflect.ValueOf(dehyrated.Pointer())).Type()
+	dehydratedPtrName := fmt.Sprintf(doubleStringPattern, dehydratedPtrType.PkgPath(), dehydratedPtrType.Name())
+	app.mp[dehydratedPtrName] = bridge
 }

@@ -3,9 +3,9 @@ package users
 import "github.com/steve-care-software/products/identity/domain/accesses"
 
 type user struct {
-	name     string
-	seed     string
-	accesses accesses.Accesses
+	name     string            `hydro:"Name, Name"`
+	seed     string            `hydro:"Seed, Seed"`
+	accesses accesses.Accesses `hydro:"Accesses, Accesses"`
 }
 
 func createUser(

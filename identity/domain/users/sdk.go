@@ -8,11 +8,17 @@ func NewBuilder(encPkBitrate int) Builder {
 	return createBuilder(accessesFactory)
 }
 
+// NewPointer returns a new user pointer
+func NewPointer() interface{} {
+	return new(user)
+}
+
 // Builder represents a user builder
 type Builder interface {
 	Create() Builder
 	WithName(name string) Builder
 	WithSeed(seed string) Builder
+	WithAccesses(accesses accesses.Accesses) Builder
 	Now() (User, error)
 }
 

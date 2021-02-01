@@ -6,13 +6,14 @@ import "github.com/steve-care-software/products/libs/hash"
  * simpleInterface -> dehydrateSimpleStruct
  */
 
-type dehydrateSimpleStruct struct {
+// DehydrateSimpleStruct repreents a dehydrated simple struct
+type DehydrateSimpleStruct struct {
 	first  string `hydro:"First, Fr"`
 	second string `hydro:"Second, Se"`
 }
 
 func createSimpleStruct(first string, second string) SimpleInterface {
-	out := dehydrateSimpleStruct{
+	out := DehydrateSimpleStruct{
 		first:  first,
 		second: second,
 	}
@@ -21,12 +22,12 @@ func createSimpleStruct(first string, second string) SimpleInterface {
 }
 
 // First returns the first element
-func (obj *dehydrateSimpleStruct) First() string {
+func (obj *DehydrateSimpleStruct) First() string {
 	return obj.first
 }
 
 // Second returns the second element
-func (obj *dehydrateSimpleStruct) Second() string {
+func (obj *DehydrateSimpleStruct) Second() string {
 	return obj.second
 }
 
@@ -34,7 +35,8 @@ func (obj *dehydrateSimpleStruct) Second() string {
  * complexInterface -> dehydrateComplexStruct
  */
 
-type dehydrateComplexStruct struct {
+// DehydrateComplexStruct represents a dehydrated complex struct
+type DehydrateComplexStruct struct {
 	simple  SimpleInterface `hydro:"Simple, Sim"`
 	another uint            `hydro:"Another, An"`
 	hash    hash.Hash       `hydro:"Hash, Hsh"`
@@ -45,7 +47,7 @@ func createComplexStruct(
 	another uint,
 	hash hash.Hash,
 ) ComplexInterface {
-	out := dehydrateComplexStruct{
+	out := DehydrateComplexStruct{
 		simple:  simple,
 		another: another,
 		hash:    hash,
@@ -55,16 +57,16 @@ func createComplexStruct(
 }
 
 // Simple returns the simple instance
-func (obj *dehydrateComplexStruct) Simple() SimpleInterface {
+func (obj *DehydrateComplexStruct) Simple() SimpleInterface {
 	return obj.simple
 }
 
 // Another returns the another number
-func (obj *dehydrateComplexStruct) Another() uint {
+func (obj *DehydrateComplexStruct) Another() uint {
 	return obj.another
 }
 
 // Hash returns the hash
-func (obj *dehydrateComplexStruct) Hash() hash.Hash {
+func (obj *DehydrateComplexStruct) Hash() hash.Hash {
 	return obj.hash
 }

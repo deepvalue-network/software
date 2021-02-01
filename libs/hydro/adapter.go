@@ -3,6 +3,7 @@ package hydro
 import (
 	"errors"
 	"fmt"
+	"log"
 	"reflect"
 	"strconv"
 	"strings"
@@ -37,7 +38,8 @@ func (app *adapter) Hydrate(dehydrate interface{}) (interface{}, error) {
 		return nil, err
 	}
 
-	ptr := bridge.Pointer()
+	hydratedBridge := bridge.Hydrated()
+	ptr := hydratedBridge.Pointer()
 	ptrVal := reflect.ValueOf(ptr)
 	indPtrVal := reflect.Indirect(ptrVal)
 
@@ -46,8 +48,12 @@ func (app *adapter) Hydrate(dehydrate interface{}) (interface{}, error) {
 		field := dehydrateType.Field(i)
 		tagName, ok := field.Tag.Lookup("hydro")
 		if !ok {
-			str := fmt.Sprintf("there is no tag 'hydro' on field (name: %s) of struct (name: %s)", field.Name, dehydrateType.Name())
-			return nil, errors.New(str)
+			// there is no tag log:
+			str := fmt.Sprintf("there is no tag 'hydro' on field (name: %s) of struct (name: %s), skip it.", field.Name, dehydrateType.Name())
+			log.Println(str)
+
+			// skip:
+			continue
 		}
 
 		tagProperties := strings.Split(tagName, ",")
@@ -89,12 +95,22 @@ func (app *adapter) Hydrate(dehydrate interface{}) (interface{}, error) {
 
 			fieldPtr, err := app.Hydrate(callResults[0].Interface())
 			if err != nil {
-				return nil, err
+				// log:
+				str := fmt.Sprintf("there was a property that was probably not registered. so trying the instance directly: %s", err.Error())
+				log.Println(str)
+
+				// we try to use the instance directly, since it was not registered, we will deal with it in the event:
+				fieldPtr = callResults[0].Interface()
 			}
 
-			app.setField(dehydrateType, indPtrVal, setFieldName, fieldPtr, bridge)
+			app.setHydratedField(dehydrateType, indPtrVal, setFieldName, fieldPtr, hydratedBridge)
+		case reflect.Map:
+			app.setHydratedMapField(dehydrateType, indPtrVal, setFieldName, callResults[0].Interface(), hydratedBridge)
+			break
+		case reflect.Slice:
+			panic(errors.New("finish adapter.Hydrate method for slice in hydro package"))
 		default:
-			app.setField(dehydrateType, indPtrVal, setFieldName, callResults[0].Interface(), bridge)
+			app.setHydratedField(dehydrateType, indPtrVal, setFieldName, callResults[0].Interface(), hydratedBridge)
 			break
 		}
 	}
@@ -109,25 +125,26 @@ func (app *adapter) Dehydrate(hydrate interface{}) (interface{}, error) {
 	indVal := reflect.Indirect(val)
 
 	// type:
-	deHydrateType := reflect.Indirect(val).Type()
+	hydrateType := reflect.Indirect(val).Type()
 
 	// bridge:
-	bridge, err := app.manager.Fetch(deHydrateType.PkgPath(), deHydrateType.Name())
+	bridge, err := app.manager.Fetch(hydrateType.PkgPath(), hydrateType.Name())
 	if err != nil {
 		return nil, err
 	}
 
+	dehydratedBridge := bridge.Dehydrated()
 	paramsIns := []interface{}{}
-	amount := deHydrateType.NumField()
+	amount := hydrateType.NumField()
 	for i := 0; i < amount; i++ {
 		paramsIns = append(paramsIns, nil)
 	}
 
 	for i := 0; i < amount; i++ {
-		field := deHydrateType.Field(i)
+		field := hydrateType.Field(i)
 		tagName, ok := field.Tag.Lookup("hydro")
 		if !ok {
-			str := fmt.Sprintf("there is no tag 'hydro' on field (name: %s) of struct (name: %s)", field.Name, deHydrateType.Name())
+			str := fmt.Sprintf("there is no tag 'hydro' on field (name: %s) of struct (name: %s)", field.Name, hydrateType.Name())
 			return nil, errors.New(str)
 		}
 
@@ -148,15 +165,52 @@ func (app *adapter) Dehydrate(hydrate interface{}) (interface{}, error) {
 				return nil, err
 			}
 
-			ptrVal, err := app.executeOnDehydrateEvent(bridge, dehydrate, field.Name, deHydrateType.Name())
+			ptrVal, err := app.executeOnDehydrateEvent(dehydratedBridge, dehydrate, field.Name, hydrateType.Name())
 			if err != nil {
 				return nil, err
 			}
 
 			paramsIns[index] = ptrVal
 			break
+		case reflect.Map:
+			var results reflect.Value
+			mapKeys := fieldVal.MapKeys()
+			for index, keyname := range mapKeys {
+
+				el := fieldVal.MapIndex(keyname)
+				dehydrated, err := app.Dehydrate(el.Interface())
+				if err != nil {
+					return nil, err
+				}
+
+				if index <= 0 {
+					dehydratedVal := reflect.ValueOf(dehydrated)
+					dehydrateType := reflect.Indirect(dehydratedVal).Type()
+					elBridge, err := app.manager.Fetch(dehydrateType.PkgPath(), dehydrateType.Name())
+					if err != nil {
+						return nil, err
+					}
+
+					outMapValue := reflect.TypeOf(elBridge.Dehydrated().Interface()).Elem()
+					mapType := reflect.MapOf(keyname.Type(), outMapValue)
+					results = reflect.MakeMapWithSize(mapType, len(mapKeys))
+				}
+
+				elem := reflect.ValueOf(dehydrated)
+				results.SetMapIndex(keyname, elem)
+			}
+
+			ptrVal, err := app.executeOnDehydrateEvent(dehydratedBridge, results.Interface(), field.Name, hydrateType.Name())
+			if err != nil {
+				return nil, err
+			}
+
+			paramsIns[index] = ptrVal
+			break
+		case reflect.Slice:
+			panic(errors.New("finish adapter.Dehydrate method for list in hydro package"))
 		default:
-			ptrVal, err := app.executeOnDehydrateEvent(bridge, fieldValIns, field.Name, deHydrateType.Name())
+			ptrVal, err := app.executeOnDehydrateEvent(dehydratedBridge, fieldValIns, field.Name, hydrateType.Name())
 			if err != nil {
 				return nil, err
 			}
@@ -171,14 +225,14 @@ func (app *adapter) Dehydrate(hydrate interface{}) (interface{}, error) {
 		params = append(params, reflect.ValueOf(oneParamIns))
 	}
 
-	constructorFnIns := bridge.ConstructorFn()
+	constructorFnIns := dehydratedBridge.ConstructorFn()
 	constructorFn := reflect.Indirect(reflect.ValueOf(constructorFnIns))
 	results := constructorFn.Call(params)
 	if len(results) != 2 {
+		dehydratedBridgePointerType := reflect.TypeOf(dehydratedBridge.Pointer())
 		str := fmt.Sprintf(
-			"the constructor (bridge interface: %s, struct: %s) results wered expected to contain 2 elements, %d returned",
-			bridge.Interface(),
-			bridge.Struct(),
+			"the dehydrated bridge's constructor (pointer struct: %s) results wered expected to contain 2 elements, %d returned",
+			dehydratedBridgePointerType.Name(),
 			len(results),
 		)
 
@@ -192,7 +246,34 @@ func (app *adapter) Dehydrate(hydrate interface{}) (interface{}, error) {
 	return results[0].Interface(), nil
 }
 
-func (app *adapter) setField(strctType reflect.Type, ptr reflect.Value, fieldName string, ins interface{}, bridge Bridge) error {
+func (app *adapter) setHydratedMapField(strctType reflect.Type, ptr reflect.Value, fieldName string, ins interface{}, bridge Hydrated) error {
+	val := reflect.ValueOf(ins)
+	indVal := reflect.Indirect(val)
+	mapKeys := indVal.MapKeys()
+
+	var results reflect.Value
+
+	for index, keyname := range mapKeys {
+		if index <= 0 {
+			outMapValue := ptr.FieldByName(fieldName)
+			mapType := reflect.MapOf(keyname.Type(), outMapValue.Type().Elem())
+			results = reflect.MakeMapWithSize(mapType, len(mapKeys))
+		}
+
+		el := indVal.MapIndex(keyname)
+		hydrated, err := app.Hydrate(el.Interface())
+		if err != nil {
+			return err
+		}
+
+		elem := reflect.ValueOf(hydrated)
+		results.SetMapIndex(keyname, elem)
+	}
+
+	return app.setHydratedField(strctType, ptr, fieldName, results.Interface(), bridge)
+}
+
+func (app *adapter) setHydratedField(strctType reflect.Type, ptr reflect.Value, fieldName string, ins interface{}, bridge Hydrated) error {
 	processedIns, err := app.executeOnHydrateEvent(bridge, ins, fieldName, strctType.Name())
 	if err != nil {
 		return err
@@ -209,38 +290,32 @@ func (app *adapter) setField(strctType reflect.Type, ptr reflect.Value, fieldNam
 	return nil
 }
 
-func (app *adapter) executeOnHydrateEvent(bridge Bridge, ins interface{}, fieldName string, structTypeName string) (interface{}, error) {
-	if bridge.HasEvents() {
-		evts := bridge.Events()
-		if evts.HasOnHydrate() {
-			onHydrateFn := evts.OnHydrate()
-			processedIns, err := onHydrateFn(ins, fieldName, structTypeName)
-			if err != nil {
-				return nil, err
-			}
+func (app *adapter) executeOnHydrateEvent(bridge Hydrated, ins interface{}, fieldName string, structTypeName string) (interface{}, error) {
+	if bridge.HasEvent() {
+		onHydrateFn := bridge.Event()
+		processedIns, err := onHydrateFn(ins, fieldName, structTypeName)
+		if err != nil {
+			return nil, err
+		}
 
-			if processedIns != nil {
-				return processedIns, nil
-			}
+		if processedIns != nil {
+			return processedIns, nil
 		}
 	}
 
 	return ins, nil
 }
 
-func (app *adapter) executeOnDehydrateEvent(bridge Bridge, ins interface{}, fieldName string, structTypeName string) (interface{}, error) {
-	if bridge.HasEvents() {
-		evts := bridge.Events()
-		if evts.HasOnDehydrate() {
-			onDehydrateFn := evts.OnDehydrate()
-			processedIns, err := onDehydrateFn(ins, fieldName, structTypeName)
-			if err != nil {
-				return nil, err
-			}
+func (app *adapter) executeOnDehydrateEvent(bridge Dehydrated, ins interface{}, fieldName string, structTypeName string) (interface{}, error) {
+	if bridge.HasEvent() {
+		onDehydrateFn := bridge.Event()
+		processedIns, err := onDehydrateFn(ins, fieldName, structTypeName)
+		if err != nil {
+			return nil, err
+		}
 
-			if processedIns != nil {
-				return processedIns, nil
-			}
+		if processedIns != nil {
+			return processedIns, nil
 		}
 	}
 

@@ -1,24 +1,26 @@
 package hydro
 
-import "errors"
+import (
+	"errors"
+)
 
 type bridgeBuilder struct {
-	pointer        interface{}
-	constructorFn  interface{}
-	interfaceName  string
-	structName     string
-	onHydrateFn   EventFn
-	onDehydrateFn EventFn
+	dehydratedInterface   interface{}
+	dehydratedConstructor interface{}
+	dehydratedPointer     interface{}
+	hydratedPointer       interface{}
+	onHydrateFn           EventFn
+	onDehydrateFn         EventFn
 }
 
 func createBridgeBuilder() BridgeBuilder {
 	out := bridgeBuilder{
-		pointer:        nil,
-		constructorFn:  nil,
-		interfaceName:  "",
-		structName:     "",
-		onHydrateFn:   nil,
-		onDehydrateFn: nil,
+		dehydratedInterface:   "",
+		dehydratedConstructor: nil,
+		dehydratedPointer:     nil,
+		hydratedPointer:       nil,
+		onHydrateFn:           nil,
+		onDehydrateFn:         nil,
 	}
 
 	return &out
@@ -29,37 +31,37 @@ func (app *bridgeBuilder) Create() BridgeBuilder {
 	return createBridgeBuilder()
 }
 
-// WithPointer adds a pointer to the builder
-func (app *bridgeBuilder) WithPointer(pointer interface{}) BridgeBuilder {
-	app.pointer = pointer
+// WithDehydratedInterface adds a dehydrated interface to the builder
+func (app *bridgeBuilder) WithDehydratedInterface(dehydratedInterface interface{}) BridgeBuilder {
+	app.dehydratedInterface = dehydratedInterface
 	return app
 }
 
-// WithConstructor adds a constructor func to the builder
-func (app *bridgeBuilder) WithConstructor(constructorFn interface{}) BridgeBuilder {
-	app.constructorFn = constructorFn
+// WithDehydratedConstructor adds a dehydrated constructor to the builder
+func (app *bridgeBuilder) WithDehydratedConstructor(dehydratedConstructor interface{}) BridgeBuilder {
+	app.dehydratedConstructor = dehydratedConstructor
 	return app
 }
 
-// WithInterfaceName adds an interfaceName to the builder
-func (app *bridgeBuilder) WithInterfaceName(interfaceName string) BridgeBuilder {
-	app.interfaceName = interfaceName
+// WithDehydratedPointer adds a dehydrated pointer to the builder
+func (app *bridgeBuilder) WithDehydratedPointer(dehydratedPointer interface{}) BridgeBuilder {
+	app.dehydratedPointer = dehydratedPointer
 	return app
 }
 
-// WithStructName adds a structName to the builder
-func (app *bridgeBuilder) WithStructName(structName string) BridgeBuilder {
-	app.structName = structName
+// WithHydratedPointer adds an hydrated pointer to the builder
+func (app *bridgeBuilder) WithHydratedPointer(hydratedPointer interface{}) BridgeBuilder {
+	app.hydratedPointer = hydratedPointer
 	return app
 }
 
-// OnHydrate adds an OnHydrateOn before event func to the builder
+// OnHydrate adds an onHydrate event to the builder
 func (app *bridgeBuilder) OnHydrate(onHydrateFn EventFn) BridgeBuilder {
 	app.onHydrateFn = onHydrateFn
 	return app
 }
 
-// OnDehydrate adds an OnDehydrateOn before event func to the builder
+// OnDehydrate adds an onDehydrate event to the builder
 func (app *bridgeBuilder) OnDehydrate(onDehydrateFn EventFn) BridgeBuilder {
 	app.onDehydrateFn = onDehydrateFn
 	return app
@@ -67,36 +69,39 @@ func (app *bridgeBuilder) OnDehydrate(onDehydrateFn EventFn) BridgeBuilder {
 
 // Now builds a new Bridge instance
 func (app *bridgeBuilder) Now() (Bridge, error) {
-	if app.pointer == nil {
-		return nil, errors.New("the pointer is mandatory in order to build a Bridge instance")
+	if app.dehydratedInterface == nil {
+		return nil, errors.New("the dehydrated interface name is mandatory in order to build a Bridge instance")
 	}
 
-	if app.constructorFn == nil {
-		return nil, errors.New("the constructor func is mandatory in order to build a Bridge instance")
+	if app.dehydratedConstructor == nil {
+		return nil, errors.New("the dehydrated constructor is mandatory in order to build a Bridge instance")
 	}
 
-	if app.interfaceName == "" {
-		return nil, errors.New("the interface name is mandatory in order ro build a Bridge instance")
+	if app.dehydratedPointer == nil {
+		return nil, errors.New("the dehydrated pointer is mandatory in order to build a Bridge instance")
 	}
 
-	if app.structName == "" {
-		return nil, errors.New("the struct name is mandatory in order to build a Bridge instance")
+	if app.hydratedPointer == nil {
+		return nil, errors.New("the hydrated pointer is mandatory in order to build a Bridge instance")
 	}
 
-	if app.onHydrateFn != nil && app.onDehydrateFn != nil {
-		evts := createEventsWithHydrateAndDehydrate(app.onHydrateFn, app.onDehydrateFn)
-		return createBridgeWithEvents(app.constructorFn, app.pointer, app.interfaceName, app.structName, evts), nil
-	}
-
+	var hydrated Hydrated
 	if app.onHydrateFn != nil {
-		evts := createEventsWithHydrate(app.onHydrateFn)
-		return createBridgeWithEvents(app.constructorFn, app.pointer, app.interfaceName, app.structName, evts), nil
+		hydrated = createHydratedWithEvent(app.hydratedPointer, app.onHydrateFn)
 	}
 
+	if hydrated == nil {
+		hydrated = createHydrated(app.hydratedPointer)
+	}
+
+	var dehydrated Dehydrated
 	if app.onDehydrateFn != nil {
-		evts := createEventsWithDehydrate(app.onDehydrateFn)
-		return createBridgeWithEvents(app.constructorFn, app.pointer, app.interfaceName, app.structName, evts), nil
+		dehydrated = createDehydratedWithEvent(app.dehydratedInterface, app.dehydratedConstructor, app.dehydratedPointer, app.onDehydrateFn)
 	}
 
-	return createBridge(app.constructorFn, app.pointer, app.interfaceName, app.structName), nil
+	if dehydrated == nil {
+		dehydrated = createDehydrated(app.dehydratedInterface, app.dehydratedConstructor, app.dehydratedPointer)
+	}
+
+	return createBridge(hydrated, dehydrated), nil
 }
