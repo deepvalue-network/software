@@ -6,6 +6,12 @@ import (
 	"github.com/steve-care-software/products/libs/hash"
 )
 
+// NewBuider creates a new builder instance
+func NewBuider() Builder {
+	hashAdapter := hash.NewAdapter()
+	return createBuilder(hashAdapter)
+}
+
 // Builder represents a bill builder
 type Builder interface {
 	Create() Builder
