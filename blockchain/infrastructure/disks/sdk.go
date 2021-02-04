@@ -1,6 +1,8 @@
 package disks
 
 import (
+	"path/filepath"
+
 	"github.com/steve-care-software/products/blockchain/domain/blocks"
 	block_mined "github.com/steve-care-software/products/blockchain/domain/blocks/mined"
 	"github.com/steve-care-software/products/blockchain/domain/links"
@@ -21,12 +23,14 @@ func Init(
 ) {
 	// create the block repository:
 	blockPtr := new(entityHydratedBlock)
-	repositoryFileBlock := files_disks.NewRepository(internalHydroAdapter, basePath, blockPtr)
+	blockBasePath := filepath.Join(basePath, "blocks")
+	repositoryFileBlock := files_disks.NewRepository(internalHydroAdapter, blockBasePath, blockPtr)
 	repositoryBlock := NewRepositoryBlock(repositoryFileBlock)
 
 	// create the mined block repository:
 	minedBlockPtr := new(entityHydratedBlock)
-	repositoryFileMinedBlock := files_disks.NewRepository(internalHydroAdapter, basePath, minedBlockPtr)
+	minedBlockBasePath := filepath.Join(basePath, "blocks/mined")
+	repositoryFileMinedBlock := files_disks.NewRepository(internalHydroAdapter, minedBlockBasePath, minedBlockPtr)
 	repositoryBlockMined := NewRepositoryBlockMined(repositoryFileMinedBlock)
 
 	// assign:
