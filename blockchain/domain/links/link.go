@@ -6,10 +6,10 @@ import (
 )
 
 type link struct {
-	hash          hash.Hash
-	index         uint
-	prevMinedLink hash.Hash
-	nextBlock     blocks.Block
+	hash          hash.Hash    `hydro:"Hash, Hash"`
+	index         uint         `hydro:"Index, Index"`
+	prevMinedLink hash.Hash    `hydro:"PrevMinedLink, PrevMinedLink"`
+	nextBlock     blocks.Block `hydro:"NextBlock, NextBlock"`
 }
 
 func createLink(

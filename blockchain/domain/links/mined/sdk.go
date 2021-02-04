@@ -18,6 +18,7 @@ type Builder interface {
 	Create() Builder
 	WithLink(link links.Link) Builder
 	WithResults(results string) Builder
+	CreatedOn(createdOn time.Time) Builder
 	Now() (Link, error)
 }
 

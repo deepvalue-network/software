@@ -108,7 +108,7 @@ func (app *adapter) Hydrate(dehydrate interface{}) (interface{}, error) {
 			app.setHydratedMapField(dehydrateType, indPtrVal, setFieldName, callResults[0].Interface(), hydratedBridge)
 			break
 		case reflect.Slice:
-			panic(errors.New("finish adapter.Hydrate method for slice in hydro package"))
+			app.setHydratedSliceField(dehydrateType, indPtrVal, setFieldName, callResults[0].Interface(), hydratedBridge)
 		default:
 			app.setHydratedField(dehydrateType, indPtrVal, setFieldName, callResults[0].Interface(), hydratedBridge)
 			break
@@ -262,12 +262,38 @@ func (app *adapter) setHydratedMapField(strctType reflect.Type, ptr reflect.Valu
 
 		el := indVal.MapIndex(keyname)
 		hydrated, err := app.Hydrate(el.Interface())
-		if err != nil {
+		if hydrated == nil && err != nil {
 			return err
 		}
 
 		elem := reflect.ValueOf(hydrated)
 		results.SetMapIndex(keyname, elem)
+	}
+
+	return app.setHydratedField(strctType, ptr, fieldName, results.Interface(), bridge)
+}
+
+func (app *adapter) setHydratedSliceField(strctType reflect.Type, ptr reflect.Value, fieldName string, ins interface{}, bridge Hydrated) error {
+	val := reflect.ValueOf(ins)
+	indVal := reflect.Indirect(val)
+	sliceLength := indVal.Len()
+
+	var results reflect.Value
+	for i := 0; i < sliceLength; i++ {
+		if i <= 0 {
+			outSliceValue := indVal.Index(i)
+			sliceType := reflect.SliceOf(outSliceValue.Type())
+			results = reflect.MakeSlice(sliceType, sliceLength, indVal.Cap())
+		}
+
+		el := indVal.Index(i)
+		hydrated, err := app.Hydrate(el.Interface())
+		if hydrated == nil && err != nil {
+			return err
+		}
+
+		elem := reflect.ValueOf(hydrated)
+		el.Set(elem)
 	}
 
 	return app.setHydratedField(strctType, ptr, fieldName, results.Interface(), bridge)

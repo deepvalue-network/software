@@ -11,15 +11,14 @@ import (
 )
 
 type chain struct {
-	id            *uuid.UUID
-	peers         peers.Peers
-	gen           genesis.Genesis
-	root          block_mined.Block
-	totalHashes   uint
-	height        uint
-	createdOn     time.Time
-	lastUpdatedOn time.Time
-	head          link_mined.Link
+	id          *uuid.UUID        `hydro:"ID, ID"`
+	peers       peers.Peers       `hydro:"Peers, Peers"`
+	gen         genesis.Genesis   `hydro:"Genesis, Genesis"`
+	root        block_mined.Block `hydro:"Hash, Hash"`
+	totalHashes uint              `hydro:"TotalHashes, TotalHashes"`
+	height      uint              `hydro:"Height, Height"`
+	createdOn   time.Time         `hydro:"CreatedOn, CreatedOn"`
+	head        link_mined.Link   `hydro:"Head, Head"`
 }
 
 func createChain(
@@ -30,7 +29,6 @@ func createChain(
 	totalHashes uint,
 	height uint,
 	createdOn time.Time,
-	lastUpdatedOn time.Time,
 ) Chain {
 	return createChainInternally(
 		id,
@@ -40,7 +38,6 @@ func createChain(
 		totalHashes,
 		height,
 		createdOn,
-		lastUpdatedOn,
 		nil,
 	)
 }
@@ -53,7 +50,6 @@ func createChainWithHead(
 	totalHashes uint,
 	height uint,
 	createdOn time.Time,
-	lastUpdatedOn time.Time,
 	head link_mined.Link,
 ) Chain {
 	return createChainInternally(
@@ -64,7 +60,6 @@ func createChainWithHead(
 		totalHashes,
 		height,
 		createdOn,
-		lastUpdatedOn,
 		head,
 	)
 }
@@ -77,19 +72,17 @@ func createChainInternally(
 	totalHashes uint,
 	height uint,
 	createdOn time.Time,
-	lastUpdatedOn time.Time,
 	head link_mined.Link,
 ) Chain {
 	out := chain{
-		id:            id,
-		peers:         peers,
-		gen:           gen,
-		root:          root,
-		totalHashes:   totalHashes,
-		height:        height,
-		createdOn:     createdOn,
-		lastUpdatedOn: lastUpdatedOn,
-		head:          head,
+		id:          id,
+		peers:       peers,
+		gen:         gen,
+		root:        root,
+		totalHashes: totalHashes,
+		height:      height,
+		createdOn:   createdOn,
+		head:        head,
 	}
 
 	return &out
@@ -128,11 +121,6 @@ func (obj *chain) Height() uint {
 // CreatedOn returns the creation time
 func (obj *chain) CreatedOn() time.Time {
 	return obj.createdOn
-}
-
-// LastUpdatedOn returns the lastUpdatedOn time
-func (obj *chain) LastUpdatedOn() time.Time {
-	return obj.lastUpdatedOn
 }
 
 // HasHead returns true if there is a head, false otherwise

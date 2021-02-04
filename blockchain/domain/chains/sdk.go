@@ -27,10 +27,13 @@ type Validator interface {
 // Builder represents a chain builder
 type Builder interface {
 	Create() Builder
+	WithID(id *uuid.UUID) Builder
+	WithPeers(peers peers.Peers) Builder
 	WithOriginal(original Chain) Builder
 	WithGenesis(gen genesis.Genesis) Builder
 	WithRoot(root block_mined.Block) Builder
 	WithHead(head link_mined.Link) Builder
+	CreatedOn(createdOn time.Time) Builder
 	Now() (Chain, error)
 }
 
@@ -43,7 +46,6 @@ type Chain interface {
 	TotalHashes() uint
 	Height() uint
 	CreatedOn() time.Time
-	LastUpdatedOn() time.Time
 	HasHead() bool
 	Head() link_mined.Link
 }

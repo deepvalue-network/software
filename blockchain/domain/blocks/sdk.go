@@ -11,6 +11,11 @@ func NewBuilder() Builder {
 	return createBuilder(hashTreeBuilder)
 }
 
+// NewPointer creates a new block pointer
+func NewPointer() Block {
+	return new(block)
+}
+
 // Builder represents a block builder
 type Builder interface {
 	Create() Builder

@@ -8,10 +8,10 @@ import (
 )
 
 type block struct {
-	hash      hash.Hash
-	block     blocks.Block
-	results   string
-	createdOn time.Time
+	hash      hash.Hash    `hydro:"Hash, Hash"`
+	block     blocks.Block `hydro:"Block, Block"`
+	results   string       `hydro:"Results, Results"`
+	createdOn time.Time    `hydro:"CreatedOn, CreatedOn"`
 }
 
 func createBlock(

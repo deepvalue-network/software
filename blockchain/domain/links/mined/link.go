@@ -8,10 +8,10 @@ import (
 )
 
 type link struct {
-	hash      hash.Hash
-	link      links.Link
-	results   string
-	createdOn time.Time
+	hash      hash.Hash  `hydro:"Hash, Hash"`
+	link      links.Link `hydro:"Link, Link"`
+	results   string     `hydro:"Results, Results"`
+	createdOn time.Time  `hydro:"CreatedOn, CreatedOn"`
 }
 
 func createLink(

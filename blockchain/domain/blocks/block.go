@@ -6,8 +6,8 @@ import (
 )
 
 type block struct {
-	tree   hashtree.HashTree
-	hashes []hash.Hash
+	tree   hashtree.HashTree `hydro:"Tree, Tree"`
+	hashes []hash.Hash       `hydro:"Hashes, Hashes"`
 }
 
 func createBlock(

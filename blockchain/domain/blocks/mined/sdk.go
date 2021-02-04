@@ -13,11 +13,17 @@ func NewBuilder() Builder {
 	return createBuilder(hashAdapter)
 }
 
+// NewPointer creates a new mined block pointer
+func NewPointer() Block {
+	return new(block)
+}
+
 // Builder represents a block builder
 type Builder interface {
 	Create() Builder
 	WithBlock(block blocks.Block) Builder
 	WithResults(results string) Builder
+	CreatedOn(createdOn time.Time) Builder
 	Now() (Block, error)
 }
 

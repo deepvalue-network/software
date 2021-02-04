@@ -14,10 +14,13 @@ import (
 type builder struct {
 	peersBuilder     peers.Builder
 	peerSyncInterval time.Duration
+	id               *uuid.UUID
 	original         Chain
+	peers            peers.Peers
 	gen              genesis.Genesis
 	root             block_mined.Block
 	head             link_mined.Link
+	createdOn        *time.Time
 }
 
 func createBuilder(
@@ -27,10 +30,13 @@ func createBuilder(
 	out := builder{
 		peersBuilder:     peersBuilder,
 		peerSyncInterval: peerSyncInterval,
+		id:               nil,
+		peers:            nil,
 		original:         nil,
 		gen:              nil,
 		root:             nil,
 		head:             nil,
+		createdOn:        nil,
 	}
 
 	return &out
@@ -39,6 +45,18 @@ func createBuilder(
 // Create initializes the builder
 func (app *builder) Create() Builder {
 	return createBuilder(app.peersBuilder, app.peerSyncInterval)
+}
+
+// WithID adds an ID to the builder
+func (app *builder) WithID(id *uuid.UUID) Builder {
+	app.id = id
+	return app
+}
+
+// WithPeers add peers to the builder
+func (app *builder) WithPeers(peers peers.Peers) Builder {
+	app.peers = peers
+	return app
 }
 
 // WithOriginal adds an original chain to the builder
@@ -65,21 +83,34 @@ func (app *builder) WithHead(head link_mined.Link) Builder {
 	return app
 }
 
+// CreatedOn adds a creation time to the builder
+func (app *builder) CreatedOn(createdOn time.Time) Builder {
+	app.createdOn = &createdOn
+	return app
+}
+
 // Now builds a new Chain instance
 func (app *builder) Now() (Chain, error) {
+	if app.createdOn == nil {
+		createdOn := time.Now().UTC()
+		app.createdOn = &createdOn
+	}
+
 	if app.original != nil {
 		if app.head == nil {
 			return nil, errors.New("the head mined link is mandatory in order to build an updated Chain instance")
 		}
 
-		id := app.original.ID()
 		peers := app.original.Peers()
+		if app.peers != nil {
+			peers.Merge(app.peers)
+		}
+
+		id := app.original.ID()
 		root := app.original.Root()
 		gen := app.original.Genesis()
 		totalHashes := app.original.TotalHashes() + uint(len(app.head.Link().NextBlock().Hashes()))
 		height := app.original.Height() + 1
-		createdOn := app.original.CreatedOn()
-		lastUpdatedOn := time.Now().UTC()
 		return createChainWithHead(
 			id,
 			peers,
@@ -87,10 +118,14 @@ func (app *builder) Now() (Chain, error) {
 			root,
 			totalHashes,
 			height,
-			createdOn,
-			lastUpdatedOn,
+			*app.createdOn,
 			app.head,
 		), nil
+	}
+
+	if app.id == nil {
+		id := uuid.NewV4()
+		app.id = &id
 	}
 
 	if app.gen == nil {
@@ -106,19 +141,19 @@ func (app *builder) Now() (Chain, error) {
 		return nil, err
 	}
 
-	id := uuid.NewV4()
+	if app.peers != nil {
+		peers.Merge(app.peers)
+	}
+
 	totalHashes := uint(len(app.root.Block().Hashes()))
 	height := uint(0)
-	createdOn := time.Now().UTC()
-	lastUpdatedOn := time.Now().UTC()
 	return createChain(
-		&id,
+		app.id,
 		peers,
 		app.gen,
 		app.root,
 		totalHashes,
 		height,
-		createdOn,
-		lastUpdatedOn,
+		*app.createdOn,
 	), nil
 }
