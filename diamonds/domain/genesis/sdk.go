@@ -3,12 +3,14 @@ package genesis
 import (
 	"time"
 
+	"github.com/steve-care-software/products/blockchain/domain/chains"
 	"github.com/steve-care-software/products/libs/hash"
 )
 
 // Builder represents a genesis builder
 type Builder interface {
 	Create() Builder
+	WithChain(chain chains.Chain) Builder
 	WithHashedPubKeysOwner(hashedPubKeysOwner []hash.Hash) Builder
 	CreatedOn(createdOn time.Time) Builder
 	ActiveOn(activeOn time.Time) Builder
@@ -18,6 +20,7 @@ type Builder interface {
 // Genesis represents a genesis diamond
 type Genesis interface {
 	Hash() hash.Hash
+	Chain() chains.Chain
 	Owner() []hash.Hash
 	CreatedOn() time.Time
 	ActiveOn() time.Time
