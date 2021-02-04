@@ -4,15 +4,15 @@ import (
 	"time"
 
 	"github.com/steve-care-software/products/blockchain/domain/chains"
-	"github.com/steve-care-software/products/diamonds/domain/mines/diamonds"
 	"github.com/steve-care-software/products/libs/hash"
+	"github.com/steve-care-software/products/libs/hashtree"
 )
 
 // Builder represents a mine builder
 type Builder interface {
 	Create() Builder
 	WithChain(chain chains.Chain) Builder
-	WithDiamonds(diamonds diamonds.Diamonds) Builder
+	WithDiamonds(diamonds hashtree.HashTree) Builder
 	CreatedOn(createdOn time.Time) Builder
 	Now() (Mine, error)
 }
@@ -21,7 +21,7 @@ type Builder interface {
 type Mine interface {
 	Hash() hash.Hash
 	Chain() chains.Chain
-	Diamonds() diamonds.Diamonds
+	Diamonds() hashtree.HashTree
 	CreatedOn() time.Time
 }
 
