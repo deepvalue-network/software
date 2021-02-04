@@ -5,10 +5,31 @@ import (
 	"github.com/steve-care-software/products/libs/hash"
 )
 
+// Builder represents a genesis builder
+type Builder interface {
+	Create() Builder
+	WithGenesis(gen spends.Genesis) Builder
+	WithSeed(seed string) Builder
+	Now() (Genesis, error)
+}
+
 // Genesis represents a genesis view spent
 type Genesis interface {
 	Hash() hash.Hash
 	Genesis() spends.Genesis
 	Seed() string
 	Amount() uint64
+}
+
+// Repository represents a genesis repository
+type Repository interface {
+	List() ([]hash.Hash, error)
+	ListByGenesis(gen spends.Genesis) ([]hash.Hash, error)
+	Retrieve(hash hash.Hash) (Genesis, error)
+}
+
+// Service represents a genesis service
+type Service interface {
+	Insert(gen Genesis) error
+	Delete(gen Genesis) error
 }
