@@ -10,6 +10,7 @@ import (
 // Builder represents a genesis builder
 type Builder interface {
 	Create() Builder
+	WithAmount(amount uint64) Builder
 	WithChain(chain chains.Chain) Builder
 	WithHashedPubKeysOwner(hashedPubKeysOwner []hash.Hash) Builder
 	CreatedOn(createdOn time.Time) Builder
@@ -20,6 +21,7 @@ type Builder interface {
 // Genesis represents a genesis diamond
 type Genesis interface {
 	Hash() hash.Hash
+	Amount() uint64
 	Chain() chains.Chain
 	Owner() []hash.Hash
 	CreatedOn() time.Time
