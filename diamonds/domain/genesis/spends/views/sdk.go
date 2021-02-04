@@ -5,11 +5,18 @@ import (
 	"github.com/steve-care-software/products/libs/hash"
 )
 
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	hashAdapter := hash.NewAdapter()
+	return createBuilder(hashAdapter)
+}
+
 // Builder represents a genesis builder
 type Builder interface {
 	Create() Builder
 	WithGenesis(gen spends.Genesis) Builder
 	WithSeed(seed string) Builder
+	WithAmount(amount uint64) Builder
 	Now() (Genesis, error)
 }
 

@@ -10,8 +10,8 @@ import (
 // Builder represents a genesis builder
 type Builder interface {
 	Create() Builder
-	WithHashedAmount(hashedAmount hash.Hash) Builder
-	WithEncryptedSeed(encSeed []byte) Builder
+	WithAmount(amount hash.Hash) Builder
+	WithSeed(seed hash.Hash) Builder
 	WithGenesis(gen genesis.Genesis) Builder
 	CreatedOn(createdOn time.Time) Builder
 	Now() (Genesis, error)
@@ -20,8 +20,8 @@ type Builder interface {
 // Genesis represents a spent genesis
 type Genesis interface {
 	Hash() hash.Hash
-	Amount() []byte
-	Seed() []byte
+	Amount() hash.Hash
+	Seed() hash.Hash
 	Genesis() genesis.Genesis
 	CreatedOn() time.Time
 }
