@@ -1,4 +1,4 @@
-package chains
+package mines
 
 import (
 	"time"
@@ -7,6 +7,12 @@ import (
 	"github.com/steve-care-software/products/libs/hash"
 	"github.com/steve-care-software/products/libs/hashtree"
 )
+
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	hashAdapter := hash.NewAdapter()
+	return createBuilder(hashAdapter)
+}
 
 // Builder represents a mine builder
 type Builder interface {
