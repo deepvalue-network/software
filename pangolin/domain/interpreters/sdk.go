@@ -1,16 +1,16 @@
 package interpreters
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/lexers"
-	"github.com/steve-care-software/products/pangolin/domain/lexers/grammar"
-	lexer_parser "github.com/steve-care-software/products/pangolin/domain/lexers/parser"
-	"github.com/steve-care-software/products/pangolin/domain/linkers"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/remaining"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/standard"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/transform"
-	var_variable "github.com/steve-care-software/products/pangolin/domain/middle/variables/variable"
-	"github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
+	lexer_parser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
+	"github.com/deepvalue-network/software/pangolin/domain/linkers"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )
 
 // NewBuilder creates a new interpreter builder instance

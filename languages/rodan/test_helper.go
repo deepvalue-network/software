@@ -1,12 +1,12 @@
 package rodan
 
 import (
-	scripts "github.com/steve-care-software/products/pangolin/application"
-	"github.com/steve-care-software/products/pangolin/domain/interpreters"
-	"github.com/steve-care-software/products/pangolin/domain/lexers"
-	"github.com/steve-care-software/products/pangolin/domain/lexers/grammar"
-	"github.com/steve-care-software/products/pangolin/domain/middle"
-	"github.com/steve-care-software/products/pangolin/domain/parsers"
+	scripts "github.com/deepvalue-network/software/pangolin/application"
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
+	"github.com/deepvalue-network/software/pangolin/domain/middle"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 func create(dirPath string) (scripts.ParserLinker, interpreters.Builder, error) {

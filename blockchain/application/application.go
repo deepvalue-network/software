@@ -1,8 +1,8 @@
 package application
 
 import (
-	"github.com/steve-care-software/products/blockchain/application/repositories"
-	"github.com/steve-care-software/products/blockchain/application/services"
+	"github.com/deepvalue-network/software/blockchain/application/repositories"
+	"github.com/deepvalue-network/software/blockchain/application/services"
 )
 
 type application struct {

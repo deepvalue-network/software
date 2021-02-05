@@ -2,7 +2,7 @@ package repositories
 
 import (
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/blockchain/domain/chains"
+	"github.com/deepvalue-network/software/blockchain/domain/chains"
 )
 
 type chain struct {

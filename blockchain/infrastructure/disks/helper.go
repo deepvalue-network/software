@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 func makeDirIfNotExists(path string, fileMode os.FileMode) error {

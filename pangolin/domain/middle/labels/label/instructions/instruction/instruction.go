@@ -1,7 +1,7 @@
 package instruction
 
 import (
-	ins "github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction"
+	ins "github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
 )
 
 type instruction struct {

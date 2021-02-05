@@ -4,8 +4,8 @@ import (
 	"time"
 
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/libs/cryptography/pk/encryption/public"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/encryption/public"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewBuilder creates a new builder instance

@@ -1,8 +1,8 @@
 package sets
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/resources"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/resources"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type unrankedElements struct {

@@ -1,16 +1,16 @@
 package middle
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction"
-	"github.com/steve-care-software/products/pangolin/domain/middle/labels"
-	"github.com/steve-care-software/products/pangolin/domain/middle/tests"
-	"github.com/steve-care-software/products/pangolin/domain/middle/tests/test"
-	test_instructions "github.com/steve-care-software/products/pangolin/domain/middle/tests/test/instructions"
-	test_instruction "github.com/steve-care-software/products/pangolin/domain/middle/tests/test/instructions/instruction"
-	"github.com/steve-care-software/products/pangolin/domain/middle/variables"
-	"github.com/steve-care-software/products/pangolin/domain/parsers"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/tests/test"
+	test_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions"
+	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewAdapter creates a new adapter instance

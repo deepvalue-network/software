@@ -3,9 +3,9 @@ package owners
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/diamonds/domain/bills"
-	"github.com/steve-care-software/products/diamonds/domain/owners"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/diamonds/domain/bills"
+	"github.com/deepvalue-network/software/diamonds/domain/owners"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type builder struct {

@@ -1,7 +1,7 @@
 package disks
 
 import (
-	"github.com/steve-care-software/products/libs/hashtree"
+	"github.com/deepvalue-network/software/libs/hashtree"
 )
 
 type entityHydratedBlock struct {

@@ -1,6 +1,6 @@
 package users
 
-import "github.com/steve-care-software/products/identity/domain/accesses"
+import "github.com/deepvalue-network/software/identity/domain/accesses"
 
 // NewBuilder creates a new builder instance
 func NewBuilder(encPkBitrate int) Builder {

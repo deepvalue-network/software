@@ -3,10 +3,10 @@ package disks
 import (
 	"testing"
 
-	"github.com/steve-care-software/products/identity/domain/accesses"
-	"github.com/steve-care-software/products/identity/domain/accesses/access"
-	"github.com/steve-care-software/products/identity/domain/users"
-	"github.com/steve-care-software/products/libs/hydro"
+	"github.com/deepvalue-network/software/identity/domain/accesses"
+	"github.com/deepvalue-network/software/identity/domain/accesses/access"
+	"github.com/deepvalue-network/software/identity/domain/users"
+	"github.com/deepvalue-network/software/libs/hydro"
 )
 
 func TestHydrate_access_Success(t *testing.T) {

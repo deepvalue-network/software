@@ -1,8 +1,8 @@
 package deletes
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/structures"
-	"github.com/steve-care-software/products/bobby/domain/structures/graphbases"
+	"github.com/deepvalue-network/software/bobby/domain/structures"
+	"github.com/deepvalue-network/software/bobby/domain/structures/graphbases"
 )
 
 type processor struct {

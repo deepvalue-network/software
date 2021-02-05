@@ -4,15 +4,15 @@ import (
 	"time"
 
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
-	mined_block "github.com/steve-care-software/products/blockchain/domain/blocks/mined"
-	"github.com/steve-care-software/products/blockchain/domain/chains"
-	"github.com/steve-care-software/products/blockchain/domain/chains/peers"
-	"github.com/steve-care-software/products/blockchain/domain/genesis"
-	"github.com/steve-care-software/products/blockchain/domain/links"
-	mined_link "github.com/steve-care-software/products/blockchain/domain/links/mined"
-	"github.com/steve-care-software/products/libs/hash"
-	"github.com/steve-care-software/products/libs/hashtree"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	mined_block "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
+	"github.com/deepvalue-network/software/blockchain/domain/chains"
+	"github.com/deepvalue-network/software/blockchain/domain/chains/peers"
+	"github.com/deepvalue-network/software/blockchain/domain/genesis"
+	"github.com/deepvalue-network/software/blockchain/domain/links"
+	mined_link "github.com/deepvalue-network/software/blockchain/domain/links/mined"
+	"github.com/deepvalue-network/software/libs/hash"
+	"github.com/deepvalue-network/software/libs/hashtree"
 )
 
 func newBlock(

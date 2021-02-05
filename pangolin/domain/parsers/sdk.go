@@ -3,9 +3,9 @@ package parsers
 import (
 	"strings"
 
-	"github.com/steve-care-software/products/pangolin/domain/lexers"
-	"github.com/steve-care-software/products/pangolin/domain/lexers/grammar"
-	lparser "github.com/steve-care-software/products/pangolin/domain/lexers/parser"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
+	lparser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
 )
 
 const quaotationChar = '"'

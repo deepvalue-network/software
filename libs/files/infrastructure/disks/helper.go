@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 func makeDirIfNotExists(path string, fileMode os.FileMode) error {

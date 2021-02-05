@@ -1,6 +1,6 @@
 package files
 
-import "github.com/steve-care-software/products/libs/hash"
+import "github.com/deepvalue-network/software/libs/hash"
 
 // Repository represents a file repository
 type Repository interface {

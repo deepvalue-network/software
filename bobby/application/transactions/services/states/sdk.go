@@ -1,8 +1,8 @@
 package states
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/states/overviews"
-	"github.com/steve-care-software/products/bobby/domain/transactions"
+	"github.com/deepvalue-network/software/bobby/domain/states/overviews"
+	"github.com/deepvalue-network/software/bobby/domain/transactions"
 )
 
 // CallBackFn represents a callback, executed when the transaction is processed

@@ -3,10 +3,10 @@ package states
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/blockchain/application/services"
-	"github.com/steve-care-software/products/bobby/domain/resources"
-	"github.com/steve-care-software/products/bobby/domain/transactions"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/blockchain/application/services"
+	"github.com/deepvalue-network/software/bobby/domain/resources"
+	"github.com/deepvalue-network/software/bobby/domain/transactions"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type builder struct {

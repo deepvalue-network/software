@@ -1,8 +1,8 @@
 package structures
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/structures/sets"
-	set_schemas "github.com/steve-care-software/products/bobby/domain/structures/sets/schemas"
+	"github.com/deepvalue-network/software/bobby/domain/structures/sets"
+	set_schemas "github.com/deepvalue-network/software/bobby/domain/structures/sets/schemas"
 )
 
 type set struct {

@@ -1,6 +1,6 @@
 package users
 
-import "github.com/steve-care-software/products/identity/domain/accesses"
+import "github.com/deepvalue-network/software/identity/domain/accesses"
 
 type user struct {
 	name     string            `hydro:"Name, Name"`

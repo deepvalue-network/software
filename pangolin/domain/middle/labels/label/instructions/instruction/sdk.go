@@ -1,8 +1,8 @@
 package instruction
 
 import (
-	ins "github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction"
-	"github.com/steve-care-software/products/pangolin/domain/parsers"
+	ins "github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapter creates a new adapter instance

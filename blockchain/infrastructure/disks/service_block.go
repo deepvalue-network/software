@@ -1,8 +1,8 @@
 package disks
 
 import (
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
-	"github.com/steve-care-software/products/libs/files/domain/files"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/libs/files/domain/files"
 )
 
 type serviceBlock struct {

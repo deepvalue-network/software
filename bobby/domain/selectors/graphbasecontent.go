@@ -1,6 +1,6 @@
 package selectors
 
-import "github.com/steve-care-software/products/bobby/domain/selectors/specifiers"
+import "github.com/deepvalue-network/software/bobby/domain/selectors/specifiers"
 
 type graphbaseContent struct {
 	specifier specifiers.Specifier

@@ -1,8 +1,8 @@
 package transactions
 
 import (
-	"github.com/steve-care-software/products/bobby/application/transactions/repositories"
-	"github.com/steve-care-software/products/bobby/application/transactions/services"
+	"github.com/deepvalue-network/software/bobby/application/transactions/repositories"
+	"github.com/deepvalue-network/software/bobby/application/transactions/services"
 )
 
 // Application represents the transaction application

@@ -1,7 +1,7 @@
 package interpreters
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/linkers"
+	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 )
 
 func execute(machine Machine, application linkers.Application) (StackFrame, error) {

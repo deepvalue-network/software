@@ -1,8 +1,8 @@
 package contents
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/selectors"
-	"github.com/steve-care-software/products/bobby/domain/structures/sets"
+	"github.com/deepvalue-network/software/bobby/domain/selectors"
+	"github.com/deepvalue-network/software/bobby/domain/structures/sets"
 )
 
 type set struct {

@@ -1,8 +1,8 @@
 package test
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/middle/tests/test/instructions"
-	"github.com/steve-care-software/products/pangolin/domain/parsers"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type adapter struct {

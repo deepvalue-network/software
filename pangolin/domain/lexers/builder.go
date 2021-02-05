@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/steve-care-software/products/pangolin/domain/lexers/grammar"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
 )
 
 type builder struct {

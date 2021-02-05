@@ -1,9 +1,9 @@
 package tables
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/containers/tables/deletes"
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/containers/tables/saves"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/containers/tables/deletes"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/containers/tables/saves"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewBuilder creates a new builder instance

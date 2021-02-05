@@ -4,15 +4,15 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/steve-care-software/products/pangolin/domain/lexers"
-	lexer_parser "github.com/steve-care-software/products/pangolin/domain/lexers/parser"
-	"github.com/steve-care-software/products/pangolin/domain/middle"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/condition"
-	label_instructions "github.com/steve-care-software/products/pangolin/domain/middle/labels/label/instructions"
-	label_instruction "github.com/steve-care-software/products/pangolin/domain/middle/labels/label/instructions/instruction"
-	var_value "github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value"
-	"github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
+	lexer_parser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
+	"github.com/deepvalue-network/software/pangolin/domain/middle"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
+	label_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/labels/label/instructions"
+	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/labels/label/instructions/instruction"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )
 
 type machine struct {

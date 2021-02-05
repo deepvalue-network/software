@@ -3,8 +3,8 @@ package hydro
 import (
 	"testing"
 
-	"github.com/steve-care-software/products/libs/hash"
-	"github.com/steve-care-software/products/libs/hydro/internals"
+	"github.com/deepvalue-network/software/libs/hash"
+	"github.com/deepvalue-network/software/libs/hydro/internals"
 )
 
 func TestHydrate_Success(t *testing.T) {

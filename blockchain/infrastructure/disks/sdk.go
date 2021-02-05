@@ -3,12 +3,12 @@ package disks
 import (
 	"path/filepath"
 
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
-	block_mined "github.com/steve-care-software/products/blockchain/domain/blocks/mined"
-	"github.com/steve-care-software/products/blockchain/domain/links"
-	"github.com/steve-care-software/products/libs/files/domain/files"
-	files_disks "github.com/steve-care-software/products/libs/files/infrastructure/disks"
-	"github.com/steve-care-software/products/libs/hydro"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	block_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
+	"github.com/deepvalue-network/software/blockchain/domain/links"
+	"github.com/deepvalue-network/software/libs/files/domain/files"
+	files_disks "github.com/deepvalue-network/software/libs/files/infrastructure/disks"
+	"github.com/deepvalue-network/software/libs/hydro"
 )
 
 const timeLayout = "2006-01-02T15:04:05.000Z"

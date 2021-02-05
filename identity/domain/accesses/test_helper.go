@@ -1,6 +1,6 @@
 package accesses
 
-import "github.com/steve-care-software/products/identity/domain/accesses/access"
+import "github.com/deepvalue-network/software/identity/domain/accesses/access"
 
 // CreateAccessesForTests creates a new accesses instance for tests
 func CreateAccessesForTests(encPkBitrate int) Accesses {

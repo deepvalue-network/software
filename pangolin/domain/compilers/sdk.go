@@ -1,10 +1,10 @@
 package compilers
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/interpreters"
-	"github.com/steve-care-software/products/pangolin/domain/linkers"
-	"github.com/steve-care-software/products/pangolin/domain/middle"
-	"github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters"
+	"github.com/deepvalue-network/software/pangolin/domain/linkers"
+	"github.com/deepvalue-network/software/pangolin/domain/middle"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )
 
 // NewApplication creates a new application instance

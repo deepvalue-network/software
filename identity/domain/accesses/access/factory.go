@@ -2,8 +2,8 @@ package access
 
 import (
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/libs/cryptography/pk/encryption"
-	"github.com/steve-care-software/products/libs/cryptography/pk/signature"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/encryption"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 )
 
 type factory struct {

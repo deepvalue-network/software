@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/middle/tests/test"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/tests/test"
 )
 
 type builder struct {

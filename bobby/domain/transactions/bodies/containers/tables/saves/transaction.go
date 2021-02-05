@@ -1,9 +1,9 @@
 package saves
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/selectors"
-	"github.com/steve-care-software/products/bobby/domain/structures/tables/schemas"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/selectors"
+	"github.com/deepvalue-network/software/bobby/domain/structures/tables/schemas"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type transaction struct {

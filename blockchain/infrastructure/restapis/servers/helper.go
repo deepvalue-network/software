@@ -8,7 +8,7 @@ import (
 
 	"github.com/gorilla/mux"
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 func fetchHashFromParams(hashAdapter hash.Adapter, w http.ResponseWriter, r *http.Request, keyname string) *hash.Hash {

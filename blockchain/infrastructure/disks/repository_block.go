@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
-	"github.com/steve-care-software/products/libs/files/domain/files"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/libs/files/domain/files"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type repositoryBlock struct {

@@ -3,7 +3,7 @@ package mined
 import (
 	"time"
 
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
 )
 
 // CreateBlockForTests creates a block for tests

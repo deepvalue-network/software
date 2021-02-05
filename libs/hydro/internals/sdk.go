@@ -1,6 +1,6 @@
 package internals
 
-import "github.com/steve-care-software/products/libs/hash"
+import "github.com/deepvalue-network/software/libs/hash"
 
 // NewComplex creates a new complex instance
 func NewComplex(simple SimpleInterface, another uint, hash hash.Hash) (ComplexInterface, error) {

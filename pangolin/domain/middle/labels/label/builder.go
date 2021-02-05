@@ -3,7 +3,7 @@ package label
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/pangolin/domain/middle/labels/label/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/labels/label/instructions"
 )
 
 type builder struct {

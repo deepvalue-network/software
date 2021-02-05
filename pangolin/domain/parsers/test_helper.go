@@ -1,7 +1,7 @@
 package parsers
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/lexers"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 )
 
 func createParserForTests(rootPattern string, grammarFile string) Parser {

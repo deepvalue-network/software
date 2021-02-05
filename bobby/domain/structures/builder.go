@@ -4,15 +4,15 @@ import (
 	"errors"
 	"time"
 
-	"github.com/steve-care-software/products/bobby/domain/structures/graphbases"
-	"github.com/steve-care-software/products/bobby/domain/structures/identities"
-	"github.com/steve-care-software/products/bobby/domain/structures/sets"
-	set_schemas "github.com/steve-care-software/products/bobby/domain/structures/sets/schemas"
-	"github.com/steve-care-software/products/bobby/domain/structures/tables"
-	"github.com/steve-care-software/products/bobby/domain/structures/tables/elements"
-	"github.com/steve-care-software/products/bobby/domain/structures/tables/rows"
-	table_schemas "github.com/steve-care-software/products/bobby/domain/structures/tables/schemas"
-	"github.com/steve-care-software/products/bobby/domain/structures/tables/values"
+	"github.com/deepvalue-network/software/bobby/domain/structures/graphbases"
+	"github.com/deepvalue-network/software/bobby/domain/structures/identities"
+	"github.com/deepvalue-network/software/bobby/domain/structures/sets"
+	set_schemas "github.com/deepvalue-network/software/bobby/domain/structures/sets/schemas"
+	"github.com/deepvalue-network/software/bobby/domain/structures/tables"
+	"github.com/deepvalue-network/software/bobby/domain/structures/tables/elements"
+	"github.com/deepvalue-network/software/bobby/domain/structures/tables/rows"
+	table_schemas "github.com/deepvalue-network/software/bobby/domain/structures/tables/schemas"
+	"github.com/deepvalue-network/software/bobby/domain/structures/tables/values"
 )
 
 type builder struct {

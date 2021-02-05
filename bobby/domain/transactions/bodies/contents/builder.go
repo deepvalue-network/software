@@ -3,10 +3,10 @@ package contents
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/bobby/domain/selectors"
-	"github.com/steve-care-software/products/bobby/domain/structures/sets"
-	"github.com/steve-care-software/products/bobby/domain/structures/tables/rows"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/selectors"
+	"github.com/deepvalue-network/software/bobby/domain/structures/sets"
+	"github.com/deepvalue-network/software/bobby/domain/structures/tables/rows"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type builder struct {

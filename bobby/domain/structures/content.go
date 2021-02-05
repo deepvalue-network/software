@@ -1,8 +1,8 @@
 package structures
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/structures/graphbases"
-	"github.com/steve-care-software/products/bobby/domain/structures/identities"
+	"github.com/deepvalue-network/software/bobby/domain/structures/graphbases"
+	"github.com/deepvalue-network/software/bobby/domain/structures/identities"
 )
 
 type content struct {

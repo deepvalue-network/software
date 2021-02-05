@@ -3,7 +3,7 @@ package bills
 import (
 	"time"
 
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type content struct {

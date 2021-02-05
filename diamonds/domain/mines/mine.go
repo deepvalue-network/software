@@ -3,9 +3,9 @@ package mines
 import (
 	"time"
 
-	"github.com/steve-care-software/products/blockchain/domain/chains"
-	"github.com/steve-care-software/products/libs/hash"
-	"github.com/steve-care-software/products/libs/hashtree"
+	"github.com/deepvalue-network/software/blockchain/domain/chains"
+	"github.com/deepvalue-network/software/libs/hash"
+	"github.com/deepvalue-network/software/libs/hashtree"
 )
 
 type mine struct {

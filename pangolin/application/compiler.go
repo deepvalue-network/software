@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/steve-care-software/products/pangolin/domain/compilers"
-	"github.com/steve-care-software/products/pangolin/domain/linkers"
+	"github.com/deepvalue-network/software/pangolin/domain/compilers"
+	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 )
 
 type compiler struct {

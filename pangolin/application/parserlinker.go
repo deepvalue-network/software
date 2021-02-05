@@ -1,7 +1,7 @@
 package scripts
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/linkers"
+	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 )
 
 type parserLinker struct {

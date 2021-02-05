@@ -1,7 +1,7 @@
 package variables
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/middle/variables/variable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
 )
 
 type builder struct {

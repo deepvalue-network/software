@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/steve-care-software/products/blockchain/domain/links"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/blockchain/domain/links"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type builder struct {

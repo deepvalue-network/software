@@ -1,6 +1,6 @@
 package accesses
 
-import "github.com/steve-care-software/products/identity/domain/accesses/access"
+import "github.com/deepvalue-network/software/identity/domain/accesses/access"
 
 // NewFactory creates a new factory instance
 func NewFactory(encPkBitrate int) Factory {

@@ -1,6 +1,6 @@
 package genesis
 
-import "github.com/steve-care-software/products/libs/hash"
+import "github.com/deepvalue-network/software/libs/hash"
 
 type genesis struct {
 	hash        hash.Hash

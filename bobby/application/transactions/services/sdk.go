@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/steve-care-software/products/bobby/application/transactions/services/states"
+	"github.com/deepvalue-network/software/bobby/application/transactions/services/states"
 )
 
 // Application represents the service application

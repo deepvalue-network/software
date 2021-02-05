@@ -4,11 +4,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/remaining"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/standard"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/transform"
-	var_variable "github.com/steve-care-software/products/pangolin/domain/middle/variables/variable"
-	"github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )
 
 type frame struct {

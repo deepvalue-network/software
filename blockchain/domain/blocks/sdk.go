@@ -1,8 +1,8 @@
 package blocks
 
 import (
-	"github.com/steve-care-software/products/libs/hash"
-	"github.com/steve-care-software/products/libs/hashtree"
+	"github.com/deepvalue-network/software/libs/hash"
+	"github.com/deepvalue-network/software/libs/hashtree"
 )
 
 // NewBuilder creates a new builder instance

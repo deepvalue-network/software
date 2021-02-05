@@ -1,6 +1,6 @@
 package parsers
 
-import "github.com/steve-care-software/products/pangolin/domain/lexers"
+import "github.com/deepvalue-network/software/pangolin/domain/lexers"
 
 type parser struct {
 	lexer  lexers.Lexer

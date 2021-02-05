@@ -1,13 +1,13 @@
 package scripts
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/compilers"
-	"github.com/steve-care-software/products/pangolin/domain/interpreters"
-	"github.com/steve-care-software/products/pangolin/domain/lexers"
-	"github.com/steve-care-software/products/pangolin/domain/lexers/grammar"
-	"github.com/steve-care-software/products/pangolin/domain/linkers"
-	"github.com/steve-care-software/products/pangolin/domain/middle"
-	"github.com/steve-care-software/products/pangolin/domain/parsers"
+	"github.com/deepvalue-network/software/pangolin/domain/compilers"
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
+	"github.com/deepvalue-network/software/pangolin/domain/linkers"
+	"github.com/deepvalue-network/software/pangolin/domain/middle"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 const scriptName = "default"

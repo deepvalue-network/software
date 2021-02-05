@@ -1,8 +1,8 @@
 package application
 
 import (
-	"github.com/steve-care-software/products/bobby/application/data"
-	"github.com/steve-care-software/products/bobby/application/transactions"
+	"github.com/deepvalue-network/software/bobby/application/data"
+	"github.com/deepvalue-network/software/bobby/application/transactions"
 )
 
 // Application represents the bobby application

@@ -2,7 +2,7 @@ package resources
 
 import (
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/libs/cryptography/pk/encryption/public"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/encryption/public"
 )
 
 type access struct {

@@ -1,6 +1,6 @@
 package contents
 
-import "github.com/steve-care-software/products/libs/hash"
+import "github.com/deepvalue-network/software/libs/hash"
 
 type transaction struct {
 	hash  hash.Hash

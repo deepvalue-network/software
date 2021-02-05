@@ -5,11 +5,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/steve-care-software/products/bobby/domain/resources"
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/access"
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/containers"
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/contents"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/resources"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/access"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/containers"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/contents"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type builder struct {

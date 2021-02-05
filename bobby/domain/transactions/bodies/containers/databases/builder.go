@@ -3,8 +3,8 @@ package databases
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/containers/databases/deletes"
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/containers/databases/saves"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/containers/databases/deletes"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/containers/databases/saves"
 )
 
 type builder struct {

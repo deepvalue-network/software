@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	blocks_mined "github.com/steve-care-software/products/blockchain/domain/blocks/mined"
-	"github.com/steve-care-software/products/libs/files/domain/files"
-	"github.com/steve-care-software/products/libs/hash"
+	blocks_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
+	"github.com/deepvalue-network/software/libs/files/domain/files"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type repositoryBlockMined struct {

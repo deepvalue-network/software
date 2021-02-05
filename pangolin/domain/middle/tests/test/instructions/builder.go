@@ -1,6 +1,6 @@
 package instructions
 
-import "github.com/steve-care-software/products/pangolin/domain/middle/tests/test/instructions/instruction"
+import "github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions/instruction"
 
 type builder struct {
 	lst []instruction.Instruction

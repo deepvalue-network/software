@@ -4,10 +4,10 @@ import (
 	"time"
 
 	uuid "github.com/satori/go.uuid"
-	block_mined "github.com/steve-care-software/products/blockchain/domain/blocks/mined"
-	"github.com/steve-care-software/products/blockchain/domain/chains/peers"
-	"github.com/steve-care-software/products/blockchain/domain/genesis"
-	link_mined "github.com/steve-care-software/products/blockchain/domain/links/mined"
+	block_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
+	"github.com/deepvalue-network/software/blockchain/domain/chains/peers"
+	"github.com/deepvalue-network/software/blockchain/domain/genesis"
+	link_mined "github.com/deepvalue-network/software/blockchain/domain/links/mined"
 )
 
 // NewBuilder creates a new builder instance

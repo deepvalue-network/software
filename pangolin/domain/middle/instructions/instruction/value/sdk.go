@@ -1,7 +1,7 @@
 package value
 
 import (
-	var_value "github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
 )
 
 // NewBuilder creates a new builder instance

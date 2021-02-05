@@ -2,12 +2,12 @@ package disks
 
 import (
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/identity/domain/accesses"
-	"github.com/steve-care-software/products/identity/domain/accesses/access"
-	"github.com/steve-care-software/products/identity/domain/users"
-	"github.com/steve-care-software/products/libs/cryptography/pk/encryption"
-	"github.com/steve-care-software/products/libs/cryptography/pk/signature"
-	"github.com/steve-care-software/products/libs/hydro"
+	"github.com/deepvalue-network/software/identity/domain/accesses"
+	"github.com/deepvalue-network/software/identity/domain/accesses/access"
+	"github.com/deepvalue-network/software/identity/domain/users"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/encryption"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
+	"github.com/deepvalue-network/software/libs/hydro"
 )
 
 // EncPKBitrate represents the encryption PrivateKey bitrate

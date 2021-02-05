@@ -3,11 +3,11 @@ package services
 import (
 	"errors"
 
-	states_app "github.com/steve-care-software/products/bobby/application/transactions/services/states"
-	"github.com/steve-care-software/products/bobby/domain/states"
-	"github.com/steve-care-software/products/bobby/domain/states/overviews"
-	"github.com/steve-care-software/products/bobby/domain/transactions"
-	"github.com/steve-care-software/products/libs/hash"
+	states_app "github.com/deepvalue-network/software/bobby/application/transactions/services/states"
+	"github.com/deepvalue-network/software/bobby/domain/states"
+	"github.com/deepvalue-network/software/bobby/domain/states/overviews"
+	"github.com/deepvalue-network/software/bobby/domain/transactions"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type application struct {

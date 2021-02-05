@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
-	domain_genesis "github.com/steve-care-software/products/diamonds/domain/genesis"
-	"github.com/steve-care-software/products/libs/hash"
+	domain_genesis "github.com/deepvalue-network/software/diamonds/domain/genesis"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type builder struct {

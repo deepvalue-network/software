@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steve-care-software/products/blockchain/domain/genesis"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/blockchain/domain/genesis"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type miner struct {

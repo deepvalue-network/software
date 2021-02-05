@@ -4,9 +4,9 @@ import (
 	"os"
 	"testing"
 
-	blocks_mined "github.com/steve-care-software/products/blockchain/domain/blocks/mined"
-	files_disks "github.com/steve-care-software/products/libs/files/infrastructure/disks"
-	"github.com/steve-care-software/products/libs/hydro"
+	blocks_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
+	files_disks "github.com/deepvalue-network/software/libs/files/infrastructure/disks"
+	"github.com/deepvalue-network/software/libs/hydro"
 )
 
 func TestHydrate_block_mined_Success(t *testing.T) {

@@ -1,7 +1,7 @@
 package hashtree
 
 import (
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewBuilder creates a new hashtree builder

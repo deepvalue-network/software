@@ -1,9 +1,9 @@
 package disks
 
 import (
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
-	mined_blocks "github.com/steve-care-software/products/blockchain/domain/blocks/mined"
-	"github.com/steve-care-software/products/libs/files/domain/files"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	mined_blocks "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
+	"github.com/deepvalue-network/software/libs/files/domain/files"
 )
 
 type serviceBlockMined struct {

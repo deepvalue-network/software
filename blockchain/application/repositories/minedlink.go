@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	mined_link "github.com/steve-care-software/products/blockchain/domain/links/mined"
-	"github.com/steve-care-software/products/libs/hash"
+	mined_link "github.com/deepvalue-network/software/blockchain/domain/links/mined"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type minedLink struct {

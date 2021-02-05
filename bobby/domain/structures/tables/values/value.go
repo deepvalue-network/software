@@ -1,6 +1,6 @@
 package values
 
-import "github.com/steve-care-software/products/bobby/domain/resources"
+import "github.com/deepvalue-network/software/bobby/domain/resources"
 
 type value struct {
 	resource resources.Resource

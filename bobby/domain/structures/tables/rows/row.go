@@ -1,9 +1,9 @@
 package rows
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/resources"
-	"github.com/steve-care-software/products/bobby/domain/structures/tables"
-	"github.com/steve-care-software/products/bobby/domain/structures/tables/elements"
+	"github.com/deepvalue-network/software/bobby/domain/resources"
+	"github.com/deepvalue-network/software/bobby/domain/structures/tables"
+	"github.com/deepvalue-network/software/bobby/domain/structures/tables/elements"
 )
 
 type row struct {

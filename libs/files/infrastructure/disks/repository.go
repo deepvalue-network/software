@@ -7,9 +7,9 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/steve-care-software/products/libs/files/domain/files"
-	"github.com/steve-care-software/products/libs/hash"
-	"github.com/steve-care-software/products/libs/hydro"
+	"github.com/deepvalue-network/software/libs/files/domain/files"
+	"github.com/deepvalue-network/software/libs/hash"
+	"github.com/deepvalue-network/software/libs/hydro"
 )
 
 type repository struct {

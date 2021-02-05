@@ -1,9 +1,9 @@
 package diamond
 
 import (
-	bill_owners "github.com/steve-care-software/products/diamonds/domain/bills/owners"
-	genesis_owners "github.com/steve-care-software/products/diamonds/domain/genesis/spends/owners"
-	"github.com/steve-care-software/products/libs/hash"
+	bill_owners "github.com/deepvalue-network/software/diamonds/domain/bills/owners"
+	genesis_owners "github.com/deepvalue-network/software/diamonds/domain/genesis/spends/owners"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // Diamond represents diamond

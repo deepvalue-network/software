@@ -3,7 +3,7 @@ package users
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/identity/domain/accesses"
+	"github.com/deepvalue-network/software/identity/domain/accesses"
 )
 
 type builder struct {

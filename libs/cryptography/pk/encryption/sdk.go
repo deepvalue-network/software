@@ -3,7 +3,7 @@ package encryption
 import (
 	"crypto/rsa"
 
-	"github.com/steve-care-software/products/libs/cryptography/pk/encryption/public"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/encryption/public"
 )
 
 // NewFactory returns a new encryption's privatekey factory

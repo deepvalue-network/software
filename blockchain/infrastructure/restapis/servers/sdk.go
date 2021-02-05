@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/steve-care-software/products/blockchain/application/repositories"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/blockchain/application/repositories"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 const internalErrorOutput = "server error"

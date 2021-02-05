@@ -1,6 +1,6 @@
 package value
 
-import "github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value/computable"
+import "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 
 type value struct {
 	comp           computable.Value

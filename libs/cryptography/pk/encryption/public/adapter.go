@@ -4,7 +4,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type adapter struct {

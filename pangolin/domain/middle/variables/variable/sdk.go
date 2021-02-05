@@ -1,8 +1,8 @@
 package variable
 
 import (
-	var_value "github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value"
-	"github.com/steve-care-software/products/pangolin/domain/parsers"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapterBuilder creates a new adapter builder

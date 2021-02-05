@@ -1,8 +1,8 @@
 package value
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/parsers"
-	"github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )
 
 const (

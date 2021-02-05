@@ -3,8 +3,8 @@ package parsers
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/pangolin/domain/lexers"
-	lexer_parser "github.com/steve-care-software/products/pangolin/domain/lexers/parser"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
+	lexer_parser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
 )
 
 type parserBuilder struct {

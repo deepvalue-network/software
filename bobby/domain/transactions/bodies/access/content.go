@@ -1,6 +1,6 @@
 package access
 
-import access "github.com/steve-care-software/products/bobby/domain/resources"
+import access "github.com/deepvalue-network/software/bobby/domain/resources"
 
 type content struct {
 	isRemove bool

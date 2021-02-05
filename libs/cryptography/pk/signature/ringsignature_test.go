@@ -3,7 +3,7 @@ package signature
 import (
 	"testing"
 
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 func TestRingSignature_Success(t *testing.T) {

@@ -3,7 +3,7 @@ package value
 import (
 	"errors"
 
-	var_value "github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
 )
 
 type builder struct {

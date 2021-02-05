@@ -1,18 +1,18 @@
 package instruction
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/condition"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/match"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/remaining"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/stackframe"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/standard"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/token"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/transform"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/value"
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction/variablename"
-	var_variable "github.com/steve-care-software/products/pangolin/domain/middle/variables/variable"
-	var_value "github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value"
-	"github.com/steve-care-software/products/pangolin/domain/parsers"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/token"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/value"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/variablename"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapter creates a new adapter instance

@@ -1,8 +1,8 @@
 package structures
 
 import (
-	table_schemas "github.com/steve-care-software/products/bobby/domain/structures/tables/schemas"
-	"github.com/steve-care-software/products/bobby/domain/structures/tables/values"
+	table_schemas "github.com/deepvalue-network/software/bobby/domain/structures/tables/schemas"
+	"github.com/deepvalue-network/software/bobby/domain/structures/tables/values"
 )
 
 type tableSchema struct {

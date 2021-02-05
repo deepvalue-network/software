@@ -1,6 +1,6 @@
 package rows
 
-import "github.com/steve-care-software/products/libs/hash"
+import "github.com/deepvalue-network/software/libs/hash"
 
 type rows struct {
 	hash hash.Hash

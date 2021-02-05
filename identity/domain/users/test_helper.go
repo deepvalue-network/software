@@ -1,6 +1,6 @@
 package users
 
-import "github.com/steve-care-software/products/identity/domain/accesses"
+import "github.com/deepvalue-network/software/identity/domain/accesses"
 
 // CreateUserForTests creates a user instance for tests
 func CreateUserForTests(encPkBitrate int) User {

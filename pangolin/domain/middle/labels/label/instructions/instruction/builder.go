@@ -3,7 +3,7 @@ package instruction
 import (
 	"errors"
 
-	ins "github.com/steve-care-software/products/pangolin/domain/middle/instructions/instruction"
+	ins "github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
 )
 
 type builder struct {

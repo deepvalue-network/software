@@ -1,8 +1,8 @@
 package graphbases
 
 import (
-	"github.com/steve-care-software/products/blockchain/domain/chains"
-	"github.com/steve-care-software/products/bobby/domain/resources"
+	"github.com/deepvalue-network/software/blockchain/domain/chains"
+	"github.com/deepvalue-network/software/bobby/domain/resources"
 )
 
 type graphbase struct {

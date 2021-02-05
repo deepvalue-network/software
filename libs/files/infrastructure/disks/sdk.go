@@ -3,8 +3,8 @@ package disks
 import (
 	"os"
 
-	"github.com/steve-care-software/products/libs/files/domain/files"
-	"github.com/steve-care-software/products/libs/hydro"
+	"github.com/deepvalue-network/software/libs/files/domain/files"
+	"github.com/deepvalue-network/software/libs/hydro"
 )
 
 const fileDoesNotExistsPattern = "the file (path: %s) does not exists"

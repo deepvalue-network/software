@@ -1,10 +1,10 @@
 package states
 
 import (
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
-	"github.com/steve-care-software/products/bobby/domain/resources"
-	"github.com/steve-care-software/products/bobby/domain/transactions"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/bobby/domain/resources"
+	"github.com/deepvalue-network/software/bobby/domain/transactions"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type state struct {

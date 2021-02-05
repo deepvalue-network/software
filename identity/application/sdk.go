@@ -1,6 +1,6 @@
 package application
 
-import "github.com/steve-care-software/products/identity/domain/users"
+import "github.com/deepvalue-network/software/identity/domain/users"
 
 // NewApplication creates a new application instance
 func NewApplication(

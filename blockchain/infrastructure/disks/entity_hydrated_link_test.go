@@ -4,9 +4,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/steve-care-software/products/blockchain/domain/links"
-	files_disks "github.com/steve-care-software/products/libs/files/infrastructure/disks"
-	"github.com/steve-care-software/products/libs/hydro"
+	"github.com/deepvalue-network/software/blockchain/domain/links"
+	files_disks "github.com/deepvalue-network/software/libs/files/infrastructure/disks"
+	"github.com/deepvalue-network/software/libs/hydro"
 )
 
 func TestHydrate_link_Success(t *testing.T) {

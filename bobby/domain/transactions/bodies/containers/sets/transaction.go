@@ -1,9 +1,9 @@
 package sets
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/containers/sets/deletes"
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/containers/sets/saves"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/containers/sets/deletes"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/containers/sets/saves"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type transaction struct {

@@ -1,7 +1,7 @@
 package genesis
 
 import (
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // DefaultMiningValue represents the default mining value

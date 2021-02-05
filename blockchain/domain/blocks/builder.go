@@ -3,8 +3,8 @@ package blocks
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/libs/hash"
-	"github.com/steve-care-software/products/libs/hashtree"
+	"github.com/deepvalue-network/software/libs/hash"
+	"github.com/deepvalue-network/software/libs/hashtree"
 )
 
 type builder struct {

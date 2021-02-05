@@ -1,8 +1,8 @@
 package variable
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/middle/variables/variable/value"
-	"github.com/steve-care-software/products/pangolin/domain/parsers"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type adapter struct {

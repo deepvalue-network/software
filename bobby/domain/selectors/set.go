@@ -1,9 +1,9 @@
 package selectors
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/selectors/specifiers"
-	"github.com/steve-care-software/products/bobby/domain/structures/sets/schemas"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/selectors/specifiers"
+	"github.com/deepvalue-network/software/bobby/domain/structures/sets/schemas"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type set struct {

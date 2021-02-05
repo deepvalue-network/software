@@ -1,7 +1,7 @@
 package linkers
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/middle"
+	"github.com/deepvalue-network/software/pangolin/domain/middle"
 )
 
 type language struct {

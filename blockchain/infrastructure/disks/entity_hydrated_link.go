@@ -1,8 +1,8 @@
 package disks
 
 import (
-	mined_block "github.com/steve-care-software/products/blockchain/domain/blocks/mined"
-	"github.com/steve-care-software/products/libs/hash"
+	mined_block "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type entityHydratedLink struct {

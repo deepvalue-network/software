@@ -1,6 +1,6 @@
 package blocks
 
-import "github.com/steve-care-software/products/libs/hash"
+import "github.com/deepvalue-network/software/libs/hash"
 
 // CreateBlockForTests creates a new block instance for tests
 func CreateBlockForTests() Block {

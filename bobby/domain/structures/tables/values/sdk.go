@@ -2,7 +2,7 @@ package values
 
 import (
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/bobby/domain/resources"
+	"github.com/deepvalue-network/software/bobby/domain/resources"
 )
 
 // NewBuilder creates a new builder instance

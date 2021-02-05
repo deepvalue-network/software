@@ -1,6 +1,6 @@
 package lexers
 
-import "github.com/steve-care-software/products/pangolin/domain/lexers/grammar"
+import "github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
 
 type element struct {
 	rule grammar.Rule

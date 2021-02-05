@@ -3,7 +3,7 @@ package public
 import (
 	"crypto/rsa"
 
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewAdapter returns a new encryption's public adapter

@@ -1,6 +1,6 @@
 package bills
 
-import "github.com/steve-care-software/products/libs/hash"
+import "github.com/deepvalue-network/software/libs/hash"
 
 type viewBill struct {
 	hash   hash.Hash

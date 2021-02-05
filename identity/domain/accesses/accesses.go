@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/steve-care-software/products/identity/domain/accesses/access"
+	"github.com/deepvalue-network/software/identity/domain/accesses/access"
 )
 
 type accesses struct {

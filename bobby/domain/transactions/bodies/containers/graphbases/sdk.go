@@ -1,9 +1,9 @@
 package graphbases
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/containers/graphbases/deletes"
-	"github.com/steve-care-software/products/bobby/domain/transactions/bodies/containers/graphbases/saves"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/containers/graphbases/deletes"
+	"github.com/deepvalue-network/software/bobby/domain/transactions/bodies/containers/graphbases/saves"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewBuilder creates a new builder instance

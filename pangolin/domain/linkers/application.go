@@ -4,10 +4,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/steve-care-software/products/pangolin/domain/middle/instructions"
-	"github.com/steve-care-software/products/pangolin/domain/middle/labels"
-	"github.com/steve-care-software/products/pangolin/domain/middle/tests"
-	"github.com/steve-care-software/products/pangolin/domain/middle/variables"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
 )
 
 type application struct {

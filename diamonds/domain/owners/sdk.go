@@ -3,9 +3,9 @@ package owners
 import (
 	"time"
 
-	"github.com/steve-care-software/products/libs/cryptography/pk/encryption"
-	"github.com/steve-care-software/products/libs/cryptography/pk/signature"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/encryption"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewBuilder creates a new builder instance

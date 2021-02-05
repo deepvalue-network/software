@@ -1,9 +1,9 @@
 package deletes
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/selectors"
-	"github.com/steve-care-software/products/bobby/domain/structures"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/selectors"
+	"github.com/deepvalue-network/software/bobby/domain/structures"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewBuilder creates a new builder instance

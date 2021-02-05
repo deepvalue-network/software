@@ -6,9 +6,9 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/steve-care-software/products/pangolin/domain/lexers/grammar"
-	"github.com/steve-care-software/products/pangolin/domain/linkers"
-	"github.com/steve-care-software/products/pangolin/domain/middle"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
+	"github.com/deepvalue-network/software/pangolin/domain/linkers"
+	"github.com/deepvalue-network/software/pangolin/domain/middle"
 )
 
 type linker struct {

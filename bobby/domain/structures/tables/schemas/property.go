@@ -1,6 +1,6 @@
 package schemas
 
-import "github.com/steve-care-software/products/bobby/domain/resources"
+import "github.com/deepvalue-network/software/bobby/domain/resources"
 
 type property struct {
 	resource resources.Accessible

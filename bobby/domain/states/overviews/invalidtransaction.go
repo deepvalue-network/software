@@ -1,8 +1,8 @@
 package overviews
 
 import (
-	domain_errors "github.com/steve-care-software/products/bobby/domain/errors"
-	"github.com/steve-care-software/products/bobby/domain/transactions"
+	domain_errors "github.com/deepvalue-network/software/bobby/domain/errors"
+	"github.com/deepvalue-network/software/bobby/domain/transactions"
 )
 
 type invalidTransaction struct {

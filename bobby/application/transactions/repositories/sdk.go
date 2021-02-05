@@ -2,8 +2,8 @@ package repositories
 
 import (
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/bobby/domain/transactions"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/transactions"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // Application represents the transaction repository

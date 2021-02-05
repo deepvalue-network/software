@@ -3,7 +3,7 @@ package computable
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/pangolin/domain/lexers"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 )
 
 type builder struct {

@@ -3,7 +3,7 @@ package test
 import (
 	"errors"
 
-	"github.com/steve-care-software/products/pangolin/domain/middle/tests/test/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions"
 )
 
 type builder struct {

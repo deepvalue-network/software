@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/steve-care-software/products/diamonds/domain/genesis/spends/views"
-	"github.com/steve-care-software/products/libs/cryptography/pk/signature"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/diamonds/domain/genesis/spends/views"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type contentBuilder struct {

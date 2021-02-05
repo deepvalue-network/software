@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	uuid "github.com/satori/go.uuid"
-	"github.com/steve-care-software/products/bobby/domain/resources"
+	"github.com/deepvalue-network/software/bobby/domain/resources"
 )
 
 type builder struct {

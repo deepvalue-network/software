@@ -7,8 +7,8 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/steve-care-software/products/identity/domain/users"
-	"github.com/steve-care-software/products/libs/cryptography/encryption"
+	"github.com/deepvalue-network/software/identity/domain/users"
+	"github.com/deepvalue-network/software/libs/cryptography/encryption"
 )
 
 type userRepository struct {

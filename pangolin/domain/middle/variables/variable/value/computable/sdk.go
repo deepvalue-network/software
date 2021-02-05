@@ -1,7 +1,7 @@
 package computable
 
 import (
-	"github.com/steve-care-software/products/pangolin/domain/lexers"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 )
 
 // NewBuilder creates a new builder instance

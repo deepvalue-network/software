@@ -1,8 +1,8 @@
 package links
 
 import (
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // CreateLinkForTests creates link instance for tests

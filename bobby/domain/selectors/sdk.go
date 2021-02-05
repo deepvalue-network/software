@@ -1,11 +1,11 @@
 package selectors
 
 import (
-	"github.com/steve-care-software/products/bobby/domain/selectors/specifiers"
-	"github.com/steve-care-software/products/bobby/domain/structures/sets/schemas"
-	table_schemas "github.com/steve-care-software/products/bobby/domain/structures/tables/schemas"
-	"github.com/steve-care-software/products/libs/cryptography/pk/encryption"
-	"github.com/steve-care-software/products/libs/hash"
+	"github.com/deepvalue-network/software/bobby/domain/selectors/specifiers"
+	"github.com/deepvalue-network/software/bobby/domain/structures/sets/schemas"
+	table_schemas "github.com/deepvalue-network/software/bobby/domain/structures/tables/schemas"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/encryption"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewBuilder creates a new builder instance

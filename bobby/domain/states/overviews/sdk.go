@@ -1,11 +1,11 @@
 package overviews
 
 import (
-	"github.com/steve-care-software/products/blockchain/domain/blocks"
-	"github.com/steve-care-software/products/blockchain/domain/chains"
-	domain_errors "github.com/steve-care-software/products/bobby/domain/errors"
-	"github.com/steve-care-software/products/bobby/domain/structures"
-	"github.com/steve-care-software/products/bobby/domain/transactions"
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/blockchain/domain/chains"
+	domain_errors "github.com/deepvalue-network/software/bobby/domain/errors"
+	"github.com/deepvalue-network/software/bobby/domain/structures"
+	"github.com/deepvalue-network/software/bobby/domain/transactions"
 )
 
 // NewBuilder creates a new builder instance

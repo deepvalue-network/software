@@ -1,9 +1,9 @@
 package access
 
 import (
-	access "github.com/steve-care-software/products/bobby/domain/resources"
-	"github.com/steve-care-software/products/bobby/domain/selectors"
-	"github.com/steve-care-software/products/libs/hash"
+	access "github.com/deepvalue-network/software/bobby/domain/resources"
+	"github.com/deepvalue-network/software/bobby/domain/selectors"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewBuilder creates a new builder instance
