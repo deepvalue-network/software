@@ -122,7 +122,7 @@ At the end of each year, the shareholders (also employees or previous employees)
 Both Steve Care Software Inc and XMN Blockchain Services Ltd. will have revenue in cryptocurrency and fiat currency.  The companies will trade fiat for cryptocurrency regularly, enabling contributors of the network to exchange their cryptocurrency for fiat currency if they needs to.
 
 ## Contributors
-If you want to be a contributor, please email me at [mailto:info@steve.care](info@steve.care).  Send me the kind of tasks you want to help us with and send me your LinkedIn or a resumé.  Also provide me with your normal fee for work, and the amount of hours per week you think you could work on our network.  While we pay in our cryptocurrency, the amount of cyptocurrency you would receive for your work will be related to your normal salary.
+If you want to be a contributor, please email me at [info@steve.care](info@steve.care).  Send me the kind of tasks you want to help us with and send me your LinkedIn or a resumé.  Also provide me with your normal fee for work, and the amount of hours per week you think you could work on our network.  While we pay in our cryptocurrency, the amount of cyptocurrency you would receive for your work will be related to your normal salary.
 
 At last, tell me in the email where you are located and on which timezone you can work.  This will be used to create teams of contributors with matching timezones.
 
