@@ -8,6 +8,18 @@ import (
 	"github.com/steve-care-software/products/libs/hash"
 )
 
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	hashAdapter := hash.NewAdapter()
+	return createBuilder(hashAdapter)
+}
+
+// NewContentBuilder creates a new content builder
+func NewContentBuilder(minPubKeysAmount uint) ContentBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createContentBuilder(hashAdapter, minPubKeysAmount)
+}
+
 // Builder represents a bill builder
 type Builder interface {
 	Create() Builder
@@ -25,14 +37,17 @@ type Bill interface {
 
 // ContentBuilder represents a bill content builder
 type ContentBuilder interface {
-	Create() Builder
-	WithOriginGenesis(originGenesis views.Genesis) Builder
-	WithOriginBill(originBill ViewBill) Builder
-	WithHashedAmount(hashedAmount hash.Hash) Builder
-	WithEncryptedSeed(encSeed []byte) Builder
-	WithHashedPubKeysOwner(hashedPubKeysOwner []hash.Hash) Builder
-	CreatedOn(createdOn time.Time) Builder
-	Now() (Bill, error)
+	Create() ContentBuilder
+	WithOriginGenesis(originGenesis views.Genesis) ContentBuilder
+	WithOriginBill(originBill ViewBill) ContentBuilder
+	WithAmount(amount uint64) ContentBuilder
+	WithHashedAmount(hashedAmount hash.Hash) ContentBuilder
+	WithSeed(seed string) ContentBuilder
+	WithHashedSeed(hashedSeed hash.Hash) ContentBuilder
+	WithPubKeysOwner(pubKeys []signature.PublicKey) ContentBuilder
+	WithHashedPubKeysOwner(hashedPubKeysOwner []hash.Hash) ContentBuilder
+	CreatedOn(createdOn time.Time) ContentBuilder
+	Now() (Content, error)
 }
 
 // Content represents a bill content
@@ -40,7 +55,7 @@ type Content interface {
 	Hash() hash.Hash
 	Origin() Origin
 	Amount() hash.Hash
-	Seed() []byte
+	Seed() hash.Hash
 	Owner() []hash.Hash
 	CreatedOn() time.Time
 }
@@ -59,6 +74,7 @@ type ViewBillBuilder interface {
 	Create() ViewBillBuilder
 	WithBill(bill Bill) ViewBillBuilder
 	WithSeed(seed string) ViewBillBuilder
+	WithAmount(amount uint64) ViewBillBuilder
 	Now() (ViewBill, error)
 }
 
