@@ -6,3 +6,6 @@ This software is currently being developed.  If you want to follow its developme
 
 ## Technical documentation
 The technical documentation is coming soon.
+
+## Ask me any question (AMA)
+We are doing an AMA on reddit, [you can ask questions about the project here](https://www.reddit.com/r/IAmA/comments/lfca2b/we_are_the_deepvaluenetwork_team_an_open_source/). AMA!
