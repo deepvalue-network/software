@@ -3,11 +3,11 @@ package chains
 import (
 	"time"
 
-	uuid "github.com/satori/go.uuid"
 	block_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
 	"github.com/deepvalue-network/software/blockchain/domain/chains/peers"
 	"github.com/deepvalue-network/software/blockchain/domain/genesis"
 	link_mined "github.com/deepvalue-network/software/blockchain/domain/links/mined"
+	uuid "github.com/satori/go.uuid"
 )
 
 // NewBuilder creates a new builder instance
@@ -19,9 +19,14 @@ func NewBuilder(peerSyncInterval time.Duration) Builder {
 	)
 }
 
+// NewPointer creates a new chain pointer
+func NewPointer() *chain {
+	return new(chain)
+}
+
 // Validator represents a chain validator
 type Validator interface {
-	Validate(chain Chain) bool
+	Validate(chain Chain) error
 }
 
 // Builder represents a chain builder

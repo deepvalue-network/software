@@ -25,6 +25,10 @@ func createAdapter(
 
 // Hydrate takes an interface instance and hydrate it to a struct instance, in the given ptr
 func (app *adapter) Hydrate(dehydrate interface{}) (interface{}, error) {
+	if dehydrate == nil {
+		return nil, nil
+	}
+
 	// value:
 	val := reflect.ValueOf(dehydrate)
 	indVal := reflect.Indirect(val)
@@ -78,6 +82,10 @@ func (app *adapter) Hydrate(dehydrate interface{}) (interface{}, error) {
 		}
 
 		fieldVal := indVal.Field(i)
+		if fieldVal.IsZero() {
+			return nil, nil
+		}
+
 		indFieldVal := reflect.Indirect(fieldVal)
 		fieldTypeKind := indFieldVal.Type().Kind()
 		switch fieldTypeKind {
@@ -120,6 +128,10 @@ func (app *adapter) Hydrate(dehydrate interface{}) (interface{}, error) {
 
 // Dehydrate takes a struct instance and dehydrate it to an interface instance, then returns it
 func (app *adapter) Dehydrate(hydrate interface{}) (interface{}, error) {
+	if hydrate == nil {
+		return nil, nil
+	}
+
 	// value:
 	val := reflect.ValueOf(hydrate)
 	indVal := reflect.Indirect(val)
@@ -154,15 +166,27 @@ func (app *adapter) Dehydrate(hydrate interface{}) (interface{}, error) {
 		}
 
 		fieldVal := indVal.Field(i)
-		fieldValIns := fieldVal.Interface()
 		indFieldVal := reflect.Indirect(fieldVal)
-		indFieldType := indFieldVal.Type()
-		fieldTypeKind := indFieldType.Kind()
-		switch fieldTypeKind {
+		indFieldKind := indFieldVal.Kind()
+		if fieldVal.IsZero() {
+			if indFieldKind == reflect.Ptr {
+				paramsIns[index] = fieldVal
+				continue
+			}
+
+		}
+
+		fieldValIns := fieldVal.Interface()
+		switch indFieldKind {
 		case reflect.Struct:
 			dehydrate, err := app.Dehydrate(fieldValIns)
 			if err != nil {
 				return nil, err
+			}
+
+			if dehydrate == nil {
+				paramsIns[index] = nil
+				break
 			}
 
 			ptrVal, err := app.executeOnDehydrateEvent(dehydratedBridge, dehydrate, field.Name, hydrateType.Name())
@@ -208,7 +232,39 @@ func (app *adapter) Dehydrate(hydrate interface{}) (interface{}, error) {
 			paramsIns[index] = ptrVal
 			break
 		case reflect.Slice:
-			panic(errors.New("finish adapter.Dehydrate method for list in hydro package"))
+			var results reflect.Value
+			sliceLength := fieldVal.Len()
+			for i := 0; i < sliceLength; i++ {
+				el := fieldVal.Index(i)
+				dehydrated, err := app.Dehydrate(el.Interface())
+				if err != nil {
+					return nil, err
+				}
+
+				if i <= 0 {
+					dehydratedVal := reflect.ValueOf(dehydrated)
+					dehydrateType := reflect.Indirect(dehydratedVal).Type()
+					elBridge, err := app.manager.Fetch(dehydrateType.PkgPath(), dehydrateType.Name())
+					if err != nil {
+						return nil, err
+					}
+
+					ourSliceValue := reflect.TypeOf(elBridge.Dehydrated().Interface()).Elem()
+					sliceType := reflect.SliceOf(ourSliceValue)
+					results = reflect.MakeSlice(sliceType, sliceLength, fieldVal.Cap())
+				}
+
+				elem := reflect.ValueOf(dehydrated)
+				results.Index(i).Set(elem)
+			}
+
+			ptrVal, err := app.executeOnDehydrateEvent(dehydratedBridge, results.Interface(), field.Name, hydrateType.Name())
+			if err != nil {
+				return nil, err
+			}
+
+			paramsIns[index] = ptrVal
+			break
 		default:
 			ptrVal, err := app.executeOnDehydrateEvent(dehydratedBridge, fieldValIns, field.Name, hydrateType.Name())
 			if err != nil {
@@ -281,7 +337,23 @@ func (app *adapter) setHydratedSliceField(strctType reflect.Type, ptr reflect.Va
 	var results reflect.Value
 	for i := 0; i < sliceLength; i++ {
 		if i <= 0 {
-			outSliceValue := indVal.Index(i)
+			if ptr.IsZero() {
+				str := fmt.Sprintf("the pointer (name: %s) contains a field (name: %s) that is nil", ptr.Type().Name(), fieldName)
+				return errors.New(str)
+			}
+
+			ptrField := ptr.FieldByName(fieldName)
+			if !ptrField.IsValid() {
+				str := fmt.Sprintf("the field (type: %s, field: %s) is invalid", ptr.Type().Name(), fieldName)
+				return errors.New(str)
+			}
+
+			if ptrField.IsZero() {
+				str := fmt.Sprintf("the slice (type: %s, field: %s) is empty", ptr.Type().Name(), fieldName)
+				return errors.New(str)
+			}
+
+			outSliceValue := ptr.FieldByName(fieldName).Index(i)
 			sliceType := reflect.SliceOf(outSliceValue.Type())
 			results = reflect.MakeSlice(sliceType, sliceLength, indVal.Cap())
 		}
@@ -293,7 +365,7 @@ func (app *adapter) setHydratedSliceField(strctType reflect.Type, ptr reflect.Va
 		}
 
 		elem := reflect.ValueOf(hydrated)
-		el.Set(elem)
+		results.Index(i).Set(elem)
 	}
 
 	return app.setHydratedField(strctType, ptr, fieldName, results.Interface(), bridge)
@@ -303,6 +375,10 @@ func (app *adapter) setHydratedField(strctType reflect.Type, ptr reflect.Value, 
 	processedIns, err := app.executeOnHydrateEvent(bridge, ins, fieldName, strctType.Name())
 	if err != nil {
 		return err
+	}
+
+	if processedIns == nil {
+		return nil
 	}
 
 	val := reflect.ValueOf(processedIns)

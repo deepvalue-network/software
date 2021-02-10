@@ -3,22 +3,22 @@ package chains
 import (
 	"time"
 
-	uuid "github.com/satori/go.uuid"
 	block_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
 	"github.com/deepvalue-network/software/blockchain/domain/chains/peers"
 	"github.com/deepvalue-network/software/blockchain/domain/genesis"
 	link_mined "github.com/deepvalue-network/software/blockchain/domain/links/mined"
+	uuid "github.com/satori/go.uuid"
 )
 
 type chain struct {
 	id          *uuid.UUID        `hydro:"ID, ID"`
 	peers       peers.Peers       `hydro:"Peers, Peers"`
 	gen         genesis.Genesis   `hydro:"Genesis, Genesis"`
-	root        block_mined.Block `hydro:"Hash, Hash"`
-	totalHashes uint              `hydro:"TotalHashes, TotalHashes"`
-	height      uint              `hydro:"Height, Height"`
-	createdOn   time.Time         `hydro:"CreatedOn, CreatedOn"`
-	head        link_mined.Link   `hydro:"Head, Head"`
+	root        block_mined.Block `hydro:"Root, Root"`
+	totalHashes uint
+	height      uint
+	createdOn   time.Time       `hydro:"CreatedOn, CreatedOn"`
+	head        link_mined.Link `hydro:"Head, Head"`
 }
 
 func createChain(

@@ -3,12 +3,12 @@ package services
 import (
 	"time"
 
-	uuid "github.com/satori/go.uuid"
 	"github.com/deepvalue-network/software/blockchain/application/repositories"
 	"github.com/deepvalue-network/software/blockchain/domain/chains"
 	"github.com/deepvalue-network/software/blockchain/domain/chains/peers"
 	"github.com/deepvalue-network/software/blockchain/domain/genesis"
 	"github.com/deepvalue-network/software/libs/hash"
+	uuid "github.com/satori/go.uuid"
 )
 
 type chain struct {
@@ -59,19 +59,17 @@ func (app *chain) Update(id *uuid.UUID) error {
 	// mine the block:
 	genesis := chain.Genesis()
 	genesisMiningValue := genesis.MiningValue()
-	genesisDiff := genesis.Difficulty()
-	genesisBlockDiff := genesisDiff.Block()
 
 	// mine the blocks:
-	baseDifficulty := genesisBlockDiff.Base()
-	incrPerHash := genesisBlockDiff.IncreasePerHash()
+	baseDifficulty := genesis.BlockBaseDifficulty()
+	incrPerHash := genesis.BlockIncreasePerHashDifficulty()
 	_, err = app.minedBlockApp.MineList(genesisMiningValue, baseDifficulty, incrPerHash)
 	if err != nil {
 		return err
 	}
 
 	// mine the links:
-	genesisLinkDiff := genesisDiff.Link()
+	genesisLinkDiff := genesis.LinkDifficulty()
 	_, err = app.minedLinkApp.MineList(genesisMiningValue, genesisLinkDiff)
 	if err != nil {
 		return err

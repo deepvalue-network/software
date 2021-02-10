@@ -3,8 +3,8 @@ package peers
 import "fmt"
 
 type content struct {
-	normal Server
-	tor    Server
+	normal Server `hydro:"Normal, Normal"`
+	tor    Server `hydro:"Tor, Tor"`
 }
 
 func createContentWithNormal(

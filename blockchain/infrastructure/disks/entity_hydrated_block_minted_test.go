@@ -3,6 +3,7 @@ package disks
 import (
 	"os"
 	"testing"
+	"time"
 
 	blocks_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
 	files_disks "github.com/deepvalue-network/software/libs/files/infrastructure/disks"
@@ -16,7 +17,7 @@ func TestHydrate_block_mined_Success(t *testing.T) {
 	}()
 
 	// init:
-	Init(basePath)
+	Init(basePath, time.Duration(time.Second))
 
 	// creates the block service:
 	serviceFile := files_disks.NewService(internalHydroAdapter, basePath, 0777)

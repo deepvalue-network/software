@@ -8,16 +8,18 @@ import (
 )
 
 type peerBuilder struct {
-	original Peer
-	normal   string
-	tor      string
+	original      Peer
+	server        string
+	createdOn     *time.Time
+	lastUpdatedOn *time.Time
 }
 
 func createPeerBuilder() PeerBuilder {
 	out := peerBuilder{
-		original: nil,
-		normal:   "",
-		tor:      "",
+		original:      nil,
+		server:        "",
+		createdOn:     nil,
+		lastUpdatedOn: nil,
 	}
 
 	return &out
@@ -34,63 +36,78 @@ func (app *peerBuilder) WithOriginal(original Peer) PeerBuilder {
 	return app
 }
 
-// WithNormalServer adds a normal server to the builder
-func (app *peerBuilder) WithNormalServer(normal string) PeerBuilder {
-	app.normal = normal
+// WithServer adds a sever to the builder
+func (app *peerBuilder) WithServer(server string) PeerBuilder {
+	app.server = server
 	return app
 }
 
-// WithTorServer adds a tor server to the builder
-func (app *peerBuilder) WithTorServer(tor string) PeerBuilder {
-	app.tor = tor
+// CreatedOn adds a creation time to the builder
+func (app *peerBuilder) CreatedOn(createdOn time.Time) PeerBuilder {
+	app.createdOn = &createdOn
+	return app
+}
+
+// LastUpdatedOn adds a lastUpdatedOn time to the builder
+func (app *peerBuilder) LastUpdatedOn(lastUpdatedOn time.Time) PeerBuilder {
+	app.lastUpdatedOn = &lastUpdatedOn
 	return app
 }
 
 // Now builds a new Peer instance
 func (app *peerBuilder) Now() (Peer, error) {
 	var content Content
-	if app.normal != "" {
-		server, err := app.extract(app.normal)
+	if app.server != "" {
+		server, scheme, err := app.extract(app.server)
 		if err != nil {
 			return nil, err
 		}
 
-		content = createContentWithNormal(server)
-	}
-
-	if app.tor != "" {
-		server, err := app.extract(app.tor)
-		if err != nil {
-			return nil, err
+		if scheme == NormalProtocol {
+			content = createContentWithNormal(server)
 		}
 
-		content = createContentWithTor(server)
+		if scheme == TorProtocol {
+			content = createContentWithTor(server)
+		}
 	}
 
 	if content == nil {
 		return nil, errors.New("the normal or tor server is mandatory in order to build a Peer instance")
 	}
 
-	createdOn := time.Now().UTC()
-	lastUpdatedOn := time.Now().UTC()
 	if app.original != nil {
-		createdOn = app.original.CreatedOn()
+		original := app.original.CreatedOn()
+		app.createdOn = &original
+
+		lastUpdatedOn := time.Now().UTC()
+		app.lastUpdatedOn = &lastUpdatedOn
 	}
 
-	return createPeer(content, createdOn, lastUpdatedOn), nil
+	if app.createdOn == nil {
+		createdOn := time.Now().UTC()
+		app.createdOn = &createdOn
+	}
+
+	if app.lastUpdatedOn == nil {
+		lastUpdatedOn := time.Now().UTC()
+		app.lastUpdatedOn = &lastUpdatedOn
+	}
+
+	return createPeer(content, *app.createdOn, *app.lastUpdatedOn), nil
 }
 
-func (app *peerBuilder) extract(str string) (Server, error) {
+func (app *peerBuilder) extract(str string) (Server, string, error) {
 	ins, err := url.Parse(str)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	port, err := strconv.Atoi(ins.Port())
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	host := ins.Hostname()
-	return createServer(host, uint(port)), nil
+	return createServer(host, uint(port)), ins.Scheme, nil
 }

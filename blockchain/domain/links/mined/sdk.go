@@ -13,6 +13,11 @@ func NewBuilder() Builder {
 	return createBuilder(hashAdapter)
 }
 
+// NewPointer creates a new pointer instance
+func NewPointer() *link {
+	return new(link)
+}
+
 // Builder represenst the link builder
 type Builder interface {
 	Create() Builder

@@ -10,6 +10,7 @@ import (
 	"github.com/deepvalue-network/software/libs/files/domain/files"
 	"github.com/deepvalue-network/software/libs/hash"
 	"github.com/deepvalue-network/software/libs/hydro"
+	uuid "github.com/satori/go.uuid"
 )
 
 type repository struct {
@@ -32,9 +33,14 @@ func createRepository(
 	return &out
 }
 
-// List lists the hashes of head blocks
+// List lists the hashes
 func (app *repository) List() ([]hash.Hash, error) {
-	return listFiles(app.basePath)
+	return listFilesForHashes(app.basePath)
+}
+
+// ListIDs list the ids
+func (app *repository) ListIDs() ([]*uuid.UUID, error) {
+	return listFilesForIDs(app.basePath)
 }
 
 // Retrieve retrieves a file by name

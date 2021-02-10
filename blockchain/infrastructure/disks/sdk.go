@@ -2,10 +2,15 @@ package disks
 
 import (
 	"path/filepath"
+	"time"
 
 	"github.com/deepvalue-network/software/blockchain/domain/blocks"
 	block_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
+	"github.com/deepvalue-network/software/blockchain/domain/chains"
+	"github.com/deepvalue-network/software/blockchain/domain/chains/peers"
+	"github.com/deepvalue-network/software/blockchain/domain/genesis"
 	"github.com/deepvalue-network/software/blockchain/domain/links"
+	link_mined "github.com/deepvalue-network/software/blockchain/domain/links/mined"
 	"github.com/deepvalue-network/software/libs/files/domain/files"
 	files_disks "github.com/deepvalue-network/software/libs/files/infrastructure/disks"
 	"github.com/deepvalue-network/software/libs/hydro"
@@ -13,13 +18,18 @@ import (
 
 const timeLayout = "2006-01-02T15:04:05.000Z"
 
+var internalPeerSyncInterval time.Duration
 var internalHydroAdapter hydro.Adapter
 var internalRepositoryBlock blocks.Repository
 var internalMinedRepositoryBlock block_mined.Repository
+var internalRepositoryLink links.Repository
+var internalRepositoryLinkMined link_mined.Repository
+var internalRepositoryChain chains.Repository
 
 // Init initializes the package
 func Init(
 	basePath string,
+	peerSyncInterval time.Duration,
 ) {
 	// create the block repository:
 	blockPtr := new(entityHydratedBlock)
@@ -29,13 +39,72 @@ func Init(
 
 	// create the mined block repository:
 	minedBlockPtr := new(entityHydratedBlock)
-	minedBlockBasePath := filepath.Join(basePath, "blocks/mined")
+	minedBlockBasePath := filepath.Join(basePath, "blocks_mined")
 	repositoryFileMinedBlock := files_disks.NewRepository(internalHydroAdapter, minedBlockBasePath, minedBlockPtr)
 	repositoryBlockMined := NewRepositoryBlockMined(repositoryFileMinedBlock)
+
+	// create the link repository:
+	linkPtr := new(entityHydratedLink)
+	linkBasePath := filepath.Join(basePath, "links")
+	repositoryFileLink := files_disks.NewRepository(internalHydroAdapter, linkBasePath, linkPtr)
+	linkRepository := NewRepositoryLink(repositoryFileLink)
+
+	// create the link mined repository:
+	minedLinkPtr := new(entityHydratedLinkMined)
+	minedLinkBasePath := filepath.Join(basePath, "links_mined")
+	repositoryFileLinkMined := files_disks.NewRepository(internalHydroAdapter, minedLinkBasePath, minedLinkPtr)
+	minedLinkRepository := NewRepositoryLinkMined(repositoryFileLinkMined)
+
+	// create the chain repository:
+	chainLinkPtr := new(entityHydratedChain)
+	chainBasePath := filepath.Join(basePath, "chains")
+	repositoryFileChain := files_disks.NewRepository(internalHydroAdapter, chainBasePath, chainLinkPtr)
+	chainRepository := NewRepositoryChain(repositoryFileChain)
 
 	// assign:
 	internalRepositoryBlock = repositoryBlock
 	internalMinedRepositoryBlock = repositoryBlockMined
+	internalRepositoryLink = linkRepository
+	internalRepositoryLinkMined = minedLinkRepository
+	internalRepositoryChain = chainRepository
+	internalPeerSyncInterval = peerSyncInterval
+}
+
+// NewRepositoryChain creates a new chain repository
+func NewRepositoryChain(
+	fileRepository files.Repository,
+) chains.Repository {
+	return createRepositoryChain(fileRepository)
+}
+
+// NewServiceLinkMined creates a new disk link mined service instance
+func NewServiceLinkMined(
+	linkService links.Service,
+	fileService files.Service,
+) link_mined.Service {
+	return createServiceLinkMined(linkService, fileService)
+}
+
+// NewRepositoryLinkMined represents a new disk link mined repository instance
+func NewRepositoryLinkMined(
+	fileRepository files.Repository,
+) link_mined.Repository {
+	return createRepositoryLinkMined(fileRepository)
+}
+
+// NewServiceLink creates a new disk link service instance
+func NewServiceLink(
+	blockService blocks.Service,
+	fileService files.Service,
+) links.Service {
+	return createServiceLink(blockService, fileService)
+}
+
+// NewRepositoryLink creates a new disk link repository instance
+func NewRepositoryLink(
+	fileRepository files.Repository,
+) links.Repository {
+	return createRepositoryLink(fileRepository)
 }
 
 // NewRepositoryBlock creates a new disk block repository instance
@@ -106,6 +175,69 @@ func init() {
 		panic(err)
 	}
 
+	minedLinkBridge, err := hydro.NewBridgeBuilder().Create().
+		WithDehydratedInterface((*link_mined.Link)(nil)).
+		WithDehydratedConstructor(newLinkMined).
+		WithDehydratedPointer(link_mined.NewPointer()).
+		WithHydratedPointer(new(entityHydratedLinkMined)).
+		OnHydrate(linkMinedOnHydrateEventFn).
+		OnDehydrate(linkMinedOnDehydrateEventFn).
+		Now()
+
+	if err != nil {
+		panic(err)
+	}
+
+	peerBridge, err := hydro.NewBridgeBuilder().Create().
+		WithDehydratedInterface((*peers.Peer)(nil)).
+		WithDehydratedConstructor(newPeer).
+		WithDehydratedPointer(peers.NewPeerPointer()).
+		WithHydratedPointer(createPeerForBridge()).
+		OnHydrate(peerOnHydrateEventFn).
+		OnDehydrate(peerOnDehydrateEventFn).
+		Now()
+
+	if err != nil {
+		panic(err)
+	}
+
+	peersBridge, err := hydro.NewBridgeBuilder().Create().
+		WithDehydratedInterface((*peers.Peers)(nil)).
+		WithDehydratedConstructor(newPeers).
+		WithDehydratedPointer(peers.NewPointer()).
+		WithHydratedPointer(createPeersForBridge()).
+		OnHydrate(peersOnHydrateEventFn).
+		OnDehydrate(peersOnDehydrateEventFn).
+		Now()
+
+	if err != nil {
+		panic(err)
+	}
+
+	genesisBridge, err := hydro.NewBridgeBuilder().Create().
+		WithDehydratedInterface((*genesis.Genesis)(nil)).
+		WithDehydratedConstructor(newGenesis).
+		WithDehydratedPointer(genesis.NewPointer()).
+		WithHydratedPointer(createGenesisForBridge()).
+		Now()
+
+	if err != nil {
+		panic(err)
+	}
+
+	chainBridge, err := hydro.NewBridgeBuilder().Create().
+		WithDehydratedInterface((*chains.Chain)(nil)).
+		WithDehydratedConstructor(newChain).
+		WithDehydratedPointer(chains.NewPointer()).
+		WithHydratedPointer(new(entityHydratedChain)).
+		OnHydrate(chainOnHydrateEventFn).
+		OnDehydrate(chainOnDehydrateEventFn).
+		Now()
+
+	if err != nil {
+		panic(err)
+	}
+
 	// build the manager:
 	manager := hydro.NewManagerFactory().Create()
 
@@ -113,6 +245,11 @@ func init() {
 	manager.Register(blockBridge)
 	manager.Register(blockMinedBridge)
 	manager.Register(linkBridge)
+	manager.Register(minedLinkBridge)
+	manager.Register(peerBridge)
+	manager.Register(peersBridge)
+	manager.Register(genesisBridge)
+	manager.Register(chainBridge)
 
 	// create the adapter:
 	internalHydroAdapter, err = hydro.NewAdapterBuilder().Create().WithManager(manager).Now()

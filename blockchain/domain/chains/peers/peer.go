@@ -3,9 +3,9 @@ package peers
 import "time"
 
 type peer struct {
-	content       Content
-	createdOn     time.Time
-	lastUpdatedOn time.Time
+	content       Content   `hydro:"Content, Content"`
+	createdOn     time.Time `hydro:"CreatedOn, CreatedOn"`
+	lastUpdatedOn time.Time `hydro:"LastUpdatedOn, LastUpdatedOn"`
 }
 
 func createPeer(

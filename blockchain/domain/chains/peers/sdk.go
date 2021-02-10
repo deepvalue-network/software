@@ -20,10 +20,28 @@ func NewBuilder() Builder {
 	return createBuilder()
 }
 
+// NewPeerBuilder creates a new peer builder instance
+func NewPeerBuilder() PeerBuilder {
+	return createPeerBuilder()
+}
+
+// NewPointer returns a new peers pointer
+func NewPointer() *peers {
+	return new(peers)
+}
+
+// NewPeerPointer returns a new peer pointer
+func NewPeerPointer() *peer {
+	return new(peer)
+}
+
 // Builder represents a peers builder
 type Builder interface {
 	Create() Builder
+	WithID(id *uuid.UUID) Builder
 	WithSyncDuration(syncDuration time.Duration) Builder
+	WithList(list []Peer) Builder
+	LastSyncTime(lastSyncTime time.Time) Builder
 	Now() (Peers, error)
 }
 
@@ -43,8 +61,9 @@ type Peers interface {
 type PeerBuilder interface {
 	Create() PeerBuilder
 	WithOriginal(original Peer) PeerBuilder
-	WithNormalServer(normal string) PeerBuilder
-	WithTorServer(tor string) PeerBuilder
+	WithServer(server string) PeerBuilder
+	CreatedOn(createdOn time.Time) PeerBuilder
+	LastUpdatedOn(lastUpdatedOn time.Time) PeerBuilder
 	Now() (Peer, error)
 }
 

@@ -3,7 +3,6 @@ package disks
 import (
 	"time"
 
-	uuid "github.com/satori/go.uuid"
 	"github.com/deepvalue-network/software/blockchain/domain/blocks"
 	mined_block "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
 	"github.com/deepvalue-network/software/blockchain/domain/chains"
@@ -13,6 +12,7 @@ import (
 	mined_link "github.com/deepvalue-network/software/blockchain/domain/links/mined"
 	"github.com/deepvalue-network/software/libs/hash"
 	"github.com/deepvalue-network/software/libs/hashtree"
+	uuid "github.com/satori/go.uuid"
 )
 
 func newBlock(
@@ -69,17 +69,56 @@ func newLinkMined(
 		Now()
 }
 
+func newPeer(
+	server string,
+	createdOn time.Time,
+	lastUpdatedOn *time.Time,
+) (peers.Peer, error) {
+	builder := peers.NewPeerBuilder().Create().CreatedOn(createdOn).WithServer(server)
+	if lastUpdatedOn != nil {
+		builder.LastUpdatedOn(*lastUpdatedOn)
+	}
+
+	return builder.Now()
+}
+
+func newPeers(
+	id *uuid.UUID,
+	syncInterval time.Duration,
+	list []peers.Peer,
+	lastSyncTime *time.Time,
+) (peers.Peers, error) {
+	builder := peers.NewBuilder().Create().WithID(id).WithSyncDuration(syncInterval).WithList(list)
+	if lastSyncTime != nil {
+		builder.LastSyncTime(*lastSyncTime)
+	}
+
+	return builder.Now()
+}
+
+func newGenesis(
+	miningValue uint8,
+	blockBaseDifficulty uint,
+	blockIncreasePerHashDifficulty float64,
+	linkDifficulty uint,
+) (genesis.Genesis, error) {
+	return genesis.NewBuilder().Create().
+		WithMiningValue(miningValue).
+		WithBlockBaseDifficulty(blockBaseDifficulty).
+		WithBlockIncreasePerHashDifficulty(blockIncreasePerHashDifficulty).
+		WithLinkDifficulty(linkDifficulty).
+		Now()
+}
+
 func newChain(
 	id *uuid.UUID,
 	peers peers.Peers,
 	root mined_block.Block,
 	gen genesis.Genesis,
 	createdOn time.Time,
-	peerSyncInterval time.Duration,
 	head mined_link.Link,
-	previousChain chains.Chain,
 ) (chains.Chain, error) {
-	builder := chains.NewBuilder(peerSyncInterval).
+	builder := chains.NewBuilder(internalPeerSyncInterval).
 		Create().
 		WithID(id).
 		WithPeers(peers).
@@ -91,8 +130,14 @@ func newChain(
 		builder.WithHead(head)
 	}
 
-	if previousChain != nil {
-		builder.WithOriginal(previousChain)
+	if head != nil {
+		// retrieve previous version of chain:
+		prevChain, err := internalRepositoryChain.Retrieve(id)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithOriginal(prevChain)
 	}
 
 	return builder.Now()

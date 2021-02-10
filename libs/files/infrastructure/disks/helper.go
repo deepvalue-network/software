@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/deepvalue-network/software/libs/hash"
+	uuid "github.com/satori/go.uuid"
 )
 
 func makeDirIfNotExists(path string, fileMode os.FileMode) error {
@@ -26,7 +27,31 @@ func fileExists(path string) bool {
 	return true
 }
 
-func listFiles(dirPath string) ([]hash.Hash, error) {
+func listFilesForIDs(dirPath string) ([]*uuid.UUID, error) {
+	files, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		return nil, err
+	}
+
+	out := []*uuid.UUID{}
+	for _, oneFile := range files {
+		if oneFile.IsDir() {
+			continue
+		}
+
+		name := oneFile.Name()
+		id, err := uuid.FromString(name)
+		if err != nil {
+			continue
+		}
+
+		out = append(out, &id)
+	}
+
+	return out, nil
+}
+
+func listFilesForHashes(dirPath string) ([]hash.Hash, error) {
 	files, err := ioutil.ReadDir(dirPath)
 	if err != nil {
 		return nil, err

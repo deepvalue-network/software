@@ -87,8 +87,6 @@ func (app *builder) Now() (Genesis, error) {
 		return nil, err
 	}
 
-	block := createBlock(app.blockBaseDiff, app.incrPerHashDiff)
-	diff := createDifficulty(block, app.linkDiff)
-	return createGenesis(*hash, app.miningValue, diff), nil
+	return createGenesis(*hash, app.miningValue, app.blockBaseDiff, app.incrPerHashDiff, app.linkDiff), nil
 
 }

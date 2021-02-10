@@ -13,6 +13,11 @@ func NewBuilder() Builder {
 	return createBuilder(hashAdapter)
 }
 
+// NewPointer returns a genesis pointer
+func NewPointer() *genesis {
+	return new(genesis)
+}
+
 // Builder represenst a genesis builder
 type Builder interface {
 	Create() Builder
@@ -27,17 +32,7 @@ type Builder interface {
 type Genesis interface {
 	Hash() hash.Hash
 	MiningValue() uint8
-	Difficulty() Difficulty
-}
-
-// Difficulty represents the genesis difficulty
-type Difficulty interface {
-	Block() Block
-	Link() uint
-}
-
-// Block represents the block difficulty related data
-type Block interface {
-	Base() uint
-	IncreasePerHash() float64
+	BlockBaseDifficulty() uint
+	BlockIncreasePerHashDifficulty() float64
+	LinkDifficulty() uint
 }

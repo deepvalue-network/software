@@ -35,10 +35,5 @@ func (app *serviceBlockMined) Insert(block mined_blocks.Block) error {
 
 // Delete deletes a block
 func (app *serviceBlockMined) Delete(block mined_blocks.Block) error {
-	err := app.blockService.Delete(block.Block())
-	if err != nil {
-		return err
-	}
-
 	return app.fileService.Delete(block.Hash().String())
 }
