@@ -1,7 +1,6 @@
 package servers
 
 import (
-	"os"
 	"testing"
 	"time"
 
@@ -10,11 +9,6 @@ import (
 )
 
 func TestHydrate_block_mined_Success(t *testing.T) {
-	basePath := "./test_files"
-	defer func() {
-		os.RemoveAll(basePath)
-	}()
-
 	// init:
 	Init(time.Duration(time.Second), nil, "2006-01-02T15:04:05.000Z")
 
