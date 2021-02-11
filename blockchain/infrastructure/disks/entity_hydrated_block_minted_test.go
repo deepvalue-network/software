@@ -1,6 +1,7 @@
 package disks
 
 import (
+	"os"
 	"reflect"
 	"testing"
 	"time"
@@ -9,9 +10,9 @@ import (
 )
 
 func TestHydrate_block_mined_Success(t *testing.T) {
-	basePath := "./test_files_voila"
+	basePath := "./test_files"
 	defer func() {
-		//os.RemoveAll(basePath)
+		os.RemoveAll(basePath)
 	}()
 
 	// init:
