@@ -1,7 +1,6 @@
-package disks
+package servers
 
 import (
-	mined_block "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
@@ -12,10 +11,6 @@ type entityHydratedLink struct {
 }
 
 func linkOnHydrateEventFn(ins interface{}, fieldName string, structName string) (interface{}, error) {
-	if block, ok := ins.(mined_block.Block); ok {
-		return block.Hash().String(), nil
-	}
-
 	if hsh, ok := ins.(hash.Hash); ok {
 		return hsh.String(), nil
 	}
@@ -24,12 +19,6 @@ func linkOnHydrateEventFn(ins interface{}, fieldName string, structName string) 
 }
 
 func linkOnDehydrateEventFn(ins interface{}, fieldName string, structName string) (interface{}, error) {
-	if fieldName == "NextBlock" {
-		if hsh, ok := ins.(hash.Hash); ok {
-			return internalRepositoryBlockMined.Retrieve(hsh)
-		}
-	}
-
 	if fieldName == "PrevMinedLink" {
 		hsh, err := hash.NewAdapter().FromString(ins.(string))
 		if err != nil {

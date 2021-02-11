@@ -16,7 +16,7 @@ func TestHydrate_peers_Success(t *testing.T) {
 	}()
 
 	// init:
-	Init(basePath, time.Duration(time.Second))
+	Init(basePath, 0777, time.Duration(time.Second))
 
 	// build a peers:
 	peers := peers.CreatePeersForTests()

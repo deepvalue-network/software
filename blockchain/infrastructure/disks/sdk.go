@@ -1,6 +1,7 @@
 package disks
 
 import (
+	"os"
 	"path/filepath"
 	"time"
 
@@ -18,19 +19,32 @@ import (
 
 const timeLayout = "2006-01-02T15:04:05.000Z"
 
+// peer sync interval:
 var internalPeerSyncInterval time.Duration
+
+// adapters:
 var internalHydroAdapter hydro.Adapter
+
+// repositories:
 var internalRepositoryBlock blocks.Repository
-var internalMinedRepositoryBlock block_mined.Repository
+var internalRepositoryBlockMined block_mined.Repository
 var internalRepositoryLink links.Repository
 var internalRepositoryLinkMined link_mined.Repository
 var internalRepositoryChain chains.Repository
 
+// services:
+var internalServiceBlock blocks.Service
+var internalServiceBlockMined block_mined.Service
+
 // Init initializes the package
 func Init(
 	basePath string,
+	fileMode os.FileMode,
 	peerSyncInterval time.Duration,
 ) {
+	// interval assign
+	internalPeerSyncInterval = peerSyncInterval
+
 	// create the block repository:
 	blockPtr := new(entityHydratedBlock)
 	blockBasePath := filepath.Join(basePath, "blocks")
@@ -61,13 +75,24 @@ func Init(
 	repositoryFileChain := files_disks.NewRepository(internalHydroAdapter, chainBasePath, chainLinkPtr)
 	chainRepository := NewRepositoryChain(repositoryFileChain)
 
-	// assign:
+	// repository assign:
 	internalRepositoryBlock = repositoryBlock
-	internalMinedRepositoryBlock = repositoryBlockMined
+	internalRepositoryBlockMined = repositoryBlockMined
 	internalRepositoryLink = linkRepository
 	internalRepositoryLinkMined = minedLinkRepository
 	internalRepositoryChain = chainRepository
-	internalPeerSyncInterval = peerSyncInterval
+
+	// create the block service:
+	blockFileService := files_disks.NewService(internalHydroAdapter, blockBasePath, fileMode)
+	blockService := NewServiceBlock(blockFileService)
+
+	// create the mined block service:
+	minedBlockFileService := files_disks.NewService(internalHydroAdapter, minedBlockBasePath, fileMode)
+	minedBlockService := NewServiceBlockMined(blockService, minedBlockFileService)
+
+	// service assign:
+	internalServiceBlock = blockService
+	internalServiceBlockMined = minedBlockService
 }
 
 // NewRepositoryChain creates a new chain repository

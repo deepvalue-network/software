@@ -17,7 +17,7 @@ func TestHydrate_linkMined_Success(t *testing.T) {
 	}()
 
 	// init:
-	Init(basePath, time.Duration(time.Second))
+	Init(basePath, 0777, time.Duration(time.Second))
 
 	// creates the link service:
 	serviceFileBlock := files_disks.NewService(internalHydroAdapter, basePath, 0777)

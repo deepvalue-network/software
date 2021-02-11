@@ -17,7 +17,7 @@ func TestHydrate_chain_Success(t *testing.T) {
 	}()
 
 	// init:
-	Init(basePath, time.Duration(time.Second))
+	Init(basePath, 0777, time.Duration(time.Second))
 
 	// create the services:
 	fileService := files_disks.NewService(internalHydroAdapter, basePath, 0777)

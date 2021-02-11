@@ -1,38 +1,56 @@
 package disks
 
 import (
-	"os"
+	"reflect"
 	"testing"
 	"time"
 
 	blocks_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
-	files_disks "github.com/deepvalue-network/software/libs/files/infrastructure/disks"
-	"github.com/deepvalue-network/software/libs/hydro"
 )
 
 func TestHydrate_block_mined_Success(t *testing.T) {
-	basePath := "./test_files"
+	basePath := "./test_files_voila"
 	defer func() {
-		os.RemoveAll(basePath)
+		//os.RemoveAll(basePath)
 	}()
 
 	// init:
-	Init(basePath, time.Duration(time.Second))
-
-	// creates the block service:
-	serviceFile := files_disks.NewService(internalHydroAdapter, basePath, 0777)
-	serviceBlock := NewServiceBlock(serviceFile)
+	Init(basePath, 0777, time.Duration(time.Second))
 
 	// build a mined block:
 	minedBlock := blocks_mined.CreateBlockForTests()
 
 	// save the block:
-	err := serviceBlock.Insert(minedBlock.Block())
+	err := internalServiceBlockMined.Insert(minedBlock)
 	if err != nil {
 		t.Errorf("the error was expected to be nil, error returned: %s", err.Error())
 		return
 	}
 
+	// retrieve the block:
+	retMinedBlock, err := internalRepositoryBlockMined.Retrieve(minedBlock.Hash())
+	if err != nil {
+		t.Errorf("the error was expected to be nil, error returned: %s", err.Error())
+		return
+	}
+
+	hydrated, err := internalHydroAdapter.Hydrate(minedBlock)
+	if err != nil {
+		t.Errorf("the error was expected to be nil, error returned: %s", err.Error())
+		return
+	}
+
+	retHydrated, err := internalHydroAdapter.Hydrate(retMinedBlock)
+	if err != nil {
+		t.Errorf("the error was expected to be nil, error returned: %s", err.Error())
+		return
+	}
+
+	// compare:
+	if !reflect.DeepEqual(hydrated, retHydrated) {
+		t.Errorf("the compared instances are different")
+		return
+	}
 	// execute:
-	hydro.VerifyAdapterUsingJSForTests(internalHydroAdapter, minedBlock, t)
+	//hydro.VerifyAdapterUsingJSForTests(internalHydroAdapter, minedBlock, t)
 }

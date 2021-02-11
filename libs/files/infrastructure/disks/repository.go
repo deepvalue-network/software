@@ -62,5 +62,7 @@ func (app *repository) Retrieve(name string) (interface{}, error) {
 		return nil, err
 	}
 
+	fmt.Printf("\n%s\n", js)
+
 	return app.hydroAdapter.Dehydrate(hydrated)
 }

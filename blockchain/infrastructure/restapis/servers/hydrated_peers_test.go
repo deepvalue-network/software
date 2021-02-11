@@ -1,4 +1,4 @@
-package disks
+package servers
 
 import (
 	"os"
@@ -9,18 +9,18 @@ import (
 	"github.com/deepvalue-network/software/libs/hydro"
 )
 
-func TestHydrate_peer_Success(t *testing.T) {
+func TestHydrate_peers_Success(t *testing.T) {
 	basePath := "./test_files"
 	defer func() {
 		os.RemoveAll(basePath)
 	}()
 
 	// init:
-	Init(basePath, 0777, time.Duration(time.Second))
+	Init(time.Duration(time.Second), nil, "2006-01-02T15:04:05.000Z")
 
-	// build a peer:
-	peer := peers.CreatePeerForTests()
+	// build a peers:
+	peers := peers.CreatePeersForTests()
 
 	// execute:
-	hydro.VerifyAdapterUsingJSForTests(internalHydroAdapter, peer, t)
+	hydro.VerifyAdapterUsingJSForTests(internalHydroAdapter, peers, t)
 }

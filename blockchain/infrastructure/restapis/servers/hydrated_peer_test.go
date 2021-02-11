@@ -1,4 +1,4 @@
-package disks
+package servers
 
 import (
 	"os"
@@ -16,7 +16,7 @@ func TestHydrate_peer_Success(t *testing.T) {
 	}()
 
 	// init:
-	Init(basePath, 0777, time.Duration(time.Second))
+	Init(time.Duration(time.Second), nil, "2006-01-02T15:04:05.000Z")
 
 	// build a peer:
 	peer := peers.CreatePeerForTests()

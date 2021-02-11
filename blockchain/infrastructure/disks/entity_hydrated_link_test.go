@@ -17,7 +17,7 @@ func TestHydrate_link_Success(t *testing.T) {
 	}()
 
 	// init:
-	Init(basePath, time.Duration(time.Second))
+	Init(basePath, 0777, time.Duration(time.Second))
 
 	// creates the block service:
 	serviceFileBlock := files_disks.NewService(internalHydroAdapter, basePath, 0777)
