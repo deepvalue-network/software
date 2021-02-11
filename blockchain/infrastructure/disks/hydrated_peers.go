@@ -6,10 +6,11 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-type hydratedPeers struct {
+// HydratedPeers represents hydrated peers
+type HydratedPeers struct {
 	ID           string          `json:"id" hydro:"0"`
 	SyncInterval int64           `json:"sync_interval" hydro:"1"`
-	List         []*hydratedPeer `json:"list" hydro:"2"`
+	List         []*HydratedPeer `json:"list" hydro:"2"`
 	LastSyncTime string          `json:"last_sync_time" hydro:"3"`
 }
 

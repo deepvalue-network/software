@@ -8,8 +8,8 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-func createGenesisForBridge() *hydratedGenesis {
-	out := hydratedGenesis{
+func createGenesisForBridge() *HydratedGenesis {
+	out := HydratedGenesis{
 		MiningValue:                    uint8(0x0),
 		BlockBaseDifficulty:            uint(2),
 		BlockIncreasePerHashDifficulty: float64(0.43),
@@ -19,9 +19,9 @@ func createGenesisForBridge() *hydratedGenesis {
 	return &out
 }
 
-func createPeerForBridge() *hydratedPeer {
+func createPeerForBridge() *HydratedPeer {
 	now := time.Now().UTC()
-	out := hydratedPeer{
+	out := HydratedPeer{
 		Content:       fmt.Sprintf("%s://127.0.0.1:80", peers.NormalProtocol),
 		CreatedOn:     now.String(),
 		LastUpdatedOn: now.String(),
@@ -30,13 +30,13 @@ func createPeerForBridge() *hydratedPeer {
 	return &out
 }
 
-func createPeersForBridge() *hydratedPeers {
+func createPeersForBridge() *HydratedPeers {
 	now := time.Now().UTC()
 	id := uuid.NewV4()
-	out := hydratedPeers{
+	out := HydratedPeers{
 		ID:           id.String(),
 		SyncInterval: int64(time.Duration(time.Second * 30)),
-		List: []*hydratedPeer{
+		List: []*HydratedPeer{
 			createPeerForBridge(),
 		},
 		LastSyncTime: now.String(),

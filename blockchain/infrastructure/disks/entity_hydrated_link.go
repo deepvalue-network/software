@@ -1,23 +1,34 @@
 package disks
 
 import (
-	mined_block "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
-type entityHydratedLink struct {
-	Index         uint                 `json:"index" hydro:"0"`
-	PrevMinedLink string               `json:"prev_mined_link" hydro:"1"`
-	NextBlock     *entityHydratedBlock `json:"next_block" hydro:"2"`
+// EntityHydratedLink represents an entity hydrated link
+type EntityHydratedLink struct {
+	Hash          string `json:"hash"`
+	Index         uint   `json:"index" hydro:"0"`
+	PrevMinedLink string `json:"prev_mined_link" hydro:"1"`
+	NextBlock     string `json:"next_block" hydro:"2"`
 }
 
 func linkOnHydrateEventFn(ins interface{}, fieldName string, structName string) (interface{}, error) {
-	if block, ok := ins.(mined_block.Block); ok {
-		return block.Hash().String(), nil
+	if fieldName == "Hash" {
+		if hsh, ok := ins.(hash.Hash); ok {
+			return hsh.String(), nil
+		}
 	}
 
-	if hsh, ok := ins.(hash.Hash); ok {
-		return hsh.String(), nil
+	if fieldName == "NextBlock" {
+		if hydratedBlock, ok := ins.(*EntityHydratedBlock); ok {
+			return hydratedBlock.Tree.Head, nil
+		}
+	}
+
+	if fieldName == "PrevMinedLink" {
+		if hsh, ok := ins.(hash.Hash); ok {
+			return hsh.String(), nil
+		}
 	}
 
 	return nil, nil
@@ -25,8 +36,13 @@ func linkOnHydrateEventFn(ins interface{}, fieldName string, structName string) 
 
 func linkOnDehydrateEventFn(ins interface{}, fieldName string, structName string) (interface{}, error) {
 	if fieldName == "NextBlock" {
-		if hsh, ok := ins.(hash.Hash); ok {
-			return internalRepositoryBlockMined.Retrieve(hsh)
+		if strHash, ok := ins.(string); ok {
+			hsh, err := hash.NewAdapter().FromString(strHash)
+			if err != nil {
+				return nil, err
+			}
+
+			return internalRepositoryBlock.Retrieve(*hsh)
 		}
 	}
 

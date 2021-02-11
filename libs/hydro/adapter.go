@@ -156,8 +156,15 @@ func (app *adapter) Dehydrate(hydrate interface{}) (interface{}, error) {
 		field := hydrateType.Field(i)
 		tagName, ok := field.Tag.Lookup("hydro")
 		if !ok {
-			str := fmt.Sprintf("there is no tag 'hydro' on field (name: %s) of struct (name: %s)", field.Name, hydrateType.Name())
-			return nil, errors.New(str)
+			// log:
+			str := fmt.Sprintf("there is no tag 'hydro' on field (name: %s) of struct (name: %s), skip", field.Name, hydrateType.Name())
+			log.Println(str)
+
+			// remove the params:
+			paramsIns = append(paramsIns[:i], paramsIns[i+1:]...)
+
+			// skip:
+			continue
 		}
 
 		index, err := strconv.Atoi(strings.TrimSpace(tagName))
@@ -181,10 +188,15 @@ func (app *adapter) Dehydrate(hydrate interface{}) (interface{}, error) {
 		case reflect.Struct:
 			dehydrate, err := app.Dehydrate(fieldValIns)
 			if err != nil {
-				return nil, err
+				// log:
+				str := fmt.Sprintf("there was a property that was probably not registered. so trying the instance directly: %s", err.Error())
+				log.Println(str)
+
+				// we try to use the instance directly, since it was not registered, we will deal with it in the event:
+				dehydrate = fieldValIns
 			}
 
-			if dehydrate == nil {
+			if err == nil && dehydrate == nil {
 				paramsIns[index] = nil
 				break
 			}

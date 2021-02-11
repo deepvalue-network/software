@@ -52,6 +52,4 @@ func TestHydrate_block_mined_Success(t *testing.T) {
 		t.Errorf("the compared instances are different")
 		return
 	}
-	// execute:
-	//hydro.VerifyAdapterUsingJSForTests(internalHydroAdapter, minedBlock, t)
 }

@@ -6,7 +6,8 @@ import (
 	"github.com/deepvalue-network/software/blockchain/domain/chains/peers"
 )
 
-type hydratedPeer struct {
+// HydratedPeer represents an hydrated peer
+type HydratedPeer struct {
 	Content       string `json:"server" hydro:"0"`
 	CreatedOn     string `json:"created_on" hydro:"1"`
 	LastUpdatedOn string `json:"last_updated_on,omitempty" hydro:"2"`

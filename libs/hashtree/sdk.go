@@ -4,6 +4,16 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// ToJSON converts a compact ht to JSONCompact
+func ToJSON(ht Compact) *JSONCompact {
+	return createJSONCompactFromCompact(ht)
+}
+
+// ToCompact creates compact hashtree from JSONCompact
+func ToCompact(js *JSONCompact) (Compact, error) {
+	return createCompactFromJSON(js)
+}
+
 // NewBuilder creates a new hashtree builder
 func NewBuilder() Builder {
 	return createBuilder()

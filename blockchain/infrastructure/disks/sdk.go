@@ -35,6 +35,8 @@ var internalRepositoryChain chains.Repository
 // services:
 var internalServiceBlock blocks.Service
 var internalServiceBlockMined block_mined.Service
+var internalServiceLink links.Service
+var internalServiceLinkMined link_mined.Service
 
 // Init initializes the package
 func Init(
@@ -46,31 +48,31 @@ func Init(
 	internalPeerSyncInterval = peerSyncInterval
 
 	// create the block repository:
-	blockPtr := new(entityHydratedBlock)
+	blockPtr := new(EntityHydratedBlock)
 	blockBasePath := filepath.Join(basePath, "blocks")
 	repositoryFileBlock := files_disks.NewRepository(internalHydroAdapter, blockBasePath, blockPtr)
 	repositoryBlock := NewRepositoryBlock(repositoryFileBlock)
 
 	// create the mined block repository:
-	minedBlockPtr := new(entityHydratedBlock)
+	minedBlockPtr := new(EntityHydratedBlockMined)
 	minedBlockBasePath := filepath.Join(basePath, "blocks_mined")
 	repositoryFileMinedBlock := files_disks.NewRepository(internalHydroAdapter, minedBlockBasePath, minedBlockPtr)
 	repositoryBlockMined := NewRepositoryBlockMined(repositoryFileMinedBlock)
 
 	// create the link repository:
-	linkPtr := new(entityHydratedLink)
+	linkPtr := new(EntityHydratedLink)
 	linkBasePath := filepath.Join(basePath, "links")
 	repositoryFileLink := files_disks.NewRepository(internalHydroAdapter, linkBasePath, linkPtr)
 	linkRepository := NewRepositoryLink(repositoryFileLink)
 
 	// create the link mined repository:
-	minedLinkPtr := new(entityHydratedLinkMined)
+	minedLinkPtr := new(EntityHydratedLinkMined)
 	minedLinkBasePath := filepath.Join(basePath, "links_mined")
 	repositoryFileLinkMined := files_disks.NewRepository(internalHydroAdapter, minedLinkBasePath, minedLinkPtr)
 	minedLinkRepository := NewRepositoryLinkMined(repositoryFileLinkMined)
 
 	// create the chain repository:
-	chainLinkPtr := new(entityHydratedChain)
+	chainLinkPtr := new(EntityHydratedChain)
 	chainBasePath := filepath.Join(basePath, "chains")
 	repositoryFileChain := files_disks.NewRepository(internalHydroAdapter, chainBasePath, chainLinkPtr)
 	chainRepository := NewRepositoryChain(repositoryFileChain)
@@ -90,9 +92,19 @@ func Init(
 	minedBlockFileService := files_disks.NewService(internalHydroAdapter, minedBlockBasePath, fileMode)
 	minedBlockService := NewServiceBlockMined(blockService, minedBlockFileService)
 
+	// create the link service:
+	linkFileService := files_disks.NewService(internalHydroAdapter, linkBasePath, fileMode)
+	linkService := NewServiceLink(blockService, linkFileService)
+
+	// create the mined link service:
+	minedLinkFileService := files_disks.NewService(internalHydroAdapter, minedLinkBasePath, fileMode)
+	minedLinkService := NewServiceLinkMined(linkService, minedLinkFileService)
+
 	// service assign:
 	internalServiceBlock = blockService
 	internalServiceBlockMined = minedBlockService
+	internalServiceLink = linkService
+	internalServiceLinkMined = minedLinkService
 }
 
 // NewRepositoryChain creates a new chain repository
@@ -166,8 +178,9 @@ func init() {
 		WithDehydratedInterface((*blocks.Block)(nil)).
 		WithDehydratedConstructor(newBlock).
 		WithDehydratedPointer(blocks.NewPointer()).
-		WithHydratedPointer(new(entityHydratedBlock)).
+		WithHydratedPointer(new(EntityHydratedBlock)).
 		OnHydrate(blockOnHydrateEventFn).
+		OnDehydrate(blockOnDehydrateEventFn).
 		Now()
 
 	if err != nil {
@@ -178,7 +191,7 @@ func init() {
 		WithDehydratedInterface((*block_mined.Block)(nil)).
 		WithDehydratedConstructor(newBlockMined).
 		WithDehydratedPointer(block_mined.NewPointer()).
-		WithHydratedPointer(new(entityHydratedBlockMined)).
+		WithHydratedPointer(new(EntityHydratedBlockMined)).
 		OnHydrate(blockMinedOnHydrateEventFn).
 		OnDehydrate(blockMinedOnDehydrateEventFn).
 		Now()
@@ -191,7 +204,7 @@ func init() {
 		WithDehydratedInterface((*links.Link)(nil)).
 		WithDehydratedConstructor(newLink).
 		WithDehydratedPointer(links.NewPointer()).
-		WithHydratedPointer(new(entityHydratedLink)).
+		WithHydratedPointer(new(EntityHydratedLink)).
 		OnHydrate(linkOnHydrateEventFn).
 		OnDehydrate(linkOnDehydrateEventFn).
 		Now()
@@ -204,7 +217,7 @@ func init() {
 		WithDehydratedInterface((*link_mined.Link)(nil)).
 		WithDehydratedConstructor(newLinkMined).
 		WithDehydratedPointer(link_mined.NewPointer()).
-		WithHydratedPointer(new(entityHydratedLinkMined)).
+		WithHydratedPointer(new(EntityHydratedLinkMined)).
 		OnHydrate(linkMinedOnHydrateEventFn).
 		OnDehydrate(linkMinedOnDehydrateEventFn).
 		Now()
@@ -244,6 +257,7 @@ func init() {
 		WithDehydratedConstructor(newGenesis).
 		WithDehydratedPointer(genesis.NewPointer()).
 		WithHydratedPointer(createGenesisForBridge()).
+		OnHydrate(genesisOnHydrateEventFn).
 		Now()
 
 	if err != nil {
@@ -254,7 +268,7 @@ func init() {
 		WithDehydratedInterface((*chains.Chain)(nil)).
 		WithDehydratedConstructor(newChain).
 		WithDehydratedPointer(chains.NewPointer()).
-		WithHydratedPointer(new(entityHydratedChain)).
+		WithHydratedPointer(new(EntityHydratedChain)).
 		OnHydrate(chainOnHydrateEventFn).
 		OnDehydrate(chainOnDehydrateEventFn).
 		Now()

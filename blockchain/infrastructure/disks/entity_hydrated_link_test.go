@@ -2,12 +2,11 @@ package disks
 
 import (
 	"os"
+	"reflect"
 	"testing"
 	"time"
 
 	"github.com/deepvalue-network/software/blockchain/domain/links"
-	files_disks "github.com/deepvalue-network/software/libs/files/infrastructure/disks"
-	"github.com/deepvalue-network/software/libs/hydro"
 )
 
 func TestHydrate_link_Success(t *testing.T) {
@@ -19,20 +18,38 @@ func TestHydrate_link_Success(t *testing.T) {
 	// init:
 	Init(basePath, 0777, time.Duration(time.Second))
 
-	// creates the block service:
-	serviceFileBlock := files_disks.NewService(internalHydroAdapter, basePath, 0777)
-	serviceBlock := NewServiceBlock(serviceFileBlock)
-
 	// build a link:
 	link := links.CreateLinkForTests()
 
-	// save the block:
-	err := serviceBlock.Insert(link.NextBlock())
+	// save the link:
+	err := internalServiceLink.Insert(link)
 	if err != nil {
 		t.Errorf("the error was expected to be nil, error returned: %s", err.Error())
 		return
 	}
 
-	// execute:
-	hydro.VerifyAdapterUsingJSForTests(internalHydroAdapter, link, t)
+	// retrieve the link:
+	retLink, err := internalRepositoryLink.Retrieve(link.Hash())
+	if err != nil {
+		t.Errorf("the error was expected to be nil, error returned: %s", err.Error())
+		return
+	}
+
+	hydrated, err := internalHydroAdapter.Hydrate(link)
+	if err != nil {
+		t.Errorf("the error was expected to be nil, error returned: %s", err.Error())
+		return
+	}
+
+	retHydrated, err := internalHydroAdapter.Hydrate(retLink)
+	if err != nil {
+		t.Errorf("the error was expected to be nil, error returned: %s", err.Error())
+		return
+	}
+
+	// compare:
+	if !reflect.DeepEqual(hydrated, retHydrated) {
+		t.Errorf("the compared instances are different")
+		return
+	}
 }
