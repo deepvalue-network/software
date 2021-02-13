@@ -37,8 +37,7 @@ func (app *manager) Add(evt Event) error {
 
 	diff := (id - length) + 1
 	for i := 0; i < diff; i++ {
-		index := length + i
-		app.evts[index] = map[string]Event{}
+		app.evts = append(app.evts, map[string]Event{})
 	}
 
 	app.evts[id][keyname] = evt
@@ -60,17 +59,12 @@ func (app *manager) AddList(evts []Event) error {
 // Trigger triggers an event
 func (app *manager) Trigger(identifier int, data interface{}, triggerFn TriggerFn) error {
 	length := len(app.evts)
-	if identifier < length {
-		return nil
-	}
-
-	lst := app.evts[identifier]
-	if len(lst) <= 0 {
-		return nil
+	if identifier >= length {
+		return triggerFn()
 	}
 
 	// executes onEnter:
-	for _, oneEvt := range lst {
+	for _, oneEvt := range app.evts[identifier] {
 		if oneEvt.HasOnEnter() {
 			enterFn := oneEvt.OnEnter()
 			err := enterFn(data, oneEvt)
@@ -87,7 +81,7 @@ func (app *manager) Trigger(identifier int, data interface{}, triggerFn TriggerF
 	}
 
 	// executes the onExit:
-	for _, oneEvt := range lst {
+	for _, oneEvt := range app.evts[identifier] {
 		if oneEvt.HasOnExit() {
 			exitFn := oneEvt.OnExit()
 			err := exitFn(data, oneEvt)

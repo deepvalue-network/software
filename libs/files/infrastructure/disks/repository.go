@@ -51,13 +51,17 @@ func (app *repository) Retrieve(name string) (interface{}, error) {
 		return nil, errors.New(str)
 	}
 
-	js, err := ioutil.ReadFile(path)
+	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
+	if app.ptr == nil {
+		return data, nil
+	}
+
 	hydrated := app.ptr
-	err = json.Unmarshal(js, hydrated)
+	err = json.Unmarshal(data, hydrated)
 	if err != nil {
 		return nil, err
 	}

@@ -71,6 +71,14 @@ func (app *service) Delete(name string) error {
 }
 
 func (app *service) save(path string, ins interface{}) error {
+	if str, ok := ins.(string); ok {
+		return ioutil.WriteFile(path, []byte(str), app.fileMode)
+	}
+
+	if bytes, ok := ins.([]byte); ok {
+		return ioutil.WriteFile(path, bytes, app.fileMode)
+	}
+
 	hydrated, err := app.hydroAdapter.Hydrate(ins)
 	if err != nil {
 		return err

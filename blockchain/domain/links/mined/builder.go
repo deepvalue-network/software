@@ -70,7 +70,7 @@ func (app *builder) Now() (Link, error) {
 	hash, err := app.hashAdapter.FromMultiBytes([][]byte{
 		app.link.Hash().Bytes(),
 		[]byte(app.results),
-		[]byte(strconv.Itoa(app.createdOn.Nanosecond())),
+		[]byte(strconv.Itoa(app.createdOn.Second())),
 	})
 
 	if err != nil {

@@ -12,12 +12,52 @@ import (
 	"github.com/deepvalue-network/software/blockchain/domain/genesis"
 	"github.com/deepvalue-network/software/blockchain/domain/links"
 	link_mined "github.com/deepvalue-network/software/blockchain/domain/links/mined"
+	"github.com/deepvalue-network/software/libs/events"
 	"github.com/deepvalue-network/software/libs/files/domain/files"
 	files_disks "github.com/deepvalue-network/software/libs/files/infrastructure/disks"
+	"github.com/deepvalue-network/software/libs/hash"
 	"github.com/deepvalue-network/software/libs/hydro"
 )
 
+const (
+	// EventBlockInsert represents an insert block event
+	EventBlockInsert = iota
+
+	// EventBlockDelete represents a delete block event
+	EventBlockDelete
+
+	// EventBlockMinedInsert represents an insert mined block event
+	EventBlockMinedInsert
+
+	// EventBlockMinedDelete represents a delete mined block event
+	EventBlockMinedDelete
+
+	// EventLinkInsert represents an insert link event
+	EventLinkInsert
+
+	// EventLinkDelete represents a delete link event
+	EventLinkDelete
+
+	// EventLinkMinedInsert represents an insert mined link event
+	EventLinkMinedInsert
+
+	// EventLinkMinedDelete represents a delete mined link event
+	EventLinkMinedDelete
+
+	// EventChainInsert represents an insert chain event
+	EventChainInsert
+
+	// EventChainUpdate represents an update chain event
+	EventChainUpdate
+
+	// EventChainDelete represents a delete chain event
+	EventChainDelete
+)
+
 const timeLayout = "2006-01-02T15:04:05.000Z"
+
+// event manager:
+var internalEventManager events.Manager
 
 // peer sync interval:
 var internalPeerSyncInterval time.Duration
@@ -44,6 +84,16 @@ func Init(
 	fileMode os.FileMode,
 	peerSyncInterval time.Duration,
 ) {
+
+	// init events:
+	eventManager, err := initEventManager()
+	if err != nil {
+		panic(err)
+	}
+
+	// assign event manager:
+	internalEventManager = eventManager
+
 	// interval assign
 	internalPeerSyncInterval = peerSyncInterval
 
@@ -56,14 +106,20 @@ func Init(
 	// create the mined block repository:
 	minedBlockPtr := new(EntityHydratedBlockMined)
 	minedBlockBasePath := filepath.Join(basePath, "blocks_mined")
+	pointerMinedBlockBasePath := filepath.Join(basePath, "blocks_mined_pointers")
 	repositoryFileMinedBlock := files_disks.NewRepository(internalHydroAdapter, minedBlockBasePath, minedBlockPtr)
-	repositoryBlockMined := NewRepositoryBlockMined(repositoryFileMinedBlock)
+	repositoryPointerFileMinedBlock := files_disks.NewRepository(internalHydroAdapter, pointerMinedBlockBasePath, nil)
+	repositoryBlockMined := NewRepositoryBlockMined(repositoryFileMinedBlock, repositoryPointerFileMinedBlock)
 
 	// create the link repository:
 	linkPtr := new(EntityHydratedLink)
 	linkBasePath := filepath.Join(basePath, "links")
+	blockPointerLinkBasePath := filepath.Join(basePath, "links_blocks_pointers")
+	minedLinkPointerLinkBasePath := filepath.Join(basePath, "links_minedlinks_pointers")
 	repositoryFileLink := files_disks.NewRepository(internalHydroAdapter, linkBasePath, linkPtr)
-	linkRepository := NewRepositoryLink(repositoryFileLink)
+	repositoryBlockPointerFileLink := files_disks.NewRepository(internalHydroAdapter, blockPointerLinkBasePath, nil)
+	repositoryMinedLinkPointerFileLink := files_disks.NewRepository(internalHydroAdapter, minedLinkPointerLinkBasePath, nil)
+	linkRepository := NewRepositoryLink(repositoryFileLink, repositoryBlockPointerFileLink, repositoryMinedLinkPointerFileLink)
 
 	// create the link mined repository:
 	minedLinkPtr := new(EntityHydratedLinkMined)
@@ -86,15 +142,18 @@ func Init(
 
 	// create the block service:
 	blockFileService := files_disks.NewService(internalHydroAdapter, blockBasePath, fileMode)
-	blockService := NewServiceBlock(blockFileService)
+	blockService := NewServiceBlock(internalEventManager, blockFileService)
 
 	// create the mined block service:
 	minedBlockFileService := files_disks.NewService(internalHydroAdapter, minedBlockBasePath, fileMode)
-	minedBlockService := NewServiceBlockMined(blockService, minedBlockFileService)
+	minedBlockPointerFileService := files_disks.NewService(internalHydroAdapter, pointerMinedBlockBasePath, fileMode)
+	minedBlockService := NewServiceBlockMined(internalEventManager, repositoryBlockMined, blockService, minedBlockFileService, minedBlockPointerFileService)
 
 	// create the link service:
 	linkFileService := files_disks.NewService(internalHydroAdapter, linkBasePath, fileMode)
-	linkService := NewServiceLink(blockService, linkFileService)
+	linkBlockPointerFileService := files_disks.NewService(internalHydroAdapter, blockPointerLinkBasePath, fileMode)
+	linkMinedLinkPointerFileService := files_disks.NewService(internalHydroAdapter, minedLinkPointerLinkBasePath, fileMode)
+	linkService := NewServiceLink(internalEventManager, linkRepository, blockService, linkFileService, linkBlockPointerFileService, linkMinedLinkPointerFileService)
 
 	// create the mined link service:
 	minedLinkFileService := files_disks.NewService(internalHydroAdapter, minedLinkBasePath, fileMode)
@@ -131,17 +190,31 @@ func NewRepositoryLinkMined(
 
 // NewServiceLink creates a new disk link service instance
 func NewServiceLink(
+	eventManager events.Manager,
+	linkRepository links.Repository,
 	blockService blocks.Service,
 	fileService files.Service,
+	blockPointerFileService files.Service,
+	minedLinkPointerFileService files.Service,
 ) links.Service {
-	return createServiceLink(blockService, fileService)
+	return createServiceLink(
+		eventManager,
+		linkRepository,
+		blockService,
+		fileService,
+		blockPointerFileService,
+		minedLinkPointerFileService,
+	)
 }
 
 // NewRepositoryLink creates a new disk link repository instance
 func NewRepositoryLink(
 	fileRepository files.Repository,
+	blockPointerFileRepository files.Repository,
+	minedLinkPointerFileRepository files.Repository,
 ) links.Repository {
-	return createRepositoryLink(fileRepository)
+	hashAdapter := hash.NewAdapter()
+	return createRepositoryLink(hashAdapter, fileRepository, blockPointerFileRepository, minedLinkPointerFileRepository)
 }
 
 // NewRepositoryBlock creates a new disk block repository instance
@@ -153,27 +226,34 @@ func NewRepositoryBlock(
 
 // NewServiceBlock creates a new disk block service
 func NewServiceBlock(
+	eventManager events.Manager,
 	fileService files.Service,
 ) blocks.Service {
-	return createServiceBlock(fileService)
+	return createServiceBlock(eventManager, fileService)
 }
 
 // NewRepositoryBlockMined creates a new disk mined block repository
 func NewRepositoryBlockMined(
 	fileRepository files.Repository,
+	pointerFileRepository files.Repository,
 ) block_mined.Repository {
-	return createRepositoryBlockMined(fileRepository)
+	hashAdapter := hash.NewAdapter()
+	return createRepositoryBlockMined(hashAdapter, fileRepository, pointerFileRepository)
 }
 
 // NewServiceBlockMined creates a new disk mined block service
 func NewServiceBlockMined(
+	eventManager events.Manager,
+	minedBlockRepository block_mined.Repository,
 	blockService blocks.Service,
 	fileService files.Service,
+	pointerFileService files.Service,
 ) block_mined.Service {
-	return createServiceBlockMined(blockService, fileService)
+	return createServiceBlockMined(eventManager, minedBlockRepository, blockService, fileService, pointerFileService)
 }
 
 func init() {
+	// create bridges:
 	blockBridge, err := hydro.NewBridgeBuilder().Create().
 		WithDehydratedInterface((*blocks.Block)(nil)).
 		WithDehydratedConstructor(newBlock).

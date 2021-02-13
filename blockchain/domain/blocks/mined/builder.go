@@ -70,7 +70,7 @@ func (app *builder) Now() (Block, error) {
 	hash, err := app.hashAdapter.FromMultiBytes([][]byte{
 		app.block.Tree().Head().Bytes(),
 		[]byte(app.results),
-		[]byte(strconv.Itoa(app.createdOn.Nanosecond())),
+		[]byte(strconv.Itoa(app.createdOn.Second())),
 	})
 
 	if err != nil {

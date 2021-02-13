@@ -87,7 +87,7 @@ func (app *builder) Now() (Owner, error) {
 		[]byte(app.seed),
 		[]byte(app.sigPK.String()),
 		app.encPKAdapter.ToBytes(app.encPK),
-		[]byte(strconv.Itoa(int(app.createdOn.UnixNano()))),
+		[]byte(strconv.Itoa(int(app.createdOn.Second()))),
 	})
 
 	if err != nil {

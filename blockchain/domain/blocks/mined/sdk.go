@@ -38,11 +38,13 @@ type Block interface {
 // Repository represents a block repository
 type Repository interface {
 	List() ([]hash.Hash, error)
-	Retrieve(blockHash hash.Hash) (Block, error)
+	Retrieve(minedBlockHash hash.Hash) (Block, error)
+	RetrieveByBlockHash(blockHash hash.Hash) (Block, error)
 }
 
 // Service represents a block service
 type Service interface {
 	Insert(block Block) error
 	Delete(block Block) error
+	DeleteByBlock(block blocks.Block) error
 }

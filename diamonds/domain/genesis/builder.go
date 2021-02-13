@@ -109,8 +109,8 @@ func (app *builder) Now() (Genesis, error) {
 	data := [][]byte{
 		[]byte(strconv.Itoa(int(app.amount))),
 		app.chain.ID().Bytes(),
-		[]byte(strconv.Itoa(int(app.createdOn.UnixNano()))),
-		[]byte(strconv.Itoa(int(app.activeOn.UnixNano()))),
+		[]byte(strconv.Itoa(int(app.createdOn.Second()))),
+		[]byte(strconv.Itoa(int(app.activeOn.Second()))),
 	}
 
 	for _, oneHash := range app.hashedPubKeysOwner {

@@ -175,7 +175,7 @@ func (app *contentBuilder) Now() (Content, error) {
 		origin.Hash().Bytes(),
 		app.hashedAmount.Bytes(),
 		app.hashedSeed.Bytes(),
-		[]byte(strconv.Itoa(int(app.createdOn.UnixNano()))),
+		[]byte(strconv.Itoa(int(app.createdOn.Second()))),
 	}
 
 	for _, onePubKeyHash := range app.hashedPubKeysOwner {

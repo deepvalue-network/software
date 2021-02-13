@@ -37,10 +37,14 @@ type Link interface {
 type Repository interface {
 	List() ([]hash.Hash, error)
 	Retrieve(linkHash hash.Hash) (Link, error)
+	RetrieveByBlockHash(blockHash hash.Hash) (Link, error)
+	RetrieveByMinedLinkHash(minedLinkHash hash.Hash) (Link, error)
 }
 
 // Service represents a link service
 type Service interface {
 	Insert(link Link) error
 	Delete(link Link) error
+	DeleteByBlock(block blocks.Block) error
+	DeleteByMinedLinkHash(minedLinkHash hash.Hash) error
 }

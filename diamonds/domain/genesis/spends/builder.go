@@ -116,7 +116,7 @@ func (app *builder) Now() (Genesis, error) {
 		app.hashedSeed.Bytes(),
 		app.hashedAmount.Bytes(),
 		app.gen.Hash().Bytes(),
-		[]byte(strconv.Itoa(int(app.createdOn.UnixNano()))),
+		[]byte(strconv.Itoa(int(app.createdOn.Second()))),
 	})
 
 	if err != nil {

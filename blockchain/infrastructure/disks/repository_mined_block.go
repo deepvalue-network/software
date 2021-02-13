@@ -10,14 +10,20 @@ import (
 )
 
 type repositoryBlockMined struct {
-	fileRepository files.Repository
+	hashAdapter           hash.Adapter
+	fileRepository        files.Repository
+	pointerFileRepository files.Repository
 }
 
 func createRepositoryBlockMined(
+	hashAdapter hash.Adapter,
 	fileRepository files.Repository,
+	pointerFileRepository files.Repository,
 ) blocks_mined.Repository {
 	out := repositoryBlockMined{
-		fileRepository: fileRepository,
+		hashAdapter:           hashAdapter,
+		fileRepository:        fileRepository,
+		pointerFileRepository: pointerFileRepository,
 	}
 
 	return &out
@@ -28,9 +34,9 @@ func (app *repositoryBlockMined) List() ([]hash.Hash, error) {
 	return app.fileRepository.List()
 }
 
-// Retrieve retrieves a block by hash
-func (app *repositoryBlockMined) Retrieve(blockHash hash.Hash) (blocks_mined.Block, error) {
-	dehydrated, err := app.fileRepository.Retrieve(blockHash.String())
+// Retrieve retrieves a mined block by hash
+func (app *repositoryBlockMined) Retrieve(minedBlockHash hash.Hash) (blocks_mined.Block, error) {
+	dehydrated, err := app.fileRepository.Retrieve(minedBlockHash.String())
 	if err != nil {
 		return nil, err
 	}
@@ -39,6 +45,21 @@ func (app *repositoryBlockMined) Retrieve(blockHash hash.Hash) (blocks_mined.Blo
 		return ins, nil
 	}
 
-	str := fmt.Sprintf("the mined block (head hash: %s) could not be dehydrated into a mined block instance", blockHash.String())
+	str := fmt.Sprintf("the mined block (head hash: %s) could not be dehydrated into a mined block instance", minedBlockHash.String())
 	return nil, errors.New(str)
+}
+
+// RetrieveByBlockHash retrieves a mined block by block hash
+func (app *repositoryBlockMined) RetrieveByBlockHash(blockHash hash.Hash) (blocks_mined.Block, error) {
+	ptrData, err := app.pointerFileRepository.Retrieve(blockHash.String())
+	if err != nil {
+		return nil, err
+	}
+
+	minedBlockHash, err := app.hashAdapter.FromString(string(ptrData.([]byte)))
+	if err != nil {
+		return nil, err
+	}
+
+	return app.Retrieve(*minedBlockHash)
 }

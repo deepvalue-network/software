@@ -69,7 +69,7 @@ func (app *builder) Now() (Mine, error) {
 	hsh, err := app.hashAdapter.FromMultiBytes([][]byte{
 		app.chain.ID().Bytes(),
 		app.diamonds.Head().Bytes(),
-		[]byte(strconv.Itoa(int(app.createdOn.UnixNano()))),
+		[]byte(strconv.Itoa(int(app.createdOn.Second()))),
 	})
 
 	if err != nil {
