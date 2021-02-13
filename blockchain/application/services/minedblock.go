@@ -42,7 +42,7 @@ func (app *minedBlock) Mine(miningValue uint8, baseDifficulty uint, incrPerHash 
 
 	// calculate the difficulty:
 	hashes := block.Hashes()
-	difficulty := app.calculateDifficulty(baseDifficulty, incrPerHash, len(hashes))
+	difficulty := mined_block.CalculateDifficulty(baseDifficulty, incrPerHash, len(hashes))
 
 	// mine the block:
 	hash := block.Tree().Head()
@@ -92,14 +92,4 @@ func (app *minedBlock) Delete(hash hash.Hash) error {
 	}
 
 	return app.mineBlockService.Delete(minedBlock)
-}
-
-func (app *minedBlock) calculateDifficulty(baseDifficulty uint, incrPerHash float64, amountHashes int) uint {
-	sum := float64(0)
-	base := float64(baseDifficulty)
-	for i := 0; i < int(amountHashes); i++ {
-		sum += incrPerHash
-	}
-
-	return uint(sum + base)
 }

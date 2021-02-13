@@ -3,9 +3,17 @@ package mined
 import (
 	"time"
 
+	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/blockchain/domain/genesis"
 	"github.com/deepvalue-network/software/blockchain/domain/links"
 	"github.com/deepvalue-network/software/libs/hash"
 )
+
+// NewValidator creates a new validator instance
+func NewValidator(minedLinkRepository Repository) Validator {
+	hashAdapter := hash.NewAdapter()
+	return createValidator(hashAdapter, minedLinkRepository)
+}
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
@@ -16,6 +24,11 @@ func NewBuilder() Builder {
 // NewPointer creates a new pointer instance
 func NewPointer() *link {
 	return new(link)
+}
+
+// Validator represents a mined link validator
+type Validator interface {
+	Execute(gen genesis.Genesis, minedLink Link, root blocks.Block) (uint, uint, error)
 }
 
 // Builder represenst the link builder

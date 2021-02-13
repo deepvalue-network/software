@@ -4,8 +4,15 @@ import (
 	"time"
 
 	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/blockchain/domain/genesis"
 	"github.com/deepvalue-network/software/libs/hash"
 )
+
+// NewValidator creates a new validator instance
+func NewValidator() Validator {
+	hashAdapter := hash.NewAdapter()
+	return createValidator(hashAdapter)
+}
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
@@ -13,9 +20,19 @@ func NewBuilder() Builder {
 	return createBuilder(hashAdapter)
 }
 
+// CalculateDifficulty calculates the difficulty
+func CalculateDifficulty(baseDifficulty uint, incrPerHash float64, amountHashes int) uint {
+	return calculateDifficulty(baseDifficulty, incrPerHash, amountHashes)
+}
+
 // NewPointer creates a new mined block pointer
 func NewPointer() Block {
 	return new(block)
+}
+
+// Validator represents a mined block validator
+type Validator interface {
+	Execute(gen genesis.Genesis, block Block) error
 }
 
 // Builder represents a block builder

@@ -4,11 +4,22 @@ import (
 	"time"
 
 	block_mined "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
+	mined_block "github.com/deepvalue-network/software/blockchain/domain/blocks/mined"
 	"github.com/deepvalue-network/software/blockchain/domain/chains/peers"
 	"github.com/deepvalue-network/software/blockchain/domain/genesis"
 	link_mined "github.com/deepvalue-network/software/blockchain/domain/links/mined"
+	mined_link "github.com/deepvalue-network/software/blockchain/domain/links/mined"
 	uuid "github.com/satori/go.uuid"
 )
+
+// NewValidator creates a new validator instance
+func NewValidator(
+	minedBlockValidator mined_block.Validator,
+	minedLinkValidator mined_link.Validator,
+	chainRepository Repository,
+) Validator {
+	return createValidator(minedBlockValidator, minedLinkValidator, chainRepository)
+}
 
 // NewBuilder creates a new builder instance
 func NewBuilder(peerSyncInterval time.Duration) Builder {
@@ -26,7 +37,7 @@ func NewPointer() *chain {
 
 // Validator represents a chain validator
 type Validator interface {
-	Validate(chain Chain) error
+	Execute(chain Chain) error
 }
 
 // Builder represents a chain builder
