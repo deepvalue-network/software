@@ -10,14 +10,26 @@ import (
 )
 
 type repositoryLinkMined struct {
-	fileRepository files.Repository
+	hashAdapter               hash.Adapter
+	fileRepository            files.Repository
+	linkPointerFileRepository files.Repository
+	headPointerFileRepository files.Repository
+	headFileName              string
 }
 
 func createRepositoryLinkMined(
+	hashAdapter hash.Adapter,
 	fileRepository files.Repository,
+	linkPointerFileRepository files.Repository,
+	headPointerFileRepository files.Repository,
+	headFileName string,
 ) link_mined.Repository {
 	out := repositoryLinkMined{
-		fileRepository: fileRepository,
+		hashAdapter:               hashAdapter,
+		fileRepository:            fileRepository,
+		linkPointerFileRepository: linkPointerFileRepository,
+		headPointerFileRepository: headPointerFileRepository,
+		headFileName:              headFileName,
 	}
 
 	return &out
@@ -25,7 +37,17 @@ func createRepositoryLinkMined(
 
 // Head returns the head link
 func (app *repositoryLinkMined) Head() (link_mined.Link, error) {
-	return nil, nil
+	ptrData, err := app.headPointerFileRepository.Retrieve(app.headFileName)
+	if err != nil {
+		return nil, err
+	}
+
+	minedLinkHash, err := app.hashAdapter.FromString(string(ptrData.([]byte)))
+	if err != nil {
+		return nil, err
+	}
+
+	return app.Retrieve(*minedLinkHash)
 }
 
 // List returns the list of mined links
@@ -46,4 +68,19 @@ func (app *repositoryLinkMined) Retrieve(linkHash hash.Hash) (link_mined.Link, e
 
 	str := fmt.Sprintf("the mined link ( hash: %s) could not be dehydrated into a mined link instance", linkHash.String())
 	return nil, errors.New(str)
+}
+
+// RetrieveByLinkHash retrieves a mined link by link hash
+func (app *repositoryLinkMined) RetrieveByLinkHash(linkHash hash.Hash) (link_mined.Link, error) {
+	ptrData, err := app.linkPointerFileRepository.Retrieve(linkHash.String())
+	if err != nil {
+		return nil, err
+	}
+
+	minedLinkHash, err := app.hashAdapter.FromString(string(ptrData.([]byte)))
+	if err != nil {
+		return nil, err
+	}
+
+	return app.Retrieve(*minedLinkHash)
 }

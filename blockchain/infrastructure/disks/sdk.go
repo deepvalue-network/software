@@ -124,8 +124,13 @@ func Init(
 	// create the link mined repository:
 	minedLinkPtr := new(EntityHydratedLinkMined)
 	minedLinkBasePath := filepath.Join(basePath, "links_mined")
+	linkPointerMinedLinkBasePath := filepath.Join(basePath, "links_mined_links_pointers")
+	headPointerMinedLinkBasePath := filepath.Join(basePath, "links_mined_head_pointer")
+	headFileName := "head.hash"
 	repositoryFileLinkMined := files_disks.NewRepository(internalHydroAdapter, minedLinkBasePath, minedLinkPtr)
-	minedLinkRepository := NewRepositoryLinkMined(repositoryFileLinkMined)
+	linkPointerFileRepository := files_disks.NewRepository(internalHydroAdapter, linkPointerMinedLinkBasePath, nil)
+	headPointerFileRepository := files_disks.NewRepository(internalHydroAdapter, headPointerMinedLinkBasePath, nil)
+	minedLinkRepository := NewRepositoryLinkMined(repositoryFileLinkMined, linkPointerFileRepository, headPointerFileRepository, headFileName)
 
 	// create the chain repository:
 	chainLinkPtr := new(EntityHydratedChain)
@@ -157,7 +162,9 @@ func Init(
 
 	// create the mined link service:
 	minedLinkFileService := files_disks.NewService(internalHydroAdapter, minedLinkBasePath, fileMode)
-	minedLinkService := NewServiceLinkMined(linkService, minedLinkFileService)
+	minedLinkLinkPointerFileService := files_disks.NewService(internalHydroAdapter, linkPointerMinedLinkBasePath, fileMode)
+	headPointerFileService := files_disks.NewService(internalHydroAdapter, headPointerMinedLinkBasePath, fileMode)
+	minedLinkService := NewServiceLinkMined(internalEventManager, minedLinkRepository, linkService, minedLinkFileService, minedLinkLinkPointerFileService, headPointerFileService, headFileName)
 
 	// service assign:
 	internalServiceBlock = blockService
@@ -175,17 +182,26 @@ func NewRepositoryChain(
 
 // NewServiceLinkMined creates a new disk link mined service instance
 func NewServiceLinkMined(
+	eventManager events.Manager,
+	minedLinkRepository link_mined.Repository,
 	linkService links.Service,
 	fileService files.Service,
+	linkPointerFileService files.Service,
+	headPointerFileService files.Service,
+	headFileName string,
 ) link_mined.Service {
-	return createServiceLinkMined(linkService, fileService)
+	return createServiceLinkMined(eventManager, minedLinkRepository, linkService, fileService, linkPointerFileService, headPointerFileService, headFileName)
 }
 
 // NewRepositoryLinkMined represents a new disk link mined repository instance
 func NewRepositoryLinkMined(
 	fileRepository files.Repository,
+	linkPointerFileRepository files.Repository,
+	headPointerFileRepository files.Repository,
+	headFileName string,
 ) link_mined.Repository {
-	return createRepositoryLinkMined(fileRepository)
+	hashAdapter := hash.NewAdapter()
+	return createRepositoryLinkMined(hashAdapter, fileRepository, linkPointerFileRepository, headPointerFileRepository, headFileName)
 }
 
 // NewServiceLink creates a new disk link service instance

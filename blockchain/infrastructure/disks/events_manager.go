@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/deepvalue-network/software/blockchain/domain/blocks"
+	"github.com/deepvalue-network/software/blockchain/domain/links"
 	mined_link "github.com/deepvalue-network/software/blockchain/domain/links/mined"
 	"github.com/deepvalue-network/software/libs/events"
 )
@@ -42,10 +43,24 @@ func initEventManager() (events.Manager, error) {
 
 	linkOnMinedLinkDelete, err := builder.Create().WithIdentifier(EventLinkMinedDelete).OnEnter(func(data interface{}, event events.Event) error {
 		if ins, ok := data.(mined_link.Link); ok {
-			return internalServiceLink.DeleteByMinedLinkHash(ins.Hash())
+			internalServiceLink.DeleteByMinedLinkHash(ins.Hash())
+			return nil
 		}
 
 		return errors.New("the event data was expected to be a mined link instance")
+	}).Now()
+
+	if err != nil {
+		return nil, err
+	}
+
+	minedLinkOnLinkDelete, err := builder.Create().WithIdentifier(EventLinkDelete).OnEnter(func(data interface{}, event events.Event) error {
+		if ins, ok := data.(links.Link); ok {
+			internalServiceLinkMined.DeleteByLink(ins)
+			return nil
+		}
+
+		return errors.New("the event data was expected to be a link instance")
 	}).Now()
 
 	if err != nil {
@@ -60,6 +75,7 @@ func initEventManager() (events.Manager, error) {
 		minedBlockOnBlockDelete,
 		linkOnBlockDelete,
 		linkOnMinedLinkDelete,
+		minedLinkOnLinkDelete,
 	})
 
 	if err != nil {
