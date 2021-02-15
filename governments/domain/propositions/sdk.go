@@ -117,6 +117,7 @@ type ShareHolders interface {
 // ShareHolderBuilder represents a shareholder builder
 type ShareHolderBuilder interface {
 	Create() ShareHolderBuilder
+	WithChain(chain chains.Chain) ShareHolderBuilder
 	WithKeys(keys []hash.Hash) ShareHolderBuilder
 	WithNewPower(newPower uint) ShareHolderBuilder
 	Now() (ShareHolder, error)
@@ -125,6 +126,7 @@ type ShareHolderBuilder interface {
 // ShareHolder represents a shareholder
 type ShareHolder interface {
 	Hash() hash.Hash
+	Chain() chains.Chain
 	Keys() []hash.Hash
 	NewPower() uint
 }
