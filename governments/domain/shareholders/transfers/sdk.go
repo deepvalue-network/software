@@ -1,0 +1,45 @@
+package transfers
+
+import (
+	"time"
+
+	"github.com/deepvalue-network/software/governments/domain/shareholders"
+	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
+	"github.com/deepvalue-network/software/libs/hash"
+)
+
+// Builder represents a transfer builder
+type Builder interface {
+	Create() Builder
+	WithContent(content Content) Builder
+	WithSignature(sig signature.RingSignature) Builder
+	Now() (Transfer, error)
+}
+
+// Transfer represents a transfer
+type Transfer interface {
+	Hash() hash.Hash
+	Content() Content
+	Signature() signature.RingSignature
+}
+
+// ContentBuilder represents a content builder
+type ContentBuilder interface {
+	Create() ContentBuilder
+	WithOrigin(origin shareholders.ShareHolder) ContentBuilder
+	WithAmount(amount hash.Hash) ContentBuilder
+	WithSeed(seed hash.Hash) ContentBuilder
+	WithOwner(owner []hash.Hash) ContentBuilder
+	CreatedOn(createdOn time.Time) ContentBuilder
+	Now() (Content, error)
+}
+
+// Content represents a transfer content
+type Content interface {
+	Hash() hash.Hash
+	Origin() shareholders.ShareHolder
+	Amount() hash.Hash
+	Seed() hash.Hash
+	Owner() []hash.Hash
+	CreatedOn() time.Time
+}
