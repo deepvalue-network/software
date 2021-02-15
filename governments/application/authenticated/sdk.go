@@ -20,7 +20,7 @@ type Builder interface {
 
 // Application represents an authenticated shareholder application
 type Application interface {
-	Propose() Proposition
+	Proposition() Proposition
 	Transfer(amount uint, seed string, to []hash.Hash, note string) error
 	View(amount uint, seed string, to []hash.Hash) (views.Section, error)
 	Receive(view views.Section, pk signature.PrivateKey, note string) error
