@@ -46,7 +46,6 @@ type Content interface {
 	MinPowerToPassResolution() uint
 	MinPowerToPropose() uint
 	CanCancelVote() bool
-	BurnOnReceive() bool
 	SharesVelocity() uint
 	SharesCap() uint
 	CreatedOn() time.Time
