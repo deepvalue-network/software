@@ -1,7 +1,6 @@
 package authenticated
 
 import (
-	"hash"
 	"time"
 
 	"github.com/deepvalue-network/software/governments/domain/propositions"
@@ -9,6 +8,7 @@ import (
 	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers/views/transactions"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
+	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // Builder represents an application builder
