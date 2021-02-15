@@ -76,7 +76,6 @@ type GovernmentBuilder interface {
 	WithSharesVelocity(sharesVelocity uint) GovernmentBuilder
 	WithSharesCap(sharesCap uint) GovernmentBuilder
 	CanCancelVote() GovernmentBuilder
-	BurnOnReceive() GovernmentBuilder
 	CreatedOn(createdOn time.Time) GovernmentBuilder
 	Now() (Government, error)
 }
@@ -93,8 +92,6 @@ type Government interface {
 	MinPowerToPropose() *uint
 	HasCanCancelVote() bool
 	CanCancelVote() *bool
-	HasBurnOnReceive() bool
-	BurnOnReceive() *bool
 	HasSharesVelocity() bool
 	SharesVelocity() *uint
 	HasSharesCap() bool

@@ -35,7 +35,6 @@ type ContentBuilder interface {
 	WithSharesVelocity(sharesVelocity uint) ContentBuilder
 	WithSharesCap(sharesCap uint) ContentBuilder
 	CanCancelVote() ContentBuilder
-	BurnOnReceive() ContentBuilder
 	CreatedOn(createdOn time.Time) ContentBuilder
 	Now() (Content, error)
 }

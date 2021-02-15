@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/deepvalue-network/software/governments/domain/propositions"
+	payment_trx "github.com/deepvalue-network/software/governments/domain/shareholders/payments/transactions"
 	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers/views/transactions"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
@@ -21,6 +22,7 @@ type Builder interface {
 // Application represents an authenticated shareholder application
 type Application interface {
 	Proposition() Proposition
+	Payment(amount uint, note string) error
 	Transfer(amount uint, seed string, to []hash.Hash, note string) error
 	View(amount uint, seed string, to []hash.Hash) (views.Section, error)
 	Receive(view views.Section, pk signature.PrivateKey, note string) error
@@ -37,8 +39,15 @@ type Proposition interface {
 
 // Transaction represents an authenticated transaction application
 type Transaction interface {
+	Payment() PaymentTransaction
 	Incoming() IncomingTransaction
 	Outgoing() OutgoingTransaction
+}
+
+// PaymentTransaction represents a payment transaction application
+type PaymentTransaction interface {
+	List() ([]hash.Hash, error)
+	Retrieve(hash hash.Hash) ([]payment_trx.Transaction, error)
 }
 
 // IncomingTransaction represents an incoming transaction application

@@ -3,7 +3,6 @@ package transfers
 import (
 	"time"
 
-	"github.com/deepvalue-network/software/governments/domain/shareholders"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )
@@ -26,7 +25,7 @@ type Transfer interface {
 // ContentBuilder represents a content builder
 type ContentBuilder interface {
 	Create() ContentBuilder
-	WithOrigin(origin shareholders.ShareHolder) ContentBuilder
+	WithOrigin(origin hash.Hash) ContentBuilder
 	WithAmount(amount hash.Hash) ContentBuilder
 	WithSeed(seed hash.Hash) ContentBuilder
 	WithOwner(owner []hash.Hash) ContentBuilder
@@ -37,7 +36,7 @@ type ContentBuilder interface {
 // Content represents a transfer content
 type Content interface {
 	Hash() hash.Hash
-	Origin() shareholders.ShareHolder
+	Origin() hash.Hash
 	Amount() hash.Hash
 	Seed() hash.Hash
 	Owner() []hash.Hash
