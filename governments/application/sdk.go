@@ -28,6 +28,9 @@ type Proposition interface {
 // Resolution represents a resolution
 type Resolution interface {
 	List() ([]hash.Hash, error)
+	Pending() ([]hash.Hash, error)
+	Passed() ([]hash.Hash, error)
+	Denied() ([]hash.Hash, error)
 	Retrieve(hash hash.Hash) (resolutions.Resolution, error)
 }
 
