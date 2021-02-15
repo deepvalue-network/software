@@ -51,6 +51,7 @@ type SectionBuilder interface {
 	Create() SectionBuilder
 	WithGovernment(government Government) SectionBuilder
 	WithShareHolders(shareHolders ShareHolders) SectionBuilder
+	WithCustom(custom hash.Hash) SectionBuilder
 	Now() (Section, error)
 }
 
@@ -61,6 +62,8 @@ type Section interface {
 	Government() Government
 	IsShareHolders() bool
 	ShareHolders() ShareHolders
+	IsCustom() bool
+	Custom() *hash.Hash
 }
 
 // GovernmentBuilder represents a government builder
