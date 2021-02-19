@@ -8,13 +8,26 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
-// Builder represents an incoming builder
+// Builder represents the incomings builder
 type Builder interface {
 	Create() Builder
-	WithPK(pk signature.PrivateKey) Builder
-	WithTransfer(transfer views.Section) Builder
-	WithNote(note string) Builder
-	CreatedOn(createdOn time.Time) Builder
+	WithIncomings(incomings []Incoming) Builder
+	Now() (Incomings, error)
+}
+
+// Incomings represents an incomings
+type Incomings interface {
+	Hash() hash.Hash
+	All() []Incoming
+}
+
+// IncomingBuilder represents an incoming builder
+type IncomingBuilder interface {
+	Create() IncomingBuilder
+	WithPK(pk signature.PrivateKey) IncomingBuilder
+	WithTransfer(transfer views.Section) IncomingBuilder
+	WithNote(note string) IncomingBuilder
+	CreatedOn(createdOn time.Time) IncomingBuilder
 	Now() (Incoming, error)
 }
 
