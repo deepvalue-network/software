@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/deepvalue-network/software/blockchain/domain/chains"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
 	"github.com/deepvalue-network/software/libs/hash"
 	uuid "github.com/satori/go.uuid"
 )
@@ -25,6 +26,7 @@ type Builder interface {
 	Create() Builder
 	WithID(id *uuid.UUID) Builder
 	WithCurrent(current Content) Builder
+	WithShareHolders(shareholders shareholders.ShareHolders) Builder
 	WithPrevious(prev Government) Builder
 	Now() (Government, error)
 }
@@ -34,6 +36,7 @@ type Government interface {
 	Hash() hash.Hash
 	ID() *uuid.UUID
 	Current() Content
+	ShareHolders() shareholders.ShareHolders
 	HasPrevious() bool
 	Previous() Government
 }

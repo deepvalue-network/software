@@ -3,6 +3,7 @@ package governments
 import (
 	"errors"
 
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
 	"github.com/deepvalue-network/software/libs/hash"
 	uuid "github.com/satori/go.uuid"
 )
@@ -11,6 +12,7 @@ type builder struct {
 	hashAdapter hash.Adapter
 	id          *uuid.UUID
 	current     Content
+	holders     shareholders.ShareHolders
 	prev        Government
 }
 
@@ -21,6 +23,7 @@ func createBuilder(
 		hashAdapter: hashAdapter,
 		id:          nil,
 		current:     nil,
+		holders:     nil,
 		prev:        nil,
 	}
 
@@ -44,6 +47,12 @@ func (app *builder) WithCurrent(current Content) Builder {
 	return app
 }
 
+// WithShareHolders add shareholders to the builder
+func (app *builder) WithShareHolders(shareholders shareholders.ShareHolders) Builder {
+	app.holders = shareholders
+	return app
+}
+
 // WithPrevious adds a previous governement to the builder
 func (app *builder) WithPrevious(prev Government) Builder {
 	app.prev = prev
@@ -56,8 +65,13 @@ func (app *builder) Now() (Government, error) {
 		return nil, errors.New("the current Content is mandatory in order to build a Government instance")
 	}
 
+	if app.holders == nil {
+		return nil, errors.New("the shareHolders are mandatory in order to build a Government instance")
+	}
+
 	data := [][]byte{
 		app.current.Hash().Bytes(),
+		app.holders.Hash().Bytes(),
 	}
 
 	if app.prev != nil {
@@ -79,8 +93,8 @@ func (app *builder) Now() (Government, error) {
 	}
 
 	if app.prev != nil {
-		return createGovernmentWithPrevious(*hash, app.current, app.prev), nil
+		return createGovernmentWithPrevious(*hash, app.current, app.holders, app.prev), nil
 	}
 
-	return createGovernment(*hash, app.id, app.current), nil
+	return createGovernment(*hash, app.current, app.holders, app.id), nil
 }

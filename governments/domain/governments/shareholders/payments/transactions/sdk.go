@@ -1,7 +1,7 @@
 package transactions
 
 import (
-	"github.com/deepvalue-network/software/governments/domain/shareholders/payments"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/payments"
 	"github.com/deepvalue-network/software/libs/hash"
 )
 

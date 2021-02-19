@@ -3,10 +3,10 @@ package authenticated
 import (
 	"time"
 
+	payment_trx "github.com/deepvalue-network/software/governments/domain/governments/shareholders/payments/transactions"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views/transactions"
 	"github.com/deepvalue-network/software/governments/domain/propositions"
-	payment_trx "github.com/deepvalue-network/software/governments/domain/shareholders/payments/transactions"
-	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers/views"
-	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers/views/transactions"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )

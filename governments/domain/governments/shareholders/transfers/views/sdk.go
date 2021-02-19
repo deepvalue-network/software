@@ -1,8 +1,8 @@
 package views
 
 import (
-	"github.com/deepvalue-network/software/governments/domain/shareholders"
-	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )

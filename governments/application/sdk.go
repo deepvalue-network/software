@@ -3,9 +3,9 @@ package application
 import (
 	"github.com/deepvalue-network/software/governments/application/authenticated"
 	"github.com/deepvalue-network/software/governments/domain/governments"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
 	"github.com/deepvalue-network/software/governments/domain/propositions"
 	"github.com/deepvalue-network/software/governments/domain/resolutions"
-	"github.com/deepvalue-network/software/governments/domain/shareholders"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 	uuid "github.com/satori/go.uuid"

@@ -3,7 +3,7 @@ package payments
 import (
 	"time"
 
-	"github.com/deepvalue-network/software/governments/domain/shareholders"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )

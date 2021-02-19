@@ -1,6 +1,7 @@
 package governments
 
 import (
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
 	"github.com/deepvalue-network/software/libs/hash"
 	uuid "github.com/satori/go.uuid"
 )
@@ -9,34 +10,39 @@ type government struct {
 	hash    hash.Hash
 	id      *uuid.UUID
 	current Content
+	holders shareholders.ShareHolders
 	prev    Government
 }
 
 func createGovernment(
 	hash hash.Hash,
-	id *uuid.UUID,
 	current Content,
+	holders shareholders.ShareHolders,
+	id *uuid.UUID,
 ) Government {
-	return createGovernmentInternally(hash, current, id, nil)
+	return createGovernmentInternally(hash, current, holders, id, nil)
 }
 
 func createGovernmentWithPrevious(
 	hash hash.Hash,
 	current Content,
+	holders shareholders.ShareHolders,
 	prev Government,
 ) Government {
-	return createGovernmentInternally(hash, current, nil, prev)
+	return createGovernmentInternally(hash, current, holders, nil, prev)
 }
 
 func createGovernmentInternally(
 	hash hash.Hash,
 	current Content,
+	holders shareholders.ShareHolders,
 	id *uuid.UUID,
 	prev Government,
 ) Government {
 	out := government{
 		hash:    hash,
 		current: current,
+		holders: holders,
 		id:      id,
 		prev:    prev,
 	}
@@ -47,6 +53,11 @@ func createGovernmentInternally(
 // Hash returns the hash
 func (obj *government) Hash() hash.Hash {
 	return obj.hash
+}
+
+// ShareHolders returns the shareholders
+func (obj *government) ShareHolders() shareholders.ShareHolders {
+	return obj.holders
 }
 
 // ID returns the identifier
