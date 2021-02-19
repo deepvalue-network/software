@@ -5,23 +5,19 @@ import (
 
 	"github.com/deepvalue-network/software/governments/domain/governments"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
-	"github.com/deepvalue-network/software/governments/domain/shareholders/transactions"
+	"github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions"
 )
 
 // Builder represents a shareholders builder
 type Builder interface {
 	Create() Builder
-	WithName(name string) Builder
-	WithSeed(seed string) Builder
 	WithShareHolders(shareHolders []ShareHolder) Builder
 	Now() (ShareHolders, error)
 }
 
 // ShareHolders represents shareholders
 type ShareHolders interface {
-	Name() string
-	Seed() string
-	ShareHolders() []ShareHolder
+	All() []ShareHolder
 }
 
 // ShareHolderBuilder represents a shareholder builder
@@ -39,18 +35,4 @@ type ShareHolder interface {
 	Government() governments.Government
 	Public() shareholders.ShareHolder
 	Transactions() transactions.Transactions
-}
-
-// Repository represents a shareholders repository
-type Repository interface {
-	List() ([]string, error)
-	Retrieve(name string, seed string, password string) (ShareHolders, error)
-}
-
-// Service represents a shareholders service
-type Service interface {
-	Insert(ins ShareHolders, password string) error
-	Update(origin ShareHolders, updated ShareHolders, password string) error
-	UpdateWithPassword(origin ShareHolders, updated ShareHolders, originalPassword string, updatedPassword string) error
-	Delete(ins ShareHolders, password string) error
 }

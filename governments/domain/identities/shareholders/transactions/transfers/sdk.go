@@ -1,8 +1,8 @@
 package transfers
 
 import (
-	"github.com/deepvalue-network/software/governments/domain/shareholders/transactions/transfers/incomings"
-	"github.com/deepvalue-network/software/governments/domain/shareholders/transactions/transfers/outgoings"
+	"github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/transfers/incomings"
+	"github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/transfers/outgoings"
 )
 
 // Builder represents a transactions builder
