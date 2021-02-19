@@ -3,7 +3,7 @@ package shareholders
 import (
 	"github.com/deepvalue-network/software/governments/domain/governments"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
-	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
+	"github.com/deepvalue-network/software/governments/domain/shareholders/transactions"
 )
 
 // Builder represents a shareholder builder
@@ -13,7 +13,7 @@ type Builder interface {
 	WithSeed(seed string) Builder
 	WithGovernment(gov governments.Government) Builder
 	WithPublic(public shareholders.ShareHolder) Builder
-	WithKeys(keys []signature.PrivateKey) Builder
+	WithTransactions(transactions transactions.Transactions) Builder
 	Now() (ShareHolder, error)
 }
 
@@ -23,5 +23,5 @@ type ShareHolder interface {
 	Seed() string
 	Government() governments.Government
 	Public() shareholders.ShareHolder
-	Keys() []signature.PrivateKey
+	Transactions() transactions.Transactions
 }
