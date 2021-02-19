@@ -4,9 +4,14 @@ import (
 	"time"
 
 	"github.com/deepvalue-network/software/blockchain/domain/chains"
-	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )
+
+// NewShareHolderBuilder creates a new shareHolder builder instance
+func NewShareHolderBuilder(minHashesInShareHolders uint) ShareHolderBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createShareHolderBuilder(hashAdapter, minHashesInShareHolders)
+}
 
 // Builder represents a shareholders builder
 type Builder interface {
@@ -19,7 +24,7 @@ type Builder interface {
 type ShareHolders interface {
 	Hash() hash.Hash
 	All() []ShareHolder
-	Validate(sig signature.RingSignature) bool
+	Same(pubKeyHashes []hash.Hash) bool
 }
 
 // ShareHolderBuilder represents a shareholder builder
@@ -39,6 +44,6 @@ type ShareHolder interface {
 	Keys() []hash.Hash
 	Power() uint
 	CreatedOn() time.Time
-	Validate(sig signature.RingSignature) bool
+	Same(pubKeyHashes []hash.Hash) bool
 	Contains(hashedPubKey hash.Hash) bool
 }

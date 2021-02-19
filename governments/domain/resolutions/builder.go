@@ -72,7 +72,18 @@ func (app *builder) Now() (Resolution, error) {
 	holders := app.prop.Content().Government().ShareHolders()
 	for _, oneVote := range app.votes {
 		sig := oneVote.Signature()
-		if !holders.Validate(sig) {
+		sigKeys := sig.Ring()
+		pubKeyHashes := []hash.Hash{}
+		for _, oneSigKey := range sigKeys {
+			hsh, err := app.hashAdapter.FromBytes([]byte(oneSigKey.String()))
+			if err != nil {
+				return nil, err
+			}
+
+			pubKeyHashes = append(pubKeyHashes, *hsh)
+		}
+
+		if !holders.Same(pubKeyHashes) {
 			continue
 		}
 
