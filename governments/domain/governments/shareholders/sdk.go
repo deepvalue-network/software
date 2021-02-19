@@ -7,6 +7,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	hashAdapter := hash.NewAdapter()
+	return createBuilder(hashAdapter)
+}
+
 // NewShareHolderBuilder creates a new shareHolder builder instance
 func NewShareHolderBuilder(minHashesInShareHolders uint) ShareHolderBuilder {
 	hashAdapter := hash.NewAdapter()
