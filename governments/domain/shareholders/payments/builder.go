@@ -1,4 +1,4 @@
-package transactions
+package payments
 
 import (
 	"errors"
@@ -42,10 +42,10 @@ func (app *builder) WithNote(note string) Builder {
 	return app
 }
 
-// Now builds a new Transaction instance
-func (app *builder) Now() (Transaction, error) {
+// Now builds a new Payment instance
+func (app *builder) Now() (Payment, error) {
 	if app.payment == nil {
-		return nil, errors.New("the payment is mandatory in order to build a Transaction instance")
+		return nil, errors.New("the payment is mandatory in order to build a Payment instance")
 	}
 
 	hash, err := app.hashAdapter.FromMultiBytes([][]byte{
@@ -57,5 +57,5 @@ func (app *builder) Now() (Transaction, error) {
 		return nil, err
 	}
 
-	return createTransaction(*hash, app.payment, app.note), nil
+	return createPayment(*hash, app.payment, app.note), nil
 }

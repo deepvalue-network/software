@@ -1,24 +1,24 @@
-package transactions
+package payments
 
 import (
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/payments"
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
-type transaction struct {
+type payment struct {
 	hash    hash.Hash
 	payment payments.Payment
 	note    string
 }
 
-func createTransaction(
+func createPayment(
 	hash hash.Hash,
-	payment payments.Payment,
+	pay payments.Payment,
 	note string,
-) Transaction {
-	out := transaction{
+) Payment {
+	out := payment{
 		hash:    hash,
-		payment: payment,
+		payment: pay,
 		note:    note,
 	}
 
@@ -26,16 +26,16 @@ func createTransaction(
 }
 
 // Hash returns the hash
-func (obj *transaction) Hash() hash.Hash {
+func (obj *payment) Hash() hash.Hash {
 	return obj.hash
 }
 
 // Payment returns the payment
-func (obj *transaction) Payment() payments.Payment {
+func (obj *payment) Payment() payments.Payment {
 	return obj.payment
 }
 
 // Note returns the note
-func (obj *transaction) Note() string {
+func (obj *payment) Note() string {
 	return obj.note
 }

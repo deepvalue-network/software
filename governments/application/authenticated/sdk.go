@@ -3,10 +3,11 @@ package authenticated
 import (
 	"time"
 
-	payment_trx "github.com/deepvalue-network/software/governments/domain/governments/shareholders/payments/transactions"
-	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
-	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views/transactions"
 	"github.com/deepvalue-network/software/governments/domain/propositions"
+	"github.com/deepvalue-network/software/governments/domain/shareholders/payments"
+	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers"
+	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers/incomings"
+	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers/outgoings"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )
@@ -24,8 +25,8 @@ type Application interface {
 	Proposition() Proposition
 	Payment(amount uint, note string) error
 	Transfer(amount uint, seed string, to []hash.Hash, note string) error
-	View(amount uint, seed string, to []hash.Hash) (views.Section, error)
-	Receive(view views.Section, pk signature.PrivateKey, note string) error
+	View(amount uint, seed string, to []hash.Hash) (transfers.Section, error)
+	Receive(view transfers.Section, pk signature.PrivateKey, note string) error
 	Transaction(filter DateFilter) Transaction
 }
 
@@ -39,27 +40,27 @@ type Proposition interface {
 
 // Transaction represents an authenticated transaction application
 type Transaction interface {
-	Payment() PaymentTransaction
+	Payment() Payments
 	Incoming() IncomingTransaction
 	Outgoing() OutgoingTransaction
 }
 
-// PaymentTransaction represents a payment transaction application
-type PaymentTransaction interface {
+// Payments represents a payments application
+type Payments interface {
 	List() ([]hash.Hash, error)
-	Retrieve(hash hash.Hash) ([]payment_trx.Transaction, error)
+	Retrieve(hash hash.Hash) ([]payments.Payment, error)
 }
 
 // IncomingTransaction represents an incoming transaction application
 type IncomingTransaction interface {
 	List() ([]hash.Hash, error)
-	Retrieve(hash hash.Hash) ([]transactions.Incoming, error)
+	Retrieve(hash hash.Hash) ([]incomings.Incoming, error)
 }
 
 // OutgoingTransaction represents an outgoing transaction application
 type OutgoingTransaction interface {
 	List() ([]hash.Hash, error)
-	Retrieve(hash hash.Hash) ([]transactions.Outgoing, error)
+	Retrieve(hash hash.Hash) ([]outgoings.Outgoing, error)
 }
 
 // DateFilterBuilder represents a date filter builder

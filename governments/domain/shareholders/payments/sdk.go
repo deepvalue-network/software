@@ -1,4 +1,4 @@
-package transactions
+package payments
 
 import (
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/payments"
@@ -11,16 +11,16 @@ func NewBuilder() Builder {
 	return createBuilder(hashAdapter)
 }
 
-// Builder represents a transaction builder
+// Builder represents a payment builder
 type Builder interface {
 	Create() Builder
 	WithPayment(payment payments.Payment) Builder
 	WithNote(note string) Builder
-	Now() (Transaction, error)
+	Now() (Payment, error)
 }
 
-// Transaction represents a transaction
-type Transaction interface {
+// Payment represents a payment
+type Payment interface {
 	Hash() hash.Hash
 	Payment() payments.Payment
 	Note() string

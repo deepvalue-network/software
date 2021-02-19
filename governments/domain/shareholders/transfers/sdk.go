@@ -1,4 +1,4 @@
-package views
+package transfers
 
 import (
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
