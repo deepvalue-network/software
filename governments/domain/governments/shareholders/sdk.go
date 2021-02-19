@@ -39,4 +39,5 @@ type ShareHolder interface {
 	Keys() []hash.Hash
 	Power() uint
 	CreatedOn() time.Time
+	Validate(sig signature.RingSignature) bool
 }
