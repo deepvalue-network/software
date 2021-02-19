@@ -3,6 +3,7 @@ package authenticated
 import (
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/governments/domain/propositions"
+	"github.com/deepvalue-network/software/governments/domain/shareholders"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )
@@ -18,6 +19,7 @@ type Builder interface {
 
 // Application represents an authenticated shareholder application
 type Application interface {
+	Retrieve() (shareholders.ShareHolders, error)
 	Proposition() Proposition
 	Payment(amount uint, note string) error
 	Transfer(amount uint, seed string, to []hash.Hash, note string) error
