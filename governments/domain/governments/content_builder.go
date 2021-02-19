@@ -87,23 +87,23 @@ func (app *contentBuilder) CreatedOn(createdOn time.Time) ContentBuilder {
 // Now builds a new Content instance
 func (app *contentBuilder) Now() (Content, error) {
 	if app.chain == nil {
-		return nil, errors.New("the chain is mandatory in order to build a Content instance")
+		return nil, errors.New("the chain is mandatory in order to build a government Content instance")
 	}
 
 	if app.minPowerToPassResolution <= 0 {
-		return nil, errors.New("the minPowerToPassResolution must be greater than zero (0) in order to build a Content instance")
+		return nil, errors.New("the minPowerToPassResolution must be greater than zero (0) in order to build a government Content instance")
 	}
 
 	if app.minPowerToPropose <= 0 {
-		return nil, errors.New("the minPowerToPropose must be greater than zero (0) in order to build a Content instance")
+		return nil, errors.New("the minPowerToPropose must be greater than zero (0) in order to build a government Content instance")
 	}
 
 	if app.sharesVelocity <= 0 {
-		return nil, errors.New("the sharesVelocity must be greater than zero (0) in order to build a Content instance")
+		return nil, errors.New("the sharesVelocity must be greater than zero (0) in order to build a government Content instance")
 	}
 
 	if app.sharesCap <= 0 {
-		return nil, errors.New("the sharesCap must be greater than zero (0) in order to build a Content instance")
+		return nil, errors.New("the sharesCap must be greater than zero (0) in order to build a government Content instance")
 	}
 
 	if app.createdOn == nil {
