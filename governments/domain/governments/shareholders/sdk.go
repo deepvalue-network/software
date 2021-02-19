@@ -40,4 +40,5 @@ type ShareHolder interface {
 	Power() uint
 	CreatedOn() time.Time
 	Validate(sig signature.RingSignature) bool
+	Contains(hashedPubKey hash.Hash) bool
 }
