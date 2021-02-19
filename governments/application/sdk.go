@@ -43,5 +43,6 @@ type Resolution interface {
 type Identity interface {
 	List() ([]hash.Hash, error)
 	Retrieve(hash hash.Hash) (shareholders.ShareHolder, error)
+	Create(name string, seed string, password string) error
 	Authenticate(name string, seed string, password string) authenticated.Application
 }
