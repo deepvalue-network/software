@@ -8,13 +8,13 @@ import (
 // Builder represents a transactions builder
 type Builder interface {
 	Create() Builder
-	WithIncomings() []incomings.Incoming
-	WithOutgoings() []outgoings.Outgoing
+	WithIncomings() incomings.Incomings
+	WithOutgoings() outgoings.Outgoings
 	Now() (Transfers, error)
 }
 
 // Transfers represents the transfers
 type Transfers interface {
-	Incomings() []incomings.Incoming
-	Outgoings() []outgoings.Outgoing
+	Incomings() incomings.Incomings
+	Outgoings() outgoings.Outgoings
 }
