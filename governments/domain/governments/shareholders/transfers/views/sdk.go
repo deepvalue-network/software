@@ -6,6 +6,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewSectionBuilder creates a new section builder instance
+func NewSectionBuilder() SectionBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createSectionBuilder(hashAdapter)
+}
+
 // Builder represents a transfer builder
 type Builder interface {
 	Create() Builder
