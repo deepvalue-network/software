@@ -10,17 +10,17 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
-type contentBuilder struct {
+type builder struct {
 	hashAdapter hash.Adapter
 	prop        propositions.Proposition
 	votes       []votes.Vote
 	createdOn   *time.Time
 }
 
-func createContentBuilder(
+func createBuilder(
 	hashAdapter hash.Adapter,
-) ContentBuilder {
-	out := contentBuilder{
+) Builder {
+	out := builder{
 		hashAdapter: hashAdapter,
 		prop:        nil,
 		votes:       nil,
@@ -31,32 +31,32 @@ func createContentBuilder(
 }
 
 // Create initializes the builder
-func (app *contentBuilder) Create() ContentBuilder {
-	return createContentBuilder(app.hashAdapter)
+func (app *builder) Create() Builder {
+	return createBuilder(app.hashAdapter)
 }
 
 // WithProposition adds a proposition to the builder
-func (app *contentBuilder) WithProposition(propositon propositions.Proposition) ContentBuilder {
+func (app *builder) WithProposition(propositon propositions.Proposition) Builder {
 	app.prop = propositon
 	return app
 }
 
 // WithVotes add votes to the builder
-func (app *contentBuilder) WithVotes(votes []votes.Vote) ContentBuilder {
+func (app *builder) WithVotes(votes []votes.Vote) Builder {
 	app.votes = votes
 	return app
 }
 
 // CreatedOn adds a creation time to the builder
-func (app *contentBuilder) CreatedOn(createdOn time.Time) ContentBuilder {
+func (app *builder) CreatedOn(createdOn time.Time) Builder {
 	app.createdOn = &createdOn
 	return app
 }
 
-// Now builds a new Content instance
-func (app *contentBuilder) Now() (Content, error) {
+// Now builds a new Resolution instance
+func (app *builder) Now() (Resolution, error) {
 	if app.prop == nil {
-		return nil, errors.New("the proposition is mandatory in order to build a resolution Content instance")
+		return nil, errors.New("the proposition is mandatory in order to build a Resolution instance")
 	}
 
 	if app.votes == nil {
@@ -93,5 +93,5 @@ func (app *contentBuilder) Now() (Content, error) {
 		return nil, err
 	}
 
-	return createContent(*hash, app.prop, validVotes, *app.createdOn), nil
+	return createResolution(*hash, app.prop, validVotes, *app.createdOn), nil
 }
