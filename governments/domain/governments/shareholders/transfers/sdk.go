@@ -7,6 +7,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewContentBuilder creates a new content builder instance
+func NewContentBuilder(minPubKeysPerRingSig uint) ContentBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createContentBuilder(hashAdapter, minPubKeysPerRingSig)
+}
+
 // Builder represents a transfer builder
 type Builder interface {
 	Create() Builder
