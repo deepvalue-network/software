@@ -3,7 +3,7 @@ package incomings
 import (
 	"time"
 
-	"github.com/deepvalue-network/software/governments/domain/shareholders/transfers"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )
@@ -12,7 +12,7 @@ import (
 type Builder interface {
 	Create() Builder
 	WithPK(pk signature.PrivateKey) Builder
-	WithTransfer(transfer transfers.Section) Builder
+	WithTransfer(transfer views.Section) Builder
 	WithNote(note string) Builder
 	CreatedOn(createdOn time.Time) Builder
 	Now() (Incoming, error)
@@ -22,7 +22,7 @@ type Builder interface {
 type Incoming interface {
 	Hash() hash.Hash
 	PK() signature.PrivateKey
-	Transfer() transfers.Section
+	Transfer() views.Section
 	Note() string
 	CreatedOn() time.Time
 }

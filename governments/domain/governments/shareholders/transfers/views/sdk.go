@@ -1,7 +1,6 @@
-package transfers
+package views
 
 import (
-	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
@@ -26,7 +25,7 @@ type Transfer interface {
 type ContentBuilder interface {
 	Create() ContentBuilder
 	WithSection(section Section) ContentBuilder
-	WithShareHolder(shareHolder []hash.Hash) ContentBuilder
+	WithOwner(owner []hash.Hash) ContentBuilder
 	Now() (Content, error)
 }
 
@@ -34,13 +33,12 @@ type ContentBuilder interface {
 type Content interface {
 	Hash() hash.Hash
 	Section() Section
-	ShareHolder() []hash.Hash
+	Owner() []hash.Hash
 }
 
 // SectionBuilder represents a section builder
 type SectionBuilder interface {
 	Create() SectionBuilder
-	WithShareHolder(shareHolder shareholders.ShareHolder) SectionBuilder
 	WithTransfer(transfer transfers.Transfer) SectionBuilder
 	WithSeed(seed string) SectionBuilder
 	WithAmount(amount uint) SectionBuilder
@@ -50,7 +48,6 @@ type SectionBuilder interface {
 // Section represents a view transfer section
 type Section interface {
 	Hash() hash.Hash
-	ShareHolder() shareholders.ShareHolder
 	Transfer() transfers.Transfer
 	Seed() string
 	Amount() uint
