@@ -8,6 +8,12 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// NewContentBuilder creates a new content builder instance
+func NewContentBuilder() ContentBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createContentBuilder(hashAdapter)
+}
+
 // Builder represents a government builder
 type Builder interface {
 	Create() Builder
