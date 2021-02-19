@@ -1,10 +1,17 @@
 package views
 
 import (
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )
+
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	hashAdapter := hash.NewAdapter()
+	return createBuilder(hashAdapter)
+}
 
 // NewContentBuilder creates a new content builder instance
 func NewContentBuilder(minHashesInOwner uint) ContentBuilder {
@@ -52,6 +59,7 @@ type Content interface {
 type SectionBuilder interface {
 	Create() SectionBuilder
 	WithTransfer(transfer transfers.Transfer) SectionBuilder
+	WithOrigin(origin shareholders.ShareHolder) SectionBuilder
 	WithSeed(seed string) SectionBuilder
 	WithAmount(amount uint) SectionBuilder
 	Now() (Section, error)
@@ -61,6 +69,7 @@ type SectionBuilder interface {
 type Section interface {
 	Hash() hash.Hash
 	Transfer() transfers.Transfer
+	Origin() shareholders.ShareHolder
 	Seed() string
 	Amount() uint
 }

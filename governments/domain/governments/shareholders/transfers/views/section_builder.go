@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
 	"github.com/deepvalue-network/software/libs/hash"
 )
@@ -12,6 +13,7 @@ import (
 type sectionBuilder struct {
 	hashAdapter hash.Adapter
 	transfer    transfers.Transfer
+	origin      shareholders.ShareHolder
 	seed        string
 	amount      uint
 }
@@ -22,6 +24,7 @@ func createSectionBuilder(
 	out := sectionBuilder{
 		hashAdapter: hashAdapter,
 		transfer:    nil,
+		origin:      nil,
 		seed:        "",
 		amount:      0,
 	}
@@ -37,6 +40,12 @@ func (app *sectionBuilder) Create() SectionBuilder {
 // WithTransfer adds a transfer to the builder
 func (app *sectionBuilder) WithTransfer(transfer transfers.Transfer) SectionBuilder {
 	app.transfer = transfer
+	return app
+}
+
+// WithOrigin adds an origin to the builder
+func (app *sectionBuilder) WithOrigin(origin shareholders.ShareHolder) SectionBuilder {
+	app.origin = origin
 	return app
 }
 
@@ -56,6 +65,10 @@ func (app *sectionBuilder) WithAmount(amount uint) SectionBuilder {
 func (app *sectionBuilder) Now() (Section, error) {
 	if app.transfer == nil {
 		return nil, errors.New("the transfer is mandatory in order to build a Section instance")
+	}
+
+	if app.origin == nil {
+		return nil, errors.New("the origin shareHolder is mandatory in order to build a Section instance")
 	}
 
 	if app.seed == "" {
@@ -93,6 +106,7 @@ func (app *sectionBuilder) Now() (Section, error) {
 
 	hash, err := app.hashAdapter.FromMultiBytes([][]byte{
 		app.transfer.Hash().Bytes(),
+		app.origin.Hash().Bytes(),
 		[]byte(app.seed),
 		[]byte(strconv.Itoa(int(app.amount))),
 	})
@@ -101,5 +115,5 @@ func (app *sectionBuilder) Now() (Section, error) {
 		return nil, err
 	}
 
-	return createSection(*hash, app.transfer, app.seed, app.amount), nil
+	return createSection(*hash, app.transfer, app.origin, app.seed, app.amount), nil
 }
