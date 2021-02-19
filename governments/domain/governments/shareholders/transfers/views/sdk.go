@@ -6,6 +6,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewContentBuilder creates a new content builder instance
+func NewContentBuilder(minHashesInOwner uint) ContentBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createContentBuilder(hashAdapter, minHashesInOwner)
+}
+
 // NewSectionBuilder creates a new section builder instance
 func NewSectionBuilder() SectionBuilder {
 	hashAdapter := hash.NewAdapter()
@@ -31,7 +37,7 @@ type Transfer interface {
 type ContentBuilder interface {
 	Create() ContentBuilder
 	WithSection(section Section) ContentBuilder
-	WithOwner(owner []hash.Hash) ContentBuilder
+	WithNewOwner(newOwner []hash.Hash) ContentBuilder
 	Now() (Content, error)
 }
 
@@ -39,7 +45,7 @@ type ContentBuilder interface {
 type Content interface {
 	Hash() hash.Hash
 	Section() Section
-	Owner() []hash.Hash
+	NewOwner() []hash.Hash
 }
 
 // SectionBuilder represents a section builder
