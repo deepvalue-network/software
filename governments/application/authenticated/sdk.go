@@ -1,11 +1,14 @@
 package authenticated
 
 import (
+	"time"
+
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/governments/domain/identities"
 	"github.com/deepvalue-network/software/governments/domain/propositions"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
+	uuid "github.com/satori/go.uuid"
 )
 
 // Builder represents an application builder
@@ -22,6 +25,7 @@ type Application interface {
 	Identity() Identity
 	Proposition() Proposition
 	Transactions() Transactions
+	Swaps() Swaps
 }
 
 // Identity represents the identity application
@@ -45,6 +49,15 @@ type Transactions interface {
 	Transfer(amount uint, seed string, to []hash.Hash, note string) error
 	View(amount uint, seed string, to []hash.Hash) (views.Section, error)
 	Receive(view views.Section, pk signature.PrivateKey, note string) error
+}
+
+// Swaps represents a swaps application
+type Swaps interface {
+	Request(amount uint, seed string, to []hash.Hash, forGov *uuid.UUID, expireOn time.Time) error
+	Trade(requestID *uuid.UUID) error
+	Complaint(tradeID *uuid.UUID) error
+	Defense(tradeID *uuid.UUID) error
+	Close(tradeID *uuid.UUID) error
 }
 
 // UpdateIdentityBuilder represents an update identity builder
