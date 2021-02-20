@@ -9,6 +9,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewContentBuilder creates a new content builder instance
+func NewContentBuilder(minPubKeys uint) ContentBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createContentBuilder(hashAdapter, minPubKeys)
+}
+
 // Builder represents a request builder
 type Builder interface {
 	Create() Builder
