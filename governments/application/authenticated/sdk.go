@@ -29,8 +29,8 @@ type Builder interface {
 type Application interface {
 	Identity() Identity
 	Proposition() Proposition
-	Transactions() Transactions
-	Swaps() Swaps
+	Transaction() Transaction
+	Swap() Swap
 }
 
 // Identity represents the identity application
@@ -48,16 +48,16 @@ type Proposition interface {
 	Disapprove(propositionHash hash.Hash) error
 }
 
-// Transactions represents a transactions application
-type Transactions interface {
+// Transaction represents a transaction application
+type Transaction interface {
 	Payment(amount uint, note string) error
 	Transfer(amount uint, seed string, to []hash.Hash, note string) error
 	View(amount uint, seed string, to []hash.Hash) (views.Section, error)
 	Receive(view views.Section, pk signature.PrivateKey, note string) error
 }
 
-// Swaps represents a swaps application
-type Swaps interface {
+// Swap represents a swap application
+type Swap interface {
 	Request(amount uint, seed string, to []hash.Hash, forGov *uuid.UUID, expireOn time.Time) error
 	Trade(requestID *uuid.UUID) error
 	Close(tradeID *uuid.UUID) error
