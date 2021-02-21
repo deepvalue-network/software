@@ -65,3 +65,8 @@ type Content interface {
 	SharesCap() uint
 	CreatedOn() time.Time
 }
+
+// Repository represents a government repository
+type Repository interface {
+	Retrieve(id *uuid.UUID) (Government, error)
+}

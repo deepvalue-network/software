@@ -38,3 +38,8 @@ type Payment interface {
 	Payment() payments.Payment
 	Note() string
 }
+
+// Service represents a payment service
+type Service interface {
+	Insert(payment Payment) error
+}

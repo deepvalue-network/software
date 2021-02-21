@@ -50,9 +50,9 @@ type Proposition interface {
 
 // Transaction represents a transaction application
 type Transaction interface {
-	Payment(amount uint, note string) error
-	Transfer(amount uint, seed string, to []hash.Hash, note string) error
-	View(amount uint, seed string, to []hash.Hash) (views.Section, error)
+	Payment(govID *uuid.UUID, amount uint, note string) error
+	Transfer(govID *uuid.UUID, amount uint, seed string, to []hash.Hash, note string) error
+	View(govID *uuid.UUID, amount uint, seed string, to []hash.Hash) (views.Section, error)
 	Receive(view views.Section, pk signature.PrivateKey, note string) error
 }
 

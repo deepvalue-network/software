@@ -2,7 +2,6 @@ package identities
 
 import (
 	"github.com/deepvalue-network/software/governments/domain/identities/shareholders"
-	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 )
 
 // Builder represents an identity builder
@@ -11,7 +10,6 @@ type Builder interface {
 	WithName(name string) Builder
 	WithSeed(seed string) Builder
 	WithShareHolders(shareHolders shareholders.ShareHolders) Builder
-	WithSigPK(sigPK signature.PrivateKey) Builder
 	Now() (Identity, error)
 }
 
@@ -20,7 +18,6 @@ type Identity interface {
 	Name() string
 	Seed() string
 	ShareHolders() shareholders.ShareHolders
-	SigPK() signature.PrivateKey
 }
 
 // Repository represents an identity repository

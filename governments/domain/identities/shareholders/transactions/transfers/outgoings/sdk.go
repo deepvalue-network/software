@@ -36,3 +36,8 @@ type Outgoing interface {
 	Note() string
 	CreatedOn() time.Time
 }
+
+// Service represents an outgoing service
+type Service interface {
+	Insert(ins Outgoing) error
+}

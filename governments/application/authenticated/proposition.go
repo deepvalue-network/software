@@ -16,9 +16,6 @@ type proposition struct {
 	voteBuilder         votes.Builder
 	voteContentBuilder  votes.ContentBuilder
 	pkFactory           signature.PrivateKeyFactory
-	name                string
-	seed                string
-	password            string
 	amountPubKeysInRing uint
 }
 
@@ -31,9 +28,6 @@ func createProposition(
 	voteBuilder votes.Builder,
 	voteContentBuilder votes.ContentBuilder,
 	pkFactory signature.PrivateKeyFactory,
-	name string,
-	seed string,
-	password string,
 	amountPubKeysInRing uint,
 ) Proposition {
 	out := proposition{
@@ -45,9 +39,6 @@ func createProposition(
 		voteBuilder:         voteBuilder,
 		voteContentBuilder:  voteContentBuilder,
 		pkFactory:           pkFactory,
-		name:                name,
-		seed:                seed,
-		password:            password,
 		amountPubKeysInRing: amountPubKeysInRing,
 	}
 
@@ -108,7 +99,13 @@ func (app *proposition) vote(propositionHash hash.Hash, isApprove bool, isCancel
 		return err
 	}
 
-	pk := identity.SigPK()
+	gov := proposition.Content().Government()
+	shareHolder, err := identity.ShareHolders().Fetch(gov)
+	if err != nil {
+		return err
+	}
+
+	pk := shareHolder.SigPK()
 	ring, err := newRing(app.pkFactory, pk, int(app.amountPubKeysInRing))
 	if err != nil {
 		return err
