@@ -2,8 +2,6 @@ package swaps
 
 import (
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/closes"
-	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/complaints"
-	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/defenses"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/trades"
 	"github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/transfers/incomings"
 	"github.com/deepvalue-network/software/libs/hash"
@@ -58,7 +56,7 @@ type Incoming interface {
 type CompleteBuilder interface {
 	Create() CompleteBuilder
 	WithTrade(trade trades.Trade) CompleteBuilder
-	WithExecution(execution Execution) CompleteBuilder
+	WithClose(close closes.Close) CompleteBuilder
 	Now() (Complete, error)
 }
 
@@ -66,38 +64,6 @@ type CompleteBuilder interface {
 type Complete interface {
 	Hash() hash.Hash
 	Trade() trades.Trade
-	Execution() Execution
-}
-
-// ExecutionBuilder represents an execution builder
-type ExecutionBuilder interface {
-	Create() ExecutionBuilder
-	WithProblem(problem Problem) ExecutionBuilder
-	WithClose(close closes.Close) ExecutionBuilder
-	Now() (Execution, error)
-}
-
-// Execution represents a swap execution
-type Execution interface {
-	Hash() hash.Hash
-	HasProblem() bool
-	Problem() Problem
 	HasClose() bool
 	Close() closes.Close
-}
-
-// ProblemBuilder represents a problem builder
-type ProblemBuilder interface {
-	Create() ProblemBuilder
-	WithComplaint(complaint complaints.Complaint) ProblemBuilder
-	WithDefense(defense defenses.Defense) ProblemBuilder
-	Now() (Problem, error)
-}
-
-// Problem represents pending swap problem
-type Problem interface {
-	Hash() hash.Hash
-	Complaint() complaints.Complaint
-	HasDefense() bool
-	Defense() defenses.Defense
 }
