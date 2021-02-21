@@ -1,4 +1,4 @@
-package requests
+package trades
 
 import (
 	"errors"
@@ -43,19 +43,19 @@ func (app *builder) WithSignature(sig signature.RingSignature) Builder {
 	return app
 }
 
-// Now builds a new Request instance
-func (app *builder) Now() (Request, error) {
+// Now builds a new Trade instance
+func (app *builder) Now() (Trade, error) {
 	if app.content == nil {
-		return nil, errors.New("the content is mandatory in order to build a Request instance")
+		return nil, errors.New("the content is mandatory in order to build a Trade instance")
 	}
 
 	if app.sig == nil {
-		return nil, errors.New("the ring signature is mandatory in order to build a Request instance")
+		return nil, errors.New("the signature is mandatory in order to build a Trade instance")
 	}
 
 	msg := app.content.Hash().String()
 	if !app.sig.Verify(msg) {
-		str := fmt.Sprintf("the ring signature (%s) could not validate against the content (hash: %s) while building a Request instance", app.sig.String(), msg)
+		str := fmt.Sprintf("the ring signature (%s) could not validate against the content (hash: %s) while building a Trade instance", app.sig.String(), msg)
 		return nil, errors.New(str)
 	}
 
@@ -68,5 +68,5 @@ func (app *builder) Now() (Request, error) {
 		return nil, err
 	}
 
-	return createRequest(*hash, app.content, app.sig), nil
+	return createTrade(*hash, app.content, app.sig), nil
 }

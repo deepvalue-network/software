@@ -9,6 +9,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	hashAdapter := hash.NewAdapter()
+	return createBuilder(hashAdapter)
+}
+
 // NewContentBuilder creates a new content builder instance
 func NewContentBuilder(minPubKeys uint) ContentBuilder {
 	hashAdapter := hash.NewAdapter()

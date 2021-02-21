@@ -131,6 +131,11 @@ func (app *contentBuilder) Now() (Content, error) {
 		return nil, errors.New(str)
 	}
 
+	if !app.stake.Origin().Same(app.to) {
+		str := fmt.Sprintf("the stake origin (shareHolder's hash: %s) does not match the to pubKey hashes", app.stake.Origin().Hash().String())
+		return nil, errors.New(str)
+	}
+
 	data := [][]byte{
 		app.from.Hash().Bytes(),
 		app.stake.Hash().Bytes(),
