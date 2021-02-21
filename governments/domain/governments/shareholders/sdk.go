@@ -30,6 +30,7 @@ type Builder interface {
 type ShareHolders interface {
 	Hash() hash.Hash
 	All() []ShareHolder
+	Has(shareHolder ShareHolder) bool
 	Same(pubKeyHashes []hash.Hash) bool
 }
 

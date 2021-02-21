@@ -7,6 +7,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewShareHolderBuilder creates a new shareHolder builder instance
+func NewShareHolderBuilder() ShareHolderBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createShareHolderBuilder(hashAdapter)
+}
+
 // Builder represents an identity builder
 type Builder interface {
 	Create() Builder
