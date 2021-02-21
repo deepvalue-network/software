@@ -11,6 +11,11 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// NewUpdateIdentityBuilder creates a new updateIdentity builder
+func NewUpdateIdentityBuilder() UpdateIdentityBuilder {
+	return createUpdateIdentityBuilder()
+}
+
 // Builder represents an application builder
 type Builder interface {
 	Create() Builder
@@ -31,7 +36,7 @@ type Application interface {
 // Identity represents the identity application
 type Identity interface {
 	Retrieve() (identities.Identity, error)
-	Update(update UpdateIdentity, password string) error
+	Update(update UpdateIdentity) error
 	Delete() error
 }
 
