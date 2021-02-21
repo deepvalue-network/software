@@ -5,6 +5,7 @@ import (
 
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/complaints"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )
@@ -37,6 +38,6 @@ type ContentBuilder interface {
 type Content interface {
 	Hash() hash.Hash
 	Complaint() complaints.Complaint
-	Transfer() transfers.Transfer
+	Transfer() views.Transfer
 	CreatedOn() time.Time
 }

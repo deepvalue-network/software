@@ -14,6 +14,7 @@ type content struct {
 	stake     views.Section
 	forGov    governments.Government
 	to        []hash.Hash
+	amount    uint
 	expiresOn time.Time
 	createdOn time.Time
 }
@@ -24,6 +25,7 @@ func createContent(
 	stake views.Section,
 	forGov governments.Government,
 	to []hash.Hash,
+	amount uint,
 	expiresOn time.Time,
 	createdOn time.Time,
 ) Content {
@@ -33,6 +35,7 @@ func createContent(
 		stake:     stake,
 		forGov:    forGov,
 		to:        to,
+		amount:    amount,
 		expiresOn: expiresOn,
 		createdOn: createdOn,
 	}
@@ -63,6 +66,11 @@ func (obj *content) For() governments.Government {
 // To returns the to hashes pubkeys
 func (obj *content) To() []hash.Hash {
 	return obj.to
+}
+
+// Amount returns the amount
+func (obj *content) Amount() uint {
+	return obj.amount
 }
 
 // ExpiresOn returns the expiration time

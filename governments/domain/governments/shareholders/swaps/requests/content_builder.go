@@ -18,6 +18,7 @@ type contentBuilder struct {
 	stake       views.Section
 	forGov      governments.Government
 	to          []hash.Hash
+	amount      uint
 	expiresOn   *time.Time
 	createdOn   *time.Time
 }
@@ -33,6 +34,7 @@ func createContentBuilder(
 		stake:       nil,
 		forGov:      nil,
 		to:          nil,
+		amount:      0,
 		expiresOn:   nil,
 		createdOn:   nil,
 	}
@@ -69,6 +71,12 @@ func (app *contentBuilder) To(to []hash.Hash) ContentBuilder {
 	return app
 }
 
+// WithAmount adds an amount to the builder
+func (app *contentBuilder) WithAmount(amount uint) ContentBuilder {
+	app.amount = amount
+	return app
+}
+
 // ExpiresOn adds an expiration time to the builder
 func (app *contentBuilder) ExpiresOn(expiresOn time.Time) ContentBuilder {
 	app.expiresOn = &expiresOn
@@ -99,6 +107,10 @@ func (app *contentBuilder) Now() (Content, error) {
 		return nil, errors.New("the expiration time is mandatory in order to build a request Content instance")
 	}
 
+	if app.amount <= 0 {
+		return nil, errors.New("the amount is mandatory in order to build a request Content instance")
+	}
+
 	if app.to == nil {
 		app.to = []hash.Hash{}
 	}
@@ -123,6 +135,7 @@ func (app *contentBuilder) Now() (Content, error) {
 		app.from.Hash().Bytes(),
 		app.stake.Hash().Bytes(),
 		app.forGov.Hash().Bytes(),
+		[]byte(strconv.Itoa(int(app.amount))),
 		[]byte(strconv.Itoa(app.expiresOn.Second())),
 		[]byte(strconv.Itoa(app.createdOn.Second())),
 	}
@@ -136,5 +149,5 @@ func (app *contentBuilder) Now() (Content, error) {
 		return nil, err
 	}
 
-	return createContent(*hash, app.from, app.stake, app.forGov, app.to, *app.expiresOn, *app.createdOn), nil
+	return createContent(*hash, app.from, app.stake, app.forGov, app.to, app.amount, *app.expiresOn, *app.createdOn), nil
 }

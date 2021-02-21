@@ -43,6 +43,7 @@ type ContentBuilder interface {
 	WithStake(stake views.Section) ContentBuilder
 	For(forGov governments.Government) ContentBuilder
 	To(to []hash.Hash) ContentBuilder
+	WithAmount(amount uint) ContentBuilder
 	ExpiresOn(expiresOn time.Time) ContentBuilder
 	CreatedOn(createdOn time.Time) ContentBuilder
 	Now() (Content, error)
@@ -55,6 +56,7 @@ type Content interface {
 	Stake() views.Section
 	For() governments.Government
 	To() []hash.Hash
+	Amount() uint
 	ExpiresOn() time.Time
 	CreatedOn() time.Time
 }

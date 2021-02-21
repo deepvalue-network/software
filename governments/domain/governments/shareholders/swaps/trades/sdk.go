@@ -9,6 +9,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewContentBuilder creates a new content builder instance
+func NewContentBuilder(minPubKeys uint) ContentBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createContentBuilder(hashAdapter, minPubKeys)
+}
+
 // Builder represents a trade builder
 type Builder interface {
 	Create() Builder
@@ -30,6 +36,7 @@ type ContentBuilder interface {
 	WithRequest(request requests.Request) ContentBuilder
 	WithTransfer(transfer transfers.Transfer) ContentBuilder
 	To(to []hash.Hash) ContentBuilder
+	ExpiresOn(expiresOn time.Time) ContentBuilder
 	CreatedOn(createdOn time.Time) ContentBuilder
 	Now() (Content, error)
 }
@@ -40,5 +47,6 @@ type Content interface {
 	Request() requests.Request
 	Transfer() transfers.Transfer
 	To() []hash.Hash
+	ExpiresOn() time.Time
 	CreatedOn() time.Time
 }
