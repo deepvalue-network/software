@@ -7,6 +7,11 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewCompleteBuilder creates a new complete builder instance
+func NewCompleteBuilder() CompleteBuilder {
+	return createCompleteBuilder()
+}
+
 // Builder represents a swap builder
 type Builder interface {
 	Create() Builder
