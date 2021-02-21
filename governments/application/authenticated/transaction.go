@@ -176,7 +176,7 @@ func (app *transaction) View(govID *uuid.UUID, amount uint, seed string) (views.
 		owners = append(owners, *hsh)
 	}
 
-	origin := shareHolder.Hash()
+	origin := shareHolder.Public().Hash()
 	transferContent, err := app.transferContentBuilder.Create().WithOrigin(origin).WithAmount(*amountHash).WithOwner(owners).Now()
 	if err != nil {
 		return nil, err

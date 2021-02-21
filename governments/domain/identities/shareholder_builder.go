@@ -83,15 +83,5 @@ func (app *shareHolderBuilder) Now() (ShareHolder, error) {
 		return nil, errors.New(str)
 	}
 
-	hash, err := app.hashAdapter.FromMultiBytes([][]byte{
-		app.gov.Hash().Bytes(),
-		app.public.Hash().Bytes(),
-		[]byte(app.sigPK.String()),
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	return createShareHolder(*hash, app.gov, app.public, app.sigPK), nil
+	return createShareHolder(app.gov, app.public, app.sigPK), nil
 }

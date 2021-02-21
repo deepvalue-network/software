@@ -7,6 +7,11 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewShareHoldersBuilder creates a new shareHolders builder instance
+func NewShareHoldersBuilder() ShareHoldersBuilder {
+	return createShareHoldersBuilder()
+}
+
 // NewShareHolderBuilder creates a new shareHolder builder instance
 func NewShareHolderBuilder() ShareHolderBuilder {
 	hashAdapter := hash.NewAdapter()
@@ -53,7 +58,6 @@ type ShareHolderBuilder interface {
 
 // ShareHolder represents a shareholder
 type ShareHolder interface {
-	Hash() hash.Hash
 	Government() governments.Government
 	Public() shareholders.ShareHolder
 	SigPK() signature.PrivateKey
