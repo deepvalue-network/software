@@ -1,4 +1,4 @@
-package outgoings
+package transfers
 
 import (
 	"time"
@@ -13,18 +13,18 @@ type Builder interface {
 	WithTransfer(transfer views.Transfer) Builder
 	WithNote(note string) Builder
 	CreatedOn(createdOn time.Time) Builder
-	Now() (Outgoing, error)
+	Now() (Transfer, error)
 }
 
-// Outgoing represents an outgoing transfer
-type Outgoing interface {
+// Transfer represents a transfer
+type Transfer interface {
 	Hash() hash.Hash
 	Transfer() views.Transfer
 	Note() string
 	CreatedOn() time.Time
 }
 
-// Service represents an outgoing service
+// Service represents a transfer service
 type Service interface {
-	Insert(ins Outgoing) error
+	Insert(ins Transfer) error
 }

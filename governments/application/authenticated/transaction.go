@@ -8,21 +8,22 @@ import (
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
 	identity_payments "github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/payments"
-	"github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/transfers/incomings"
-	"github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/transfers/outgoings"
+	identity_transfers "github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/transfers"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 	uuid "github.com/satori/go.uuid"
 )
 
 type transaction struct {
-	identityApp                Identity
-	identityPaymentService     identity_payments.Service
-	identityPaymentBuilder     identity_payments.Builder
-	identityOutgoingService    outgoings.Service
-	identityOutgoingBuilder    outgoings.Builder
-	identityIncomingService    incomings.Service
-	identityIncomingBuilder    incomings.Builder
+	identityApp            Identity
+	identityPaymentService identity_payments.Service
+	identityPaymentBuilder identity_payments.Builder
+	//identityOutgoingService    outgoings.Service
+	//identityOutgoingBuilder    outgoings.Builder
+	//identityIncomingService    incomings.Service
+	//identityIncomingBuilder    incomings.Builder
+	identityTransferService    identity_transfers.Service
+	identityTransferBuilder    identity_transfers.Builder
 	paymentBuilder             payments.Builder
 	paymentContentBuilder      payments.ContentBuilder
 	transferContentBuilder     transfers.ContentBuilder
@@ -40,10 +41,12 @@ func createTransaction(
 	identityApp Identity,
 	identityPaymentService identity_payments.Service,
 	identityPaymentBuilder identity_payments.Builder,
-	identityOutgoingService outgoings.Service,
-	identityOutgoingBuilder outgoings.Builder,
-	identityIncomingService incomings.Service,
-	identityIncomingBuilder incomings.Builder,
+	//identityOutgoingService outgoings.Service,
+	//identityOutgoingBuilder outgoings.Builder,
+	//identityIncomingService incomings.Service,
+	//identityIncomingBuilder incomings.Builder,
+	identityTransferService identity_transfers.Service,
+	identityTransferBuilder identity_transfers.Builder,
 	paymentBuilder payments.Builder,
 	paymentContentBuilder payments.ContentBuilder,
 	transferContentBuilder transfers.ContentBuilder,
@@ -57,13 +60,15 @@ func createTransaction(
 	amountPubKeysInRing uint,
 ) Transaction {
 	out := transaction{
-		identityApp:                identityApp,
-		identityPaymentService:     identityPaymentService,
-		identityPaymentBuilder:     identityPaymentBuilder,
-		identityOutgoingService:    identityOutgoingService,
-		identityOutgoingBuilder:    identityOutgoingBuilder,
-		identityIncomingService:    identityIncomingService,
-		identityIncomingBuilder:    identityIncomingBuilder,
+		identityApp:            identityApp,
+		identityPaymentService: identityPaymentService,
+		identityPaymentBuilder: identityPaymentBuilder,
+		//identityOutgoingService:    identityOutgoingService,
+		//identityOutgoingBuilder:    identityOutgoingBuilder,
+		//identityIncomingService:    identityIncomingService,
+		//identityIncomingBuilder:    identityIncomingBuilder,
+		identityTransferService:    identityTransferService,
+		identityTransferBuilder:    identityTransferBuilder,
 		paymentBuilder:             paymentBuilder,
 		paymentContentBuilder:      paymentContentBuilder,
 		transferContentBuilder:     transferContentBuilder,
@@ -133,12 +138,12 @@ func (app *transaction) Transfer(govID *uuid.UUID, amount uint, seed string, to 
 		return err
 	}
 
-	outgoing, err := app.identityOutgoingBuilder.Create().WithTransfer(viewTransfer).WithNote(note).Now()
+	transfer, err := app.identityTransferBuilder.Create().WithTransfer(viewTransfer).WithNote(note).Now()
 	if err != nil {
 		return err
 	}
 
-	return app.identityOutgoingService.Insert(outgoing)
+	return app.identityTransferService.Insert(transfer)
 }
 
 // View creates a view transfer
@@ -220,32 +225,56 @@ func (app *transaction) ViewTransfer(section views.Section, govID *uuid.UUID, to
 		return nil, err
 	}
 
+	pk := shareHolder.SigPK()
+	return app.viewTransfer(section, to, pk)
+}
+
+// Receive receives a transfer
+func (app *transaction) Receive(section views.Section, pk signature.PrivateKey, note string) error {
+	ring, err := newRing(app.pkFactory, pk, int(app.amountPubKeysInRing))
+	if err != nil {
+		return err
+	}
+
+	to := []hash.Hash{}
+	for _, onePubKey := range ring {
+		hsh, err := app.hashAdapter.FromBytes([]byte(onePubKey.String()))
+		if err != nil {
+			return err
+		}
+
+		to = append(to, *hsh)
+	}
+
+	viewTransfer, err := app.viewTransfer(section, to, pk)
+	if err != nil {
+		return err
+	}
+
+	transfer, err := app.identityTransferBuilder.Create().WithTransfer(viewTransfer).WithNote(note).Now()
+	if err != nil {
+		return err
+	}
+
+	return app.identityTransferService.Insert(transfer)
+}
+
+func (app *transaction) viewTransfer(section views.Section, to []hash.Hash, pk signature.PrivateKey) (views.Transfer, error) {
 	content, err := app.viewTransferContentBuilder.Create().WithSection(section).WithNewOwner(to).Now()
 	if err != nil {
 		return nil, err
 	}
 
 	msg := content.Hash().String()
-	pk := shareHolder.SigPK()
 	ring, err := newRing(app.pkFactory, pk, int(app.amountPubKeysInRing))
 	if err != nil {
 		return nil, err
 	}
 
-	sig, err := shareHolder.SigPK().RingSign(msg, ring)
+	sig, err := pk.RingSign(msg, ring)
 	if err != nil {
 		return nil, err
 	}
 
 	return app.viewTransferBuilder.Create().WithContent(content).WithSignature(sig).Now()
-}
-
-// Receive receives a transfer
-func (app *transaction) Receive(view views.Section, pk signature.PrivateKey, note string) error {
-	incoming, err := app.identityIncomingBuilder.Create().WithPK(pk).WithTransfer(view).WithNote(note).Now()
-	if err != nil {
-		return err
-	}
-
-	return app.identityIncomingService.Insert(incoming)
 }
