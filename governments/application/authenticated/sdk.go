@@ -55,8 +55,6 @@ type Transactions interface {
 type Swaps interface {
 	Request(amount uint, seed string, to []hash.Hash, forGov *uuid.UUID, expireOn time.Time) error
 	Trade(requestID *uuid.UUID) error
-	Complaint(tradeID *uuid.UUID) error
-	Defense(tradeID *uuid.UUID) error
 	Close(tradeID *uuid.UUID) error
 }
 
