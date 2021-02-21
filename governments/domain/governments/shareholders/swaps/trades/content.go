@@ -4,14 +4,14 @@ import (
 	"time"
 
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/requests"
-	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
 type content struct {
 	hash      hash.Hash
 	request   requests.Request
-	transfer  transfers.Transfer
+	transfer  views.Transfer
 	to        []hash.Hash
 	expiresOn  time.Time
 	createdOn time.Time
@@ -20,7 +20,7 @@ type content struct {
 func createContent(
 	hash hash.Hash,
 	request requests.Request,
-	transfer transfers.Transfer,
+	transfer views.Transfer,
 	to []hash.Hash,
 	expiresOn time.Time,
 	createdOn time.Time,
@@ -48,7 +48,7 @@ func (obj *content) Request() requests.Request {
 }
 
 // Transfer returns the transfer
-func (obj *content) Transfer() transfers.Transfer {
+func (obj *content) Transfer() views.Transfer {
 	return obj.transfer
 }
 

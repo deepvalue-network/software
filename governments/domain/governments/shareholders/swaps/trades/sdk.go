@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/requests"
-	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )
@@ -40,7 +40,7 @@ type Trade interface {
 type ContentBuilder interface {
 	Create() ContentBuilder
 	WithRequest(request requests.Request) ContentBuilder
-	WithTransfer(transfer transfers.Transfer) ContentBuilder
+	WithTransfer(transfer views.Transfer) ContentBuilder
 	To(to []hash.Hash) ContentBuilder
 	ExpiresOn(expiresOn time.Time) ContentBuilder
 	CreatedOn(createdOn time.Time) ContentBuilder
@@ -51,7 +51,7 @@ type ContentBuilder interface {
 type Content interface {
 	Hash() hash.Hash
 	Request() requests.Request
-	Transfer() transfers.Transfer
+	Transfer() views.Transfer
 	To() []hash.Hash
 	ExpiresOn() time.Time
 	CreatedOn() time.Time

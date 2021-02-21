@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/requests"
-	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
@@ -15,7 +15,7 @@ type contentBuilder struct {
 	hashAdapter hash.Adapter
 	minPubKeys  uint
 	request     requests.Request
-	transfer    transfers.Transfer
+	transfer    views.Transfer
 	to          []hash.Hash
 	expiresOn   *time.Time
 	createdOn   *time.Time
@@ -50,7 +50,7 @@ func (app *contentBuilder) WithRequest(request requests.Request) ContentBuilder 
 }
 
 // WithTransfer adds a transfer to the builder
-func (app *contentBuilder) WithTransfer(transfer transfers.Transfer) ContentBuilder {
+func (app *contentBuilder) WithTransfer(transfer views.Transfer) ContentBuilder {
 	app.transfer = transfer
 	return app
 }
@@ -105,6 +105,21 @@ func (app *contentBuilder) Now() (Content, error) {
 	if app.expiresOn.Before(*app.createdOn) {
 		str := fmt.Sprintf("the expiration time (%s) cannot be before the creation time (%s)", app.expiresOn.String(), app.createdOn.String())
 		return nil, errors.New(str)
+	}
+
+	// make sure the amounts matches:
+	reqAmount := app.request.Content().Amount()
+	trsfAmount := app.transfer.Content().Section().Amount()
+	if reqAmount != trsfAmount {
+		str := fmt.Sprintf("the requested amount (%d) does not match the transfer amount (%d)", reqAmount, trsfAmount)
+		return nil, errors.New(str)
+	}
+
+	// make sure the pubkeys matches:
+	reqPubKeys := app.request.Content().To()
+	trsfNewOwnerPubKeys := app.transfer.Content().NewOwner()
+	if !compareHashes(reqPubKeys, trsfNewOwnerPubKeys) {
+		return nil, errors.New("the request to pubKey hashes do not matche the transfer new owner pubKey hashes")
 	}
 
 	data := [][]byte{
