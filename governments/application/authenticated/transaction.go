@@ -18,11 +18,11 @@ import (
 type transaction struct {
 	identityApp                Identity
 	identityPaymentService     identity_payments.Service
-	identityPaymentBuilder     identity_payments.PaymentBuilder
+	identityPaymentBuilder     identity_payments.Builder
 	identityOutgoingService    outgoings.Service
-	identityOutgoingBuilder    outgoings.OutgoingBuilder
+	identityOutgoingBuilder    outgoings.Builder
 	identityIncomingService    incomings.Service
-	identityIncomingBuilder    incomings.IncomingBuilder
+	identityIncomingBuilder    incomings.Builder
 	paymentBuilder             payments.Builder
 	paymentContentBuilder      payments.ContentBuilder
 	transferContentBuilder     transfers.ContentBuilder
@@ -39,11 +39,11 @@ type transaction struct {
 func createTransaction(
 	identityApp Identity,
 	identityPaymentService identity_payments.Service,
-	identityPaymentBuilder identity_payments.PaymentBuilder,
+	identityPaymentBuilder identity_payments.Builder,
 	identityOutgoingService outgoings.Service,
-	identityOutgoingBuilder outgoings.OutgoingBuilder,
+	identityOutgoingBuilder outgoings.Builder,
 	identityIncomingService incomings.Service,
-	identityIncomingBuilder incomings.IncomingBuilder,
+	identityIncomingBuilder incomings.Builder,
 	paymentBuilder payments.Builder,
 	paymentContentBuilder payments.ContentBuilder,
 	transferContentBuilder transfers.ContentBuilder,

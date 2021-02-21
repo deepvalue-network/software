@@ -7,24 +7,11 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
-// Builder represents a builder
+// Builder represents a swap builder
 type Builder interface {
 	Create() Builder
-	WithSwaps(swaps []Swap) Builder
-	Now() (Swaps, error)
-}
-
-// Swaps represents swaps
-type Swaps interface {
-	Hash() hash.Hash
-	All() []Swap
-}
-
-// SwapBuilder represents a swap builder
-type SwapBuilder interface {
-	Create() SwapBuilder
-	WithIncoming(incoming Incoming) SwapBuilder
-	WithOutgoing(outgoing Complete) SwapBuilder
+	WithIncoming(incoming Incoming) Builder
+	WithOutgoing(outgoing Complete) Builder
 	Now() (Swap, error)
 }
 
@@ -66,4 +53,9 @@ type Complete interface {
 	Trade() trades.Trade
 	HasClose() bool
 	Close() closes.Close
+}
+
+// Repository represents a swap repository
+type Repository interface {
+	Retrieve(requestHash hash.Hash) (Swap, error)
 }

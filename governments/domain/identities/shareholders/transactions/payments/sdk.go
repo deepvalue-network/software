@@ -5,30 +5,17 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
-// NewPaymentBuilder creates a new payment builder instance
-func NewPaymentBuilder() PaymentBuilder {
+// NewBuilder creates a new payment builder instance
+func NewBuilder() Builder {
 	hashAdapter := hash.NewAdapter()
-	return createPaymentBuilder(hashAdapter)
+	return createBuilder(hashAdapter)
 }
 
-// Builder creates a new payments instance
+// Builder represents a payment builder
 type Builder interface {
 	Create() Builder
-	WithPayments(payments []Payment) Builder
-	Now() (Payments, error)
-}
-
-// Payments retruns the payments
-type Payments interface {
-	Hash() hash.Hash
-	All() []Payment
-}
-
-// PaymentBuilder represents a payment builder
-type PaymentBuilder interface {
-	Create() PaymentBuilder
-	WithPayment(payment payments.Payment) PaymentBuilder
-	WithNote(note string) PaymentBuilder
+	WithPayment(payment payments.Payment) Builder
+	WithNote(note string) Builder
 	Now() (Payment, error)
 }
 

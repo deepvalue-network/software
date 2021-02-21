@@ -3,7 +3,6 @@ package shareholders
 import (
 	"github.com/deepvalue-network/software/governments/domain/governments"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
-	"github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 )
@@ -26,7 +25,6 @@ type ShareHolderBuilder interface {
 	Create() ShareHolderBuilder
 	WithGovernment(gov governments.Government) ShareHolderBuilder
 	WithPublic(public shareholders.ShareHolder) ShareHolderBuilder
-	WithTransactions(transactions transactions.Transactions) ShareHolderBuilder
 	WithSigPK(sigPK signature.PrivateKey) ShareHolderBuilder
 	Now() (ShareHolder, error)
 }
@@ -36,6 +34,5 @@ type ShareHolder interface {
 	Hash() hash.Hash
 	Government() governments.Government
 	Public() shareholders.ShareHolder
-	Transactions() transactions.Transactions
 	SigPK() signature.PrivateKey
 }

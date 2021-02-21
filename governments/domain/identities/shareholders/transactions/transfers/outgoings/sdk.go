@@ -7,25 +7,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
-// Builder represents an outgoings builder
+// Builder represents an outgoing builder
 type Builder interface {
 	Create() Builder
-	WithOutgoings(outgoings []Outgoing) Builder
-	Now() (Outgoings, error)
-}
-
-// Outgoings represents an outgoings
-type Outgoings interface {
-	Hash() hash.Hash
-	All() []Outgoing
-}
-
-// OutgoingBuilder represents an outgoing builder
-type OutgoingBuilder interface {
-	Create() OutgoingBuilder
-	WithTransfer(transfer views.Transfer) OutgoingBuilder
-	WithNote(note string) OutgoingBuilder
-	CreatedOn(createdOn time.Time) OutgoingBuilder
+	WithTransfer(transfer views.Transfer) Builder
+	WithNote(note string) Builder
+	CreatedOn(createdOn time.Time) Builder
 	Now() (Outgoing, error)
 }
 

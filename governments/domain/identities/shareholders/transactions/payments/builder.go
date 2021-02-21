@@ -7,16 +7,16 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
-type paymentBuilder struct {
+type builder struct {
 	hashAdapter hash.Adapter
 	payment     payments.Payment
 	note        string
 }
 
-func createPaymentBuilder(
+func createBuilder(
 	hashAdapter hash.Adapter,
-) PaymentBuilder {
-	out := paymentBuilder{
+) Builder {
+	out := builder{
 		hashAdapter: hashAdapter,
 		payment:     nil,
 		note:        "",
@@ -25,25 +25,25 @@ func createPaymentBuilder(
 	return &out
 }
 
-// Create initializes the paymentBuilder
-func (app *paymentBuilder) Create() PaymentBuilder {
-	return createPaymentBuilder(app.hashAdapter)
+// Create initializes the builder
+func (app *builder) Create() Builder {
+	return createBuilder(app.hashAdapter)
 }
 
-// WithPayment adds a payment to the paymentBuilder
-func (app *paymentBuilder) WithPayment(payment payments.Payment) PaymentBuilder {
+// WithPayment adds a payment to the builder
+func (app *builder) WithPayment(payment payments.Payment) Builder {
 	app.payment = payment
 	return app
 }
 
-// WithNote adds a note to the paymentBuilder
-func (app *paymentBuilder) WithNote(note string) PaymentBuilder {
+// WithNote adds a note to the builder
+func (app *builder) WithNote(note string) Builder {
 	app.note = note
 	return app
 }
 
 // Now builds a new Payment instance
-func (app *paymentBuilder) Now() (Payment, error) {
+func (app *builder) Now() (Payment, error) {
 	if app.payment == nil {
 		return nil, errors.New("the payment is mandatory in order to build a Payment instance")
 	}
