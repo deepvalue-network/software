@@ -127,3 +127,13 @@ type ShareHolder interface {
 	Keys() []hash.Hash
 	NewPower() uint
 }
+
+// Repository represents a proposition repository
+type Repository interface {
+	Retrieve(hash hash.Hash) (Proposition, error)
+}
+
+// Service represents a proposition service
+type Service interface {
+	Insert(proposition Proposition) error
+}

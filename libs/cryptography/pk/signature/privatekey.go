@@ -28,7 +28,6 @@ func (app *privateKey) PublicKey() PublicKey {
 
 // RingSign signs a ring signature on the given message, in the given ring pubKey
 func (app *privateKey) RingSign(msg string, ringPubKeys []PublicKey) (RingSignature, error) {
-
 	retrieveSignerIndexFn := func(ringPubKeys []PublicKey, pk PrivateKey) int {
 		pubKey := pk.PublicKey()
 		for index, oneRingPubKey := range ringPubKeys {

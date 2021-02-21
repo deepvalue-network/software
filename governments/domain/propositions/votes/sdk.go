@@ -55,3 +55,8 @@ type Content interface {
 	IsDisapproved() bool
 	CreatedOn() time.Time
 }
+
+// Service represents a vote service
+type Service interface {
+	Insert(vote Vote) error
+}

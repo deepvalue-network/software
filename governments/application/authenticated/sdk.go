@@ -42,7 +42,7 @@ type Identity interface {
 
 // Proposition represents an authenticated proposition application
 type Proposition interface {
-	New(content propositions.Proposition, sigs []signature.RingSignature) error
+	New(content propositions.Content, sigs []signature.RingSignature) error
 	Approve(propositionHash hash.Hash) error
 	Cancel(propositionHash hash.Hash) error
 	Disapprove(propositionHash hash.Hash) error
