@@ -7,6 +7,11 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	return createBuilder()
+}
+
 // NewShareHoldersBuilder creates a new shareHolders builder instance
 func NewShareHoldersBuilder() ShareHoldersBuilder {
 	return createShareHoldersBuilder()
