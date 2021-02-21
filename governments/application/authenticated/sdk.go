@@ -52,15 +52,16 @@ type Proposition interface {
 type Transaction interface {
 	Payment(govID *uuid.UUID, amount uint, note string) error
 	Transfer(govID *uuid.UUID, amount uint, seed string, to []hash.Hash, note string) error
-	View(govID *uuid.UUID, amount uint, seed string, to []hash.Hash) (views.Section, error)
+	View(govID *uuid.UUID, amount uint, seed string) (views.Section, error)
+	ViewTransfer(section views.Section, govID *uuid.UUID, to []hash.Hash) (views.Transfer, error)
 	Receive(view views.Section, pk signature.PrivateKey, note string) error
 }
 
 // Swap represents a swap application
 type Swap interface {
-	Request(amount uint, seed string, to []hash.Hash, forGov *uuid.UUID, expireOn time.Time) error
-	Trade(requestID *uuid.UUID) error
-	Close(tradeID *uuid.UUID) error
+	Request(fromGovID *uuid.UUID, amount uint, seed string, to []hash.Hash, forGov *uuid.UUID, expireOn time.Time) error
+	Trade(requestHash hash.Hash, expireOn time.Time) error
+	Close(tradeHash hash.Hash) error
 }
 
 // UpdateIdentityBuilder represents an update identity builder

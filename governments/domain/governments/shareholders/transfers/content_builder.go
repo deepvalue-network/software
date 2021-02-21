@@ -14,7 +14,6 @@ type contentBuilder struct {
 	minPubKeysPerRingSig uint
 	origin               *hash.Hash
 	amount               *hash.Hash
-	seed                 *hash.Hash
 	owner                []hash.Hash
 	createdOn            *time.Time
 }
@@ -28,7 +27,6 @@ func createContentBuilder(
 		minPubKeysPerRingSig: minPubKeysPerRingSig,
 		origin:               nil,
 		amount:               nil,
-		seed:                 nil,
 		owner:                nil,
 		createdOn:            nil,
 	}
@@ -50,12 +48,6 @@ func (app *contentBuilder) WithOrigin(origin hash.Hash) ContentBuilder {
 // WithAmount adds an amount to the builder
 func (app *contentBuilder) WithAmount(amount hash.Hash) ContentBuilder {
 	app.amount = &amount
-	return app
-}
-
-// WithSeed adds a seed to the builder
-func (app *contentBuilder) WithSeed(seed hash.Hash) ContentBuilder {
-	app.seed = &seed
 	return app
 }
 
@@ -81,10 +73,6 @@ func (app *contentBuilder) Now() (Content, error) {
 		return nil, errors.New("the amount is mandatory in order to build a transfer Content instance")
 	}
 
-	if app.seed == nil {
-		return nil, errors.New("the seed is mandatory in order to build a transfer Content instance")
-	}
-
 	if app.createdOn == nil {
 		createdOn := time.Now().UTC()
 		app.createdOn = &createdOn
@@ -103,7 +91,6 @@ func (app *contentBuilder) Now() (Content, error) {
 	data := [][]byte{
 		app.origin.Bytes(),
 		app.amount.Bytes(),
-		app.seed.Bytes(),
 		[]byte(strconv.Itoa(app.createdOn.Second())),
 	}
 
@@ -116,6 +103,6 @@ func (app *contentBuilder) Now() (Content, error) {
 		return nil, err
 	}
 
-	return createContent(*hash, *app.origin, *app.amount, *app.seed, app.owner, *app.createdOn), nil
+	return createContent(*hash, *app.origin, *app.amount, app.owner, *app.createdOn), nil
 
 }

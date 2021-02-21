@@ -28,6 +28,8 @@ type transaction struct {
 	transferContentBuilder     transfers.ContentBuilder
 	transferBuilder            transfers.Builder
 	viewTransferSectionBuilder views.SectionBuilder
+	viewTransferContentBuilder views.ContentBuilder
+	viewTransferBuilder        views.Builder
 	governmentRepository       governments.Repository
 	pkFactory                  signature.PrivateKeyFactory
 	hashAdapter                hash.Adapter
@@ -47,6 +49,8 @@ func createTransaction(
 	transferContentBuilder transfers.ContentBuilder,
 	transferBuilder transfers.Builder,
 	viewTransferSectionBuilder views.SectionBuilder,
+	viewTransferContentBuilder views.ContentBuilder,
+	viewTransferBuilder views.Builder,
 	governmentRepository governments.Repository,
 	pkFactory signature.PrivateKeyFactory,
 	hashAdapter hash.Adapter,
@@ -65,6 +69,8 @@ func createTransaction(
 		transferContentBuilder:     transferContentBuilder,
 		transferBuilder:            transferBuilder,
 		viewTransferSectionBuilder: viewTransferSectionBuilder,
+		viewTransferContentBuilder: viewTransferContentBuilder,
+		viewTransferBuilder:        viewTransferBuilder,
 		governmentRepository:       governmentRepository,
 		pkFactory:                  pkFactory,
 		hashAdapter:                hashAdapter,
@@ -117,7 +123,12 @@ func (app *transaction) Payment(govID *uuid.UUID, amount uint, note string) erro
 
 // Transfer creates a transfer
 func (app *transaction) Transfer(govID *uuid.UUID, amount uint, seed string, to []hash.Hash, note string) error {
-	viewTransfer, err := app.View(govID, amount, seed, to)
+	section, err := app.View(govID, amount, seed)
+	if err != nil {
+		return err
+	}
+
+	viewTransfer, err := app.ViewTransfer(section, govID, to)
 	if err != nil {
 		return err
 	}
@@ -131,7 +142,7 @@ func (app *transaction) Transfer(govID *uuid.UUID, amount uint, seed string, to 
 }
 
 // View creates a view transfer
-func (app *transaction) View(govID *uuid.UUID, amount uint, seed string, to []hash.Hash) (views.Section, error) {
+func (app *transaction) View(govID *uuid.UUID, amount uint, seed string) (views.Section, error) {
 	gov, err := app.governmentRepository.Retrieve(govID)
 	if err != nil {
 		return nil, err
@@ -143,12 +154,6 @@ func (app *transaction) View(govID *uuid.UUID, amount uint, seed string, to []ha
 	}
 
 	shareHolder, err := identity.ShareHolders().Fetch(gov)
-	if err != nil {
-		return nil, err
-	}
-
-	origin := shareHolder.Hash()
-	seedHash, err := app.hashAdapter.FromBytes([]byte(seed))
 	if err != nil {
 		return nil, err
 	}
@@ -178,7 +183,8 @@ func (app *transaction) View(govID *uuid.UUID, amount uint, seed string, to []ha
 		owners = append(owners, *hsh)
 	}
 
-	transferContent, err := app.transferContentBuilder.Create().WithOrigin(origin).WithAmount(*amountHash).WithSeed(*seedHash).WithOwner(owners).Now()
+	origin := shareHolder.Hash()
+	transferContent, err := app.transferContentBuilder.Create().WithOrigin(origin).WithAmount(*amountHash).WithOwner(owners).Now()
 	if err != nil {
 		return nil, err
 	}
@@ -195,6 +201,43 @@ func (app *transaction) View(govID *uuid.UUID, amount uint, seed string, to []ha
 	}
 
 	return app.viewTransferSectionBuilder.Create().WithTransfer(transfer).WithOrigin(shareHolder.Public()).WithSeed(seed).WithAmount(amount).Now()
+}
+
+// ViewTransfer creates a new transfer
+func (app *transaction) ViewTransfer(section views.Section, govID *uuid.UUID, to []hash.Hash) (views.Transfer, error) {
+	gov, err := app.governmentRepository.Retrieve(govID)
+	if err != nil {
+		return nil, err
+	}
+
+	identity, err := app.identityApp.Retrieve()
+	if err != nil {
+		return nil, err
+	}
+
+	shareHolder, err := identity.ShareHolders().Fetch(gov)
+	if err != nil {
+		return nil, err
+	}
+
+	content, err := app.viewTransferContentBuilder.Create().WithSection(section).WithNewOwner(to).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	msg := content.Hash().String()
+	pk := shareHolder.SigPK()
+	ring, err := newRing(app.pkFactory, pk, int(app.amountPubKeysInRing))
+	if err != nil {
+		return nil, err
+	}
+
+	sig, err := shareHolder.SigPK().RingSign(msg, ring)
+	if err != nil {
+		return nil, err
+	}
+
+	return app.viewTransferBuilder.Create().WithContent(content).WithSignature(sig).Now()
 }
 
 // Receive receives a transfer

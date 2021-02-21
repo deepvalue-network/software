@@ -23,7 +23,7 @@ type Outgoings interface {
 // OutgoingBuilder represents an outgoing builder
 type OutgoingBuilder interface {
 	Create() OutgoingBuilder
-	WithTransfer(transfer views.Section) OutgoingBuilder
+	WithTransfer(transfer views.Transfer) OutgoingBuilder
 	WithNote(note string) OutgoingBuilder
 	CreatedOn(createdOn time.Time) OutgoingBuilder
 	Now() (Outgoing, error)
@@ -32,7 +32,7 @@ type OutgoingBuilder interface {
 // Outgoing represents an outgoing transfer
 type Outgoing interface {
 	Hash() hash.Hash
-	Transfer() views.Section
+	Transfer() views.Transfer
 	Note() string
 	CreatedOn() time.Time
 }

@@ -94,16 +94,6 @@ func (app *sectionBuilder) Now() (Section, error) {
 		return nil, errors.New(str)
 	}
 
-	seedHash, err := app.hashAdapter.FromBytes([]byte(app.seed))
-	if err != nil {
-		return nil, err
-	}
-
-	if !transferContent.Seed().Compare(*seedHash) {
-		str := fmt.Sprintf("the seed (%s) when hashed (%s) does not equal the transfer seed hash (%s)", app.seed, seedHash.String(), transferContent.Seed().String())
-		return nil, errors.New(str)
-	}
-
 	hash, err := app.hashAdapter.FromMultiBytes([][]byte{
 		app.transfer.Hash().Bytes(),
 		app.origin.Hash().Bytes(),

@@ -56,3 +56,13 @@ type Content interface {
 	ExpiresOn() time.Time
 	CreatedOn() time.Time
 }
+
+// Repository represents a close repository
+type Repository interface {
+	Retrieve(hash hash.Hash) (Trade, error)
+}
+
+// Service represents a trade service
+type Service interface {
+	Insert(trade Trade) error
+}

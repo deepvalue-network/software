@@ -39,7 +39,6 @@ type ContentBuilder interface {
 	Create() ContentBuilder
 	WithOrigin(origin hash.Hash) ContentBuilder
 	WithAmount(amount hash.Hash) ContentBuilder
-	WithSeed(seed hash.Hash) ContentBuilder
 	WithOwner(owner []hash.Hash) ContentBuilder
 	CreatedOn(createdOn time.Time) ContentBuilder
 	Now() (Content, error)
@@ -50,7 +49,6 @@ type Content interface {
 	Hash() hash.Hash
 	Origin() hash.Hash
 	Amount() hash.Hash
-	Seed() hash.Hash
 	Owner() []hash.Hash
 	CreatedOn() time.Time
 }

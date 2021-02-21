@@ -49,3 +49,8 @@ type Content interface {
 	Trade() trades.Trade
 	CreatedOn() time.Time
 }
+
+// Service represents a close service
+type Service interface {
+	Insert(close Close) error
+}

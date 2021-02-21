@@ -10,7 +10,6 @@ type content struct {
 	hash      hash.Hash
 	origin    hash.Hash
 	amount    hash.Hash
-	seed      hash.Hash
 	owner     []hash.Hash
 	createdOn time.Time
 }
@@ -19,7 +18,6 @@ func createContent(
 	hash hash.Hash,
 	origin hash.Hash,
 	amount hash.Hash,
-	seed hash.Hash,
 	owner []hash.Hash,
 	createdOn time.Time,
 ) Content {
@@ -27,7 +25,6 @@ func createContent(
 		hash:      hash,
 		origin:    origin,
 		amount:    amount,
-		seed:      seed,
 		owner:     owner,
 		createdOn: createdOn,
 	}
@@ -48,11 +45,6 @@ func (obj *content) Origin() hash.Hash {
 // Amount returns the amount
 func (obj *content) Amount() hash.Hash {
 	return obj.amount
-}
-
-// Seed returns the seed
-func (obj *content) Seed() hash.Hash {
-	return obj.seed
 }
 
 // Owner returns the owner

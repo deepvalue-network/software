@@ -60,3 +60,13 @@ type Content interface {
 	ExpiresOn() time.Time
 	CreatedOn() time.Time
 }
+
+// Repository represents a request repository
+type Repository interface {
+	Retrieve(hash hash.Hash) (Request, error)
+}
+
+// Service represents a requests service
+type Service interface {
+	Insert(req Request) error
+}
