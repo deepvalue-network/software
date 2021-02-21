@@ -3,7 +3,7 @@ package swaps
 import (
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/closes"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/swaps/trades"
-	"github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/transfers/incomings"
+	"github.com/deepvalue-network/software/governments/domain/identities/transfers"
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
@@ -17,7 +17,6 @@ type Builder interface {
 
 // Swap represents a swap
 type Swap interface {
-	Hash() hash.Hash
 	IsIncoming() bool
 	Incoming() Incoming
 	IsOutgoing() bool
@@ -28,15 +27,14 @@ type Swap interface {
 type IncomingBuilder interface {
 	Create() IncomingBuilder
 	WithComplete(complete Complete) IncomingBuilder
-	WithIncoming(incoming incomings.Incoming) IncomingBuilder
+	WithIncoming(transfer transfers.Transfer) IncomingBuilder
 	Now() (Incoming, error)
 }
 
 // Incoming represents an incoming swap
 type Incoming interface {
-	Hash() hash.Hash
 	Complete() Complete
-	Incoming() incomings.Incoming
+	Incoming() transfers.Transfer
 }
 
 // CompleteBuilder represents a complete builder
@@ -49,7 +47,6 @@ type CompleteBuilder interface {
 
 // Complete represents a complete swap
 type Complete interface {
-	Hash() hash.Hash
 	Trade() trades.Trade
 	HasClose() bool
 	Close() closes.Close

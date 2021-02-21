@@ -7,21 +7,17 @@ import (
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/payments"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
-	identity_payments "github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/payments"
-	identity_transfers "github.com/deepvalue-network/software/governments/domain/identities/shareholders/transactions/transfers"
+	identity_payments "github.com/deepvalue-network/software/governments/domain/identities/payments"
+	identity_transfers "github.com/deepvalue-network/software/governments/domain/identities/transfers"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
 	uuid "github.com/satori/go.uuid"
 )
 
 type transaction struct {
-	identityApp            Identity
-	identityPaymentService identity_payments.Service
-	identityPaymentBuilder identity_payments.Builder
-	//identityOutgoingService    outgoings.Service
-	//identityOutgoingBuilder    outgoings.Builder
-	//identityIncomingService    incomings.Service
-	//identityIncomingBuilder    incomings.Builder
+	identityApp                Identity
+	identityPaymentService     identity_payments.Service
+	identityPaymentBuilder     identity_payments.Builder
 	identityTransferService    identity_transfers.Service
 	identityTransferBuilder    identity_transfers.Builder
 	paymentBuilder             payments.Builder
@@ -41,10 +37,6 @@ func createTransaction(
 	identityApp Identity,
 	identityPaymentService identity_payments.Service,
 	identityPaymentBuilder identity_payments.Builder,
-	//identityOutgoingService outgoings.Service,
-	//identityOutgoingBuilder outgoings.Builder,
-	//identityIncomingService incomings.Service,
-	//identityIncomingBuilder incomings.Builder,
 	identityTransferService identity_transfers.Service,
 	identityTransferBuilder identity_transfers.Builder,
 	paymentBuilder payments.Builder,
@@ -60,13 +52,9 @@ func createTransaction(
 	amountPubKeysInRing uint,
 ) Transaction {
 	out := transaction{
-		identityApp:            identityApp,
-		identityPaymentService: identityPaymentService,
-		identityPaymentBuilder: identityPaymentBuilder,
-		//identityOutgoingService:    identityOutgoingService,
-		//identityOutgoingBuilder:    identityOutgoingBuilder,
-		//identityIncomingService:    identityIncomingService,
-		//identityIncomingBuilder:    identityIncomingBuilder,
+		identityApp:                identityApp,
+		identityPaymentService:     identityPaymentService,
+		identityPaymentBuilder:     identityPaymentBuilder,
 		identityTransferService:    identityTransferService,
 		identityTransferBuilder:    identityTransferBuilder,
 		paymentBuilder:             paymentBuilder,
