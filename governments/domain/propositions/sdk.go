@@ -9,6 +9,12 @@ import (
 	"github.com/deepvalue-network/software/libs/hash"
 )
 
+// NewContentBuilder creates a new content builder instance
+func NewContentBuilder() ContentBuilder {
+	hashAdapter := hash.NewAdapter()
+	return createContentBuilder(hashAdapter)
+}
+
 // NewSectionBuilder creates a new section builder instance
 func NewSectionBuilder() SectionBuilder {
 	return createSectionBuilder()
@@ -33,7 +39,7 @@ type Proposition interface {
 type ContentBuilder interface {
 	Create() ContentBuilder
 	WithGovernment(gov governments.Government) ContentBuilder
-	WithContent(content Content) ContentBuilder
+	WithSection(section Section) ContentBuilder
 	WithDeadline(deadline time.Time) ContentBuilder
 	ActiveOn(activeOn time.Time) ContentBuilder
 	CreatedOn(createdOn time.Time) ContentBuilder
@@ -44,7 +50,7 @@ type ContentBuilder interface {
 type Content interface {
 	Hash() hash.Hash
 	Government() governments.Government
-	Content() Content
+	Section() Section
 	ActiveOn() time.Time
 	Deadline() time.Time
 	CreatedOn() time.Time
