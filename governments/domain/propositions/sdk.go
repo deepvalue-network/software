@@ -3,12 +3,16 @@ package propositions
 import (
 	"time"
 
-	"github.com/deepvalue-network/software/blockchain/domain/chains"
 	"github.com/deepvalue-network/software/governments/domain/governments"
+	"github.com/deepvalue-network/software/governments/domain/governments/shareholders"
 	"github.com/deepvalue-network/software/libs/cryptography/pk/signature"
 	"github.com/deepvalue-network/software/libs/hash"
-	uuid "github.com/satori/go.uuid"
 )
+
+// NewSectionBuilder creates a new section builder instance
+func NewSectionBuilder() SectionBuilder {
+	return createSectionBuilder()
+}
 
 // Builder represents a proposition builder
 type Builder interface {
@@ -49,8 +53,8 @@ type Content interface {
 // SectionBuilder represents a section builder
 type SectionBuilder interface {
 	Create() SectionBuilder
-	WithGovernment(government Government) SectionBuilder
-	WithShareHolders(shareHolders []ShareHolder) SectionBuilder
+	WithGovernment(government governments.Content) SectionBuilder
+	WithShareHolders(shareHolders shareholders.ShareHolders) SectionBuilder
 	WithCustom(custom hash.Hash) SectionBuilder
 	Now() (Section, error)
 }
@@ -59,60 +63,11 @@ type SectionBuilder interface {
 type Section interface {
 	Hash() hash.Hash
 	IsGovernment() bool
-	Government() Government
+	Government() governments.Content
 	IsShareHolders() bool
-	ShareHolders() []ShareHolder
+	ShareHolders() shareholders.ShareHolders
 	IsCustom() bool
 	Custom() *hash.Hash
-}
-
-// GovernmentBuilder represents a government builder
-type GovernmentBuilder interface {
-	Create() GovernmentBuilder
-	WithID(id *uuid.UUID) GovernmentBuilder
-	WithChain(chain chains.Chain) GovernmentBuilder
-	WithMinPowerToPassResolution(minPowerToPassRes uint) GovernmentBuilder
-	WithMinPowerToPropose(minPowerToPropose uint) GovernmentBuilder
-	WithSharesVelocity(sharesVelocity uint) GovernmentBuilder
-	WithSharesCap(sharesCap uint) GovernmentBuilder
-	CanCancelVote() GovernmentBuilder
-	CreatedOn(createdOn time.Time) GovernmentBuilder
-	Now() (Government, error)
-}
-
-// Government represents a government
-type Government interface {
-	Hash() hash.Hash
-	ID() *uuid.UUID
-	HasChain() bool
-	Chain() chains.Chain
-	HasMinPowerToPassResolution() bool
-	MinPowerToPassResolution() *uint
-	HasMinPowerToPropose() bool
-	MinPowerToPropose() *uint
-	HasCanCancelVote() bool
-	CanCancelVote() *bool
-	HasSharesVelocity() bool
-	SharesVelocity() *uint
-	HasSharesCap() bool
-	SharesCap() *uint
-}
-
-// ShareHolderBuilder represents a shareholder builder
-type ShareHolderBuilder interface {
-	Create() ShareHolderBuilder
-	WithChain(chain chains.Chain) ShareHolderBuilder
-	WithKeys(keys []hash.Hash) ShareHolderBuilder
-	WithNewPower(newPower uint) ShareHolderBuilder
-	Now() (ShareHolder, error)
-}
-
-// ShareHolder represents a shareholder
-type ShareHolder interface {
-	Hash() hash.Hash
-	Chain() chains.Chain
-	Keys() []hash.Hash
-	NewPower() uint
 }
 
 // Repository represents a proposition repository
