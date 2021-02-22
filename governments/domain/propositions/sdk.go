@@ -50,7 +50,7 @@ type Content interface {
 type SectionBuilder interface {
 	Create() SectionBuilder
 	WithGovernment(government Government) SectionBuilder
-	WithShareHolders(shareHolders ShareHolders) SectionBuilder
+	WithShareHolders(shareHolders []ShareHolder) SectionBuilder
 	WithCustom(custom hash.Hash) SectionBuilder
 	Now() (Section, error)
 }
@@ -61,7 +61,7 @@ type Section interface {
 	IsGovernment() bool
 	Government() Government
 	IsShareHolders() bool
-	ShareHolders() ShareHolders
+	ShareHolders() []ShareHolder
 	IsCustom() bool
 	Custom() *hash.Hash
 }
@@ -96,19 +96,6 @@ type Government interface {
 	SharesVelocity() *uint
 	HasSharesCap() bool
 	SharesCap() *uint
-}
-
-// ShareHoldersBuilder represents a shareholders builder
-type ShareHoldersBuilder interface {
-	Create() ShareHoldersBuilder
-	WithShareHolders(shareHolders []ShareHolder) ShareHoldersBuilder
-	Now() (ShareHolders, error)
-}
-
-// ShareHolders represents shareholders
-type ShareHolders interface {
-	Hash() hash.Hash
-	All() []ShareHolder
 }
 
 // ShareHolderBuilder represents a shareholder builder
