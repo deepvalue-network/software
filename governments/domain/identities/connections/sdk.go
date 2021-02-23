@@ -8,6 +8,13 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// NewConnectionBuilder creates a new connection builder
+func NewConnectionBuilder(encBitrate int) ConnectionBuilder {
+	sigPKFactory := signature.NewPrivateKeyFactory()
+	encPKFactory := encryption.NewFactory(encBitrate)
+	return createConnectionBuilder(sigPKFactory, encPKFactory)
+}
+
 // NewProfileBuilder creates a new profile builder
 func NewProfileBuilder() ProfileBuilder {
 	return createProfileBuilder()
