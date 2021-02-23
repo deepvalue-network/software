@@ -1,5 +1,13 @@
 package servers
 
+// Builder represents a server builder
+type Builder interface {
+	Create() Builder
+	WithHost(host string) Builder
+	WithPort(port uint) Builder
+	Now() (Server, error)
+}
+
 // Server represents a server
 type Server interface {
 	Content() Content

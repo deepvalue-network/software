@@ -64,6 +64,15 @@ type Swap interface {
 	Close(tradeHash hash.Hash) error
 }
 
+// Connection represents a connection application
+type Connection interface {
+	Request(host string, port uint) error
+	Accept(requestHash hash.Hash) error
+	Deny(requestHash hash.Hash) error
+	Block(connID *uuid.UUID) error
+	UpdateProfile(connID *uuid.UUID, profile UpdateProfile) error
+}
+
 // UpdateIdentityBuilder represents an update identity builder
 type UpdateIdentityBuilder interface {
 	Create() UpdateIdentityBuilder
@@ -81,4 +90,20 @@ type UpdateIdentity interface {
 	Seed() string
 	HasPassword() bool
 	Password() string
+}
+
+// UpdateProfileBuilder represents an update profile builder
+type UpdateProfileBuilder interface {
+	Create() UpdateProfileBuilder
+	WithName(name string) UpdateProfileBuilder
+	WithRank(rank uint) UpdateProfileBuilder
+	Now() (UpdateProfile, error)
+}
+
+// UpdateProfile represents an update profile
+type UpdateProfile interface {
+	HasName() bool
+	Name() string
+	HasRank() bool
+	Rank() uint
 }
