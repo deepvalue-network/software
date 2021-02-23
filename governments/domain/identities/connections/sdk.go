@@ -12,6 +12,7 @@ import (
 type Builder interface {
 	Create() Builder
 	WithID(id *uuid.UUID) Builder
+	WithProfile(profile Profile) Builder
 	WithConnection(conn connections.Connection) Builder
 	WithServer(server servers.Server) Builder
 	WithSignaturePK(sigPK signature.PrivateKey) Builder
@@ -22,6 +23,7 @@ type Builder interface {
 // Connection represents a connection
 type Connection interface {
 	ID() *uuid.UUID
+	Profile() Profile
 	Connection() connections.Connection
 	Server() servers.Server
 	SigPK() signature.PrivateKey
@@ -39,5 +41,6 @@ type ProfileBuilder interface {
 // Profile represents a connection profile
 type Profile interface {
 	Name() string
+	HasRank() bool
 	Rank() uint
 }

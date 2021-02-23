@@ -27,6 +27,7 @@ type Builder interface {
 
 // Application represents an authenticated shareholder application
 type Application interface {
+	Connection() Connection
 	Identity() Identity
 	Proposition() Proposition
 	Transaction() Transaction
@@ -67,7 +68,7 @@ type Swap interface {
 // Connection represents a connection application
 type Connection interface {
 	Request(host string, port uint) error
-	Accept(requestHash hash.Hash) error
+	Accept(requestHash hash.Hash, name string) error
 	Deny(requestHash hash.Hash) error
 	Block(connID *uuid.UUID) error
 	UpdateProfile(connID *uuid.UUID, profile UpdateProfile) error
