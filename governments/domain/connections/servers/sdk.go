@@ -1,22 +1,30 @@
 package servers
 
+const onionTLD = "onion"
+
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	return createBuilder()
+}
+
 // Builder represents a server builder
 type Builder interface {
 	Create() Builder
-	WithHost(host string) Builder
-	WithPort(port uint) Builder
+	WithURL(str string) Builder
 	Now() (Server, error)
 }
 
 // Server represents a server
 type Server interface {
-	Content() Content
+	Protocol() string
+	Host() Host
 	Port() uint
 	String() string
 }
 
-// Content represents a server content
-type Content interface {
+// Host represents a server host
+type Host interface {
+	String() string
 	IsClear() bool
 	Clear() string
 	IsOnion() bool
