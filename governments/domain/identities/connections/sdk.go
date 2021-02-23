@@ -8,6 +8,11 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// NewProfileBuilder creates a new profile builder
+func NewProfileBuilder() ProfileBuilder {
+	return createProfileBuilder()
+}
+
 // Builder represents a connections builder
 type Builder interface {
 	Create() Builder
