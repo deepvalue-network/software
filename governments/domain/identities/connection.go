@@ -1,4 +1,4 @@
-package connections
+package identities
 
 import (
 	"github.com/deepvalue-network/software/governments/domain/connections"

@@ -3,16 +3,22 @@ package identities
 import "errors"
 
 type builder struct {
-	name    string
-	seed    string
-	holders ShareHolders
+	connectionsBuilder ConnectionsBuilder
+	name               string
+	seed               string
+	holders            ShareHolders
+	conns              Connections
 }
 
-func createBuilder() Builder {
+func createBuilder(
+	connectionsBuilder ConnectionsBuilder,
+) Builder {
 	out := builder{
-		name:    "",
-		seed:    "",
-		holders: nil,
+		connectionsBuilder: connectionsBuilder,
+		name:               "",
+		seed:               "",
+		holders:            nil,
+		conns:              nil,
 	}
 
 	return &out
@@ -20,7 +26,7 @@ func createBuilder() Builder {
 
 // Create initializes the builder
 func (app *builder) Create() Builder {
-	return createBuilder()
+	return createBuilder(app.connectionsBuilder)
 }
 
 // WithName adds a name to the builder
@@ -35,9 +41,15 @@ func (app *builder) WithSeed(seed string) Builder {
 	return app
 }
 
-// WithShareHolders adds a shareHolders to the builder
+// WithShareHolders adds shareHolders to the builder
 func (app *builder) WithShareHolders(shareHolders ShareHolders) Builder {
 	app.holders = shareHolders
+	return app
+}
+
+// WithConnections adds connections to the builder
+func (app *builder) WithConnections(connections Connections) Builder {
+	app.conns = connections
 	return app
 }
 
@@ -55,5 +67,14 @@ func (app *builder) Now() (Identity, error) {
 		return nil, errors.New("the shareHolders are mandatory in order to build an Identity instance")
 	}
 
-	return createIdentity(app.name, app.seed, app.holders), nil
+	if app.conns == nil {
+		conns, err := app.connectionsBuilder.Create().Now()
+		if err != nil {
+			return nil, err
+		}
+
+		app.conns = conns
+	}
+
+	return createIdentity(app.name, app.seed, app.holders, app.conns), nil
 }

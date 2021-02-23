@@ -4,17 +4,20 @@ type identity struct {
 	name    string
 	seed    string
 	holders ShareHolders
+	conns   Connections
 }
 
 func createIdentity(
 	name string,
 	seed string,
 	holders ShareHolders,
+	conns Connections,
 ) Identity {
 	out := identity{
 		name:    name,
 		seed:    seed,
 		holders: holders,
+		conns:   conns,
 	}
 
 	return &out
@@ -33,4 +36,9 @@ func (obj *identity) Seed() string {
 // ShareHolders returns the shareHolders
 func (obj *identity) ShareHolders() ShareHolders {
 	return obj.holders
+}
+
+// Connections returns the connections
+func (obj *identity) Connections() Connections {
+	return obj.conns
 }

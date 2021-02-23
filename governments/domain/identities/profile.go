@@ -1,4 +1,4 @@
-package connections
+package identities
 
 type profile struct {
 	name string
