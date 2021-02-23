@@ -8,15 +8,27 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// Builder represenst a connection builder
+// Builder represents a connections builder
 type Builder interface {
 	Create() Builder
-	WithID(id *uuid.UUID) Builder
-	WithProfile(profile Profile) Builder
-	WithConnection(conn connections.Connection) Builder
-	WithServer(server servers.Server) Builder
-	WithSignaturePK(sigPK signature.PrivateKey) Builder
-	WithEncryptionPK(encPK encryption.PrivateKey) Builder
+	WithConnections(connections []Connection) Builder
+	Now() (Connections, error)
+}
+
+// Connections represents connections
+type Connections interface {
+	All() []Connection
+}
+
+// ConnectionBuilder represenst a connection builder
+type ConnectionBuilder interface {
+	Create() ConnectionBuilder
+	WithID(id *uuid.UUID) ConnectionBuilder
+	WithProfile(profile Profile) ConnectionBuilder
+	WithConnection(conn connections.Connection) ConnectionBuilder
+	WithServer(server servers.Server) ConnectionBuilder
+	WithSignaturePK(sigPK signature.PrivateKey) ConnectionBuilder
+	WithEncryptionPK(encPK encryption.PrivateKey) ConnectionBuilder
 	Now() (Connection, error)
 }
 

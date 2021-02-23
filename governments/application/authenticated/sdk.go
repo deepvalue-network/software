@@ -3,6 +3,7 @@ package authenticated
 import (
 	"time"
 
+	"github.com/deepvalue-network/software/governments/domain/connections/servers"
 	"github.com/deepvalue-network/software/governments/domain/governments/shareholders/transfers/views"
 	"github.com/deepvalue-network/software/governments/domain/identities"
 	"github.com/deepvalue-network/software/governments/domain/propositions"
@@ -71,7 +72,7 @@ type Connection interface {
 	Accept(requestHash hash.Hash, name string) error
 	Deny(requestHash hash.Hash) error
 	Block(connID *uuid.UUID) error
-	UpdateProfile(connID *uuid.UUID, profile UpdateProfile) error
+	Update(connID *uuid.UUID, updateConnection UpdateConnection) error
 }
 
 // UpdateIdentityBuilder represents an update identity builder
@@ -93,16 +94,19 @@ type UpdateIdentity interface {
 	Password() string
 }
 
-// UpdateProfileBuilder represents an update profile builder
-type UpdateProfileBuilder interface {
-	Create() UpdateProfileBuilder
-	WithName(name string) UpdateProfileBuilder
-	WithRank(rank uint) UpdateProfileBuilder
-	Now() (UpdateProfile, error)
+// UpdateConnectionBuilder represents an update connection builder
+type UpdateConnectionBuilder interface {
+	Create() UpdateConnectionBuilder
+	WithServer(server servers.Server) UpdateConnectionBuilder
+	WithName(name string) UpdateConnectionBuilder
+	WithRank(rank uint) UpdateConnectionBuilder
+	Now() (UpdateConnection, error)
 }
 
-// UpdateProfile represents an update profile
-type UpdateProfile interface {
+// UpdateConnection represents an update connection
+type UpdateConnection interface {
+	HasServer() bool
+	Server() servers.Server
 	HasName() bool
 	Name() string
 	HasRank() bool
