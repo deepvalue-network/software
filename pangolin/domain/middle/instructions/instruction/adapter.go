@@ -1,7 +1,9 @@
 package instruction
 
 import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
@@ -31,6 +33,8 @@ type adapter struct {
 	tokenCodeBuilder      token.CodeBuilder
 	tokenCodeMatchBuilder token.CodeMatchBuilder
 	tokenBuilder          token.Builder
+	callBuilder           call.Builder
+	exitBuilder           exit.Builder
 	builder               Builder
 }
 
@@ -50,6 +54,8 @@ func createAdapter(
 	tokenCodeBuilder token.CodeBuilder,
 	tokenCodeMatchBuilder token.CodeMatchBuilder,
 	tokenBuilder token.Builder,
+	callBuilder call.Builder,
+	exitBuilder exit.Builder,
 	builder Builder,
 ) Adapter {
 	out := adapter{
@@ -68,6 +74,8 @@ func createAdapter(
 		tokenCodeBuilder:      tokenCodeBuilder,
 		tokenCodeMatchBuilder: tokenCodeMatchBuilder,
 		tokenBuilder:          tokenBuilder,
+		callBuilder:           callBuilder,
+		exitBuilder:           exitBuilder,
 		builder:               builder,
 	}
 
@@ -353,6 +361,47 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 		}
 
 		builder.WithToken(tok)
+	}
+
+	if parsed.IsExit() {
+		parsedExit := parsed.Exit()
+		exit, err := app.exit(parsedExit)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithExit(exit)
+	}
+
+	if parsed.IsCall() {
+		parsedCall := parsed.Call()
+		call, err := app.call(parsedCall)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithCall(call)
+	}
+
+	return builder.Now()
+}
+
+func (app *adapter) call(parsed parsers.Call) (call.Call, error) {
+	name := parsed.Name()
+	builder := app.callBuilder.Create().WithName(name)
+	if parsed.HasCondition() {
+		condition := parsed.Condition().String()
+		builder.WithCondition(condition)
+	}
+
+	return builder.Now()
+}
+
+func (app *adapter) exit(parsed parsers.Exit) (exit.Exit, error) {
+	builder := app.exitBuilder.Create()
+	if parsed.HasCondition() {
+		condition := parsed.Condition().String()
+		builder.WithCondition(condition)
 	}
 
 	return builder.Now()

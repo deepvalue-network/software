@@ -1,7 +1,9 @@
 package instruction
 
 import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
@@ -26,54 +28,64 @@ type instruction struct {
 	del          string
 	match        match.Match
 	token        token.Token
+	call         call.Call
+	exit         exit.Exit
 }
 
 func createInstructionWithStackframe(stackframe stackframe.Stackframe) Instruction {
-	return createInstructionInternally(stackframe, nil, nil, nil, nil, nil, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(stackframe, nil, nil, nil, nil, nil, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithTransform(transform transform.Transform) Instruction {
-	return createInstructionInternally(nil, transform, nil, nil, nil, nil, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, transform, nil, nil, nil, nil, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithVariableName(variableName variablename.VariableName) Instruction {
-	return createInstructionInternally(nil, nil, variableName, nil, nil, nil, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, variableName, nil, nil, nil, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithCondition(condition condition.Condition) Instruction {
-	return createInstructionInternally(nil, nil, nil, condition, nil, nil, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, condition, nil, nil, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithStandard(standard standard.Standard) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, standard, nil, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, standard, nil, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithRemaining(remaining remaining.Remaining) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, remaining, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, remaining, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithValue(value value.Value) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, value, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, value, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithInsert(insert variable.Variable) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, insert, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, insert, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithSave(save variable.Variable) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, save, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, save, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithDelete(del string) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, del, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, del, nil, nil, nil, nil)
 }
 
 func createInstructionWithMatch(match match.Match) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, "", match, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, "", match, nil, nil, nil)
 }
 
 func createInstructionWithToken(token token.Token) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, "", nil, token)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, "", nil, token, nil, nil)
+}
+
+func createInstructionWithCall(call call.Call) Instruction {
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, "", nil, nil, call, nil)
+}
+
+func createInstructionWithExit(exit exit.Exit) Instruction {
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, "", nil, nil, nil, exit)
 }
 
 func createInstructionInternally(
@@ -89,6 +101,8 @@ func createInstructionInternally(
 	del string,
 	match match.Match,
 	token token.Token,
+	call call.Call,
+	exit exit.Exit,
 ) Instruction {
 	out := instruction{
 		stackframe:   stackframe,
@@ -103,6 +117,8 @@ func createInstructionInternally(
 		del:          del,
 		match:        match,
 		token:        token,
+		call:         call,
+		exit:         exit,
 	}
 
 	return &out
@@ -226,4 +242,24 @@ func (obj *instruction) IsToken() bool {
 // Token returns the token, if any
 func (obj *instruction) Token() token.Token {
 	return obj.token
+}
+
+// IsCall returns true if there is a call, false otherwise
+func (obj *instruction) IsCall() bool {
+	return obj.call != nil
+}
+
+// Call returns the call, if any
+func (obj *instruction) Call() call.Call {
+	return obj.call
+}
+
+// IsExit returns true if there is an exit, false otherwise
+func (obj *instruction) IsExit() bool {
+	return obj.exit != nil
+}
+
+// Exit returns the exit, if any
+func (obj *instruction) Exit() exit.Exit {
+	return obj.exit
 }

@@ -3,37 +3,30 @@ package instruction
 import ins "github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
 
 type instruction struct {
-	isStart  bool
-	isStop   bool
+	isAssert bool
 	readFile ReadFile
 	ins      ins.Instruction
 }
 
-func createInstructionWithStart() Instruction {
-	return createInstructionInternally(true, false, nil, nil)
-}
-
-func createInstructionWithStop() Instruction {
-	return createInstructionInternally(false, true, nil, nil)
+func createInstructionWithAssert() Instruction {
+	return createInstructionInternally(true, nil, nil)
 }
 
 func createInstructionWithReadFile(readFile ReadFile) Instruction {
-	return createInstructionInternally(false, false, readFile, nil)
+	return createInstructionInternally(false, readFile, nil)
 }
 
 func createInstructionWithInstruction(ins ins.Instruction) Instruction {
-	return createInstructionInternally(false, false, nil, ins)
+	return createInstructionInternally(false, nil, ins)
 }
 
 func createInstructionInternally(
-	isStart bool,
-	isStop bool,
+	isAssert bool,
 	readFile ReadFile,
 	inst ins.Instruction,
 ) Instruction {
 	out := instruction{
-		isStart:  isStart,
-		isStop:   isStop,
+		isAssert: isAssert,
 		readFile: readFile,
 		ins:      inst,
 	}
@@ -41,14 +34,9 @@ func createInstructionInternally(
 	return &out
 }
 
-// IsStart returns true if the instruction is start
-func (obj *instruction) IsStart() bool {
-	return obj.isStart
-}
-
-// IsStop returns true if the instruction is stop
-func (obj *instruction) IsStop() bool {
-	return obj.isStop
+// IsAssert returns true if there is an assert, false otherwise
+func (obj *instruction) IsAssert() bool {
+	return obj.isAssert
 }
 
 // IsReadFile returns true if there is a readFile, false otherwise

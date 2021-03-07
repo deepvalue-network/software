@@ -61,14 +61,14 @@ func (app *language) Tests(names []string) error {
 		fmt.Printf("Test: %s\n", name)
 		testInstructions := oneTest.Instructions().All()
 		for _, oneTestInstruction := range testInstructions {
-			if oneTestInstruction.IsStart() {
-				fmt.Println("Begins.")
-				continue
+			// if the machine is stopped, stop:
+			if machine.StackFrame().Current().IsStopped() {
+				break
 			}
 
-			if oneTestInstruction.IsStop() {
-				fmt.Println("Ends.")
-				continue
+			if oneTestInstruction.IsAssert() {
+				fmt.Printf("-> Assert !!\n")
+				break
 			}
 
 			if oneTestInstruction.IsInstruction() {
@@ -77,6 +77,8 @@ func (app *language) Tests(names []string) error {
 				if err != nil {
 					return err
 				}
+
+				continue
 			}
 
 			if oneTestInstruction.IsReadFile() {
@@ -105,6 +107,8 @@ func (app *language) Tests(names []string) error {
 				if err != nil {
 					return err
 				}
+
+				continue
 			}
 		}
 

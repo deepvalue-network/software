@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )
@@ -580,7 +581,7 @@ func (app *computer) IsEqual(first computable.Value, second computable.Value) (c
 	if first.IsString() {
 		firstVal := first.String()
 		secondVal := second.String()
-		val := *firstVal == *secondVal
+		val := strings.TrimSpace(*firstVal) == strings.TrimSpace(*secondVal)
 		return app.builder.Create().WithBool(val).Now()
 	}
 
@@ -678,7 +679,7 @@ func (app *computer) IsNotEqual(first computable.Value, second computable.Value)
 	if first.IsString() {
 		firstVal := first.String()
 		secondVal := second.String()
-		val := *firstVal != *secondVal
+		val := strings.TrimSpace(*firstVal) != strings.TrimSpace(*secondVal)
 		return app.builder.Create().WithBool(val).Now()
 	}
 

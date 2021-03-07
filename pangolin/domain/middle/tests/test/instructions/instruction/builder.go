@@ -7,16 +7,14 @@ import (
 )
 
 type builder struct {
-	isStart  bool
-	isStop   bool
+	isAssert bool
 	readFile ReadFile
 	ins      ins.Instruction
 }
 
 func createBuilder() Builder {
 	out := builder{
-		isStart:  false,
-		isStop:   false,
+		isAssert: false,
 		readFile: nil,
 		ins:      nil,
 	}
@@ -29,15 +27,9 @@ func (app *builder) Create() Builder {
 	return createBuilder()
 }
 
-// IsStart sets the builder as start
-func (app *builder) IsStart() Builder {
-	app.isStart = true
-	return app
-}
-
-// IsStop sets the builder as stop
-func (app *builder) IsStop() Builder {
-	app.isStop = true
+// IsAssert sets the builder as assert
+func (app *builder) IsAssert() Builder {
+	app.isAssert = true
 	return app
 }
 
@@ -55,12 +47,8 @@ func (app *builder) WithReadFile(readFile ReadFile) Builder {
 
 // Now builds a new Instruction instance
 func (app *builder) Now() (Instruction, error) {
-	if app.isStart {
-		return createInstructionWithStart(), nil
-	}
-
-	if app.isStop {
-		return createInstructionWithStop(), nil
+	if app.isAssert {
+		return createInstructionWithAssert(), nil
 	}
 
 	if app.readFile != nil {

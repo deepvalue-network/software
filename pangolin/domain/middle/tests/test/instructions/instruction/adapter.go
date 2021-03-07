@@ -28,14 +28,6 @@ func createAdapter(
 // ToInstruction converts a testInstruction to an Instruction instance
 func (app *adapter) ToInstruction(testInstruction parsers.TestInstruction) (Instruction, error) {
 	builder := app.builder.Create()
-	if testInstruction.IsStart() {
-		builder.IsStart()
-	}
-
-	if testInstruction.IsStop() {
-		builder.IsStop()
-	}
-
 	if testInstruction.IsInstruction() {
 		parsedIns := testInstruction.Instruction()
 		ins, err := app.instructionAdapter.ToInstruction(parsedIns)
@@ -56,6 +48,10 @@ func (app *adapter) ToInstruction(testInstruction parsers.TestInstruction) (Inst
 		}
 
 		builder.WithReadFile(ins)
+	}
+
+	if testInstruction.IsAssert() {
+		builder.IsAssert()
 	}
 
 	return builder.Now()

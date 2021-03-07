@@ -187,6 +187,10 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			return err
 		}
 
+		if input == nil {
+			return nil
+		}
+
 		lexerAdapterBuilder := app.lexerAdapterBuilder
 		if match.HasPattern() {
 			root := match.Pattern()
@@ -257,18 +261,45 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			return err
 		}
 
-		program, err := app.lexerParserApplication.Execute(lexerParser)
+		_, err = app.lexerParserApplication.Execute(lexerParser)
 		if err != nil {
 			return err
 		}
 
-		if match.HasPattern() {
-			patternName := match.Pattern()
-			fmt.Printf("\n++pattern: %s\n", patternName)
+		return nil
+	}
+
+	if ins.IsCall() {
+		panic(errors.New("finish call in machine (interpreter)"))
+	}
+
+	if ins.IsExit() {
+		exit := ins.Exit()
+		if exit.HasCondition() {
+			condition := exit.Condition()
+			val, err := app.StackFrame().Current().Fetch(condition)
+			if err != nil {
+				return err
+			}
+
+			if val == nil {
+				return nil
+			}
+
+			if !val.IsBool() {
+				str := fmt.Sprintf("the condition inside the exit instruction was expected to be a boolean")
+				return errors.New(str)
+			}
+
+			bl := val.Bool()
+			if *bl {
+				app.StackFrame().Current().Stop()
+			}
+
+			return nil
 		}
 
-		fmt.Printf("\ninput: %s\n", input.StringRepresentation())
-		fmt.Printf("\nout: %v\n", program)
+		app.StackFrame().Current().Stop()
 		return nil
 	}
 
@@ -284,6 +315,10 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			token, err := app.StackFrame().Current().Fetch(tokenName)
 			if err != nil {
 				return err
+			}
+
+			if token == nil {
+				return nil
 			}
 
 			if !token.IsToken() {
@@ -325,6 +360,10 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			token, err := app.StackFrame().Current().Fetch(tokenName)
 			if err != nil {
 				return err
+			}
+
+			if token == nil {
+				return nil
 			}
 
 			if !token.IsToken() {
@@ -464,6 +503,10 @@ func (app *machine) proposition(prop condition.Proposition) error {
 			return err
 		}
 
+		if com == nil {
+			return nil
+		}
+
 		if !com.IsBool() {
 			return errors.New("the condition expected a boolean value")
 		}
@@ -502,6 +545,10 @@ func (app *machine) print(val var_value.Value) error {
 			return err
 		}
 
+		if com == nil {
+			return nil
+		}
+
 		str := com.StringRepresentation()
 		fmt.Println(str)
 		return nil
@@ -511,6 +558,10 @@ func (app *machine) print(val var_value.Value) error {
 	com, err := app.stkFrame.Current().Fetch(name)
 	if err != nil {
 		return err
+	}
+
+	if com == nil {
+		return nil
 	}
 
 	str := com.StringRepresentation()

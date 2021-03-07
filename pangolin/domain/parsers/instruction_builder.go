@@ -1,6 +1,8 @@
 package parsers
 
-import "errors"
+import (
+	"errors"
+)
 
 type instructionBuilder struct {
 	variable   Variable

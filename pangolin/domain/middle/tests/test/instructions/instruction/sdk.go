@@ -32,8 +32,7 @@ type Adapter interface {
 // Builder represents an instruction builder
 type Builder interface {
 	Create() Builder
-	IsStart() Builder
-	IsStop() Builder
+	IsAssert() Builder
 	WithReadFile(readFile ReadFile) Builder
 	WithInstruction(ins ins.Instruction) Builder
 	Now() (Instruction, error)
@@ -41,8 +40,7 @@ type Builder interface {
 
 // Instruction represents a test instruction
 type Instruction interface {
-	IsStart() bool
-	IsStop() bool
+	IsAssert() bool
 	IsReadFile() bool
 	ReadFile() ReadFile
 	IsInstruction() bool
@@ -61,4 +59,18 @@ type ReadFileBuilder interface {
 type ReadFile interface {
 	Variable() string
 	Path() string
+}
+
+// AssertBuilder represents an assert builder
+type AssertBuilder interface {
+	Create() AssertBuilder
+	WithName(name string) AssertBuilder
+	WithIdentifier(identifier string) AssertBuilder
+	Now() (Assert, error)
+}
+
+// Assert represents an assert
+type Assert interface {
+	Name() string
+	Identifier() string
 }

@@ -20,11 +20,11 @@ main:
 tests:
     firstTest:
         match: myInput, $myPattern.
-        stop.
+        assert.
     .
 
     secondTest:
         match: myInput, $myPattern.
-        stop.
+        assert.
     .
 .

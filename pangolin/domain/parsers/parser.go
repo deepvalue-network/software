@@ -1142,8 +1142,7 @@ func (app *parser) exitTestInstruction(tree lexers.NodeTree) (interface{}, error
 	section, code := tree.BestMatchFromNames([]string{
 		"instruction",
 		"readFile",
-		"START",
-		"STOP",
+		"ASSERT",
 	})
 
 	switch section {
@@ -1157,11 +1156,8 @@ func (app *parser) exitTestInstruction(tree lexers.NodeTree) (interface{}, error
 			builder.WithReadFile(readFile)
 		}
 		break
-	case "START":
-		builder.IsStart()
-		break
-	case "STOP":
-		builder.IsStop()
+	case "ASSERT":
+		builder.IsAssert()
 		break
 	}
 

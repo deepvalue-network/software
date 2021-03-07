@@ -135,6 +135,8 @@ type Frame interface {
 	UpdateValue(name string, val computable.Value) error
 	Delete(name string) error
 	Fetch(name string) (computable.Value, error)
+	Stop()
+	IsStopped() bool
 }
 
 // Computer represents a computer

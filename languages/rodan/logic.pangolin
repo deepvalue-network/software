@@ -23,16 +23,25 @@ labels:
         code: StringValue, CurrentToken, @EVERYTHING_EXCEPT_QUOTATION.
     .
 .
+
 main:
     assign: Output, "output code".
     match: Input.
 .
+
 tests:
-    firstTest:
+    stringValue:
         decl: myInput|string.
-        read: myInput, "./test_files/stringValue.rod".
+        read: myInput, "./test_files/stringValue/input.pangolin".
         match: myInput, $stringValue.
-        print: myInput.
-        stop.
+
+        decl: expectedOutput|string.
+        read: expectedOutput, "./test_files/stringValue/output.expected.pangolin".
+
+        decl: isEqual|bool.
+        equal: isEqual, StringValue, expectedOutput.
+        exit_if: isEqual.
+
+        assert.
     .
 .

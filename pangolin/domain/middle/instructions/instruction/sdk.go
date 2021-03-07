@@ -1,7 +1,9 @@
 package instruction
 
 import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
@@ -32,6 +34,8 @@ func NewAdapter() Adapter {
 	tokenCodeBuilder := token.NewCodeBuilder()
 	tokenCodeMatchBuilder := token.NewCodeMatchBuilder()
 	tokenBuilder := token.NewBuilder()
+	callBuilder := call.NewBuilder()
+	exitBuilder := exit.NewBuilder()
 	builder := NewBuilder()
 	return createAdapter(
 		stackframeBuilder,
@@ -49,6 +53,8 @@ func NewAdapter() Adapter {
 		tokenCodeBuilder,
 		tokenCodeMatchBuilder,
 		tokenBuilder,
+		callBuilder,
+		exitBuilder,
 		builder,
 	)
 }
@@ -78,6 +84,8 @@ type Builder interface {
 	WithDelete(del string) Builder
 	WithMatch(match match.Match) Builder
 	WithToken(token token.Token) Builder
+	WithCall(call call.Call) Builder
+	WithExit(exit exit.Exit) Builder
 	Now() (Instruction, error)
 }
 
@@ -107,4 +115,8 @@ type Instruction interface {
 	Match() match.Match
 	IsToken() bool
 	Token() token.Token
+	IsCall() bool
+	Call() call.Call
+	IsExit() bool
+	Exit() exit.Exit
 }

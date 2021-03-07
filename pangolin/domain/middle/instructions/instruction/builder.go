@@ -3,7 +3,9 @@ package instruction
 import (
 	"errors"
 
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
@@ -28,6 +30,8 @@ type builder struct {
 	del          string
 	match        match.Match
 	token        token.Token
+	call         call.Call
+	exit         exit.Exit
 }
 
 func createBuilder() Builder {
@@ -44,6 +48,8 @@ func createBuilder() Builder {
 		del:          "",
 		match:        nil,
 		token:        nil,
+		call:         nil,
+		exit:         nil,
 	}
 
 	return &out
@@ -126,6 +132,18 @@ func (app *builder) WithToken(token token.Token) Builder {
 	return app
 }
 
+// WithCall adds a call to the builder
+func (app *builder) WithCall(call call.Call) Builder {
+	app.call = call
+	return app
+}
+
+// WithExit adds an exit to the builder
+func (app *builder) WithExit(exit exit.Exit) Builder {
+	app.exit = exit
+	return app
+}
+
 // Now builds a new Instruction instance
 func (app *builder) Now() (Instruction, error) {
 	if app.stackframe != nil {
@@ -174,6 +192,14 @@ func (app *builder) Now() (Instruction, error) {
 
 	if app.token != nil {
 		return createInstructionWithToken(app.token), nil
+	}
+
+	if app.call != nil {
+		return createInstructionWithCall(app.call), nil
+	}
+
+	if app.exit != nil {
+		return createInstructionWithExit(app.exit), nil
 	}
 
 	return nil, errors.New("the Instruction is invalid")

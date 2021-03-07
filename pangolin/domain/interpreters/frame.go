@@ -16,6 +16,7 @@ type frame struct {
 	builder   computable.Builder
 	variables map[string]computable.Value
 	constants map[string]computable.Value
+	isStopped bool
 }
 
 func createFrame(
@@ -29,6 +30,7 @@ func createFrame(
 		builder:   builder,
 		variables: variables,
 		constants: constants,
+		isStopped: false,
 	}
 
 	return &out
@@ -36,6 +38,10 @@ func createFrame(
 
 // Standard executes a standard operation on the frame
 func (app *frame) Standard(first string, second string, result string, operation standard.Operation) error {
+	if app.isStopped {
+		return nil
+	}
+
 	if _, ok := app.variables[first]; !ok {
 		str := fmt.Sprintf("standard: the first variable (%s) is not defined", first)
 		return errors.New(str)
@@ -153,6 +159,10 @@ func (app *frame) Standard(first string, second string, result string, operation
 
 // Remaining executes a remaining operation on the frame
 func (app *frame) Remaining(first string, second string, result string, remaining string, operation remaining.Operation) error {
+	if app.isStopped {
+		return nil
+	}
+
 	if _, ok := app.variables[first]; !ok {
 		str := fmt.Sprintf("remaining: the first variable (%s) is not defined", first)
 		return errors.New(str)
@@ -191,6 +201,10 @@ func (app *frame) Remaining(first string, second string, result string, remainin
 
 // Transform executes a transform operation on the frame
 func (app *frame) Transform(input string, result string, operation transform.Operation) error {
+	if app.isStopped {
+		return nil
+	}
+
 	if _, ok := app.variables[input]; !ok {
 		str := fmt.Sprintf("transform: the input variable (%s) is not defined", input)
 		return errors.New(str)
@@ -213,11 +227,19 @@ func (app *frame) Transform(input string, result string, operation transform.Ope
 
 // PushTo pushes a frame to a variable's stack
 func (app *frame) PushTo(name string, frame Frame) error {
+	if app.isStopped {
+		return nil
+	}
+
 	return nil
 }
 
 // Insert inserts a new variable on the frame
 func (app *frame) Insert(vr var_variable.Variable) error {
+	if app.isStopped {
+		return nil
+	}
+
 	name := vr.Name()
 	if _, ok := app.variables[name]; ok {
 		str := fmt.Sprintf("variable: the name variable (%s) is already defined", name)
@@ -229,6 +251,10 @@ func (app *frame) Insert(vr var_variable.Variable) error {
 
 // Update updates an existing variable on the frame
 func (app *frame) Update(vr var_variable.Variable) error {
+	if app.isStopped {
+		return nil
+	}
+
 	name := vr.Name()
 	if _, ok := app.variables[name]; !ok {
 		str := fmt.Sprintf("variable: the name variable (%s) is not defined", name)
@@ -256,6 +282,10 @@ func (app *frame) save(vr var_variable.Variable) error {
 
 // UpdateValue updates a value by name
 func (app *frame) UpdateValue(name string, val computable.Value) error {
+	if app.isStopped {
+		return nil
+	}
+
 	if _, ok := app.variables[name]; !ok {
 		str := fmt.Sprintf("variable: the name variable (%s) is not defined", name)
 		return errors.New(str)
@@ -267,6 +297,10 @@ func (app *frame) UpdateValue(name string, val computable.Value) error {
 
 // Delete deletes a variable from the frame
 func (app *frame) Delete(name string) error {
+	if app.isStopped {
+		return nil
+	}
+
 	if _, ok := app.variables[name]; !ok {
 		str := fmt.Sprintf("variable: the name variable (%s) is not defined", name)
 		return errors.New(str)
@@ -278,10 +312,24 @@ func (app *frame) Delete(name string) error {
 
 // Fetch fetches a variable by name
 func (app *frame) Fetch(name string) (computable.Value, error) {
+	if app.isStopped {
+		return nil, nil
+	}
+
 	if val, ok := app.variables[name]; ok {
 		return val, nil
 	}
 
 	str := fmt.Sprintf("the variable (name: %s) is not defined", name)
 	return nil, errors.New(str)
+}
+
+// Stop stops the frame execution
+func (app *frame) Stop() {
+	app.isStopped = true
+}
+
+// IsStopped returns true if the frame is stopped
+func (app *frame) IsStopped() bool {
+	return app.isStopped
 }

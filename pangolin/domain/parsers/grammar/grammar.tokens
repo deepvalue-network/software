@@ -83,6 +83,7 @@ testDeclaration
 testInstruction
     : instruction
     | readFile DOT
+    | ASSERT DOT
     | START DOT
     | STOP DOT
     ;

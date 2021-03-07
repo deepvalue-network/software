@@ -40,11 +40,11 @@ func Test_testInstruction_withReadFile_Success(t *testing.T) {
 	}
 }
 
-func Test_testInstruction_withStart_Success(t *testing.T) {
+func Test_testInstruction_withAssert_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("testInstruction", grammarFile)
 
-	file := "./tests/codes/testinstruction/start.rod"
+	file := "./tests/codes/testinstruction/assert.rod"
 	ins, err := pars.ExecuteFile(file)
 	if err != nil {
 		t.Errorf(err.Error())
@@ -52,26 +52,8 @@ func Test_testInstruction_withStart_Success(t *testing.T) {
 	}
 
 	testIns := ins.(TestInstruction)
-	if !testIns.IsStart() {
-		t.Errorf("the testInstruction was expected to contain a Start instruction")
-		return
-	}
-}
-
-func Test_testInstruction_withStop_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("testInstruction", grammarFile)
-
-	file := "./tests/codes/testinstruction/stop.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	testIns := ins.(TestInstruction)
-	if !testIns.IsStop() {
-		t.Errorf("the testInstruction was expected to contain a Stop instruction")
+	if !testIns.IsAssert() {
+		t.Errorf("the testInstruction was expected to contain an Assert instruction")
 		return
 	}
 }

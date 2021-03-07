@@ -1,32 +1,26 @@
 package parsers
 
 type testInstruction struct {
-	isStart  bool
-	isStop   bool
+	isAssert bool
 	readFile ReadFile
 	ins      Instruction
 }
 
-func createTestInstructionWithStart() TestInstruction {
-	return createTestInstructionInternally(true, false, nil, nil)
-}
-
-func createTestInstructionWithStop() TestInstruction {
-	return createTestInstructionInternally(false, true, nil, nil)
-}
-
 func createTestInstructionWithInstruction(ins Instruction) TestInstruction {
-	return createTestInstructionInternally(false, false, ins, nil)
+	return createTestInstructionInternally(ins, false, nil)
+}
+
+func createTestInstructionWithAssert() TestInstruction {
+	return createTestInstructionInternally(nil, true, nil)
 }
 
 func createTestInstructionWithReadFile(readFile ReadFile) TestInstruction {
-	return createTestInstructionInternally(false, false, nil, readFile)
+	return createTestInstructionInternally(nil, false, readFile)
 }
 
-func createTestInstructionInternally(isStart bool, isStop bool, ins Instruction, readFile ReadFile) TestInstruction {
+func createTestInstructionInternally(ins Instruction, isAssert bool, readFile ReadFile) TestInstruction {
 	out := testInstruction{
-		isStart:  isStart,
-		isStop:   isStop,
+		isAssert: isAssert,
 		readFile: readFile,
 		ins:      ins,
 	}
@@ -34,14 +28,9 @@ func createTestInstructionInternally(isStart bool, isStop bool, ins Instruction,
 	return &out
 }
 
-// IsStart returns true if the instruction is start, false otherwise
-func (obj *testInstruction) IsStart() bool {
-	return obj.isStart
-}
-
-// IsStop returns true if the instruction is stop, false otherwise
-func (obj *testInstruction) IsStop() bool {
-	return obj.isStop
+// IsAssert returns true if there is an assert, false otherwise
+func (obj *testInstruction) IsAssert() bool {
+	return obj.isAssert
 }
 
 // IsReadFile returns true if there is a readFile, false otherwise

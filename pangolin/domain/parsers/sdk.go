@@ -439,19 +439,31 @@ type TestInstructionBuilder interface {
 	Create() TestInstructionBuilder
 	WithInstruction(ins Instruction) TestInstructionBuilder
 	WithReadFile(readFile ReadFile) TestInstructionBuilder
-	IsStart() TestInstructionBuilder
-	IsStop() TestInstructionBuilder
+	IsAssert() TestInstructionBuilder
 	Now() (TestInstruction, error)
 }
 
 // TestInstruction represents a test instruction
 type TestInstruction interface {
-	IsStart() bool
-	IsStop() bool
+	IsAssert() bool
 	IsReadFile() bool
 	ReadFile() ReadFile
 	IsInstruction() bool
 	Instruction() Instruction
+}
+
+// AssertBuilder represents an assert builder
+type AssertBuilder interface {
+	Create() AssertBuilder
+	WithName(name string) AssertBuilder
+	WithIdentifier(identifier Identifier) AssertBuilder
+	Now() (Assert, error)
+}
+
+// Assert represents an assert
+type Assert interface {
+	Name() string
+	Identifier() Identifier
 }
 
 // ReadFileBuilder represents a readfile builder
