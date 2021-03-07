@@ -8,6 +8,8 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    DecimalValue|string.
+    DecimalValueAmount|int64.
     StringValue|string.
     CurrentToken|token.
 .
@@ -18,6 +20,9 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitDecimalValue:
+        code: DecimalValue, DecimalValueAmount, CurrentToken, @VAL_INT.
     .
     exitStringValue:
         code: StringValue, CurrentToken, @EVERYTHING_EXCEPT_QUOTATION.
@@ -30,6 +35,34 @@ main:
 .
 
 tests:
+    decimalValue:
+        decl: myInput|string.
+        read: myInput, "./test_files/decimalValue/input.pangolin".
+        match: myInput, $decimalValue.
+
+        decl: expectedAmount|int64.
+        assign: expectedAmount, 2.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, DecimalValueAmount, expectedAmount.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedSuffix|string.
+        read: expectedSuffix, "./test_files/decimalValue/suffix.expected.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, DecimalValue, expectedSuffix.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedPrefix|string.
+        read: expectedPrefix, "./test_files/decimalValue/prefix.expected.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, DecimalValue, expectedPrefix.
+        assert_if: isNotEqual.
+    .
     stringValue:
         decl: myInput|string.
         read: myInput, "./test_files/stringValue/input.pangolin".
@@ -38,10 +71,8 @@ tests:
         decl: expectedOutput|string.
         read: expectedOutput, "./test_files/stringValue/output.expected.pangolin".
 
-        decl: isEqual|bool.
-        equal: isEqual, StringValue, expectedOutput.
-        exit_if: isEqual.
-
-        assert.
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, StringValue, expectedOutput.
+        assert_if: isNotEqual.
     .
 .

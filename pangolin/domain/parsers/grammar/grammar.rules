@@ -88,6 +88,7 @@ CODE: 'code';
 CODE_MATCH: 'code_match';
 READ: 'read';
 ASSERT: 'assert';
+ASSERT_IF: 'assert_if';
 PUSH: 'push';
 
 // languages

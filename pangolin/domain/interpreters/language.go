@@ -44,11 +44,6 @@ func (app *language) TestsAll() error {
 
 // Tests executes the tests of an application in the interpreter
 func (app *language) Tests(names []string) error {
-	machine, err := app.machineBuilder.Create().WithLanguage(app.language).Now()
-	if err != nil {
-		return err
-	}
-
 	fmt.Printf("\n++++++++++++++++++++++++++++++++++\n")
 	fmt.Printf("Executing %d tests...\n", len(names))
 	fmt.Printf("++++++++++++++++++++++++++++++++++\n")
@@ -56,17 +51,44 @@ func (app *language) Tests(names []string) error {
 	baseDir := app.language.Paths().BaseDir()
 	tests := app.language.Application().Tests().All()
 	for _, oneTest := range tests {
+		machine, err := app.machineBuilder.Create().WithLanguage(app.language).Now()
+		if err != nil {
+			return err
+		}
+
 		name := oneTest.Name()
 		fmt.Printf("\n-----------------------------------\n")
 		fmt.Printf("Test: %s\n", name)
 		testInstructions := oneTest.Instructions().All()
-		for _, oneTestInstruction := range testInstructions {
+		for index, oneTestInstruction := range testInstructions {
 			// if the machine is stopped, stop:
 			if machine.StackFrame().Current().IsStopped() {
 				break
 			}
 
 			if oneTestInstruction.IsAssert() {
+				assert := oneTestInstruction.Assert()
+				if assert.HasCondition() {
+					condition := assert.Condition()
+					condVal, err := machine.StackFrame().Current().Fetch(condition)
+					if err != nil {
+						return err
+					}
+
+					if !condVal.IsBool() {
+						str := fmt.Sprintf("the assert's condition was expected to contain a bool, index: %d", index)
+						return errors.New(str)
+					}
+
+					val := condVal.Bool()
+					if *val {
+						fmt.Printf("-> Assert !!\n")
+						break
+					}
+
+					continue
+				}
+
 				fmt.Printf("-> Assert !!\n")
 				break
 			}

@@ -25,6 +25,7 @@ type parserBuilder struct {
 	testSectionBuilder         TestSectionBuilder
 	testDeclarationBuilder     TestDeclarationBuilder
 	testInstructionBuilder     TestInstructionBuilder
+	assertBuilder              AssertBuilder
 	readFileBuilder            ReadFileBuilder
 	headSectionBuilder         HeadSectionBuilder
 	headValueBuilder           HeadValueBuilder
@@ -92,6 +93,7 @@ func createParserBuilder(
 	testSectionBuilder TestSectionBuilder,
 	testDeclarationBuilder TestDeclarationBuilder,
 	testInstructionBuilder TestInstructionBuilder,
+	assertBuilder AssertBuilder,
 	readFileBuilder ReadFileBuilder,
 	headSectionBuilder HeadSectionBuilder,
 	headValueBuilder HeadValueBuilder,
@@ -157,6 +159,7 @@ func createParserBuilder(
 		testSectionBuilder:         testSectionBuilder,
 		testDeclarationBuilder:     testDeclarationBuilder,
 		testInstructionBuilder:     testInstructionBuilder,
+		assertBuilder:              assertBuilder,
 		readFileBuilder:            readFileBuilder,
 		headSectionBuilder:         headSectionBuilder,
 		headValueBuilder:           headValueBuilder,
@@ -229,6 +232,7 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.testSectionBuilder,
 		app.testDeclarationBuilder,
 		app.testInstructionBuilder,
+		app.assertBuilder,
 		app.readFileBuilder,
 		app.headSectionBuilder,
 		app.headValueBuilder,
@@ -309,6 +313,7 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.testSectionBuilder,
 		app.testDeclarationBuilder,
 		app.testInstructionBuilder,
+		app.assertBuilder,
 		app.readFileBuilder,
 		app.headSectionBuilder,
 		app.headValueBuilder,

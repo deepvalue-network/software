@@ -7,17 +7,20 @@ import (
 
 type adapter struct {
 	builder            Builder
+	assertBuilder      AssertBuilder
 	readFileBuilder    ReadFileBuilder
 	instructionAdapter ins.Adapter
 }
 
 func createAdapter(
 	builder Builder,
+	assertBuilder AssertBuilder,
 	readFileBuilder ReadFileBuilder,
 	instructionAdapter ins.Adapter,
 ) Adapter {
 	out := adapter{
 		builder:            builder,
+		assertBuilder:      assertBuilder,
 		readFileBuilder:    readFileBuilder,
 		instructionAdapter: instructionAdapter,
 	}
@@ -51,7 +54,19 @@ func (app *adapter) ToInstruction(testInstruction parsers.TestInstruction) (Inst
 	}
 
 	if testInstruction.IsAssert() {
-		builder.IsAssert()
+		parsedAssert := testInstruction.Assert()
+		assertBuilder := app.assertBuilder.Create()
+		if parsedAssert.HasCondition() {
+			condition := parsedAssert.Condition().String()
+			assertBuilder.WithCondition(condition)
+		}
+
+		ins, err := assertBuilder.Now()
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithAssert(ins)
 	}
 
 	return builder.Now()

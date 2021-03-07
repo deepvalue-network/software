@@ -328,6 +328,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 
 			tok := token.Token()
 			section, code := tok.BestMatchFromNames(patternNames)
+
 			// section:
 			computableSection, err := app.computableValueBuilder.Create().WithString(section).Now()
 			if err != nil {
@@ -416,7 +417,6 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 				pattern := code.Pattern()
 				amount := code.Amount()
 				codes := tok.CodesFromName(pattern)
-
 				// add the codes:
 				for _, oneCode := range codes {
 					computableCode, err := app.computableValueBuilder.Create().WithString(oneCode).Now()
@@ -434,7 +434,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 				}
 
 				// amount:
-				computableAmount, err := app.computableValueBuilder.Create().WithInt32(int32(len(codes))).Now()
+				computableAmount, err := app.computableValueBuilder.Create().WithInt64(int64(len(codes))).Now()
 				if err != nil {
 					return err
 				}

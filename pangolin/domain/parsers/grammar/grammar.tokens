@@ -82,10 +82,15 @@ testDeclaration
 
 testInstruction
     : instruction
+    | assert DOT
     | readFile DOT
-    | ASSERT DOT
     | START DOT
     | STOP DOT
+    ;
+
+assert
+    : ASSERT
+    | ASSERT_IF COLON identifier
     ;
 
 readFile

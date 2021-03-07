@@ -12,7 +12,6 @@ type stackFrame struct {
 	variables    map[string]computable.Value
 	constants    map[string]computable.Value
 	frames       []Frame
-	current      Frame
 }
 
 func createStackFrame(
@@ -24,8 +23,9 @@ func createStackFrame(
 		frameBuilder: frameBuilder,
 		variables:    variables,
 		constants:    constants,
-		frames:       []Frame{},
-		current:      frameBuilder.Create().WithVariables(variables).WithConstants(constants).Now(),
+		frames: []Frame{
+			frameBuilder.Create().WithVariables(variables).WithConstants(constants).Now(),
+		},
 	}
 
 	return &out
@@ -39,23 +39,23 @@ func (app *stackFrame) PushTo(name string) error {
 
 // Push pushes the current frame to the stack
 func (app *stackFrame) Push() {
-	app.frames = append(app.frames, app.current)
-	app.current = app.frameBuilder.Create().WithConstants(app.constants).WithVariables(app.variables).Now()
+	newFrame := app.frameBuilder.Create().WithConstants(app.constants).WithVariables(app.variables).Now()
+	app.frames = append(app.frames, newFrame)
 }
 
 // Pop pops the last stacked frame as the current frame
 func (app *stackFrame) Pop() error {
-	if len(app.frames) <= 0 {
+	if len(app.frames) <= 1 {
 		return errors.New("the pop instruction cannot be executed because the frame stack is empty")
 	}
 
 	index := len(app.frames) - 1
-	app.current = app.frames[index]
 	app.frames = app.frames[:index]
 	return nil
 }
 
 // Current returns the current frame
 func (app *stackFrame) Current() Frame {
-	return app.current
+	index := len(app.frames) - 1
+	return app.frames[index]
 }

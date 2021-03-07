@@ -3,30 +3,30 @@ package instruction
 import ins "github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
 
 type instruction struct {
-	isAssert bool
+	assert   Assert
 	readFile ReadFile
 	ins      ins.Instruction
 }
 
-func createInstructionWithAssert() Instruction {
-	return createInstructionInternally(true, nil, nil)
+func createInstructionWithAssert(assert Assert) Instruction {
+	return createInstructionInternally(assert, nil, nil)
 }
 
 func createInstructionWithReadFile(readFile ReadFile) Instruction {
-	return createInstructionInternally(false, readFile, nil)
+	return createInstructionInternally(nil, readFile, nil)
 }
 
 func createInstructionWithInstruction(ins ins.Instruction) Instruction {
-	return createInstructionInternally(false, nil, ins)
+	return createInstructionInternally(nil, nil, ins)
 }
 
 func createInstructionInternally(
-	isAssert bool,
+	assert Assert,
 	readFile ReadFile,
 	inst ins.Instruction,
 ) Instruction {
 	out := instruction{
-		isAssert: isAssert,
+		assert:   assert,
 		readFile: readFile,
 		ins:      inst,
 	}
@@ -36,7 +36,12 @@ func createInstructionInternally(
 
 // IsAssert returns true if there is an assert, false otherwise
 func (obj *instruction) IsAssert() bool {
-	return obj.isAssert
+	return obj.assert != nil
+}
+
+// Assert returns the assert, if any
+func (obj *instruction) Assert() Assert {
+	return obj.assert
 }
 
 // IsReadFile returns true if there is a readFile, false otherwise

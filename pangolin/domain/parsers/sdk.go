@@ -30,6 +30,7 @@ func NewParserBuilder() ParserBuilder {
 	testSectionBuilder := createTestSectionBuilder()
 	testDeclarationBuilder := createTestDeclarationBuilder()
 	testInstructionBuilder := createTestInstructionBuilder()
+	assertBuilder := createAssertBuilder()
 	readFileBuilder := createReadFileBuilder()
 	headSectionBuilder := createHeadSectionBuilder()
 	headValueBuilder := createHeadValueBuilder()
@@ -95,6 +96,7 @@ func NewParserBuilder() ParserBuilder {
 		testSectionBuilder,
 		testDeclarationBuilder,
 		testInstructionBuilder,
+		assertBuilder,
 		readFileBuilder,
 		headSectionBuilder,
 		headValueBuilder,
@@ -439,13 +441,14 @@ type TestInstructionBuilder interface {
 	Create() TestInstructionBuilder
 	WithInstruction(ins Instruction) TestInstructionBuilder
 	WithReadFile(readFile ReadFile) TestInstructionBuilder
-	IsAssert() TestInstructionBuilder
+	WithAssert(assert Assert) TestInstructionBuilder
 	Now() (TestInstruction, error)
 }
 
 // TestInstruction represents a test instruction
 type TestInstruction interface {
 	IsAssert() bool
+	Assert() Assert
 	IsReadFile() bool
 	ReadFile() ReadFile
 	IsInstruction() bool
@@ -455,15 +458,14 @@ type TestInstruction interface {
 // AssertBuilder represents an assert builder
 type AssertBuilder interface {
 	Create() AssertBuilder
-	WithName(name string) AssertBuilder
-	WithIdentifier(identifier Identifier) AssertBuilder
+	WithCondition(condition Identifier) AssertBuilder
 	Now() (Assert, error)
 }
 
 // Assert represents an assert
 type Assert interface {
-	Name() string
-	Identifier() Identifier
+	HasCondition() bool
+	Condition() Identifier
 }
 
 // ReadFileBuilder represents a readfile builder

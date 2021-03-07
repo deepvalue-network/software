@@ -44,5 +44,16 @@ func (app *frameBuilder) WithConstants(constants map[string]computable.Value) Fr
 
 // Now builds a new Frame instance
 func (app *frameBuilder) Now() Frame {
-	return createFrame(app.computer, app.builder, app.variables, app.constants)
+
+	variables := map[string]computable.Value{}
+	for keyname, value := range app.variables {
+		variables[keyname] = value
+	}
+
+	constants := map[string]computable.Value{}
+	for keyname, value := range app.constants {
+		constants[keyname] = value
+	}
+
+	return createFrame(app.computer, app.builder, variables, constants)
 }

@@ -29,6 +29,7 @@ type parser struct {
 	testSectionBuilder         TestSectionBuilder
 	testDeclarationBuilder     TestDeclarationBuilder
 	testInstructionBuilder     TestInstructionBuilder
+	assertBuilder              AssertBuilder
 	readFileBuilder            ReadFileBuilder
 	headSectionBuilder         HeadSectionBuilder
 	headValueBuilder           HeadValueBuilder
@@ -91,6 +92,7 @@ type parser struct {
 	testSection                map[string]TestSection
 	testDeclaration            map[string]TestDeclaration
 	testInstruction            map[string]TestInstruction
+	assert                     map[string]Assert
 	readFile                   map[string]ReadFile
 	headSection                map[string]HeadSection
 	headValue                  map[string]HeadValue
@@ -167,6 +169,7 @@ func createParser(
 	testSectionBuilder TestSectionBuilder,
 	testDeclarationBuilder TestDeclarationBuilder,
 	testInstructionBuilder TestInstructionBuilder,
+	assertBuilder AssertBuilder,
 	readFileBuilder ReadFileBuilder,
 	headSectionBuilder HeadSectionBuilder,
 	headValueBuilder HeadValueBuilder,
@@ -233,6 +236,7 @@ func createParser(
 		testSectionBuilder:         testSectionBuilder,
 		testDeclarationBuilder:     testDeclarationBuilder,
 		testInstructionBuilder:     testInstructionBuilder,
+		assertBuilder:              assertBuilder,
 		readFileBuilder:            readFileBuilder,
 		headSectionBuilder:         headSectionBuilder,
 		headValueBuilder:           headValueBuilder,
@@ -355,6 +359,10 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 		lparser.ToEventsParams{
 			Token:  "testInstruction",
 			OnExit: app.exitTestInstruction,
+		},
+		lparser.ToEventsParams{
+			Token:  "assert",
+			OnExit: app.exitAssert,
 		},
 		lparser.ToEventsParams{
 			Token:  "readFile",
@@ -627,6 +635,7 @@ func (app *parser) init() {
 	app.testSection = map[string]TestSection{}
 	app.testDeclaration = map[string]TestDeclaration{}
 	app.testInstruction = map[string]TestInstruction{}
+	app.assert = map[string]Assert{}
 	app.readFile = map[string]ReadFile{}
 	app.headSection = map[string]HeadSection{}
 	app.headValue = map[string]HeadValue{}
@@ -1142,7 +1151,7 @@ func (app *parser) exitTestInstruction(tree lexers.NodeTree) (interface{}, error
 	section, code := tree.BestMatchFromNames([]string{
 		"instruction",
 		"readFile",
-		"ASSERT",
+		"assert",
 	})
 
 	switch section {
@@ -1156,8 +1165,10 @@ func (app *parser) exitTestInstruction(tree lexers.NodeTree) (interface{}, error
 			builder.WithReadFile(readFile)
 		}
 		break
-	case "ASSERT":
-		builder.IsAssert()
+	case "assert":
+		if ass, ok := app.assert[code]; ok {
+			builder.WithAssert(ass)
+		}
 		break
 	}
 
@@ -1170,9 +1181,26 @@ func (app *parser) exitTestInstruction(tree lexers.NodeTree) (interface{}, error
 	return ins, nil
 }
 
+func (app *parser) exitAssert(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.assertBuilder.Create()
+	identifierCode := tree.CodeFromName("identifier")
+	if identifierCode != "" {
+		if iden, ok := app.identifier[identifierCode]; ok {
+			builder.WithCondition(iden)
+		}
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.assert[tree.Code()] = ins
+	return ins, nil
+}
+
 func (app *parser) exitReadFile(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.readFileBuilder.Create()
-
 	nameCode := tree.CodeFromName("variableName")
 	if nameCode != "" {
 		if name, ok := app.variableName[nameCode]; ok {

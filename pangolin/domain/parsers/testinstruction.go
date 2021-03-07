@@ -1,26 +1,26 @@
 package parsers
 
 type testInstruction struct {
-	isAssert bool
+	assert   Assert
 	readFile ReadFile
 	ins      Instruction
 }
 
 func createTestInstructionWithInstruction(ins Instruction) TestInstruction {
-	return createTestInstructionInternally(ins, false, nil)
+	return createTestInstructionInternally(ins, nil, nil)
 }
 
-func createTestInstructionWithAssert() TestInstruction {
-	return createTestInstructionInternally(nil, true, nil)
+func createTestInstructionWithAssert(assert Assert) TestInstruction {
+	return createTestInstructionInternally(nil, assert, nil)
 }
 
 func createTestInstructionWithReadFile(readFile ReadFile) TestInstruction {
-	return createTestInstructionInternally(nil, false, readFile)
+	return createTestInstructionInternally(nil, nil, readFile)
 }
 
-func createTestInstructionInternally(ins Instruction, isAssert bool, readFile ReadFile) TestInstruction {
+func createTestInstructionInternally(ins Instruction, assert Assert, readFile ReadFile) TestInstruction {
 	out := testInstruction{
-		isAssert: isAssert,
+		assert:   assert,
 		readFile: readFile,
 		ins:      ins,
 	}
@@ -30,7 +30,12 @@ func createTestInstructionInternally(ins Instruction, isAssert bool, readFile Re
 
 // IsAssert returns true if there is an assert, false otherwise
 func (obj *testInstruction) IsAssert() bool {
-	return obj.isAssert
+	return obj.assert != nil
+}
+
+// Assert returns the assert, if any
+func (obj *testInstruction) Assert() Assert {
+	return obj.assert
 }
 
 // IsReadFile returns true if there is a readFile, false otherwise

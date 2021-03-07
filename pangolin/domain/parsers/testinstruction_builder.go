@@ -3,14 +3,14 @@ package parsers
 import "errors"
 
 type testInstructionBuilder struct {
-	isAssert bool
+	assert   Assert
 	readFile ReadFile
 	ins      Instruction
 }
 
 func createTestInstructionBuilder() TestInstructionBuilder {
 	out := testInstructionBuilder{
-		isAssert: false,
+		assert:   nil,
 		readFile: nil,
 		ins:      nil,
 	}
@@ -35,9 +35,9 @@ func (app *testInstructionBuilder) WithReadFile(readFile ReadFile) TestInstructi
 	return app
 }
 
-// IsAssert adds an assert to the builder
-func (app *testInstructionBuilder) IsAssert() TestInstructionBuilder {
-	app.isAssert = true
+// WithAssert adds an assert to the builder
+func (app *testInstructionBuilder) WithAssert(assert Assert) TestInstructionBuilder {
+	app.assert = assert
 	return app
 }
 
@@ -51,8 +51,8 @@ func (app *testInstructionBuilder) Now() (TestInstruction, error) {
 		return createTestInstructionWithReadFile(app.readFile), nil
 	}
 
-	if app.isAssert {
-		return createTestInstructionWithAssert(), nil
+	if app.assert != nil {
+		return createTestInstructionWithAssert(app.assert), nil
 	}
 
 	return nil, errors.New("the TestInstruction is invalid")

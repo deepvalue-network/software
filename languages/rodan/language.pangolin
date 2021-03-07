@@ -8,6 +8,7 @@ language:
     matches:
         program: CurrentToken, |exitProgram.
         printCommand: CurrentToken, |exitPrintCommand.
+        decimalValue: CurrentToken, |exitDecimalValue.
         stringValue: CurrentToken, |exitStringValue.
     .
 .

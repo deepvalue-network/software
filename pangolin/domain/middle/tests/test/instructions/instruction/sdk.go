@@ -10,8 +10,9 @@ func NewAdapter(
 	instructionAdapter ins.Adapter,
 ) Adapter {
 	builder := NewBuilder()
+	assertBuilder := NewAssertBuilder()
 	readFileBuilder := NewReadFileBuilder()
-	return createAdapter(builder, readFileBuilder, instructionAdapter)
+	return createAdapter(builder, assertBuilder, readFileBuilder, instructionAdapter)
 }
 
 // NewBuilder creates a new builder instance
@@ -24,6 +25,11 @@ func NewReadFileBuilder() ReadFileBuilder {
 	return createReadFileBuilder()
 }
 
+// NewAssertBuilder creates a new assert builder instance
+func NewAssertBuilder() AssertBuilder {
+	return createAssertBuilder()
+}
+
 // Adapter represents an instruction adapter
 type Adapter interface {
 	ToInstruction(testInstruction parsers.TestInstruction) (Instruction, error)
@@ -32,7 +38,7 @@ type Adapter interface {
 // Builder represents an instruction builder
 type Builder interface {
 	Create() Builder
-	IsAssert() Builder
+	WithAssert(assert Assert) Builder
 	WithReadFile(readFile ReadFile) Builder
 	WithInstruction(ins ins.Instruction) Builder
 	Now() (Instruction, error)
@@ -41,6 +47,7 @@ type Builder interface {
 // Instruction represents a test instruction
 type Instruction interface {
 	IsAssert() bool
+	Assert() Assert
 	IsReadFile() bool
 	ReadFile() ReadFile
 	IsInstruction() bool
@@ -64,13 +71,12 @@ type ReadFile interface {
 // AssertBuilder represents an assert builder
 type AssertBuilder interface {
 	Create() AssertBuilder
-	WithName(name string) AssertBuilder
-	WithIdentifier(identifier string) AssertBuilder
+	WithCondition(condition string) AssertBuilder
 	Now() (Assert, error)
 }
 
 // Assert represents an assert
 type Assert interface {
-	Name() string
-	Identifier() string
+	HasCondition() bool
+	Condition() string
 }
