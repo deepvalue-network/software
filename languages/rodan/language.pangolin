@@ -8,7 +8,16 @@ language:
     matches:
         program: CurrentToken, |exitProgram.
         printCommand: CurrentToken, |exitPrintCommand.
+        value: CurrentToken, |exitValue.
         decimalValue: CurrentToken, |exitDecimalValue.
         stringValue: CurrentToken, |exitStringValue.
+    .
+    targets:
+        pangolin:
+            path: "./targets/pangolin.pangolin".
+            events:
+                value: eventValue.
+            .
+        .
     .
 .

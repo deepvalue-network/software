@@ -10,42 +10,47 @@ type languageValue struct {
 	output         string
 	extends        []RelativePath
 	patternMatches []PatternMatch
+	targets        []Target
 }
 
 func createLanguageValueWithRoot(root string) LanguageValue {
-	return createLanguageValueInternally(root, nil, nil, nil, nil, "", "", nil, nil)
+	return createLanguageValueInternally(root, nil, nil, nil, nil, "", "", nil, nil, nil)
 }
 
 func createLanguageValueWithTokens(tokens RelativePath) LanguageValue {
-	return createLanguageValueInternally("", tokens, nil, nil, nil, "", "", nil, nil)
+	return createLanguageValueInternally("", tokens, nil, nil, nil, "", "", nil, nil, nil)
 }
 
 func createLanguageValueWithChannels(channels RelativePath) LanguageValue {
-	return createLanguageValueInternally("", nil, channels, nil, nil, "", "", nil, nil)
+	return createLanguageValueInternally("", nil, channels, nil, nil, "", "", nil, nil, nil)
 }
 
 func createLanguageValueWithRules(rules RelativePath) LanguageValue {
-	return createLanguageValueInternally("", nil, nil, rules, nil, "", "", nil, nil)
+	return createLanguageValueInternally("", nil, nil, rules, nil, "", "", nil, nil, nil)
 }
 
 func createLanguageValueWithLogic(logic RelativePath) LanguageValue {
-	return createLanguageValueInternally("", nil, nil, nil, logic, "", "", nil, nil)
+	return createLanguageValueInternally("", nil, nil, nil, logic, "", "", nil, nil, nil)
 }
 
 func createLanguageValueWithInput(input string) LanguageValue {
-	return createLanguageValueInternally("", nil, nil, nil, nil, input, "", nil, nil)
+	return createLanguageValueInternally("", nil, nil, nil, nil, input, "", nil, nil, nil)
 }
 
 func createLanguageValueWithOutput(output string) LanguageValue {
-	return createLanguageValueInternally("", nil, nil, nil, nil, "", output, nil, nil)
+	return createLanguageValueInternally("", nil, nil, nil, nil, "", output, nil, nil, nil)
 }
 
 func createLanguageValueWithExtends(extends []RelativePath) LanguageValue {
-	return createLanguageValueInternally("", nil, nil, nil, nil, "", "", extends, nil)
+	return createLanguageValueInternally("", nil, nil, nil, nil, "", "", extends, nil, nil)
 }
 
 func createLanguageValueWithPatternMatches(patternMatches []PatternMatch) LanguageValue {
-	return createLanguageValueInternally("", nil, nil, nil, nil, "", "", nil, patternMatches)
+	return createLanguageValueInternally("", nil, nil, nil, nil, "", "", nil, patternMatches, nil)
+}
+
+func createLanguageValueWithTargets(targets []Target) LanguageValue {
+	return createLanguageValueInternally("", nil, nil, nil, nil, "", "", nil, nil, targets)
 }
 
 func createLanguageValueInternally(
@@ -58,6 +63,7 @@ func createLanguageValueInternally(
 	output string,
 	extends []RelativePath,
 	patternMatches []PatternMatch,
+	targets []Target,
 ) LanguageValue {
 	out := languageValue{
 		root:           root,
@@ -69,6 +75,7 @@ func createLanguageValueInternally(
 		output:         output,
 		extends:        extends,
 		patternMatches: patternMatches,
+		targets:        targets,
 	}
 
 	return &out
@@ -162,4 +169,14 @@ func (obj *languageValue) IsPatternMatches() bool {
 // PatternMatches returns the pattern matches, if any
 func (obj *languageValue) PatternMatches() []PatternMatch {
 	return obj.patternMatches
+}
+
+// IsTargets returns true if there is targets, false otherwise
+func (obj *languageValue) IsTargets() bool {
+	return obj.targets != nil
+}
+
+// Targets returns the targets, if any
+func (obj *languageValue) Targets() []Target {
+	return obj.targets
 }

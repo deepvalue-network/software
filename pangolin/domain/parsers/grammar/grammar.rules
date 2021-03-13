@@ -23,6 +23,8 @@ EVERYTHING_EXCEPT_DOT: ([^.]+);
 SCRIPT_ANYTHING: ((?s).*);
 RELATIVE_PATH: (/[^/^.]+)+;
 FILE_PATTERN: [^/^"]+;
+TARGET_NAME_PATTERN: [a-z_]+;
+EVENT_NAME_PATTERN: [a-z_]+;
 
 // file extensions:
 LANG_EXT: [a-z0-9]+;
@@ -90,6 +92,8 @@ READ: 'read';
 ASSERT: 'assert';
 ASSERT_IF: 'assert_if';
 PUSH: 'push';
+TRIGGER: 'trigger';
+FORMAT: 'format';
 
 // languages
 LANG_ROOT: 'root';
@@ -98,13 +102,15 @@ LANG_CHANNELS: 'channels';
 LANG_RULES: 'rules';
 LANG_LOGIC: 'logic';
 LANG_PATTERN_MATCHES: 'matches';
+LANG_TARGETS: 'targets';
+LANG_PATH: 'path';
+LANG_EVENTS: 'events';
 
 // script
 SCRIPT_NAME: 'name';
 SCRIPT_VERSION: 'version';
 SCRIPT_SCRIPT: 'script';
 SCRIPT_LANGUAGE: 'language';
-
 
 // types:
 NIL: 'nil';

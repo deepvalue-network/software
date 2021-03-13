@@ -12,6 +12,7 @@ type languageValueBuilder struct {
 	output         string
 	extends        []RelativePath
 	patternMatches []PatternMatch
+	targets        []Target
 }
 
 func createLanguageValueBuilder() LanguageValueBuilder {
@@ -25,6 +26,7 @@ func createLanguageValueBuilder() LanguageValueBuilder {
 		output:         "",
 		extends:        nil,
 		patternMatches: nil,
+		targets:        nil,
 	}
 
 	return &out
@@ -89,6 +91,12 @@ func (app *languageValueBuilder) WithPatternMatches(patternMatches []PatternMatc
 	return app
 }
 
+// WithTargets adds targets to the builder
+func (app *languageValueBuilder) WithTargets(targets []Target) LanguageValueBuilder {
+	app.targets = targets
+	return app
+}
+
 // Now builds a new LanguageValue instance
 func (app *languageValueBuilder) Now() (LanguageValue, error) {
 	if app.root != "" {
@@ -125,6 +133,10 @@ func (app *languageValueBuilder) Now() (LanguageValue, error) {
 
 	if app.patternMatches != nil {
 		return createLanguageValueWithPatternMatches(app.patternMatches), nil
+	}
+
+	if app.targets != nil {
+		return createLanguageValueWithTargets(app.targets), nil
 	}
 
 	return nil, errors.New("the LanguageValue is invalid")

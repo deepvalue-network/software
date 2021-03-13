@@ -1,0 +1,6 @@
+my_target:
+    path: "./my/mytarget.json".
+    events:
+        my_event: MyLabel.
+    .
+.

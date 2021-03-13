@@ -18,6 +18,9 @@ type parser struct {
 	programBuilder             ProgramBuilder
 	languageBuilder            LanguageBuilder
 	languageValueBuilder       LanguageValueBuilder
+	targetBuilder              TargetBuilder
+	targetSingleBuilder        TargetSingleBuilder
+	eventBuiilder              EventBuilder
 	scriptBuilder              ScriptBuilder
 	scriptValueBuilder         ScriptValueBuilder
 	patternMatchBuilder        PatternMatchBuilder
@@ -46,6 +49,8 @@ type parser struct {
 	labelInstructionBuilder    LabelInstructionBuilder
 	mainSectionBuilder         MainSectionBuilder
 	instructionBuilder         InstructionBuilder
+	triggerBuilder             TriggerBuilder
+	formatBuilder              FormatBuilder
 	tokenCodeBuilder           TokenCodeBuilder
 	specificTokenCodeBuilder   SpecificTokenCodeBuilder
 	tokenSectionBuilder        TokenSectionBuilder
@@ -79,6 +84,11 @@ type parser struct {
 	program                    map[string]Program
 	language                   map[string]Language
 	languageValue              map[string]LanguageValue
+	target                     map[string]Target
+	targetSingle               map[string]TargetSingle
+	targetEvents               map[string][]Event
+	targetPath                 map[string]RelativePath
+	event                      map[string]Event
 	script                     map[string]Script
 	scriptValue                map[string]ScriptValue
 	patternMatch               map[string]PatternMatch
@@ -109,6 +119,8 @@ type parser struct {
 	labelInstruction           map[string]LabelInstruction
 	mainSection                map[string]MainSection
 	instruction                map[string]Instruction
+	trigger                    map[string]Trigger
+	format                     map[string]Format
 	tokenCode                  map[string]TokenCode
 	specificTokenCode          map[string]SpecificTokenCode
 	tokenSection               map[string]TokenSection
@@ -158,6 +170,9 @@ func createParser(
 	programBuilder ProgramBuilder,
 	languageBuilder LanguageBuilder,
 	languageValueBuilder LanguageValueBuilder,
+	targetBuilder TargetBuilder,
+	targetSingleBuilder TargetSingleBuilder,
+	eventBuiilder EventBuilder,
 	scriptBuilder ScriptBuilder,
 	scriptValueBuilder ScriptValueBuilder,
 	patternMatchBuilder PatternMatchBuilder,
@@ -186,6 +201,8 @@ func createParser(
 	labelInstructionBuilder LabelInstructionBuilder,
 	mainSectionBuilder MainSectionBuilder,
 	instructionBuilder InstructionBuilder,
+	triggerBuilder TriggerBuilder,
+	formatBuilder FormatBuilder,
 	tokenCodeBuilder TokenCodeBuilder,
 	specificTokenCodeBuilder SpecificTokenCodeBuilder,
 	tokenSectionBuilder TokenSectionBuilder,
@@ -225,6 +242,9 @@ func createParser(
 		programBuilder:             programBuilder,
 		languageBuilder:            languageBuilder,
 		languageValueBuilder:       languageValueBuilder,
+		targetBuilder:              targetBuilder,
+		targetSingleBuilder:        targetSingleBuilder,
+		eventBuiilder:              eventBuiilder,
 		scriptBuilder:              scriptBuilder,
 		scriptValueBuilder:         scriptValueBuilder,
 		patternMatchBuilder:        patternMatchBuilder,
@@ -253,6 +273,8 @@ func createParser(
 		labelInstructionBuilder:    labelInstructionBuilder,
 		mainSectionBuilder:         mainSectionBuilder,
 		instructionBuilder:         instructionBuilder,
+		triggerBuilder:             triggerBuilder,
+		formatBuilder:              formatBuilder,
 		tokenCodeBuilder:           tokenCodeBuilder,
 		specificTokenCodeBuilder:   specificTokenCodeBuilder,
 		tokenSectionBuilder:        tokenSectionBuilder,
@@ -303,6 +325,26 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 		lparser.ToEventsParams{
 			Token:  "languageValue",
 			OnExit: app.exitLanguageValue,
+		},
+		lparser.ToEventsParams{
+			Token:  "target",
+			OnExit: app.exitTarget,
+		},
+		lparser.ToEventsParams{
+			Token:  "targetSingle",
+			OnExit: app.exitTargetSingle,
+		},
+		lparser.ToEventsParams{
+			Token:  "targetEvents",
+			OnExit: app.exitTargetEvents,
+		},
+		lparser.ToEventsParams{
+			Token:  "targetPath",
+			OnExit: app.exitTargetPath,
+		},
+		lparser.ToEventsParams{
+			Token:  "event",
+			OnExit: app.exitEvent,
 		},
 		lparser.ToEventsParams{
 			Token:  "script",
@@ -427,6 +469,14 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 		lparser.ToEventsParams{
 			Token:  "instruction",
 			OnExit: app.exitInstruction,
+		},
+		lparser.ToEventsParams{
+			Token:  "trigger",
+			OnExit: app.exitTrigger,
+		},
+		lparser.ToEventsParams{
+			Token:  "format",
+			OnExit: app.exitFormat,
 		},
 		lparser.ToEventsParams{
 			Token:  "callPattern",
@@ -622,6 +672,11 @@ func (app *parser) init() {
 	app.program = map[string]Program{}
 	app.language = map[string]Language{}
 	app.languageValue = map[string]LanguageValue{}
+	app.target = map[string]Target{}
+	app.targetSingle = map[string]TargetSingle{}
+	app.targetEvents = map[string][]Event{}
+	app.targetPath = map[string]RelativePath{}
+	app.event = map[string]Event{}
 	app.script = map[string]Script{}
 	app.scriptValue = map[string]ScriptValue{}
 	app.patternMatch = map[string]PatternMatch{}
@@ -652,6 +707,8 @@ func (app *parser) init() {
 	app.labelInstruction = map[string]LabelInstruction{}
 	app.mainSection = map[string]MainSection{}
 	app.instruction = map[string]Instruction{}
+	app.trigger = map[string]Trigger{}
+	app.format = map[string]Format{}
 	app.tokenCode = map[string]TokenCode{}
 	app.specificTokenCode = map[string]SpecificTokenCode{}
 	app.tokenSection = map[string]TokenSection{}
@@ -754,6 +811,7 @@ func (app *parser) exitLanguageValue(tree lexers.NodeTree) (interface{}, error) 
 		"relativePath",
 		"GLOBAL_VARIABLE_PATTERN",
 		"LANG_PATTERN_MATCHES",
+		"LANG_TARGETS",
 	})
 
 	switch section {
@@ -820,6 +878,17 @@ func (app *parser) exitLanguageValue(tree lexers.NodeTree) (interface{}, error) 
 
 		builder.WithPatternMatches(patternMatches)
 		break
+	case "LANG_TARGETS":
+		targets := []Target{}
+		codes := tree.CodesFromName("target")
+		for _, oneCode := range codes {
+			if target, ok := app.target[oneCode]; ok {
+				targets = append(targets, target)
+			}
+		}
+
+		builder.WithTargets(targets)
+		break
 	}
 
 	ins, err := builder.Now()
@@ -828,6 +897,113 @@ func (app *parser) exitLanguageValue(tree lexers.NodeTree) (interface{}, error) 
 	}
 
 	app.languageValue[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitTarget(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.targetBuilder.Create()
+	name := tree.CodeFromName("TARGET_NAME_PATTERN")
+	if name != "" {
+		builder.WithName(name)
+	}
+
+	targetSingles := []TargetSingle{}
+	codes := tree.CodesFromName("targetSingle")
+	for _, oneCode := range codes {
+		if targetSingle, ok := app.targetSingle[oneCode]; ok {
+			targetSingles = append(targetSingles, targetSingle)
+		}
+	}
+
+	if len(targetSingles) > 0 {
+		builder.WithSingles(targetSingles)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.target[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitTargetSingle(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.targetSingleBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"targetEvents",
+		"targetPath",
+	})
+
+	switch section {
+	case "targetEvents":
+		if targetEvents, ok := app.targetEvents[code]; ok {
+			builder.WithEvents(targetEvents)
+		}
+		break
+	case "targetPath":
+		if path, ok := app.targetPath[code]; ok {
+			builder.WithPath(path)
+		}
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.targetSingle[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitTargetEvents(tree lexers.NodeTree) (interface{}, error) {
+	events := []Event{}
+	codes := tree.CodesFromName("event")
+	for _, oneCode := range codes {
+		if evt, ok := app.event[oneCode]; ok {
+			events = append(events, evt)
+		}
+	}
+
+	if len(events) > 0 {
+		app.targetEvents[tree.Code()] = events
+		return events, nil
+	}
+
+	return nil, errors.New("the events inside the targetEvents are invalid")
+}
+
+func (app *parser) exitTargetPath(tree lexers.NodeTree) (interface{}, error) {
+	relPathCode := tree.CodeFromName("relativePath")
+	if relPathCode != "" {
+		if relPath, ok := app.relativePath[relPathCode]; ok {
+			app.targetPath[tree.Code()] = relPath
+			return relPath, nil
+		}
+	}
+
+	return nil, errors.New("the relativePath inside the targetPath is invalid")
+}
+
+func (app *parser) exitEvent(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.eventBuiilder.Create()
+	name := tree.CodeFromName("EVENT_NAME_PATTERN")
+	if name != "" {
+		builder.WithName(name)
+	}
+
+	label := tree.CodeFromName("LABEL_PATTERN")
+	if label != "" {
+		builder.WithLabel(label)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.event[tree.Code()] = ins
 	return ins, nil
 }
 
@@ -1546,6 +1722,8 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 		"exit",
 		"call",
 		"token",
+		"trigger",
+		"format",
 	})
 
 	switch section {
@@ -1591,6 +1769,15 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 			builder.WithToken(token)
 		}
 		break
+	case "trigger":
+		if trigger, ok := app.trigger[code]; ok {
+			builder.WithTrigger(trigger)
+		}
+	case "format":
+		if format, ok := app.format[code]; ok {
+			builder.WithFormat(format)
+		}
+		break
 	}
 
 	ins, err := builder.Now()
@@ -1599,6 +1786,65 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.instruction[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitTrigger(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.triggerBuilder.Create()
+	variableNameCode := tree.CodeFromName("variableName")
+	if variableNameCode != "" {
+		if vrName, ok := app.variableName[variableNameCode]; ok {
+			builder.WithVariableName(vrName)
+		}
+	}
+
+	eventName := tree.CodeFromName("EVENT_NAME_PATTERN")
+	if eventName != "" {
+		builder.WithEvent(eventName)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.trigger[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitFormat(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.formatBuilder.Create()
+	variableNameCode := tree.CodeFromName("variableName")
+	if variableNameCode != "" {
+		if results, ok := app.variableName[variableNameCode]; ok {
+			builder.WithResults(results)
+		}
+	}
+
+	identifierCodes := tree.CodesFromName("identifier")
+	if len(identifierCodes) != 3 {
+		str := fmt.Sprintf("%d variableName was expected, %d returned", 3, len(identifierCodes))
+		return nil, errors.New(str)
+	}
+
+	if pattern, ok := app.identifier[identifierCodes[0]]; ok {
+		builder.WithPattern(pattern)
+	}
+
+	if first, ok := app.identifier[identifierCodes[1]]; ok {
+		builder.WithFirst(first)
+	}
+
+	if second, ok := app.identifier[identifierCodes[2]]; ok {
+		builder.WithSecond(second)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.format[tree.Code()] = ins
 	return ins, nil
 }
 

@@ -1,5 +1,7 @@
 package middle
 
+import "github.com/deepvalue-network/software/pangolin/domain/middle/targets"
+
 type language struct {
 	root           string
 	tokens         string
@@ -8,6 +10,7 @@ type language struct {
 	patternMatches []PatternMatch
 	input          string
 	output         string
+	targets        targets.Targets
 	channels       string
 	extends        []string
 }
@@ -20,8 +23,9 @@ func createLanguage(
 	patternMatches []PatternMatch,
 	input string,
 	output string,
+	targets targets.Targets,
 ) Language {
-	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, "", nil)
+	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, targets, "", nil)
 }
 
 func createLanguageWithExtends(
@@ -32,9 +36,10 @@ func createLanguageWithExtends(
 	patternMatches []PatternMatch,
 	input string,
 	output string,
+	targets targets.Targets,
 	extends []string,
 ) Language {
-	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, "", extends)
+	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, targets, "", extends)
 }
 
 func createLanguageWithChannels(
@@ -45,9 +50,10 @@ func createLanguageWithChannels(
 	patternMatches []PatternMatch,
 	input string,
 	output string,
+	targets targets.Targets,
 	channels string,
 ) Language {
-	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, channels, nil)
+	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, targets, channels, nil)
 }
 
 func createLanguageWithChannelsAndExtends(
@@ -58,10 +64,11 @@ func createLanguageWithChannelsAndExtends(
 	patternMatches []PatternMatch,
 	input string,
 	output string,
+	targets targets.Targets,
 	channels string,
 	extends []string,
 ) Language {
-	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, channels, extends)
+	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, targets, channels, extends)
 }
 
 func createLanguageInternally(
@@ -72,6 +79,7 @@ func createLanguageInternally(
 	patternMatches []PatternMatch,
 	input string,
 	output string,
+	targets targets.Targets,
 	channels string,
 	extends []string,
 ) Language {
@@ -83,6 +91,7 @@ func createLanguageInternally(
 		patternMatches: patternMatches,
 		input:          input,
 		output:         output,
+		targets:        targets,
 		channels:       channels,
 		extends:        extends,
 	}
@@ -123,6 +132,11 @@ func (obj *language) InputVariable() string {
 // OutputVariable returns the output variable
 func (obj *language) OutputVariable() string {
 	return obj.output
+}
+
+// Targets returns the targets
+func (obj *language) Targets() targets.Targets {
+	return obj.targets
 }
 
 // HasChannelsPath returns true if there is a channels path, false otherwise

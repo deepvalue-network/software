@@ -14,4 +14,12 @@ language:
     matches:
         myFirst: MyTokenVariable, |myExit.
     .
+    targets:
+        my_target:
+            path: "./my/mytarget.json".
+            events:
+                first_event: FirstLabel.
+            .
+        .
+    .
 .

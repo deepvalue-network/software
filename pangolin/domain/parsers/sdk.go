@@ -19,6 +19,9 @@ func NewParserBuilder() ParserBuilder {
 	programBuilder := createProgramBuilder()
 	languageBuilder := createLanguageBuilder()
 	languageValueBuilder := createLanguageValueBuilder()
+	targetBuilder := createTargetBuilder()
+	targetSingleBuilder := createTargetSingleBuilder()
+	eventBuilder := createEventBuilder()
 	scriptBuilder := createScriptBuilder()
 	scriptValueBuilder := createScriptValueBuilder()
 	patternMatchBuilder := createPatternMatchBuilder()
@@ -47,6 +50,8 @@ func NewParserBuilder() ParserBuilder {
 	labelInstructionBuilder := createLabelInstructionBuilder()
 	mainSectionBuilder := createMainSectionBuilder()
 	instructionBuilder := createInstructionBuilder()
+	triggerBuilder := createTriggerBuilder()
+	formatBuilder := createFormatBuilder()
 	tokenCodeBuilder := createTokenCodeBuilder()
 	specificTokenCodeBuilder := createSpecificTokenCodeBuilder()
 	tokenSectionBuilder := createTokenSectionBuilder()
@@ -85,6 +90,9 @@ func NewParserBuilder() ParserBuilder {
 		programBuilder,
 		languageBuilder,
 		languageValueBuilder,
+		targetBuilder,
+		targetSingleBuilder,
+		eventBuilder,
 		scriptBuilder,
 		scriptValueBuilder,
 		patternMatchBuilder,
@@ -113,6 +121,8 @@ func NewParserBuilder() ParserBuilder {
 		labelInstructionBuilder,
 		mainSectionBuilder,
 		instructionBuilder,
+		triggerBuilder,
+		formatBuilder,
 		tokenCodeBuilder,
 		specificTokenCodeBuilder,
 		tokenSectionBuilder,
@@ -261,6 +271,7 @@ type Language interface {
 	Logic() RelativePath
 	Input() string
 	Output() string
+	Targets() []Target
 	HasChannels() bool
 	Channels() RelativePath
 	HasExtends() bool
@@ -281,6 +292,7 @@ type LanguageValueBuilder interface {
 	WithOutputVariable(outputVar string) LanguageValueBuilder
 	WithExtends(extends []RelativePath) LanguageValueBuilder
 	WithPatternMatches(matches []PatternMatch) LanguageValueBuilder
+	WithTargets(targets []Target) LanguageValueBuilder
 	Now() (LanguageValue, error)
 }
 
@@ -304,6 +316,53 @@ type LanguageValue interface {
 	Extends() []RelativePath
 	IsPatternMatches() bool
 	PatternMatches() []PatternMatch
+	IsTargets() bool
+	Targets() []Target
+}
+
+// TargetBuilder represents a target builder
+type TargetBuilder interface {
+	Create() TargetBuilder
+	WithName(name string) TargetBuilder
+	WithSingles(singles []TargetSingle) TargetBuilder
+	Now() (Target, error)
+}
+
+// Target represents a target
+type Target interface {
+	Name() string
+	Path() RelativePath
+	Events() []Event
+}
+
+// TargetSingleBuilder represents a target single builder
+type TargetSingleBuilder interface {
+	Create() TargetSingleBuilder
+	WithEvents(evts []Event) TargetSingleBuilder
+	WithPath(path RelativePath) TargetSingleBuilder
+	Now() (TargetSingle, error)
+}
+
+// TargetSingle represents a target single
+type TargetSingle interface {
+	IsEvents() bool
+	Events() []Event
+	IsPath() bool
+	Path() RelativePath
+}
+
+// EventBuilder represents an event builder
+type EventBuilder interface {
+	Create() EventBuilder
+	WithName(name string) EventBuilder
+	WithLabel(label string) EventBuilder
+	Now() (Event, error)
+}
+
+// Event represents an event
+type Event interface {
+	Name() string
+	Label() string
 }
 
 // PatternMatchBuilder represents a pattern match builderexitHeadValue
@@ -698,6 +757,8 @@ type InstructionBuilder interface {
 	WithExit(exit Exit) InstructionBuilder
 	WithCall(call Call) InstructionBuilder
 	WithToken(token Token) InstructionBuilder
+	WithTrigger(trigger Trigger) InstructionBuilder
+	WithFormat(format Format) InstructionBuilder
 	Now() (Instruction, error)
 }
 
@@ -721,6 +782,42 @@ type Instruction interface {
 	Call() Call
 	IsToken() bool
 	Token() Token
+	IsTrigger() bool
+	Trigger() Trigger
+	IsFormat() bool
+	Format() Format
+}
+
+// FormatBuilder represents a format builder
+type FormatBuilder interface {
+	Create() FormatBuilder
+	WithResults(results VariableName) FormatBuilder
+	WithPattern(pattern Identifier) FormatBuilder
+	WithFirst(first Identifier) FormatBuilder
+	WithSecond(second Identifier) FormatBuilder
+	Now() (Format, error)
+}
+
+// Format represents a format
+type Format interface {
+	Results() VariableName
+	Pattern() Identifier
+	First() Identifier
+	Second() Identifier
+}
+
+// TriggerBuilder represents a trigger builder
+type TriggerBuilder interface {
+	Create() TriggerBuilder
+	WithVariableName(variableName VariableName) TriggerBuilder
+	WithEvent(event string) TriggerBuilder
+	Now() (Trigger, error)
+}
+
+// Trigger represents a trigger
+type Trigger interface {
+	Variable() VariableName
+	Event() string
 }
 
 // TokenBuilder represents a token builder

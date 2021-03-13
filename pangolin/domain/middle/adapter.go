@@ -3,6 +3,7 @@ package middle
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/targets"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
@@ -20,6 +21,9 @@ type adapter struct {
 	languageBuilder     LanguageBuilder
 	patternMatchBuilder PatternMatchBuilder
 	scriptBuilder       ScriptBuilder
+	targetsBuilder      targets.Builder
+	targetBuilder       targets.TargetBuilder
+	targetEventBuilder  targets.EventBuilder
 }
 
 func createAdapter(
@@ -34,6 +38,9 @@ func createAdapter(
 	languageBuilder LanguageBuilder,
 	patternMatchBuilder PatternMatchBuilder,
 	scriptBuilder ScriptBuilder,
+	targetsBuilder targets.Builder,
+	targetBuilder targets.TargetBuilder,
+	targetEventBuilder targets.EventBuilder,
 ) Adapter {
 	out := adapter{
 		parser:              parser,
@@ -47,6 +54,9 @@ func createAdapter(
 		languageBuilder:     languageBuilder,
 		patternMatchBuilder: patternMatchBuilder,
 		scriptBuilder:       scriptBuilder,
+		targetsBuilder:      targetsBuilder,
+		targetBuilder:       targetBuilder,
+		targetEventBuilder:  targetEventBuilder,
 	}
 
 	return &out
@@ -122,6 +132,38 @@ func (app *adapter) language(parsed parsers.Language) (Language, error) {
 		patternMatches = append(patternMatches, match)
 	}
 
+	targetsList := []targets.Target{}
+	parsedTargets := parsed.Targets()
+	for _, oneParsedTarget := range parsedTargets {
+		name := oneParsedTarget.Name()
+		path := oneParsedTarget.Path().String()
+
+		events := []targets.Event{}
+		parsedEvents := oneParsedTarget.Events()
+		for _, oneParsedEvent := range parsedEvents {
+			eventName := oneParsedEvent.Name()
+			eventLabel := oneParsedEvent.Label()
+			event, err := app.targetEventBuilder.Create().WithName(eventName).WithLabel(eventLabel).Now()
+			if err != nil {
+				return nil, err
+			}
+
+			events = append(events, event)
+		}
+
+		target, err := app.targetBuilder.Create().WithName(name).WithPath(path).WithEvents(events).Now()
+		if err != nil {
+			return nil, err
+		}
+
+		targetsList = append(targetsList, target)
+	}
+
+	targets, err := app.targetsBuilder.Create().WithTargets(targetsList).Now()
+	if err != nil {
+		return nil, err
+	}
+
 	root := parsed.Root()
 	tokens := parsed.Tokens().String()
 	rules := parsed.Rules().String()
@@ -135,7 +177,8 @@ func (app *adapter) language(parsed parsers.Language) (Language, error) {
 		WithLogicsPath(logic).
 		WithInputVariable(input).
 		WithOutputVariable(output).
-		WithPatternMatches(patternMatches)
+		WithPatternMatches(patternMatches).
+		WithTargets(targets)
 
 	if parsed.HasChannels() {
 		channels := parsed.Channels().String()

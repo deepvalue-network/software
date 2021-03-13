@@ -8,6 +8,8 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    VariablePattern|string.
+    ValueInt|string.
     DecimalValue|string.
     DecimalValueAmount|int64.
     StringValue|string.
@@ -20,6 +22,10 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitValue:
+        code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: ValueInt, CurrentToken, @VAL_INT.
     .
     exitDecimalValue:
         code: DecimalValue, DecimalValueAmount, CurrentToken, @VAL_INT.
@@ -35,6 +41,64 @@ main:
 .
 
 tests:
+    valueWithString:
+        decl: myInput|string.
+        read: myInput, "./test_files/value/input.string.pangolin".
+        match: myInput, $value.
+
+        decl: expectedOutput|string.
+        read: expectedOutput, "./test_files/value/string.expected.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, StringValue, expectedOutput.
+        assert_if: isNotEqual.
+    .
+    valueWithVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/value/input.variable.pangolin".
+        match: myInput, $value.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, VariablePattern, myInput.
+        assert_if: isNotEqual.
+    .
+    valueWithDecimal:
+        decl: myInput|string.
+        read: myInput, "./test_files/value/input.decimal.pangolin".
+        match: myInput, $value.
+
+        decl: expectedAmount|int64.
+        assign: expectedAmount, 2.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, DecimalValueAmount, expectedAmount.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedSuffix|string.
+        read: expectedSuffix, "./test_files/value/decimal.suffix.expected.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, DecimalValue, expectedSuffix.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedPrefix|string.
+        read: expectedPrefix, "./test_files/value/decimal.prefix.expected.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, DecimalValue, expectedPrefix.
+        assert_if: isNotEqual.
+    .
+    valueWithInt:
+        decl: myInput|string.
+        read: myInput, "./test_files/value/input.int.pangolin".
+        match: myInput, $value.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ValueInt, myInput.
+        assert_if: isNotEqual.
+    .
     decimalValue:
         decl: myInput|string.
         read: myInput, "./test_files/decimalValue/input.pangolin".

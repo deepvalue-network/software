@@ -1,16 +1,17 @@
 package middle
 
 import (
+	"github.com/deepvalue-network/software/libs/hash"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/targets"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/tests/test"
 	test_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions"
 	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
-	"github.com/deepvalue-network/software/libs/hash"
 )
 
 // NewAdapter creates a new adapter instance
@@ -29,7 +30,9 @@ func NewAdapter(parser parsers.Parser) Adapter {
 	languageBuilder := NewLanguageBuilder()
 	patternMatchBuilder := NewPatternMatchBuilder()
 	scriptBuilder := NewScriptBuilder()
-
+	targetsBuilder := targets.NewBuilder()
+	targetBuilder := targets.NewTargetBuilder()
+	targetEventBuilder := targets.NewEventBuilder()
 	return createAdapter(
 		parser,
 		variablesAdapter,
@@ -42,6 +45,9 @@ func NewAdapter(parser parsers.Parser) Adapter {
 		languageBuilder,
 		patternMatchBuilder,
 		scriptBuilder,
+		targetsBuilder,
+		targetBuilder,
+		targetEventBuilder,
 	)
 }
 
@@ -134,6 +140,7 @@ type LanguageBuilder interface {
 	WithInputVariable(input string) LanguageBuilder
 	WithOutputVariable(output string) LanguageBuilder
 	WithExtends(extends []string) LanguageBuilder
+	WithTargets(targets targets.Targets) LanguageBuilder
 	Now() (Language, error)
 }
 
@@ -146,6 +153,7 @@ type Language interface {
 	PatternMatches() []PatternMatch
 	InputVariable() string
 	OutputVariable() string
+	Targets() targets.Targets
 	HasChannelsPath() bool
 	ChannelsPath() string
 	HasExtends() bool

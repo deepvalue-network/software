@@ -29,6 +29,28 @@ languageValue
     | OUT COLON GLOBAL_VARIABLE_PATTERN DOT
     | EXTENDS COLON singleExtend+ DOT
     | LANG_PATTERN_MATCHES COLON patternMatch+ DOT
+    | LANG_TARGETS COLON target+ DOT
+    ;
+
+target
+    : TARGET_NAME_PATTERN COLON targetSingle+ DOT
+    ;
+
+targetSingle
+    : targetEvents
+    | targetPath
+    ;
+
+targetEvents
+    : LANG_EVENTS COLON event+ DOT
+    ;
+
+targetPath
+    : LANG_PATH COLON relativePath DOT
+    ;
+
+event
+    : EVENT_NAME_PATTERN COLON LABEL_PATTERN DOT
     ;
 
 singleExtend
@@ -172,6 +194,16 @@ instruction
     | exit DOT
     | call DOT
     | token DOT
+    | trigger DOT
+    | format DOT
+    ;
+
+trigger
+    : TRIGGER COLON variableName COMMA EVENT_NAME_PATTERN
+    ;
+
+format
+    : FORMAT COLON variableName COMMA identifier COMMA identifier COMMA identifier
     ;
 
 token
