@@ -8,6 +8,11 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    ArySymbolAdd|string.
+    ArySymbolDiv|string.
+    ArySymbolMod|string.
+    ArySymbolMul|string.
+    ArySymbolSub|string.
     RelSymbolBiggerThanOrEqual|string.
     RelSymbolBiggerThan|string.
     RelSymbolLessThanOrEqual|string.
@@ -32,6 +37,13 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitArythmeticSymbol:
+        code: ArySymbolAdd, CurrentToken, @ARY_ADD.
+        code: ArySymbolDiv, CurrentToken, @ARY_DIV.
+        code: ArySymbolMod, CurrentToken, @ARY_MOD.
+        code: ArySymbolMul, CurrentToken, @ARY_MUL.
+        code: ArySymbolSub, CurrentToken, @ARY_SUB.
     .
     exitRelationalSymbol:
         code: RelSymbolBiggerThanOrEqual, CurrentToken, @REL_BIGGER_THAN_OR_EQUAL.
@@ -67,6 +79,51 @@ main:
 .
 
 tests:
+    arythmeticSymbolSub:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticSymbol/input.sub.pangolin".
+        match: myInput, $arythmeticSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ArySymbolSub, myInput.
+        assert_if: isNotEqual.
+    .
+    arythmeticSymbolMul:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticSymbol/input.mul.pangolin".
+        match: myInput, $arythmeticSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ArySymbolMul, myInput.
+        assert_if: isNotEqual.
+    .
+    arythmeticSymbolMod:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticSymbol/input.mod.pangolin".
+        match: myInput, $arythmeticSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ArySymbolMod, myInput.
+        assert_if: isNotEqual.
+    .
+    arythmeticSymbolDiv:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticSymbol/input.div.pangolin".
+        match: myInput, $arythmeticSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ArySymbolDiv, myInput.
+        assert_if: isNotEqual.
+    .
+    arythmeticSymbolAdd:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticSymbol/input.add.pangolin".
+        match: myInput, $arythmeticSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ArySymbolAdd, myInput.
+        assert_if: isNotEqual.
+    .
     relationalSymbolNotEqual:
         decl: myInput|string.
         read: myInput, "./test_files/relationalSymbol/input.not_equal.pangolin".
