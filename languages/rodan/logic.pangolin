@@ -8,6 +8,8 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    FirstAssign|string.
+    Assign|string.
     VariablePattern|string.
     ValueInt|string.
     DecimalValue|string.
@@ -22,6 +24,10 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitAssignSymbol:
+        code: FirstAssign, CurrentToken, @FIRST_ASSIGN.
+        code: Assign, CurrentToken, @ASSIGN.
     .
     exitValue:
         code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
@@ -41,6 +47,24 @@ main:
 .
 
 tests:
+    assignSymbolWithAssign:
+        decl: myInput|string.
+        read: myInput, "./test_files/assignSymbol/input.assign.pangolin".
+        match: myInput, $assignSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, Assign, myInput.
+        assert_if: isNotEqual.
+    .
+    assignSymbolWithFirstAssign:
+        decl: myInput|string.
+        read: myInput, "./test_files/assignSymbol/input.first_assign.pangolin".
+        match: myInput, $assignSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FirstAssign, myInput.
+        assert_if: isNotEqual.
+    .
     valueWithString:
         decl: myInput|string.
         read: myInput, "./test_files/value/input.string.pangolin".
