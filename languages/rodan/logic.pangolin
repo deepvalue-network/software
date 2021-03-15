@@ -8,6 +8,8 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    LogicalSymbolAnd|string.
+    LogicalSymbolOr|string.
     FirstAssign|string.
     Assign|string.
     VariablePattern|string.
@@ -24,6 +26,10 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitLogicalSymbol:
+        code: LogicalSymbolAnd, CurrentToken, @LOG_AND.
+        code: LogicalSymbolOr, CurrentToken, @LOG_OR.
     .
     exitAssignSymbol:
         code: FirstAssign, CurrentToken, @FIRST_ASSIGN.
@@ -47,6 +53,24 @@ main:
 .
 
 tests:
+    logicalSymbolOr:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalSymbol/input.or.pangolin".
+        match: myInput, $logicalSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, LogicalSymbolOr, myInput.
+        assert_if: isNotEqual.
+    .
+    logicalSymbolAnd:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalSymbol/input.and.pangolin".
+        match: myInput, $logicalSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, LogicalSymbolAnd, myInput.
+        assert_if: isNotEqual.
+    .
     assignSymbolWithAssign:
         decl: myInput|string.
         read: myInput, "./test_files/assignSymbol/input.assign.pangolin".

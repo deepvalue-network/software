@@ -12,6 +12,7 @@ language:
         decimalValue: CurrentToken, |exitDecimalValue.
         stringValue: CurrentToken, |exitStringValue.
         assignSymbol: CurrentToken, |exitAssignSymbol.
+        logicalSymbol: CurrentToken, |exitLogicalSymbol.
     .
     targets:
         pangolin:
