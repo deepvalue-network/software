@@ -9,18 +9,21 @@ language:
         program: CurrentToken, |exitProgram.
         printCommand: CurrentToken, |exitPrintCommand.
         value: CurrentToken, |exitValue.
+        valueInt: CurrentToken, |exitValueInt.
+        valueDecimal: CurrentToken, |exitValueDecimal.
         decimalValue: CurrentToken, |exitDecimalValue.
         stringValue: CurrentToken, |exitStringValue.
         assignSymbol: CurrentToken, |exitAssignSymbol.
         logicalSymbol: CurrentToken, |exitLogicalSymbol.
         relationalSymbol: CurrentToken, |exitRelationalSymbol.
         arythmeticSymbol: CurrentToken, |exitArythmeticSymbol.
+        arythmeticOperationInt: CurrentToken, |exitArythmeticOperationInt.
     .
     targets:
         pangolin:
             path: "./targets/pangolin.pangolin".
             events:
-                value: eventValue.
+                arythmetic_operation_int: eventArythmeticOperationInt.
             .
         .
     .

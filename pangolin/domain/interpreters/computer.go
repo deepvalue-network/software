@@ -97,7 +97,7 @@ func (app *computer) Add(first computable.Value, second computable.Value) (compu
 		return app.builder.Create().WithFloat64(val).Now()
 	}
 
-	return nil, errors.New("the 'add' operation can't execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64")
+	return nil, errors.New("the 'add' operation can only execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64")
 }
 
 // Substract substracts two values and return the result
@@ -176,7 +176,7 @@ func (app *computer) Substract(first computable.Value, second computable.Value) 
 		return app.builder.Create().WithFloat64(val).Now()
 	}
 
-	return nil, errors.New("the 'substract' operation can't execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64")
+	return nil, errors.New("the 'substract' operation can only execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64")
 }
 
 // Multiply multiplies two values and return the result
@@ -255,7 +255,7 @@ func (app *computer) Multiply(first computable.Value, second computable.Value) (
 		return app.builder.Create().WithFloat64(val).Now()
 	}
 
-	return nil, errors.New("the 'multiply' operation can't execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64")
+	return nil, errors.New("the 'multiply' operation can only execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64")
 }
 
 // Divide divides two values and return the result and the remaining
@@ -408,7 +408,7 @@ func (app *computer) Divide(first computable.Value, second computable.Value) (co
 		return res, rem, nil
 	}
 
-	return nil, nil, errors.New("the 'divide' operation can't execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64")
+	return nil, nil, errors.New("the 'divide' operation can only execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64")
 }
 
 // IsLessThan compares the two values and return the result
@@ -487,7 +487,7 @@ func (app *computer) IsLessThan(first computable.Value, second computable.Value)
 		return app.builder.Create().WithBool(val).Now()
 	}
 
-	return nil, errors.New("the 'less than' operation can't execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64")
+	return nil, errors.New("the 'less than' operation can only execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64")
 }
 
 // IsEqual compares the two values and return the result
@@ -585,7 +585,7 @@ func (app *computer) IsEqual(first computable.Value, second computable.Value) (c
 		return app.builder.Create().WithBool(val).Now()
 	}
 
-	return nil, errors.New("the 'equal' operation can't execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64, bool, string, nil")
+	return nil, errors.New("the 'equal' operation can only execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64, bool, string, nil")
 }
 
 // IsNotEqual compares the two values and return the result
@@ -683,7 +683,7 @@ func (app *computer) IsNotEqual(first computable.Value, second computable.Value)
 		return app.builder.Create().WithBool(val).Now()
 	}
 
-	return nil, errors.New("the 'not equal' operation can't execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64, bool, string, nil")
+	return nil, errors.New("the 'not equal' operation can only execute on these types: int8, in16, int32, int64, uint8, uint16, uint32, uint64, float32, float64, bool, string, nil")
 }
 
 // And compares the two values and return the result
@@ -699,7 +699,7 @@ func (app *computer) And(first computable.Value, second computable.Value) (compu
 		return app.builder.Create().WithBool(val).Now()
 	}
 
-	return nil, errors.New("the 'and' operation can't execute on these types: bool")
+	return nil, errors.New("the 'and' operation can only execute on these types: bool")
 }
 
 // Or compares the two values and return the result
@@ -715,7 +715,7 @@ func (app *computer) Or(first computable.Value, second computable.Value) (comput
 		return app.builder.Create().WithBool(val).Now()
 	}
 
-	return nil, errors.New("the 'or' operation can't execute on these types: bool")
+	return nil, errors.New("the 'or' operation can only execute on these types: bool")
 }
 
 // Concat concats the two values together and return the result
@@ -731,7 +731,7 @@ func (app *computer) Concat(first computable.Value, second computable.Value) (co
 		return app.builder.Create().WithString(val).Now()
 	}
 
-	return nil, errors.New("the 'concat' operation can't execute on these types: string")
+	return nil, errors.New("the 'concat' operation can only execute on these types: string")
 }
 
 // Match takes a pattern and a value and returns the results

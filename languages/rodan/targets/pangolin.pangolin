@@ -4,17 +4,29 @@ head:
 .
 
 variables:
+    FirstVariableName|string.
+    FirstValueInt|string.
+    SecondVariableName|string.
+    SecondValueInt|string.
+    AryIsAdd|bool.
+    AryIsSub|bool.
+    AryIsMul|bool.
+    AryIsDiv|bool.
+    AryIsMod|bool.
 .
 
 labels:
-    eventValue:
+    eventArythmeticOperationInt:
+        print: "eventArythmeticOperationInt".
     .
 .
 
 main:
+    print: "main".
 .
 
 tests:
     myTest:
+        print: "first_test".
     .
 .

@@ -42,8 +42,8 @@ func (app *frame) Standard(first string, second string, result string, operation
 		return nil
 	}
 
-	if _, ok := app.variables[first]; !ok {
-		str := fmt.Sprintf("standard: the first variable (%s) is not defined", first)
+	if _, ok := app.variables[result]; !ok {
+		str := fmt.Sprintf("standard: the result variable (%s) is not defined", result)
 		return errors.New(str)
 	}
 
@@ -52,8 +52,23 @@ func (app *frame) Standard(first string, second string, result string, operation
 		return errors.New(str)
 	}
 
-	if _, ok := app.variables[result]; !ok {
-		str := fmt.Sprintf("standard: the result variable (%s) is not defined", result)
+	if operation.IsMisc() {
+		misc := operation.Misc()
+		if misc.IsFrameAssignment() {
+
+			res := app.variables[result]
+			if !res.IsStackFrame() {
+				str := fmt.Sprintf("the variable (%s) was expected to be of type StackFrame, since its being used as a return variable in a frame_assign instruction", result)
+				return errors.New(str)
+			}
+
+			str := fmt.Sprintf("finish frame assignment in frame: %v, %v", res, app.variables[second])
+			return errors.New(str)
+		}
+	}
+
+	if _, ok := app.variables[first]; !ok {
+		str := fmt.Sprintf("standard: the first variable (%s) is not defined", first)
 		return errors.New(str)
 	}
 
@@ -147,10 +162,6 @@ func (app *frame) Standard(first string, second string, result string, operation
 			}
 
 			app.variables[result] = res
-		}
-
-		if misc.IsFrameAssignment() {
-			fmt.Printf("finish frame assignment in frame")
 		}
 	}
 

@@ -8,11 +8,12 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
-    ArySymbolAdd|string.
-    ArySymbolDiv|string.
-    ArySymbolMod|string.
-    ArySymbolMul|string.
-    ArySymbolSub|string.
+    IsAryOpInt|bool.
+    IsArySymbolAdd|bool.
+    IsArySymbolDiv|bool.
+    IsArySymbolMod|bool.
+    IsArySymbolMul|bool.
+    IsArySymbolSub|bool.
     RelSymbolBiggerThanOrEqual|string.
     RelSymbolBiggerThan|string.
     RelSymbolLessThanOrEqual|string.
@@ -38,12 +39,39 @@ labels:
     exitPrintCommand:
         print: "printCommand".
     .
+    exitArythmeticOperationInt:
+        assign: IsAryOpInt, true.
+        push.
+    .
     exitArythmeticSymbol:
-        code: ArySymbolAdd, CurrentToken, @ARY_ADD.
-        code: ArySymbolDiv, CurrentToken, @ARY_DIV.
-        code: ArySymbolMod, CurrentToken, @ARY_MOD.
-        code: ArySymbolMul, CurrentToken, @ARY_MUL.
-        code: ArySymbolSub, CurrentToken, @ARY_SUB.
+        decl: emptyString|string.
+
+        decl: addStr|string.
+        code: addStr, CurrentToken, @ARY_ADD.
+        not_equal: IsArySymbolAdd, addStr, emptyString.
+        del: addStr.
+
+        decl: divStr|string.
+        code: divStr, CurrentToken, @ARY_DIV.
+        not_equal: IsArySymbolDiv, divStr, emptyString.
+        del: divStr.
+
+        decl: modStr|string.
+        code: modStr, CurrentToken, @ARY_MOD.
+        not_equal: IsArySymbolMod, modStr, emptyString.
+        del: modStr.
+
+        decl: mulStr|string.
+        code: mulStr, CurrentToken, @ARY_MUL.
+        not_equal: IsArySymbolMul, mulStr, emptyString.
+        del: mulStr.
+
+        decl: subStr|string.
+        code: subStr, CurrentToken, @ARY_SUB.
+        not_equal: IsArySymbolSub, subStr, emptyString.
+        del: subStr.
+
+        del: emptyString.
     .
     exitRelationalSymbol:
         code: RelSymbolBiggerThanOrEqual, CurrentToken, @REL_BIGGER_THAN_OR_EQUAL.
@@ -60,6 +88,15 @@ labels:
     exitAssignSymbol:
         code: FirstAssign, CurrentToken, @FIRST_ASSIGN.
         code: Assign, CurrentToken, @ASSIGN.
+    .
+    exitValueDecimal:
+        code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        push.
+    .
+    exitValueInt:
+        code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: ValueInt, CurrentToken, @VAL_INT.
+        push.
     .
     exitValue:
         code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
@@ -79,13 +116,148 @@ main:
 .
 
 tests:
+    arythmeticOperationIntVariableThenVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticOperationInt/input.variable_then_variable.pangolin".
+        match: myInput, $arythmeticOperationInt.
+
+        pop.
+
+        decl: isAryOpInt|bool.
+        assign: isAryOpInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
+        assert_if: isNotEqual.
+
+        pop.
+        decl: isNotEqual|bool.
+        decl: expectedSecond|string.
+        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.second_variable.pangolin".
+        not_equal: isNotEqual, expectedSecond, VariablePattern.
+        assert_if: isNotEqual.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+        not_equal: isNotEqual, isTrue, IsArySymbolMod.
+        assert_if: isNotEqual.
+
+        pop.
+        decl: isNotEqual|bool.
+        decl: expectedSecond|string.
+        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.first_variable.pangolin".
+        not_equal: isNotEqual, expectedSecond, VariablePattern.
+        assert_if: isNotEqual.
+    .
+    arythmeticOperationIntVariableThenInt:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticOperationInt/input.variable_then_int.pangolin".
+        match: myInput, $arythmeticOperationInt.
+
+        pop.
+
+        decl: isAryOpInt|bool.
+        assign: isAryOpInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
+        assert_if: isNotEqual.
+
+        pop.
+        decl: isNotEqual|bool.
+        decl: expectedSecond|string.
+        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.23.pangolin".
+        not_equal: isNotEqual, expectedSecond, ValueInt.
+        assert_if: isNotEqual.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+        not_equal: isNotEqual, isTrue, IsArySymbolMul.
+        assert_if: isNotEqual.
+
+        pop.
+        decl: isNotEqual|bool.
+        decl: expectedSecond|string.
+        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.first_variable.pangolin".
+        not_equal: isNotEqual, expectedSecond, VariablePattern.
+        assert_if: isNotEqual.
+    .
+    arythmeticOperationIntIntThenVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticOperationInt/input.int_then_variable.pangolin".
+        match: myInput, $arythmeticOperationInt.
+
+        pop.
+
+        decl: isAryOpInt|bool.
+        assign: isAryOpInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
+        assert_if: isNotEqual.
+
+        pop.
+        decl: isNotEqual|bool.
+        decl: expectedSecond|string.
+        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.first_variable.pangolin".
+        not_equal: isNotEqual, expectedSecond, VariablePattern.
+        assert_if: isNotEqual.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+        not_equal: isNotEqual, isTrue, IsArySymbolSub.
+        assert_if: isNotEqual.
+
+        pop.
+        decl: isNotEqual|bool.
+        decl: expectedSecond|string.
+        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.23.pangolin".
+        not_equal: isNotEqual, expectedSecond, ValueInt.
+        assert_if: isNotEqual.
+    .
+    arythmeticOperationIntIntThenInt:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticOperationInt/input.int_then_int.pangolin".
+        match: myInput, $arythmeticOperationInt.
+
+        pop.
+
+        decl: isAryOpInt|bool.
+        assign: isAryOpInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
+        assert_if: isNotEqual.
+
+        pop.
+        decl: isNotEqual|bool.
+        decl: expectedSecond|string.
+        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.54.pangolin".
+        not_equal: isNotEqual, expectedSecond, ValueInt.
+        assert_if: isNotEqual.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+        not_equal: isNotEqual, isTrue, IsArySymbolAdd.
+        assert_if: isNotEqual.
+
+        pop.
+        decl: isNotEqual|bool.
+        decl: expectedFirst|string.
+        read: expectedFirst, "./test_files/arythmeticOperationInt/expected.23.pangolin".
+        not_equal: isNotEqual, expectedFirst, ValueInt.
+        assert_if: isNotEqual.
+    .
     arythmeticSymbolSub:
         decl: myInput|string.
         read: myInput, "./test_files/arythmeticSymbol/input.sub.pangolin".
         match: myInput, $arythmeticSymbol.
 
+        decl: isSub|bool.
+        assign: isSub, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ArySymbolSub, myInput.
+        not_equal: isNotEqual, isSub, IsArySymbolSub.
         assert_if: isNotEqual.
     .
     arythmeticSymbolMul:
@@ -93,8 +265,11 @@ tests:
         read: myInput, "./test_files/arythmeticSymbol/input.mul.pangolin".
         match: myInput, $arythmeticSymbol.
 
+        decl: isMul|bool.
+        assign: isMul, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ArySymbolMul, myInput.
+        not_equal: isNotEqual, isMul, IsArySymbolMul.
         assert_if: isNotEqual.
     .
     arythmeticSymbolMod:
@@ -102,8 +277,11 @@ tests:
         read: myInput, "./test_files/arythmeticSymbol/input.mod.pangolin".
         match: myInput, $arythmeticSymbol.
 
+        decl: isMod|bool.
+        assign: isMod, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ArySymbolMod, myInput.
+        not_equal: isNotEqual, isMod, IsArySymbolMod.
         assert_if: isNotEqual.
     .
     arythmeticSymbolDiv:
@@ -111,8 +289,11 @@ tests:
         read: myInput, "./test_files/arythmeticSymbol/input.div.pangolin".
         match: myInput, $arythmeticSymbol.
 
+        decl: isDiv|bool.
+        assign: isDiv, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ArySymbolDiv, myInput.
+        not_equal: isNotEqual, isDiv, IsArySymbolDiv.
         assert_if: isNotEqual.
     .
     arythmeticSymbolAdd:
@@ -120,8 +301,11 @@ tests:
         read: myInput, "./test_files/arythmeticSymbol/input.add.pangolin".
         match: myInput, $arythmeticSymbol.
 
+        decl: isAdd|bool.
+        assign: isAdd, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ArySymbolAdd, myInput.
+        not_equal: isNotEqual, isAdd, IsArySymbolAdd.
         assert_if: isNotEqual.
     .
     relationalSymbolNotEqual:
@@ -212,6 +396,69 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, FirstAssign, myInput.
+        assert_if: isNotEqual.
+    .
+    valueDecimalWithVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueDecimal/input.variable.pangolin".
+        match: myInput, $valueDecimal.
+
+        pop.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, VariablePattern, myInput.
+        assert_if: isNotEqual.
+    .
+    valueDecimalWithDecimal:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueDecimal/input.decimal.pangolin".
+        match: myInput, $valueDecimal.
+
+        pop.
+
+        decl: expectedAmount|int64.
+        assign: expectedAmount, 2.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, DecimalValueAmount, expectedAmount.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedSuffix|string.
+        read: expectedSuffix, "./test_files/valueDecimal/decimal.suffix.expected.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, DecimalValue, expectedSuffix.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedPrefix|string.
+        read: expectedPrefix, "./test_files/valueDecimal/decimal.prefix.expected.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, DecimalValue, expectedPrefix.
+        assert_if: isNotEqual.
+    .
+    valueIntWithVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueInt/input.variable.pangolin".
+        match: myInput, $valueInt.
+
+        pop.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, VariablePattern, myInput.
+        assert_if: isNotEqual.
+    .
+    valueIntWithInt:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueInt/input.int.pangolin".
+        match: myInput, $valueInt.
+
+        pop.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ValueInt, myInput.
         assert_if: isNotEqual.
     .
     valueWithString:

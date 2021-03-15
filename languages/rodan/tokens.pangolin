@@ -28,31 +28,31 @@ logicalOperation
     ;
 
 relationalOperation
-    : decimalRelationalOperation
-    | intRelationalOperation
+    : relationalOperationDecimal
+    | relationalOperationInt
     | OPEN_PARENTHESIS relationalOperation CLOSE_PARENTHESIS
     ;
 
-decimalRelationalOperation
-    : decimalValue relationalSymbol decimalValue
+relationalOperationDecimal
+    : valueDecimal relationalSymbol valueDecimal
     ;
 
-intRelationalOperation
-    : VAL_INT relationalSymbol VAL_INT
+relationalOperationInt
+    : valueInt relationalSymbol valueInt
     ;
 
 arythmeticOperation
-    : decimalArythmeticOperation
-    | intArythmeticOperation
+    : arythmeticOperationDecimal
+    | arythmeticOperationInt
     | OPEN_PARENTHESIS arythmeticOperation CLOSE_PARENTHESIS
     ;
 
-decimalArythmeticOperation
-    : decimalValue arythmeticSymbol decimalValue
+arythmeticOperationDecimal
+    : valueDecimal arythmeticSymbol valueDecimal
     ;
 
-intArythmeticOperation
-    : VAL_INT arythmeticSymbol VAL_INT
+arythmeticOperationInt
+    : valueInt arythmeticSymbol valueInt
     ;
 
 arythmeticSymbol
@@ -80,6 +80,16 @@ logicalSymbol
 assignSymbol
     : FIRST_ASSIGN
     | ASSIGN
+    ;
+
+valueDecimal
+    : VAL_VARIABLE_PATTERN
+    | decimalValue
+    ;
+
+valueInt
+    : VAL_VARIABLE_PATTERN
+    | VAL_INT
     ;
 
 value
