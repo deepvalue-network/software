@@ -8,6 +8,12 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    RelSymbolBiggerThanOrEqual|string.
+    RelSymbolBiggerThan|string.
+    RelSymbolLessThanOrEqual|string.
+    RelSymbolLessThan|string.
+    RelSymbolEqual|string.
+    RelSymbolNotEqual|string.
     LogicalSymbolAnd|string.
     LogicalSymbolOr|string.
     FirstAssign|string.
@@ -26,6 +32,14 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitRelationalSymbol:
+        code: RelSymbolBiggerThanOrEqual, CurrentToken, @REL_BIGGER_THAN_OR_EQUAL.
+        code: RelSymbolBiggerThan, CurrentToken, @REL_BIGGER_THAN.
+        code: RelSymbolLessThanOrEqual, CurrentToken, @REL_LESS_THAN_OR_EQUAL.
+        code: RelSymbolLessThan, CurrentToken, @REL_LESS_THAN.
+        code: RelSymbolEqual, CurrentToken, @REL_EQUAL.
+        code: RelSymbolNotEqual, CurrentToken, @REL_NOT_EQUAL.
     .
     exitLogicalSymbol:
         code: LogicalSymbolAnd, CurrentToken, @LOG_AND.
@@ -53,6 +67,60 @@ main:
 .
 
 tests:
+    relationalSymbolNotEqual:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalSymbol/input.not_equal.pangolin".
+        match: myInput, $relationalSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, RelSymbolNotEqual, myInput.
+        assert_if: isNotEqual.
+    .
+    relationalSymbolEqual:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalSymbol/input.equal.pangolin".
+        match: myInput, $relationalSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, RelSymbolEqual, myInput.
+        assert_if: isNotEqual.
+    .
+    relationalSymbolLessThan:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalSymbol/input.less_than.pangolin".
+        match: myInput, $relationalSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, RelSymbolLessThan, myInput.
+        assert_if: isNotEqual.
+    .
+    relationalSymbolLessThanOrEqual:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalSymbol/input.less_than_or_equal.pangolin".
+        match: myInput, $relationalSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, RelSymbolLessThanOrEqual, myInput.
+        assert_if: isNotEqual.
+    .
+    relationalSymbolBiggerThan:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalSymbol/input.bigger_than.pangolin".
+        match: myInput, $relationalSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, RelSymbolBiggerThan, myInput.
+        assert_if: isNotEqual.
+    .
+    relationalSymbolBiggerThanOrEqual:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalSymbol/input.bigger_than_or_equal.pangolin".
+        match: myInput, $relationalSymbol.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, RelSymbolBiggerThanOrEqual, myInput.
+        assert_if: isNotEqual.
+    .
     logicalSymbolOr:
         decl: myInput|string.
         read: myInput, "./test_files/logicalSymbol/input.or.pangolin".

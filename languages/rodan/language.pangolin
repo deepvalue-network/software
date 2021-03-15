@@ -13,6 +13,7 @@ language:
         stringValue: CurrentToken, |exitStringValue.
         assignSymbol: CurrentToken, |exitAssignSymbol.
         logicalSymbol: CurrentToken, |exitLogicalSymbol.
+        relationalSymbol: CurrentToken, |exitRelationalSymbol.
     .
     targets:
         pangolin:
