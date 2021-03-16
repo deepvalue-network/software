@@ -21,6 +21,7 @@ language:
         arythmeticOperationDecimal: CurrentToken, |exitArythmeticOperationDecimal.
         arythmeticOperation: CurrentToken, |exitArythmeticOperation.
         relationalOperationInt: CurrentToken, |exitRelationalOperationInt.
+        relationalOperationDecimal: CurrentToken, |exitRelationalOperationDecimal.
     .
     targets:
         pangolin:
