@@ -18,6 +18,7 @@ language:
         relationalSymbol: CurrentToken, |exitRelationalSymbol.
         arythmeticSymbol: CurrentToken, |exitArythmeticSymbol.
         arythmeticOperationInt: CurrentToken, |exitArythmeticOperationInt.
+        arythmeticOperationDecimal: CurrentToken, |exitArythmeticOperationDecimal.
     .
     targets:
         pangolin:

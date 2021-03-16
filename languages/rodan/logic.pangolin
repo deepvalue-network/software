@@ -8,6 +8,7 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsAryOpDec|bool.
     IsAryOpInt|bool.
     IsArySymbolAdd|bool.
     IsArySymbolDiv|bool.
@@ -38,6 +39,10 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitArythmeticOperationDecimal:
+        assign: IsAryOpDec, true.
+        push.
     .
     exitArythmeticOperationInt:
         assign: IsAryOpInt, true.
@@ -116,6 +121,62 @@ main:
 .
 
 tests:
+    arythmeticOperationDecVariableThenVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticOperationDecimal/input.variable_then_variable.pangolin".
+        match: myInput, $arythmeticOperationDecimal.
+
+        pop.
+
+        decl: isAryOpDec|bool.
+        assign: isAryOpDec, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isAryOpDec, IsAryOpDec.
+        assert_if: isNotEqual.
+    .
+    arythmeticOperationDecVariableThenDec:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticOperationDecimal/input.variable_then_dec.pangolin".
+        match: myInput, $arythmeticOperationDecimal.
+
+        pop.
+
+        decl: isAryOpDec|bool.
+        assign: isAryOpDec, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isAryOpDec, IsAryOpDec.
+        assert_if: isNotEqual.
+    .
+    arythmeticOperationDecDecThenVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticOperationDecimal/input.dec_then_variable.pangolin".
+        match: myInput, $arythmeticOperationDecimal.
+
+        pop.
+
+        decl: isAryOpDec|bool.
+        assign: isAryOpDec, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isAryOpDec, IsAryOpDec.
+        assert_if: isNotEqual.
+    .
+    arythmeticOperationDecDecThenDec:
+        decl: myInput|string.
+        read: myInput, "./test_files/arythmeticOperationDecimal/input.dec_then_dec.pangolin".
+        match: myInput, $arythmeticOperationDecimal.
+
+        pop.
+
+        decl: isAryOpDec|bool.
+        assign: isAryOpDec, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isAryOpDec, IsAryOpDec.
+        assert_if: isNotEqual.
+    .
     arythmeticOperationIntVariableThenVariable:
         decl: myInput|string.
         read: myInput, "./test_files/arythmeticOperationInt/input.variable_then_variable.pangolin".
