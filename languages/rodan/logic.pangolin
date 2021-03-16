@@ -190,25 +190,6 @@ tests:
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
         assert_if: isNotEqual.
-
-        pop.
-        decl: isNotEqual|bool.
-        decl: expectedSecond|string.
-        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.second_variable.pangolin".
-        not_equal: isNotEqual, expectedSecond, VariablePattern.
-        assert_if: isNotEqual.
-
-        decl: isTrue|bool.
-        assign: isTrue, true.
-        not_equal: isNotEqual, isTrue, IsArySymbolMod.
-        assert_if: isNotEqual.
-
-        pop.
-        decl: isNotEqual|bool.
-        decl: expectedSecond|string.
-        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.first_variable.pangolin".
-        not_equal: isNotEqual, expectedSecond, VariablePattern.
-        assert_if: isNotEqual.
     .
     arythmeticOperationIntVariableThenInt:
         decl: myInput|string.
@@ -222,25 +203,6 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
-        assert_if: isNotEqual.
-
-        pop.
-        decl: isNotEqual|bool.
-        decl: expectedSecond|string.
-        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.23.pangolin".
-        not_equal: isNotEqual, expectedSecond, ValueInt.
-        assert_if: isNotEqual.
-
-        decl: isTrue|bool.
-        assign: isTrue, true.
-        not_equal: isNotEqual, isTrue, IsArySymbolMul.
-        assert_if: isNotEqual.
-
-        pop.
-        decl: isNotEqual|bool.
-        decl: expectedSecond|string.
-        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.first_variable.pangolin".
-        not_equal: isNotEqual, expectedSecond, VariablePattern.
         assert_if: isNotEqual.
     .
     arythmeticOperationIntIntThenVariable:
@@ -256,25 +218,6 @@ tests:
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
         assert_if: isNotEqual.
-
-        pop.
-        decl: isNotEqual|bool.
-        decl: expectedSecond|string.
-        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.first_variable.pangolin".
-        not_equal: isNotEqual, expectedSecond, VariablePattern.
-        assert_if: isNotEqual.
-
-        decl: isTrue|bool.
-        assign: isTrue, true.
-        not_equal: isNotEqual, isTrue, IsArySymbolSub.
-        assert_if: isNotEqual.
-
-        pop.
-        decl: isNotEqual|bool.
-        decl: expectedSecond|string.
-        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.23.pangolin".
-        not_equal: isNotEqual, expectedSecond, ValueInt.
-        assert_if: isNotEqual.
     .
     arythmeticOperationIntIntThenInt:
         decl: myInput|string.
@@ -288,25 +231,6 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
-        assert_if: isNotEqual.
-
-        pop.
-        decl: isNotEqual|bool.
-        decl: expectedSecond|string.
-        read: expectedSecond, "./test_files/arythmeticOperationInt/expected.54.pangolin".
-        not_equal: isNotEqual, expectedSecond, ValueInt.
-        assert_if: isNotEqual.
-
-        decl: isTrue|bool.
-        assign: isTrue, true.
-        not_equal: isNotEqual, isTrue, IsArySymbolAdd.
-        assert_if: isNotEqual.
-
-        pop.
-        decl: isNotEqual|bool.
-        decl: expectedFirst|string.
-        read: expectedFirst, "./test_files/arythmeticOperationInt/expected.23.pangolin".
-        not_equal: isNotEqual, expectedFirst, ValueInt.
         assert_if: isNotEqual.
     .
     arythmeticSymbolSub:
