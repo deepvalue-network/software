@@ -8,6 +8,7 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsRelOpInt|bool.
     IsAryOp|bool.
     IsAryOpDec|bool.
     IsAryOpInt|bool.
@@ -40,6 +41,10 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitRelationalOperationInt:
+        assign: IsRelOpInt, true.
+        push.
     .
     exitArythmeticOperation:
         assign: IsAryOp, true.
@@ -175,9 +180,65 @@ main:
 .
 
 tests:
+    relationalOperationIntWithVariableThenVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalOperationInt/input.variable_then_variable.pangolin".
+        match: myInput, $relationalOperationInt.
+
+        pop.
+
+        decl: isRelOpInt|bool.
+        assign: isRelOpInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isRelOpInt, IsRelOpInt.
+        assert_if: isNotEqual.
+    .
+    relationalOperationIntWithVariableThenInt:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalOperationInt/input.variable_then_int.pangolin".
+        match: myInput, $relationalOperationInt.
+
+        pop.
+
+        decl: isRelOpInt|bool.
+        assign: isRelOpInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isRelOpInt, IsRelOpInt.
+        assert_if: isNotEqual.
+    .
+    relationalOperationIntWithIntThenVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalOperationInt/input.int_then_variable.pangolin".
+        match: myInput, $relationalOperationInt.
+
+        pop.
+
+        decl: isRelOpInt|bool.
+        assign: isRelOpInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isRelOpInt, IsRelOpInt.
+        assert_if: isNotEqual.
+    .
+    relationalOperationIntWithIntThenInt:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalOperationInt/input.int_then_int.pangolin".
+        match: myInput, $relationalOperationInt.
+
+        pop.
+
+        decl: isRelOpInt|bool.
+        assign: isRelOpInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isRelOpInt, IsRelOpInt.
+        assert_if: isNotEqual.
+    .
     arythmeticOperationWithDecWithParenthesis:
         decl: myInput|string.
-        read: myInput, "./test_files/relationalOperation/input.decimal_with_parenthesis.pangolin".
+        read: myInput, "./test_files/arythmeticOperation/input.decimal_with_parenthesis.pangolin".
         match: myInput, $arythmeticOperation.
 
         pop.
@@ -191,7 +252,7 @@ tests:
     .
     arythmeticOperationWithDec:
         decl: myInput|string.
-        read: myInput, "./test_files/relationalOperation/input.decimal.pangolin".
+        read: myInput, "./test_files/arythmeticOperation/input.decimal.pangolin".
         match: myInput, $arythmeticOperation.
 
         pop.
@@ -205,7 +266,7 @@ tests:
     .
     arythmeticOperationWithIntWithParenthesis:
         decl: myInput|string.
-        read: myInput, "./test_files/relationalOperation/input.int_with_parenthesis.pangolin".
+        read: myInput, "./test_files/arythmeticOperation/input.int_with_parenthesis.pangolin".
         match: myInput, $arythmeticOperation.
 
         pop.
@@ -219,7 +280,7 @@ tests:
     .
     arythmeticOperationWithInt:
         decl: myInput|string.
-        read: myInput, "./test_files/relationalOperation/input.int.pangolin".
+        read: myInput, "./test_files/arythmeticOperation/input.int.pangolin".
         match: myInput, $arythmeticOperation.
 
         pop.
