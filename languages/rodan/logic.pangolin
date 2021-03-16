@@ -8,6 +8,7 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsRelOp|bool.
     IsRelOpDec|bool.
     IsRelOpInt|bool.
     IsAryOp|bool.
@@ -42,6 +43,10 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitRelationalOperation:
+        assign: IsRelOp, true.
+        push.
     .
     exitRelationalOperationDecimal:
         assign: IsRelOpDec, true.
@@ -185,6 +190,62 @@ main:
 .
 
 tests:
+    relationalOperationWithDecWithParenthesis:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalOperation/input.decimal_with_parenthesis.pangolin".
+        match: myInput, $relationalOperation.
+
+        pop.
+
+        decl: isRelOp|bool.
+        assign: isRelOp, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isRelOp, IsRelOp.
+        assert_if: isNotEqual.
+    .
+    relationalOperationWithDec:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalOperation/input.decimal.pangolin".
+        match: myInput, $relationalOperation.
+
+        pop.
+
+        decl: isRelOp|bool.
+        assign: isRelOp, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isRelOp, IsRelOp.
+        assert_if: isNotEqual.
+    .
+    relationalOperationnWithIntWithParenthesis:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalOperation/input.int_with_parenthesis.pangolin".
+        match: myInput, $relationalOperation.
+
+        pop.
+
+        decl: isRelOp|bool.
+        assign: isRelOp, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isRelOp, IsRelOp.
+        assert_if: isNotEqual.
+    .
+    relationalOperationWithInt:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalOperation/input.int.pangolin".
+        match: myInput, $relationalOperation.
+
+        pop.
+
+        decl: isRelOp|bool.
+        assign: isRelOp, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isRelOp, IsRelOp.
+        assert_if: isNotEqual.
+    .
     relationalOperationDecimalWithVariableThenVariable:
         decl: myInput|string.
         read: myInput, "./test_files/relationalOperationDecimal/input.variable_then_variable.pangolin".
