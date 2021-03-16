@@ -24,8 +24,8 @@ variables:
     IsRelSymbolNotEqual|bool.
     LogicalSymbolAnd|string.
     LogicalSymbolOr|string.
-    FirstAssign|string.
-    Assign|string.
+    IsFirstAssign|bool.
+    IsAssign|bool.
     VariablePattern|string.
     ValueInt|string.
     DecimalValue|string.
@@ -123,8 +123,19 @@ labels:
         code: LogicalSymbolOr, CurrentToken, @LOG_OR.
     .
     exitAssignSymbol:
-        code: FirstAssign, CurrentToken, @FIRST_ASSIGN.
-        code: Assign, CurrentToken, @ASSIGN.
+        decl: emptyString|string.
+
+        decl: firstAssign|string.
+        code: firstAssign, CurrentToken, @FIRST_ASSIGN.
+        not_equal: IsFirstAssign, firstAssign, emptyString.
+        del: firstAssign.
+
+        decl: assign|string.
+        code: assign, CurrentToken, @ASSIGN.
+        not_equal: IsAssign, assign, emptyString.
+        del: assign.
+
+        del: emptyString.
     .
     exitValueDecimal:
         code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
@@ -476,8 +487,11 @@ tests:
         read: myInput, "./test_files/assignSymbol/input.assign.pangolin".
         match: myInput, $assignSymbol.
 
+        decl: isAssign|bool.
+        assign: isAssign, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, Assign, myInput.
+        not_equal: isNotEqual, isAssign, IsAssign.
         assert_if: isNotEqual.
     .
     assignSymbolWithFirstAssign:
@@ -485,8 +499,11 @@ tests:
         read: myInput, "./test_files/assignSymbol/input.first_assign.pangolin".
         match: myInput, $assignSymbol.
 
+        decl: isFirstAssign|bool.
+        assign: isFirstAssign, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, FirstAssign, myInput.
+        not_equal: isNotEqual, isFirstAssign, IsFirstAssign.
         assert_if: isNotEqual.
     .
     valueDecimalWithVariable:
