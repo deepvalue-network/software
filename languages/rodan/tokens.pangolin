@@ -34,25 +34,38 @@ relationalOperation
     ;
 
 relationalOperationDecimal
-    : valueDecimal relationalSymbol valueDecimal
+    : valueDecimalComplex relationalSymbol valueDecimalComplex
     ;
 
 relationalOperationInt
-    : valueInt relationalSymbol valueInt
+    : valueIntComplex relationalSymbol valueIntComplex
     ;
 
 arythmeticOperation
     : arythmeticOperationDecimal
     | arythmeticOperationInt
-    | OPEN_PARENTHESIS arythmeticOperation CLOSE_PARENTHESIS
     ;
 
 arythmeticOperationDecimal
-    : valueDecimal arythmeticSymbol valueDecimal
+    : valueDecimal arythmeticSymbol valueDecimalComplex
+    | arythmeticOperationDecimal arythmeticSymbol valueDecimalComplex
+    | OPEN_PARENTHESIS arythmeticOperationDecimal CLOSE_PARENTHESIS
+    ;
+
+valueDecimalComplex
+    : valueDecimal
+    | arythmeticOperationDecimal
     ;
 
 arythmeticOperationInt
-    : valueInt arythmeticSymbol valueInt
+    : valueInt arythmeticSymbol valueIntComplex
+    | arythmeticOperationInt arythmeticSymbol valueIntComplex
+    | OPEN_PARENTHESIS arythmeticOperationInt CLOSE_PARENTHESIS
+    ;
+
+valueIntComplex
+    : valueInt
+    | arythmeticOperationInt
     ;
 
 arythmeticSymbol

@@ -13,7 +13,9 @@ variables:
     IsRelOpInt|bool.
     IsAryOp|bool.
     IsAryOpDec|bool.
+    IsValueDecimalComplex|bool.
     IsAryOpInt|bool.
+    IsValueIntComplex|bool.
     IsArySymbolAdd|bool.
     IsArySymbolDiv|bool.
     IsArySymbolMod|bool.
@@ -64,8 +66,16 @@ labels:
         assign: IsAryOpDec, true.
         push.
     .
+    exitValueDecimalComplex:
+        assign: IsValueDecimalComplex, true.
+        push.
+    .
     exitArythmeticOperationInt:
         assign: IsAryOpInt, true.
+        push.
+    .
+    exitValueIntComplex:
+        assign: IsValueIntComplex, true.
         push.
     .
     exitArythmeticSymbol:
@@ -386,6 +396,48 @@ tests:
         not_equal: isNotEqual, isAryOp, IsAryOp.
         assert_if: isNotEqual.
     .
+    valueDecimalComplexWithArythmeticOperationComplex:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueDecimalComplex/input.arythmetic_operation_dec_complex.pangolin".
+        match: myInput, $valueDecimalComplex.
+
+        pop.
+
+        decl: isComplexDec|bool.
+        assign: isComplexDec, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexDec, IsValueDecimalComplex.
+        assert_if: isNotEqual.
+    .
+    valueDecimalComplexWithArythmeticOperation:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueDecimalComplex/input.arythmetic_operation_dec.pangolin".
+        match: myInput, $valueDecimalComplex.
+
+        pop.
+
+        decl: isComplexDec|bool.
+        assign: isComplexDec, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexDec, IsValueDecimalComplex.
+        assert_if: isNotEqual.
+    .
+    valueDecimalComplexWithInt:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueDecimalComplex/input.dec.pangolin".
+        match: myInput, $valueDecimalComplex.
+
+        pop.
+
+        decl: isComplexDec|bool.
+        assign: isComplexDec, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexDec, IsValueDecimalComplex.
+        assert_if: isNotEqual.
+    .
     arythmeticOperationWithIntWithParenthesis:
         decl: myInput|string.
         read: myInput, "./test_files/arythmeticOperation/input.int_with_parenthesis.pangolin".
@@ -412,6 +464,48 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isAryOp, IsAryOp.
+        assert_if: isNotEqual.
+    .
+    valueIntComplexWithArythmeticOperationComplex:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueIntComplex/input.arythmetic_operation_int_complex.pangolin".
+        match: myInput, $valueIntComplex.
+
+        pop.
+
+        decl: isComplexInt|bool.
+        assign: isComplexInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexInt, IsValueIntComplex.
+        assert_if: isNotEqual.
+    .
+    valueIntComplexWithArythmeticOperation:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueIntComplex/input.arythmetic_operation_int.pangolin".
+        match: myInput, $valueIntComplex.
+
+        pop.
+
+        decl: isComplexInt|bool.
+        assign: isComplexInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexInt, IsValueIntComplex.
+        assert_if: isNotEqual.
+    .
+    valueIntComplexWithInt:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueIntComplex/input.int.pangolin".
+        match: myInput, $valueIntComplex.
+
+        pop.
+
+        decl: isComplexInt|bool.
+        assign: isComplexInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexInt, IsValueIntComplex.
         assert_if: isNotEqual.
     .
     arythmeticOperationDecVariableThenVariable:

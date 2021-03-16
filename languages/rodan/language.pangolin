@@ -17,7 +17,9 @@ language:
         logicalSymbol: CurrentToken, |exitLogicalSymbol.
         relationalSymbol: CurrentToken, |exitRelationalSymbol.
         arythmeticSymbol: CurrentToken, |exitArythmeticSymbol.
+        valueIntComplex: CurrentToken, |exitValueIntComplex.
         arythmeticOperationInt: CurrentToken, |exitArythmeticOperationInt.
+        valueDecimalComplex: CurrentToken, |exitValueDecimalComplex.
         arythmeticOperationDecimal: CurrentToken, |exitArythmeticOperationDecimal.
         arythmeticOperation: CurrentToken, |exitArythmeticOperation.
         relationalOperationInt: CurrentToken, |exitRelationalOperationInt.
