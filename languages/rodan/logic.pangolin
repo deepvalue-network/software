@@ -16,12 +16,12 @@ variables:
     IsArySymbolMod|bool.
     IsArySymbolMul|bool.
     IsArySymbolSub|bool.
-    RelSymbolBiggerThanOrEqual|string.
-    RelSymbolBiggerThan|string.
-    RelSymbolLessThanOrEqual|string.
-    RelSymbolLessThan|string.
-    RelSymbolEqual|string.
-    RelSymbolNotEqual|string.
+    IsRelSymbolBiggerThanOrEqual|bool.
+    IsRelSymbolBiggerThan|bool.
+    IsRelSymbolLessThanOrEqual|bool.
+    IsRelSymbolLessThan|bool.
+    IsRelSymbolEqual|bool.
+    IsRelSymbolNotEqual|bool.
     LogicalSymbolAnd|string.
     LogicalSymbolOr|string.
     FirstAssign|string.
@@ -84,12 +84,39 @@ labels:
         del: emptyString.
     .
     exitRelationalSymbol:
-        code: RelSymbolBiggerThanOrEqual, CurrentToken, @REL_BIGGER_THAN_OR_EQUAL.
-        code: RelSymbolBiggerThan, CurrentToken, @REL_BIGGER_THAN.
-        code: RelSymbolLessThanOrEqual, CurrentToken, @REL_LESS_THAN_OR_EQUAL.
-        code: RelSymbolLessThan, CurrentToken, @REL_LESS_THAN.
-        code: RelSymbolEqual, CurrentToken, @REL_EQUAL.
-        code: RelSymbolNotEqual, CurrentToken, @REL_NOT_EQUAL.
+        decl: emptyString|string.
+
+        decl: biggerThanOrEqual|string.
+        code: biggerThanOrEqual, CurrentToken, @REL_BIGGER_THAN_OR_EQUAL.
+        not_equal: IsRelSymbolBiggerThanOrEqual, biggerThanOrEqual, emptyString.
+        del: biggerThanOrEqual.
+
+        decl: biggerThan|string.
+        code: biggerThan, CurrentToken, @REL_BIGGER_THAN.
+        not_equal: IsRelSymbolBiggerThan, biggerThan, emptyString.
+        del: biggerThan.
+
+        decl: lessThanOrEqual|string.
+        code: lessThanOrEqual, CurrentToken, @REL_LESS_THAN_OR_EQUAL.
+        not_equal: IsRelSymbolLessThanOrEqual, lessThanOrEqual, emptyString.
+        del: lessThanOrEqual.
+
+        decl: lessThan|string.
+        code: lessThan, CurrentToken, @REL_LESS_THAN.
+        not_equal: IsRelSymbolLessThan, lessThan, emptyString.
+        del: lessThan.
+
+        decl: equal|string.
+        code: equal, CurrentToken, @REL_EQUAL.
+        not_equal: IsRelSymbolEqual, equal, emptyString.
+        del: equal.
+
+        decl: notEqual|string.
+        code: notEqual, CurrentToken, @REL_NOT_EQUAL.
+        not_equal: IsRelSymbolNotEqual, notEqual, emptyString.
+        del: notEqual.
+
+        del: emptyString.
     .
     exitLogicalSymbol:
         code: LogicalSymbolAnd, CurrentToken, @LOG_AND.
@@ -359,8 +386,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.not_equal.pangolin".
         match: myInput, $relationalSymbol.
 
+        decl: isRelNotEqual|bool.
+        assign: isRelNotEqual, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, RelSymbolNotEqual, myInput.
+        not_equal: isNotEqual, isRelNotEqual, IsRelSymbolNotEqual.
         assert_if: isNotEqual.
     .
     relationalSymbolEqual:
@@ -368,8 +398,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.equal.pangolin".
         match: myInput, $relationalSymbol.
 
+        decl: isRelEqual|bool.
+        assign: isRelEqual, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, RelSymbolEqual, myInput.
+        not_equal: isNotEqual, isRelEqual, IsRelSymbolEqual.
         assert_if: isNotEqual.
     .
     relationalSymbolLessThan:
@@ -377,8 +410,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.less_than.pangolin".
         match: myInput, $relationalSymbol.
 
+        decl: isLessThan|bool.
+        assign: isLessThan, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, RelSymbolLessThan, myInput.
+        not_equal: isNotEqual, isLessThan, IsRelSymbolLessThan.
         assert_if: isNotEqual.
     .
     relationalSymbolLessThanOrEqual:
@@ -386,8 +422,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.less_than_or_equal.pangolin".
         match: myInput, $relationalSymbol.
 
+        decl: isLessThanOrEqual|bool.
+        assign: isLessThanOrEqual, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, RelSymbolLessThanOrEqual, myInput.
+        not_equal: isNotEqual, isLessThanOrEqual, IsRelSymbolLessThanOrEqual.
         assert_if: isNotEqual.
     .
     relationalSymbolBiggerThan:
@@ -395,8 +434,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.bigger_than.pangolin".
         match: myInput, $relationalSymbol.
 
+        decl: isBiggerThan|bool.
+        assign: isBiggerThan, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, RelSymbolBiggerThan, myInput.
+        not_equal: isNotEqual, isBiggerThan, IsRelSymbolBiggerThan.
         assert_if: isNotEqual.
     .
     relationalSymbolBiggerThanOrEqual:
@@ -404,8 +446,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.bigger_than_or_equal.pangolin".
         match: myInput, $relationalSymbol.
 
+        decl: isBiggerThanOrEqual|bool.
+        assign: isBiggerThanOrEqual, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, RelSymbolBiggerThanOrEqual, myInput.
+        not_equal: isNotEqual, isBiggerThanOrEqual, IsRelSymbolBiggerThanOrEqual.
         assert_if: isNotEqual.
     .
     logicalSymbolOr:
