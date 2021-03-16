@@ -19,6 +19,7 @@ language:
         arythmeticSymbol: CurrentToken, |exitArythmeticSymbol.
         arythmeticOperationInt: CurrentToken, |exitArythmeticOperationInt.
         arythmeticOperationDecimal: CurrentToken, |exitArythmeticOperationDecimal.
+        arythmeticOperation: CurrentToken, |exitArythmeticOperation.
     .
     targets:
         pangolin:
