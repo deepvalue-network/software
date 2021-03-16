@@ -22,8 +22,8 @@ variables:
     IsRelSymbolLessThan|bool.
     IsRelSymbolEqual|bool.
     IsRelSymbolNotEqual|bool.
-    LogicalSymbolAnd|string.
-    LogicalSymbolOr|string.
+    IsLogicalSymbolAnd|bool.
+    IsLogicalSymbolOr|bool.
     IsFirstAssign|bool.
     IsAssign|bool.
     VariablePattern|string.
@@ -119,8 +119,19 @@ labels:
         del: emptyString.
     .
     exitLogicalSymbol:
-        code: LogicalSymbolAnd, CurrentToken, @LOG_AND.
-        code: LogicalSymbolOr, CurrentToken, @LOG_OR.
+        decl: emptyString|string.
+
+        decl: isAnd|string.
+        code: isAnd, CurrentToken, @LOG_AND.
+        not_equal: IsLogicalSymbolAnd, isAnd, emptyString.
+        del: isAnd.
+
+        decl: isOr|string.
+        code: isOr, CurrentToken, @LOG_OR.
+        not_equal: IsLogicalSymbolOr, isOr, emptyString.
+        del: isOr.
+
+        del: emptyString.
     .
     exitAssignSymbol:
         decl: emptyString|string.
@@ -469,8 +480,11 @@ tests:
         read: myInput, "./test_files/logicalSymbol/input.or.pangolin".
         match: myInput, $logicalSymbol.
 
+        decl: isOr|bool.
+        assign: isOr, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, LogicalSymbolOr, myInput.
+        not_equal: isNotEqual, isOr, IsLogicalSymbolOr.
         assert_if: isNotEqual.
     .
     logicalSymbolAnd:
@@ -478,8 +492,11 @@ tests:
         read: myInput, "./test_files/logicalSymbol/input.and.pangolin".
         match: myInput, $logicalSymbol.
 
+        decl: isAnd|bool.
+        assign: isAnd, true.
+
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, LogicalSymbolAnd, myInput.
+        not_equal: isNotEqual, isAnd, IsLogicalSymbolAnd.
         assert_if: isNotEqual.
     .
     assignSymbolWithAssign:
