@@ -8,6 +8,8 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsLogOp|bool.
+    IsLogOpOperand|bool.
     IsRelOp|bool.
     IsRelOpDec|bool.
     IsRelOpInt|bool.
@@ -45,6 +47,14 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitLogicalOperation:
+        assign: IsLogOp, true.
+        push.
+    .
+    exitLogicalOperationOperand:
+        assign: IsLogOpOperand, true.
+        push.
     .
     exitRelationalOperation:
         assign: IsRelOp, true.
@@ -200,6 +210,118 @@ main:
 .
 
 tests:
+    logicalOperationWithComplexWithParenthesis:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalOperation/input.complex_with_parenthesis.pangolin".
+        match: myInput, $logicalOperation.
+
+        pop.
+
+        decl: isLogOp|bool.
+        assign: isLogOp, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isLogOp, IsLogOp.
+        assert_if: isNotEqual.
+    .
+    logicalOperationWithComplex:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalOperation/input.complex.pangolin".
+        match: myInput, $logicalOperation.
+
+        pop.
+
+        decl: isLogOp|bool.
+        assign: isLogOp, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isLogOp, IsLogOp.
+        assert_if: isNotEqual.
+    .
+    logicalOperationWithSimpleWithParenthesis:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalOperation/input.simple_with_parenthesis.pangolin".
+        match: myInput, $logicalOperation.
+
+        pop.
+
+        decl: isLogOp|bool.
+        assign: isLogOp, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isLogOp, IsLogOp.
+        assert_if: isNotEqual.
+    .
+    logicalOperationWithSimple:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalOperation/input.simple.pangolin".
+        match: myInput, $logicalOperation.
+
+        pop.
+
+        decl: isLogOp|bool.
+        assign: isLogOp, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isLogOp, IsLogOp.
+        assert_if: isNotEqual.
+    .
+    logicalOperationOperandWithLogicalOperationWithParenthesis:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalOperationOperand/input.logical_operation_with_parenthesis.pangolin".
+        match: myInput, $logicalOperationOperand.
+
+        pop.
+
+        decl: isLogOpOperand|bool.
+        assign: isLogOpOperand, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isLogOpOperand, IsLogOpOperand.
+        assert_if: isNotEqual.
+    .
+    logicalOperationOperandWithLogicalOperation:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalOperationOperand/input.logical_operation.pangolin".
+        match: myInput, $logicalOperationOperand.
+
+        pop.
+
+        decl: isLogOpOperand|bool.
+        assign: isLogOpOperand, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isLogOpOperand, IsLogOpOperand.
+        assert_if: isNotEqual.
+    .
+    logicalOperationOperandWithRelationalOperationWithParenthesis:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalOperationOperand/input.relational_operation_with_parenthesis.pangolin".
+        match: myInput, $logicalOperationOperand.
+
+        pop.
+
+        decl: isLogOpOperand|bool.
+        assign: isLogOpOperand, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isLogOpOperand, IsLogOpOperand.
+        assert_if: isNotEqual.
+    .
+    logicalOperationOperandWithRelationalOperation:
+        decl: myInput|string.
+        read: myInput, "./test_files/logicalOperationOperand/input.relational_operation.pangolin".
+        match: myInput, $logicalOperationOperand.
+
+        pop.
+
+        decl: isLogOpOperand|bool.
+        assign: isLogOpOperand, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isLogOpOperand, IsLogOpOperand.
+        assert_if: isNotEqual.
+    .
     relationalOperationWithDecWithParenthesis:
         decl: myInput|string.
         read: myInput, "./test_files/relationalOperation/input.decimal_with_parenthesis.pangolin".

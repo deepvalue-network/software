@@ -25,6 +25,8 @@ language:
         relationalOperationInt: CurrentToken, |exitRelationalOperationInt.
         relationalOperationDecimal: CurrentToken, |exitRelationalOperationDecimal.
         relationalOperation: CurrentToken, |exitRelationalOperation.
+        logicalOperationOperand: CurrentToken, |exitLogicalOperationOperand.
+        logicalOperation: CurrentToken, |exitLogicalOperation.
     .
     targets:
         pangolin:

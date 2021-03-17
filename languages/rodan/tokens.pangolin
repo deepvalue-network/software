@@ -23,8 +23,16 @@ assignable
     ;
 
 logicalOperation
-    : relationalOperation logicalSymbol relationalOperation
+    : relationalOperation logicalSymbol logicalOperationOperand
+    | logicalOperationOperand logicalSymbol relationalOperation
+    | logicalOperationOperand logicalSymbol logicalOperationOperand
     | OPEN_PARENTHESIS logicalOperation CLOSE_PARENTHESIS
+    ;
+
+logicalOperationOperand
+    : relationalOperation
+    | logicalOperation
+    | OPEN_PARENTHESIS logicalOperationOperand CLOSE_PARENTHESIS
     ;
 
 relationalOperation
