@@ -27,6 +27,13 @@ language:
         relationalOperation: CurrentToken, |exitRelationalOperation.
         logicalOperationOperand: CurrentToken, |exitLogicalOperationOperand.
         logicalOperation: CurrentToken, |exitLogicalOperation.
+        primitiveType: CurrentToken, |exitPrimitiveType.
+        listType: CurrentToken, |exitListType.
+        complexType: CurrentToken, |exitComplexType.
+        listDefinitionContentElement: CurrentToken, |exitListDefinitionContentElement.
+        listDefinitionContent: CurrentToken, |exitListDefinitionContent.
+        listDefinitionInternal: CurrentToken, |exitListDefinitionInternal.
+        listDefinition: CurrentToken, |exitListDefinition.
     .
     targets:
         pangolin:

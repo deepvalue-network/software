@@ -19,7 +19,49 @@ assignable
     : logicalOperation
     | relationalOperation
     | arythmeticOperation
+    | listDefinition
     | value
+    ;
+
+listDefinition
+    : complexType listDefinitionInternal
+    ;
+
+listDefinitionInternal
+    : OPEN_CURLED_BRACKET listDefinitionContent? CLOSE_CURLED_BRACKET
+    ;
+
+listDefinitionContent
+    : listDefinitionContentElement* assignable
+    ;
+
+listDefinitionContentElement
+    : assignable COMMA
+    ;
+
+complexType
+    : listType
+    | primitiveType
+    ;
+
+listType
+    : primitiveType PIPE LIST_DIMENSION
+    ;
+
+primitiveType
+    : BOOL
+    | BYTE
+    | INT_HEIGHT
+    | INT_SIXTEEN
+    | INT_THIRTY_TWO
+    | INT_SIXTY_FOUR
+    | UINT_HEIGHT
+    | UINT_SIXTEEN
+    | UINT_THIRTY_TWO
+    | UINT_SIXTY_FOUR
+    | FLOAT_THIRTY_TWO
+    | FLOAT_SIXTY_FOUR
+    | STRING
     ;
 
 logicalOperation

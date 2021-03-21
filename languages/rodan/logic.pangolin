@@ -8,6 +8,26 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsListDefinition|bool.
+    IsListDefInternal|bool.
+    IsListDefCon|bool.
+    IsListDefConEl|bool.
+    IsComplexType|bool.
+    IsListType|bool.
+    ListTypeDimension|string.
+    IsPrimTypeBool|bool.
+    IsPrimTypeByte|bool.
+    IsPrimTypeFloatThirtyTwo|bool.
+    IsPrimTypeFloatSixtyFour|bool.
+    IsPrimTypeIntHeight|bool.
+    IsPrimTypeIntSixteen|bool.
+    IsPrimTypeIntThirtyTwo|bool.
+    IsPrimTypeIntSixtyFour|bool.
+    IsPrimTypeString|bool.
+    IsPrimTypeUintHeight|bool.
+    IsPrimTypeUintSixteen|bool.
+    IsPrimTypeUintThirtyTwo|bool.
+    IsPrimTypeUintSixtyFour|bool.
     IsLogOp|bool.
     IsLogOpOperand|bool.
     IsRelOp|bool.
@@ -47,6 +67,102 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitListDefinition:
+        assign: IsListDefinition, true.
+        push.
+    .
+    exitListDefinitionInternal:
+        assign: IsListDefInternal, true.
+        push.
+    .
+    exitListDefinitionContent:
+        assign: IsListDefCon, true.
+        push.
+    .
+    exitListDefinitionContentElement:
+        assign: IsListDefConEl, true.
+        push.
+    .
+    exitComplexType:
+        assign: IsComplexType, true.
+        push.
+    .
+    exitListType:
+        assign: IsListType, true.
+        code: ListTypeDimension, CurrentToken, @LIST_DIMENSION.
+        push.
+    .
+    exitPrimitiveType:
+        decl: emptyString|string.
+
+        decl: str|string.
+        code: str, CurrentToken, @BOOL.
+        not_equal: IsPrimTypeBool, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @BYTE.
+        not_equal: IsPrimTypeByte, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @INT_HEIGHT.
+        not_equal: IsPrimTypeIntHeight, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @INT_SIXTEEN.
+        not_equal: IsPrimTypeIntSixteen, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @INT_THIRTY_TWO.
+        not_equal: IsPrimTypeIntThirtyTwo, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @INT_SIXTY_FOUR.
+        not_equal: IsPrimTypeIntSixtyFour, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @UINT_HEIGHT.
+        not_equal: IsPrimTypeUintHeight, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @UINT_SIXTEEN.
+        not_equal: IsPrimTypeUintSixteen, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @UINT_THIRTY_TWO.
+        not_equal: IsPrimTypeUintThirtyTwo, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @UINT_SIXTY_FOUR.
+        not_equal: IsPrimTypeUintSixtyFour, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @FLOAT_THIRTY_TWO.
+        not_equal: IsPrimTypeFloatThirtyTwo, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @FLOAT_SIXTY_FOUR.
+        not_equal: IsPrimTypeFloatSixtyFour, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @STRING.
+        not_equal: IsPrimTypeString, str, emptyString.
+        del: str.
+
+        del: emptyString.
+        push.
     .
     exitLogicalOperation:
         assign: IsLogOp, true.
@@ -210,6 +326,323 @@ main:
 .
 
 tests:
+    listDefinition:
+        decl: myInput|string.
+        read: myInput, "./test_files/listDefinition/input.simple.pangolin".
+        match: myInput, $listDefinition.
+
+        pop.
+
+        decl: isListDefinition|bool.
+        assign: isListDefinition, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isListDefinition, IsListDefinition.
+        assert_if: isNotEqual.
+    .
+    listDefinitionInternalWithElements:
+        decl: myInput|string.
+        read: myInput, "./test_files/listDefinitionInternal/input.with_elements.pangolin".
+        match: myInput, $listDefinitionInternal.
+
+        pop.
+
+        decl: isListDefInternal|bool.
+        assign: isListDefInternal, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isListDefInternal, IsListDefInternal.
+        assert_if: isNotEqual.
+    .
+    listDefinitionInternalWithEmpty:
+        decl: myInput|string.
+        read: myInput, "./test_files/listDefinitionInternal/input.empty.pangolin".
+        match: myInput, $listDefinitionInternal.
+
+        pop.
+
+        decl: isListDefInternal|bool.
+        assign: isListDefInternal, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isListDefInternal, IsListDefInternal.
+        assert_if: isNotEqual.
+    .
+    listDefinitionContentWithMultipleElements:
+        decl: myInput|string.
+        read: myInput, "./test_files/listDefinitionContent/input.with_multiple_elements.pangolin".
+        match: myInput, $listDefinitionContent.
+
+        pop.
+
+        decl: isListDefCon|bool.
+        assign: isListDefCon, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isListDefCon, IsListDefCon.
+        assert_if: isNotEqual.
+    .
+    listDefinitionContentWithOneElement:
+        decl: myInput|string.
+        read: myInput, "./test_files/listDefinitionContent/input.with_one_element.pangolin".
+        match: myInput, $listDefinitionContent.
+
+        pop.
+
+        decl: isListDefCon|bool.
+        assign: isListDefCon, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isListDefCon, IsListDefCon.
+        assert_if: isNotEqual.
+    .
+    listDefinitionContentElementWithSimple:
+        decl: myInput|string.
+        read: myInput, "./test_files/listDefinitionContentElement/input.simple.pangolin".
+        match: myInput, $listDefinitionContentElement.
+
+        pop.
+
+        decl: isListDefConEl|bool.
+        assign: isListDefConEl, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isListDefConEl, IsListDefConEl.
+        assert_if: isNotEqual.
+    .
+    complexTypeWithPrimitiveType:
+        decl: myInput|string.
+        read: myInput, "./test_files/complexType/input.primitive_type.pangolin".
+        match: myInput, $complexType.
+
+        pop.
+
+        decl: isComplexType|bool.
+        assign: isComplexType, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexType, IsComplexType.
+        assert_if: isNotEqual.
+    .
+    complexTypeWithListType:
+        decl: myInput|string.
+        read: myInput, "./test_files/complexType/input.list_type.pangolin".
+        match: myInput, $complexType.
+
+        pop.
+
+        decl: isComplexType|bool.
+        assign: isComplexType, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexType, IsComplexType.
+        assert_if: isNotEqual.
+    .
+    listType:
+        decl: myInput|string.
+        read: myInput, "./test_files/listType/input.simple.pangolin".
+        match: myInput, $listType.
+
+        pop.
+
+        decl: expectedDimension|string.
+        read: expectedDimension, "./test_files/listType/expected.dimension.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, expectedDimension, ListTypeDimension.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        decl: isListType|bool.
+        assign: isListType, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isListType, IsListType.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    primitiveTypeWithString:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.string.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeString|bool.
+        assign: isPrimTypeString, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeString, IsPrimTypeString.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithUintSixtyFour:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.uint64.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeUint|bool.
+        assign: isPrimTypeUint, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeUint, IsPrimTypeUintSixtyFour.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithUintThirtyTwo:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.uint32.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeUint|bool.
+        assign: isPrimTypeUint, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeUint, IsPrimTypeUintThirtyTwo.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithUintSixteen:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.uint16.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeUint|bool.
+        assign: isPrimTypeUint, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeUint, IsPrimTypeUintSixteen.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithUintHeight:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.uint8.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeUint|bool.
+        assign: isPrimTypeUint, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeUint, IsPrimTypeUintHeight.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithIntSixtyFour:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.int64.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeInt|bool.
+        assign: isPrimTypeInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeInt, IsPrimTypeIntSixtyFour.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithIntThirtyTwo:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.int32.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeInt|bool.
+        assign: isPrimTypeInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeInt, IsPrimTypeIntThirtyTwo.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithIntSixteen:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.int16.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeInt|bool.
+        assign: isPrimTypeInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeInt, IsPrimTypeIntSixteen.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithIntHeight:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.int8.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeInt|bool.
+        assign: isPrimTypeInt, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeInt, IsPrimTypeIntHeight.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithFloatSixtyFour:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.float64.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeFloat|bool.
+        assign: isPrimTypeFloat, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeFloat, IsPrimTypeFloatSixtyFour.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithFloatThirtyTwo:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.float32.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeFloat|bool.
+        assign: isPrimTypeFloat, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeFloat, IsPrimTypeFloatThirtyTwo.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithByte:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.byte.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeByte|bool.
+        assign: isPrimTypeByte, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeByte, IsPrimTypeByte.
+        assert_if: isNotEqual.
+    .
+    primitiveTypeWithBool:
+        decl: myInput|string.
+        read: myInput, "./test_files/primitiveType/input.bool.pangolin".
+        match: myInput, $primitiveType.
+
+        pop.
+
+        decl: isPrimTypeBool|bool.
+        assign: isPrimTypeBool, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isPrimTypeBool, IsPrimTypeBool.
+        assert_if: isNotEqual.
+    .
     logicalOperationWithComplexWithParenthesis:
         decl: myInput|string.
         read: myInput, "./test_files/logicalOperation/input.complex_with_parenthesis.pangolin".

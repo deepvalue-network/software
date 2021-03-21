@@ -5,6 +5,9 @@ CMD_PRINT: '#';
 VAL_VARIABLE_PATTERN: [a-z]{1}[a-zA-Z]+;
 VAL_INT: [0-9]+;
 
+// lists:
+LIST_DIMENSION: [1-9]{1}[0-9]*;
+
 // arythmetic operations:
 ARY_ADD: '+';
 ARY_SUB: '-';
@@ -30,5 +33,24 @@ EVERYTHING_EXCEPT_QUOTATION: ([^"]*);
 DOT: '.';
 FIRST_ASSIGN: ':=';
 ASSIGN: '=';
+COMMA: ',';
+OPEN_CURLED_BRACKET: '{';
+CLOSE_CURLED_BRACKET: '}';
 OPEN_PARENTHESIS: '(';
 CLOSE_PARENTHESIS: ')';
+PIPE: '|';
+
+// types:
+BOOL: 'bool';
+BYTE: 'byte';
+INT_HEIGHT: 'int8';
+INT_SIXTEEN: 'int16';
+INT_THIRTY_TWO: 'int32';
+INT_SIXTY_FOUR: 'int64';
+UINT_HEIGHT: 'uint8';
+UINT_SIXTEEN: 'uint16';
+UINT_THIRTY_TWO: 'uint32';
+UINT_SIXTY_FOUR: 'uint64';
+FLOAT_THIRTY_TWO: 'float32';
+FLOAT_SIXTY_FOUR: 'float64';
+STRING: 'string';
