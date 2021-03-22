@@ -7,6 +7,10 @@ printCommand
     : CMD_PRINT assignable
     ;
 
+code
+    : assignment
+    ;
+
 assignment
     : assignee assignSymbol assignable
     ;
@@ -19,9 +23,43 @@ assignable
     : logicalOperation
     | relationalOperation
     | arythmeticOperation
+    | funcDefinition
     | listDefinition
     | mapDefinition
     | value
+    ;
+
+funcDefinition
+    : funcSignature funcContent
+    ;
+
+funcSignature
+    : funcParams funcParams?
+    ;
+
+funcParams
+    : OPEN_PARENTHESIS funcParamContent* CLOSE_PARENTHESIS
+    ;
+
+funcParamContent
+    : funcParamElement* funcParamEntry
+    ;
+
+funcParamElement
+    : funcParamEntry COMMA
+    ;
+
+funcParamEntry
+    : QUESTION_MARK? VAL_VARIABLE_PATTERN COLON complexType
+    ;
+
+funcContent
+    : OPEN_CURLED_BRACKET funcCode* CLOSE_CURLED_BRACKET
+    ;
+
+funcCode
+    : code
+    | FUNC_RETURN
     ;
 
 mapDefinition

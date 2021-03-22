@@ -1,6 +1,9 @@
 // commands:
 CMD_PRINT: '#';
 
+// funcs:
+FUNC_RETURN: 'return';
+
 // values:
 VAL_VARIABLE_PATTERN: [a-z]{1}[a-zA-Z]+;
 VAL_INT: [0-9]+;
@@ -40,6 +43,7 @@ OPEN_PARENTHESIS: '(';
 CLOSE_PARENTHESIS: ')';
 PIPE: '|';
 COLON: ':';
+QUESTION_MARK: '?';
 
 // types:
 BOOL: 'bool';

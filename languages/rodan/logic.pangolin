@@ -8,6 +8,17 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsFuncDefinition|bool.
+    IsFuncSignature|bool.
+    IsFuncParams|bool.
+    IsFuncParamContent|bool.
+    IsFuncParamElement|bool.
+    IsFuncParamEntry|bool.
+    IsFuncParamEntryOptional|bool.
+    FuncParamEntryVariableName|string.
+    IsFuncContent|bool.
+    IsFuncCode|bool.
+    IsFuncCodeReturn|bool.
     IsMapDefinition|bool.
     IsMapDefinitionContent|bool.
     IsMapDefinitionContentElement|bool.
@@ -72,6 +83,60 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitFuncDefinition:
+        assign: IsFuncDefinition, true.
+        push.
+    .
+    exitFuncSignature:
+        assign: IsFuncSignature, true.
+        push.
+    .
+    exitFuncParams:
+        assign: IsFuncParams, true.
+        push.
+    .
+    exitFuncParamContent:
+        assign: IsFuncParamContent, true.
+        push.
+    .
+    exitFuncParamElement:
+        assign: IsFuncParamElement, true.
+        push.
+    .
+    exitFuncParamEntry:
+        code: FuncParamEntryVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+
+        decl: emptyString|string.
+
+        decl: str|string.
+        code: str, CurrentToken, @QUESTION_MARK.
+        not_equal: IsFuncParamEntryOptional, str, emptyString.
+        del: str.
+
+        del: emptyString.
+        push.
+
+        assign: IsFuncParamEntry, true.
+        push.
+    .
+    exitFuncContent:
+        assign: IsFuncContent, true.
+        push.
+    .
+    exitFuncCode:
+        decl: emptyString|string.
+
+        decl: str|string.
+        code: str, CurrentToken, @FUNC_RETURN.
+        not_equal: IsFuncCodeReturn, str, emptyString.
+        del: str.
+
+        del: emptyString.
+        push.
+
+        assign: IsFuncCode, true.
+        push.
     .
     exitMapDefinition:
         assign: IsMapDefinition, true.
@@ -346,7 +411,310 @@ main:
     assign: Output, "output code".
     match: Input.
 .
+
 tests:
+    funcDefinition:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcDefinition/input.simple.pangolin".
+        match: myInput, $funcDefinition.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncDefinition.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcSignatureWithReturns:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcSignature/input.with_returns.pangolin".
+        match: myInput, $funcSignature.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncSignature.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcSignatureWithoutReturn:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcSignature/input.without_return.pangolin".
+        match: myInput, $funcSignature.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncSignature.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcParamsIsNotEmpty:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcParams/input.not_empty.pangolin".
+        match: myInput, $funcParams.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncParams.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcParamsIsEmpty:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcParams/input.empty.pangolin".
+        match: myInput, $funcParams.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncParams.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcParamContentWithMultipleEntries:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcParamContent/input.multiple_entries.pangolin".
+        match: myInput, $funcParamContent.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncParamContent.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcParamContentWithSingleEntry:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcParamContent/input.single_entry.pangolin".
+        match: myInput, $funcParamContent.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncParamContent.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcParamElement:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcParamElement/input.simple.pangolin".
+        match: myInput, $funcParamElement.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncParamElement.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcParamEntryWithIsMandatory:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcParamEntry/input.is_mandatory.pangolin".
+        match: myInput, $funcParamEntry.
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncParamEntry.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isEqual|bool.
+        equal: isEqual, isTrue, IsFuncParamEntryOptional.
+        assert_if: isEqual.
+        del: isEqual.
+
+        decl: expectedVariableName|string.
+        read: expectedVariableName, "./test_files/funcParamEntry/expected.variable_name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, expectedVariableName, FuncParamEntryVariableName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcParamEntryWithIsOptional:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcParamEntry/input.is_optional.pangolin".
+        match: myInput, $funcParamEntry.
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncParamEntry.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncParamEntryOptional.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        decl: expectedVariableName|string.
+        read: expectedVariableName, "./test_files/funcParamEntry/expected.variable_name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, expectedVariableName, FuncParamEntryVariableName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcContentWithMultipleEntry:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcContent/input.multiple_entry.pangolin".
+        match: myInput, $funcContent.
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncContent.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcContentWithSingleEntry:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcContent/input.single_entry.pangolin".
+        match: myInput, $funcContent.
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncContent.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcContentWithoutEntry:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcContent/input.empty.pangolin".
+        match: myInput, $funcContent.
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncContent.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcCodeWithCode:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCode/input.code.pangolin".
+        match: myInput, $funcCode.
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCode.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+    .
+    funcCodeWithReturn:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCode/input.return.pangolin".
+        match: myInput, $funcCode.
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCode.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCodeReturn.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+    .
     mapDefinitionWithMultipleEntries:
         decl: myInput|string.
         read: myInput, "./test_files/mapDefinition/input.multiple_entries.pangolin".
