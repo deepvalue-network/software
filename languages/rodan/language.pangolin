@@ -34,6 +34,10 @@ language:
         listDefinitionContent: CurrentToken, |exitListDefinitionContent.
         listDefinitionInternal: CurrentToken, |exitListDefinitionInternal.
         listDefinition: CurrentToken, |exitListDefinition.
+        mapDefinitionContentEntry: CurrentToken, |exitMapDefinitionContentEntry.
+        mapDefinitionContentElement: CurrentToken, |exitMapDefinitionContentElement.
+        mapDefinitionContent: CurrentToken, |exitMapDefinitionContent.
+        mapDefinition: CurrentToken, |exitMapDefinition.
     .
     targets:
         pangolin:

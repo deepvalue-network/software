@@ -8,6 +8,11 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsMapDefinition|bool.
+    IsMapDefinitionContent|bool.
+    IsMapDefinitionContentElement|bool.
+    IsMapDefinitionContentEntry|bool.
+    MapDefinitionContentEntryKeyname|string.
     IsListDefinition|bool.
     IsListDefInternal|bool.
     IsListDefCon|bool.
@@ -67,6 +72,23 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitMapDefinition:
+        assign: IsMapDefinition, true.
+        push.
+    .
+    exitMapDefinitionContent:
+        assign: IsMapDefinitionContent, true.
+        push.
+    .
+    exitMapDefinitionContentElement:
+        assign: IsMapDefinitionContentElement, true.
+        push.
+    .
+    exitMapDefinitionContentEntry:
+        code: MapDefinitionContentEntryKeyname, CurrentToken, @VAL_VARIABLE_PATTERN.
+        assign: IsMapDefinitionContentEntry, true.
+        push.
     .
     exitListDefinition:
         assign: IsListDefinition, true.
@@ -324,8 +346,120 @@ main:
     assign: Output, "output code".
     match: Input.
 .
-
 tests:
+    mapDefinitionWithMultipleEntries:
+        decl: myInput|string.
+        read: myInput, "./test_files/mapDefinition/input.multiple_entries.pangolin".
+        match: myInput, $mapDefinition.
+
+        pop.
+
+        decl: isDef|bool.
+        assign: isDef, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isDef, IsMapDefinition.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    mapDefinitionWithSingleEntry:
+        decl: myInput|string.
+        read: myInput, "./test_files/mapDefinition/input.single_entry.pangolin".
+        match: myInput, $mapDefinition.
+
+        pop.
+
+        decl: isDef|bool.
+        assign: isDef, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isDef, IsMapDefinition.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    mapDefinitionWithoutEntry:
+        decl: myInput|string.
+        read: myInput, "./test_files/mapDefinition/input.empty.pangolin".
+        match: myInput, $mapDefinition.
+
+        pop.
+
+        decl: isDef|bool.
+        assign: isDef, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isDef, IsMapDefinition.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    mapDefinitionContentWithMultipleEntries:
+        decl: myInput|string.
+        read: myInput, "./test_files/mapDefinitionContent/input.multiple_entries.pangolin".
+        match: myInput, $mapDefinitionContent.
+
+        pop.
+
+        decl: isContent|bool.
+        assign: isContent, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isContent, IsMapDefinitionContent.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    mapDefinitionContentWithSingleEntry:
+        decl: myInput|string.
+        read: myInput, "./test_files/mapDefinitionContent/input.single_entry.pangolin".
+        match: myInput, $mapDefinitionContent.
+
+        pop.
+
+        decl: isContent|bool.
+        assign: isContent, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isContent, IsMapDefinitionContent.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    mapDefinitionContentElement:
+        decl: myInput|string.
+        read: myInput, "./test_files/mapDefinitionContentElement/input.simple.pangolin".
+        match: myInput, $mapDefinitionContentElement.
+
+        pop.
+
+        decl: isElement|bool.
+        assign: isElement, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isElement, IsMapDefinitionContentElement.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    mapDefinitionContentEntry:
+        decl: myInput|string.
+        read: myInput, "./test_files/mapDefinitionContentEntry/input.simple.pangolin".
+        match: myInput, $mapDefinitionContentEntry.
+
+        pop.
+
+        decl: expectedKeyname|string.
+        read: expectedKeyname, "./test_files/mapDefinitionContentEntry/expected.keyname.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, expectedKeyname, MapDefinitionContentEntryKeyname.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        decl: isEntry|bool.
+        assign: isEntry, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isEntry, IsMapDefinitionContentEntry.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
     listDefinition:
         decl: myInput|string.
         read: myInput, "./test_files/listDefinition/input.simple.pangolin".

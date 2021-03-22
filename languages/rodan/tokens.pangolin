@@ -20,7 +20,24 @@ assignable
     | relationalOperation
     | arythmeticOperation
     | listDefinition
+    | mapDefinition
     | value
+    ;
+
+mapDefinition
+    : OPEN_CURLED_BRACKET mapDefinitionContent? CLOSE_CURLED_BRACKET
+    ;
+
+mapDefinitionContent
+    : mapDefinitionContentElement* mapDefinitionContentEntry
+    ;
+
+mapDefinitionContentElement
+    : mapDefinitionContentEntry COMMA
+    ;
+
+mapDefinitionContentEntry
+    : VAL_VARIABLE_PATTERN COLON assignable
     ;
 
 listDefinition

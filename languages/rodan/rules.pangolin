@@ -39,6 +39,7 @@ CLOSE_CURLED_BRACKET: '}';
 OPEN_PARENTHESIS: '(';
 CLOSE_PARENTHESIS: ')';
 PIPE: '|';
+COLON: ':';
 
 // types:
 BOOL: 'bool';
@@ -54,3 +55,4 @@ UINT_SIXTY_FOUR: 'uint64';
 FLOAT_THIRTY_TWO: 'float32';
 FLOAT_SIXTY_FOUR: 'float64';
 STRING: 'string';
+MAP: 'map';
