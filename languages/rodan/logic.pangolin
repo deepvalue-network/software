@@ -8,6 +8,7 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsIfDefinition|bool.
     IsFuncDefinition|bool.
     IsFuncSignature|bool.
     IsFuncParams|bool.
@@ -16,9 +17,9 @@ variables:
     IsFuncParamEntry|bool.
     IsFuncParamEntryOptional|bool.
     FuncParamEntryVariableName|string.
-    IsFuncContent|bool.
-    IsFuncCode|bool.
-    IsFuncCodeReturn|bool.
+    IsBracketCode|bool.
+    IsCode|bool.
+    IsCodeReturn|bool.
     IsMapDefinition|bool.
     IsMapDefinitionContent|bool.
     IsMapDefinitionContentElement|bool.
@@ -84,6 +85,10 @@ labels:
     exitPrintCommand:
         print: "printCommand".
     .
+    exitIfDefinition:
+        assign: IsIfDefinition, true.
+        push.
+    .
     exitFuncDefinition:
         assign: IsFuncDefinition, true.
         push.
@@ -120,22 +125,22 @@ labels:
         assign: IsFuncParamEntry, true.
         push.
     .
-    exitFuncContent:
-        assign: IsFuncContent, true.
+    exitBracketCode:
+        assign: IsBracketCode, true.
         push.
     .
-    exitFuncCode:
+    exitCode:
         decl: emptyString|string.
 
         decl: str|string.
         code: str, CurrentToken, @FUNC_RETURN.
-        not_equal: IsFuncCodeReturn, str, emptyString.
+        not_equal: IsCodeReturn, str, emptyString.
         del: str.
 
         del: emptyString.
         push.
 
-        assign: IsFuncCode, true.
+        assign: IsCode, true.
         push.
     .
     exitMapDefinition:
@@ -413,6 +418,23 @@ main:
 .
 
 tests:
+    ifDefinition:
+        decl: myInput|string.
+        read: myInput, "./test_files/ifDefinition/input.simple.pangolin".
+        match: myInput, $ifDefinition.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIfDefinition.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
     funcDefinition:
         decl: myInput|string.
         read: myInput, "./test_files/funcDefinition/input.simple.pangolin".
@@ -621,82 +643,82 @@ tests:
 
         del: isTrue.
     .
-    funcContentWithMultipleEntry:
+    bracketCodeWithMultipleEntry:
         decl: myInput|string.
-        read: myInput, "./test_files/funcContent/input.multiple_entry.pangolin".
-        match: myInput, $funcContent.
+        read: myInput, "./test_files/bracketCode/input.multiple_entry.pangolin".
+        match: myInput, $bracketCode.
         pop.
 
         decl: isTrue|bool.
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncContent.
+        not_equal: isNotEqual, isTrue, IsBracketCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
         del: isTrue.
     .
-    funcContentWithSingleEntry:
+    bracketCodeWithSingleEntry:
         decl: myInput|string.
-        read: myInput, "./test_files/funcContent/input.single_entry.pangolin".
-        match: myInput, $funcContent.
+        read: myInput, "./test_files/bracketCode/input.single_entry.pangolin".
+        match: myInput, $bracketCode.
         pop.
 
         decl: isTrue|bool.
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncContent.
+        not_equal: isNotEqual, isTrue, IsBracketCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
         del: isTrue.
     .
-    funcContentWithoutEntry:
+    bracketCodeWithoutEntry:
         decl: myInput|string.
-        read: myInput, "./test_files/funcContent/input.empty.pangolin".
-        match: myInput, $funcContent.
+        read: myInput, "./test_files/bracketCode/input.empty.pangolin".
+        match: myInput, $bracketCode.
         pop.
 
         decl: isTrue|bool.
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncContent.
+        not_equal: isNotEqual, isTrue, IsBracketCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
         del: isTrue.
     .
-    funcCodeWithCode:
+    codeWithCode:
         decl: myInput|string.
-        read: myInput, "./test_files/funcCode/input.code.pangolin".
-        match: myInput, $funcCode.
+        read: myInput, "./test_files/code/input.code.pangolin".
+        match: myInput, $code.
         pop.
 
         decl: isTrue|bool.
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCode.
+        not_equal: isNotEqual, isTrue, IsCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
         del: isTrue.
 
     .
-    funcCodeWithReturn:
+    codeWithReturn:
         decl: myInput|string.
-        read: myInput, "./test_files/funcCode/input.return.pangolin".
-        match: myInput, $funcCode.
+        read: myInput, "./test_files/code/input.return.pangolin".
+        match: myInput, $code.
         pop.
 
         decl: isTrue|bool.
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCode.
+        not_equal: isNotEqual, isTrue, IsCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -708,7 +730,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCodeReturn.
+        not_equal: isNotEqual, isTrue, IsCodeReturn.
         assert_if: isNotEqual.
         del: isNotEqual.
 

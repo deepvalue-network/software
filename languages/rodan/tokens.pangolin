@@ -7,10 +7,6 @@ printCommand
     : CMD_PRINT assignable
     ;
 
-code
-    : assignment
-    ;
-
 assignment
     : assignee assignSymbol assignable
     ;
@@ -29,8 +25,12 @@ assignable
     | value
     ;
 
+ifDefinition
+    : logicalOperation bracketCode
+    ;
+
 funcDefinition
-    : funcSignature funcContent
+    : funcSignature bracketCode
     ;
 
 funcSignature
@@ -53,12 +53,12 @@ funcParamEntry
     : QUESTION_MARK? VAL_VARIABLE_PATTERN COLON complexType
     ;
 
-funcContent
-    : OPEN_CURLED_BRACKET funcCode* CLOSE_CURLED_BRACKET
+bracketCode
+    : OPEN_CURLED_BRACKET code* CLOSE_CURLED_BRACKET
     ;
 
-funcCode
-    : code
+code
+    : assignment
     | FUNC_RETURN
     ;
 

@@ -38,14 +38,15 @@ language:
         mapDefinitionContentElement: CurrentToken, |exitMapDefinitionContentElement.
         mapDefinitionContent: CurrentToken, |exitMapDefinitionContent.
         mapDefinition: CurrentToken, |exitMapDefinition.
-        funcCode: CurrentToken, |exitFuncCode.
-        funcContent: CurrentToken, |exitFuncContent.
+        code: CurrentToken, |exitCode.
+        bracketCode: CurrentToken, |exitBracketCode.
         funcParamEntry: CurrentToken, |exitFuncParamEntry.
         funcParamElement: CurrentToken, |exitFuncParamElement.
         funcParamContent: CurrentToken, |exitFuncParamContent.
         funcParams: CurrentToken, |exitFuncParams.
         funcSignature: CurrentToken, |exitFuncSignature.
         funcDefinition: CurrentToken, |exitFuncDefinition.
+        ifDefinition: CurrentToken, |exitIfDefinition.
     .
     targets:
         pangolin:
