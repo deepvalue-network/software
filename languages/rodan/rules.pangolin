@@ -45,6 +45,7 @@ CLOSE_PARENTHESIS: ')';
 PIPE: '|';
 COLON: ':';
 QUESTION_MARK: '?';
+UNDERSCORE: '_';
 
 // types:
 BOOL: 'bool';

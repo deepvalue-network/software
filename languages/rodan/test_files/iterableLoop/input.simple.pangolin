@@ -1,0 +1,1 @@
+keyname,value:=uint64{uint64|1{32,2},uint64|1{21,34,67},uint64|1{11,455,54}}{myVariable:=44}

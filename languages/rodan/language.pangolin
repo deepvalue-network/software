@@ -47,6 +47,12 @@ language:
         funcSignature: CurrentToken, |exitFuncSignature.
         funcDefinition: CurrentToken, |exitFuncDefinition.
         ifDefinition: CurrentToken, |exitIfDefinition.
+        iterable: CurrentToken, |exitIterable.
+        iterableAssignee: CurrentToken, |exitIterableAssignee.
+        iterableAssignment: CurrentToken, |exitIterableAssignment.
+        iterableLoop: CurrentToken, |exitIterableLoop.
+        relationalLoop: CurrentToken, |exitRelationalLoop.
+        loop: CurrentToken, |exitLoop.
     .
     targets:
         pangolin:

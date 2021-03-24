@@ -16,13 +16,14 @@ import (
 )
 
 type machine struct {
-	computableValueBuilder computable.Builder
-	lexerParserApplication lexer_parser.Application
-	lexerParserBuilder     lexer_parser.Builder
-	stkFrame               StackFrame
-	lbls                   map[string]label_instructions.Instructions
-	patternMatches         map[string]middle.PatternMatch
-	lexerAdapterBuilder    lexers.AdapterBuilder
+	computableValueBuilder   computable.Builder
+	lexerParserApplication   lexer_parser.Application
+	lexerParserBuilder       lexer_parser.Builder
+	stkFrame                 StackFrame
+	lbls                     map[string]label_instructions.Instructions
+	patternMatches           map[string]middle.PatternMatch
+	lexerAdapterBuilder      lexers.AdapterBuilder
+	currentTokenVariableName string
 }
 
 func createMachine(
@@ -57,13 +58,14 @@ func createMachineInternally(
 	lexerAdapterBuilder lexers.AdapterBuilder,
 ) Machine {
 	out := machine{
-		computableValueBuilder: computableValueBuilder,
-		lexerParserApplication: lexerParserApplication,
-		lexerParserBuilder:     lexerParserBuilder,
-		stkFrame:               stkFrame,
-		lbls:                   lbls,
-		patternMatches:         patternMatches,
-		lexerAdapterBuilder:    lexerAdapterBuilder,
+		computableValueBuilder:   computableValueBuilder,
+		lexerParserApplication:   lexerParserApplication,
+		lexerParserBuilder:       lexerParserBuilder,
+		stkFrame:                 stkFrame,
+		lbls:                     lbls,
+		patternMatches:           patternMatches,
+		lexerAdapterBuilder:      lexerAdapterBuilder,
+		currentTokenVariableName: "",
 	}
 
 	return &out
@@ -79,8 +81,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 	if ins.IsStackframe() {
 		stkFrame := ins.Stackframe()
 		if stkFrame.IsPush() {
-			app.stkFrame.Push()
-			return nil
+			return app.push()
 		}
 
 		return app.stkFrame.Pop()
@@ -102,7 +103,11 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			misc := operation.Misc()
 			if misc.IsPush() {
 				current := app.stkFrame.Current()
-				app.stkFrame.Push()
+				err := app.push()
+				if err != nil {
+					return err
+				}
+
 				return app.stkFrame.Current().PushTo(name, current)
 			}
 
@@ -373,6 +378,11 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			}
 
 			tok := token.Token()
+			if tok == nil {
+				str := fmt.Sprintf("the Token (variable name: %s) was not expected to be nil", tokenName)
+				return errors.New(str)
+			}
+
 			hasPattern := code.HasPattern()
 			hasAmount := code.HasAmount()
 			if !hasPattern && !hasAmount {
@@ -430,7 +440,10 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 					}
 
 					// push:
-					app.StackFrame().Push()
+					err = app.push()
+					if err != nil {
+						return err
+					}
 				}
 
 				// amount:
@@ -463,13 +476,24 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 	return errors.New("the instruction is invalid")
 }
 
+func (app *machine) push() error {
+	computable, err := app.stkFrame.Current().Fetch(app.currentTokenVariableName)
+	if err != nil {
+		return err
+	}
+
+	app.stkFrame.Push()
+	return app.StackFrame().Current().UpdateValue(app.currentTokenVariableName, computable)
+}
+
 func (app *machine) treeLabelInstructions(lblIns label_instructions.Instructions, variable string, tree lexers.NodeTree) error {
 	computable, err := app.computableValueBuilder.Create().WithToken(tree).Now()
 	if err != nil {
 		return err
 	}
 
-	err = app.StackFrame().Current().UpdateValue(variable, computable)
+	app.currentTokenVariableName = variable
+	err = app.StackFrame().Current().UpdateValue(app.currentTokenVariableName, computable)
 	if err != nil {
 		return err
 	}

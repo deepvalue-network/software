@@ -22,9 +22,36 @@ assignable
     | funcDefinition
     | listDefinition
     | mapDefinition
-    | ifDefinition
-    | funcDefinition
     | value
+    ;
+
+loop
+    : relationalLoop
+    | iterableLoop
+    ;
+
+relationalLoop
+    : relationalOperation bracketCode
+    ;
+
+iterableLoop
+    : iterableAssignment bracketCode
+    ;
+
+iterableAssignment
+    : iterableAssignee assignSymbol iterable
+    ;
+
+iterableAssignee
+    : VAL_VARIABLE_PATTERN COMMA VAL_VARIABLE_PATTERN
+    | VAL_VARIABLE_PATTERN COMMA UNDERSCORE
+    | VAL_VARIABLE_PATTERN
+    ;
+
+iterable
+    : VAL_VARIABLE_PATTERN
+    | mapDefinition
+    | listDefinition
     ;
 
 ifDefinition
@@ -61,6 +88,8 @@ bracketCode
 
 code
     : assignment
+    | ifDefinition
+    | loop
     | RETURN
     | CONTINUE
     ;

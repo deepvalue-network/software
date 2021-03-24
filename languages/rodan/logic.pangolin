@@ -8,6 +8,16 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsLoop|bool.
+    IsRelationalLoop|bool.
+    IsIterableLoop|bool.
+    IsIterableAssignment|bool.
+    IsIterableAssignee|bool.
+    IterableAssigneeVarAmount|int64.
+    IterableAssigneeVariableName|string.
+    IsIterableAssigneeKeyname|bool.
+    IsIterable|bool.
+    IterableVariableName|string.
     IsIfDefinition|bool.
     IsFuncDefinition|bool.
     IsFuncSignature|bool.
@@ -85,6 +95,46 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitLoop:
+        assign: IsLoop, true.
+        push.
+    .
+    exitRelationalLoop:
+        assign: IsRelationalLoop, true.
+        push.
+    .
+    exitIterableLoop:
+        assign: IsIterableLoop, true.
+        push.
+    .
+    exitIterableAssignment:
+        assign: IsIterableAssignment, true.
+        push.
+    .
+    exitIterableAssignee:
+        code: IterableAssigneeVariableName, IterableAssigneeVarAmount, CurrentToken, @VAL_VARIABLE_PATTERN.
+        push.
+
+        decl: emptyString|string.
+
+        decl: underscore|string.
+        code: underscore, CurrentToken, @UNDERSCORE.
+        not_equal: IsIterableAssigneeKeyname, underscore, emptyString.
+        del: underscore.
+
+        del: emptyString.
+        push.
+
+        assign: IsIterableAssignee, true.
+        push.
+    .
+    exitIterable:
+        code: IterableVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        push.
+
+        assign: IsIterable, true.
+        push.
     .
     exitIfDefinition:
         assign: IsIfDefinition, true.
@@ -424,6 +474,289 @@ main:
 .
 
 tests:
+    loopWithRelational:
+        decl: myInput|string.
+        read: myInput, "./test_files/loop/input.relational.pangolin".
+        match: myInput, $loop.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsLoop.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    loopWithIterable:
+        decl: myInput|string.
+        read: myInput, "./test_files/loop/input.iterable.pangolin".
+        match: myInput, $loop.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsLoop.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    relationalLoop:
+        decl: myInput|string.
+        read: myInput, "./test_files/relationalLoop/input.simple.pangolin".
+        match: myInput, $relationalLoop.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsRelationalLoop.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    iterableLoop:
+        decl: myInput|string.
+        read: myInput, "./test_files/iterableLoop/input.simple.pangolin".
+        match: myInput, $iterableLoop.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIterableLoop.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    iterableAssignment:
+        decl: myInput|string.
+        read: myInput, "./test_files/iterableAssignment/input.simple.pangolin".
+        match: myInput, $iterableAssignment.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIterableAssignment.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    iterableAssigneeWithValue:
+        decl: myInput|string.
+        read: myInput, "./test_files/iterableAssignee/input.with_value.pangolin".
+        match: myInput, $iterableAssignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIterableAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isEqual|bool.
+        equal: isEqual, isTrue, IsIterableAssigneeKeyname.
+        assert_if: isEqual.
+        del: isEqual.
+
+        del: isTrue.
+        pop.
+
+        decl: expectedAmount|int64.
+        assign: expectedAmount, 1.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, IterableAssigneeVarAmount, expectedAmount.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedValue|string.
+        read: expectedValue, "./test_files/iterableAssignee/expected.variable_name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, IterableAssigneeVariableName, expectedValue.
+        assert_if: isNotEqual.
+    .
+    iterableAssigneeWithKeyname:
+        decl: myInput|string.
+        read: myInput, "./test_files/iterableAssignee/input.with_keyname.pangolin".
+        match: myInput, $iterableAssignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIterableAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIterableAssigneeKeyname.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+        pop.
+
+        decl: expectedAmount|int64.
+        assign: expectedAmount, 1.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, IterableAssigneeVarAmount, expectedAmount.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedKeyname|string.
+        read: expectedKeyname, "./test_files/iterableAssignee/expected.keyname.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, IterableAssigneeVariableName, expectedKeyname.
+        assert_if: isNotEqual.
+    .
+    iterableAssigneeWithKeynameAndValue:
+        decl: myInput|string.
+        read: myInput, "./test_files/iterableAssignee/input.with_keyname_and_value.pangolin".
+        match: myInput, $iterableAssignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIterableAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isEqual|bool.
+        equal: isEqual, isTrue, IsIterableAssigneeKeyname.
+        assert_if: isEqual.
+        del: isEqual.
+
+        del: isTrue.
+        pop.
+
+        decl: expectedAmount|int64.
+        assign: expectedAmount, 2.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, IterableAssigneeVarAmount, expectedAmount.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedVariableName|string.
+        read: expectedVariableName, "./test_files/iterableAssignee/expected.variable_name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, IterableAssigneeVariableName, expectedVariableName.
+        assert_if: isNotEqual.
+        pop.
+
+        decl: expectedKeyname|string.
+        read: expectedKeyname, "./test_files/iterableAssignee/expected.keyname.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, IterableAssigneeVariableName, expectedKeyname.
+        assert_if: isNotEqual.
+    .
+    iterableWithVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/iterable/input.variable.pangolin".
+        match: myInput, $iterable.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIterable.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedVariableName|string.
+        read: expectedVariableName, "./test_files/iterable/expected.variable_name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, expectedVariableName, IterableVariableName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    iterableWithListDefinition:
+        decl: myInput|string.
+        read: myInput, "./test_files/iterable/input.list_definition.pangolin".
+        match: myInput, $iterable.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIterable.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    iterableWithMapDefinition:
+        decl: myInput|string.
+        read: myInput, "./test_files/iterable/input.map_definition.pangolin".
+        match: myInput, $iterable.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsIterable.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
     ifDefinition:
         decl: myInput|string.
         read: myInput, "./test_files/ifDefinition/input.simple.pangolin".
