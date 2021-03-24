@@ -1,8 +1,9 @@
 // commands:
 CMD_PRINT: '#';
 
-// funcs:
-FUNC_RETURN: 'return';
+// commands:
+RETURN: 'return';
+CONTINUE: 'continue';
 
 // values:
 VAL_VARIABLE_PATTERN: [a-z]{1}[a-zA-Z]+;

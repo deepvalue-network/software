@@ -59,7 +59,8 @@ bracketCode
 
 code
     : assignment
-    | FUNC_RETURN
+    | RETURN
+    | CONTINUE
     ;
 
 mapDefinition

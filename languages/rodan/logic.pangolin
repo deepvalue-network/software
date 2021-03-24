@@ -20,6 +20,7 @@ variables:
     IsBracketCode|bool.
     IsCode|bool.
     IsCodeReturn|bool.
+    IsCodeContinue|bool.
     IsMapDefinition|bool.
     IsMapDefinitionContent|bool.
     IsMapDefinitionContentElement|bool.
@@ -133,8 +134,13 @@ labels:
         decl: emptyString|string.
 
         decl: str|string.
-        code: str, CurrentToken, @FUNC_RETURN.
+        code: str, CurrentToken, @RETURN.
         not_equal: IsCodeReturn, str, emptyString.
+        del: str.
+
+        decl: str|string.
+        code: str, CurrentToken, @CONTINUE.
+        not_equal: IsCodeContinue, str, emptyString.
         del: str.
 
         del: emptyString.
@@ -731,6 +737,35 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, IsCodeReturn.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+    .
+    codeWithContinue:
+        decl: myInput|string.
+        read: myInput, "./test_files/code/input.continue.pangolin".
+        match: myInput, $code.
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsCode.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsCodeContinue.
         assert_if: isNotEqual.
         del: isNotEqual.
 
