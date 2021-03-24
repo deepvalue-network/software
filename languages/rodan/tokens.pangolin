@@ -22,6 +22,8 @@ assignable
     | funcDefinition
     | listDefinition
     | mapDefinition
+    | ifDefinition
+    | funcDefinition
     | value
     ;
 
