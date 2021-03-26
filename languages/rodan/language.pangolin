@@ -61,6 +61,14 @@ language:
         funcCallParameter: CurrentToken, |exitFuncCallParameter.
         funcCall: CurrentToken, |exitFuncCall.
         funcCallAssignment: CurrentToken, |exitFuncCallAssignment.
+        moduleNameWithComma: CurrentToken, |exitModuleNameWithComma.
+        moduleNames: CurrentToken, |exitModuleNames.
+        loadModuleDefinition: CurrentToken, |exitLoadModuleDefinition.
+        folderSectionWithSlash: CurrentToken, |exitFolderSectionWithSlash.
+        folderSection: CurrentToken, |exitFolderSection.
+        relativePath: CurrentToken, |exitRelativePath.
+        importDefinitionSingle: CurrentToken, |exitImportDefinitionSingle.
+        importDefinition: CurrentToken, |exitImportDefinition.
     .
     targets:
         pangolin:

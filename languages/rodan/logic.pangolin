@@ -8,6 +8,17 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsImportDefinition|bool.
+    IsImportDefinitionSingle|bool.
+    ImportName|string.
+    IsRelativePath|bool.
+    IsFolderSection|bool.
+    IsFolderSectionWithSlash|bool.
+    FileName|string.
+    IsLoadModuleDefinition|bool.
+    IsModuleNames|bool.
+    IsModuleNameWithComma|bool.
+    ModuleName|string.
     IsFuncCallAssignment|bool.
     IsFuncCall|bool.
     IsFuncCallParameter|bool.
@@ -104,6 +115,53 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitImportDefinition:
+        assign: IsImportDefinition, true.
+        push.
+    .
+    exitImportDefinitionSingle:
+        code: ImportName, CurrentToken, @IMPORT_NAME_PATTERN.
+        push.
+
+        assign: IsImportDefinitionSingle, true.
+        push.
+    .
+    exitRelativePath:
+        assign: IsRelativePath, true.
+        push.
+    .
+    exitFolderSection:
+        code: FileName, CurrentToken, @FILE_PATTERN.
+        push.
+
+        assign: IsFolderSection, true.
+        push.
+    .
+    exitFolderSectionWithSlash:
+        code: FileName, CurrentToken, @FILE_PATTERN.
+        push.
+
+        assign: IsFolderSectionWithSlash, true.
+        push.
+    .
+    exitLoadModuleDefinition:
+        assign: IsLoadModuleDefinition, true.
+        push.
+    .
+    exitModuleNames:
+        code: ModuleName, CurrentToken, @MODULE_NAME_PATTERN.
+        push.
+
+        assign: IsModuleNames, true.
+        push.
+    .
+    exitModuleNameWithComma:
+        code: ModuleName, CurrentToken, @MODULE_NAME_PATTERN.
+        push.
+
+        assign: IsModuleNameWithComma, true.
+        push.
     .
     exitFuncCallAssignment:
         assign: IsFuncCallAssignment, true.
@@ -521,6 +579,312 @@ main:
 .
 
 tests:
+    importDefinitionWithMultiple:
+        decl: myInput|string.
+        read: myInput, "./test_files/importDefinition/input.multiple.pangolin".
+        match: myInput, $importDefinition.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsImportDefinition.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    importDefinitionWithSingle:
+        decl: myInput|string.
+        read: myInput, "./test_files/importDefinition/input.single.pangolin".
+        match: myInput, $importDefinition.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsImportDefinition.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    importDefinitionSingle:
+        decl: myInput|string.
+        read: myInput, "./test_files/importDefinitionSingle/input.single.pangolin".
+        match: myInput, $importDefinitionSingle.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsImportDefinitionSingle.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedName|string.
+        read: expectedName, "./test_files/importDefinitionSingle/expected.name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ImportName, expectedName.
+        assert_if: isNotEqual.
+    .
+    relativePath:
+        decl: myInput|string.
+        read: myInput, "./test_files/relativePath/input.simple.pangolin".
+        match: myInput, $relativePath.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsRelativePath.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    folderSectionWithPath:
+        decl: myInput|string.
+        read: myInput, "./test_files/folderSection/input.path.pangolin".
+        match: myInput, $folderSection.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFolderSection.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedFileName|string.
+        read: expectedFileName, "./test_files/folderSection/expected.path.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FileName, expectedFileName.
+        assert_if: isNotEqual.
+    .
+    folderSectionWithFile:
+        decl: myInput|string.
+        read: myInput, "./test_files/folderSection/input.file.pangolin".
+        match: myInput, $folderSection.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFolderSection.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedFileName|string.
+        read: expectedFileName, "./test_files/folderSection/expected.file.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FileName, expectedFileName.
+        assert_if: isNotEqual.
+    .
+    folderSectionWithSlash:
+        decl: myInput|string.
+        read: myInput, "./test_files/folderSectionWithSlash/input.simple.pangolin".
+        match: myInput, $folderSectionWithSlash.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFolderSectionWithSlash.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedFileName|string.
+        read: expectedFileName, "./test_files/folderSectionWithSlash/expected.file.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FileName, expectedFileName.
+        assert_if: isNotEqual.
+    .
+    loadModuleDefinition:
+        decl: myInput|string.
+        read: myInput, "./test_files/loadModuleDefinition/input.simple.pangolin".
+        match: myInput, $loadModuleDefinition.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsLoadModuleDefinition.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    moduleNamesWithThreeModules:
+        decl: myInput|string.
+        read: myInput, "./test_files/moduleNames/input.three_modules.pangolin".
+        match: myInput, $moduleNames.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsModuleNames.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedModuleName|string.
+        read: expectedModuleName, "./test_files/moduleNames/expected.first.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        assert_if: isNotEqual.
+
+        pop.
+        pop.
+
+        decl: expectedModuleName|string.
+        read: expectedModuleName, "./test_files/moduleNames/expected.third.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        assert_if: isNotEqual.
+
+        pop.
+        pop.
+
+        decl: expectedModuleName|string.
+        read: expectedModuleName, "./test_files/moduleNames/expected.second.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        assert_if: isNotEqual.
+    .
+    moduleNamesWithTwoModules:
+        decl: myInput|string.
+        read: myInput, "./test_files/moduleNames/input.two_modules.pangolin".
+        match: myInput, $moduleNames.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsModuleNames.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedModuleName|string.
+        read: expectedModuleName, "./test_files/moduleNames/expected.first.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        assert_if: isNotEqual.
+
+        pop.
+        pop.
+
+        decl: expectedModuleName|string.
+        read: expectedModuleName, "./test_files/moduleNames/expected.second.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        assert_if: isNotEqual.
+    .
+    moduleNamesWithSingle:
+        decl: myInput|string.
+        read: myInput, "./test_files/moduleNames/input.single.pangolin".
+        match: myInput, $moduleNames.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsModuleNames.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedModuleName|string.
+        read: expectedModuleName, "./test_files/moduleNames/expected.first.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        assert_if: isNotEqual.
+    .
+    moduleNameWithComma:
+        decl: myInput|string.
+        read: myInput, "./test_files/moduleNameWithComma/input.simple.pangolin".
+        match: myInput, $moduleNameWithComma.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsModuleNameWithComma.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedModuleName|string.
+        read: expectedModuleName, "./test_files/moduleNameWithComma/expected.name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        assert_if: isNotEqual.
+    .
     funcCallAssignment:
         decl: myInput|string.
         read: myInput, "./test_files/funcCallAssignment/input.simple.pangolin".

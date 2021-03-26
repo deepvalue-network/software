@@ -5,12 +5,14 @@ CMD_PRINT: '#';
 RETURN: 'return';
 CONTINUE: 'continue';
 RAISE: 'raise';
+LOAD: '->';
 
-// values:
+// patterns:
+FILE_PATTERN: [^/^"]+;
+MODULE_NAME_PATTERN: [a-z]{1}[a-z_]+;
+IMPORT_NAME_PATTERN: [_]{1}[a-z]{1}[a-z_]+;
 VAL_VARIABLE_PATTERN: [a-z]{1}[a-zA-Z]+;
 VAL_INT: [0-9]+;
-
-// lists:
 LIST_DIMENSION: [1-9]{1}[0-9]*;
 
 // special variables:
@@ -50,6 +52,7 @@ PIPE: '|';
 COLON: ':';
 QUESTION_MARK: '?';
 UNDERSCORE: '_';
+SLASH: '/';
 
 // types:
 BOOL: 'bool';

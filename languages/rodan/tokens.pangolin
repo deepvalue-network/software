@@ -26,6 +26,42 @@ assignable
     | value
     ;
 
+importDefinition
+    : LOAD importDefinitionSingle importDefinitionSingleWithComma*
+    ;
+
+importDefinitionSingleWithComma
+    : COMMA importDefinitionSingle
+    ;
+
+importDefinitionSingle
+    : IMPORT_NAME_PATTERN relativePath
+    ;
+
+relativePath
+    : QUOTATION_MARK folderSection+ QUOTATION_MARK
+    ;
+
+folderSection
+    : FILE_PATTERN folderSectionWithSlash*
+    ;
+
+folderSectionWithSlash
+    : SLASH FILE_PATTERN
+    ;
+
+loadModuleDefinition
+    : LOAD moduleNames
+    ;
+
+moduleNames
+    : MODULE_NAME_PATTERN moduleNameWithComma*
+    ;
+
+moduleNameWithComma
+    : COMMA MODULE_NAME_PATTERN
+    ;
+
 funcCallAssignment
     : funcCallAssignee assignSymbol funcCall
     ;
