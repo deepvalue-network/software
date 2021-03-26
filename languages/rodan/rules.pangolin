@@ -4,6 +4,7 @@ CMD_PRINT: '#';
 // commands:
 RETURN: 'return';
 CONTINUE: 'continue';
+RAISE: 'raise';
 
 // values:
 VAL_VARIABLE_PATTERN: [a-z]{1}[a-zA-Z]+;
@@ -11,6 +12,9 @@ VAL_INT: [0-9]+;
 
 // lists:
 LIST_DIMENSION: [1-9]{1}[0-9]*;
+
+// special variables:
+EXCEPTION_VARIABLE: 'ex';
 
 // arythmetic operations:
 ARY_ADD: '+';
@@ -62,3 +66,4 @@ FLOAT_THIRTY_TWO: 'float32';
 FLOAT_SIXTY_FOUR: 'float64';
 STRING: 'string';
 MAP: 'map';
+EXCEPTION: 'exception';

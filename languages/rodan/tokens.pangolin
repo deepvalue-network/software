@@ -25,6 +25,14 @@ assignable
     | value
     ;
 
+raiseException
+    : RAISE exceptionDefinition EXCEPTION_VARIABLE?
+    ;
+
+exceptionDefinition
+    : VAL_INT COLON valueString
+    ;
+
 loop
     : relationalLoop
     | iterableLoop
@@ -92,6 +100,7 @@ code
     | loop
     | RETURN
     | CONTINUE
+    | raiseException
     ;
 
 mapDefinition
@@ -128,6 +137,8 @@ listDefinitionContentElement
 
 complexType
     : listType
+    | MAP
+    | EXCEPTION
     | primitiveType
     ;
 
@@ -230,6 +241,11 @@ logicalSymbol
 assignSymbol
     : FIRST_ASSIGN
     | ASSIGN
+    ;
+
+valueString
+    : VAL_VARIABLE_PATTERN
+    | stringValue
     ;
 
 valueDecimal

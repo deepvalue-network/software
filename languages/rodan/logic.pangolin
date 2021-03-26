@@ -8,6 +8,8 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsRaiseException|bool.
+    IsExceptionDefinition|bool.
     IsLoop|bool.
     IsRelationalLoop|bool.
     IsIterableLoop|bool.
@@ -81,6 +83,7 @@ variables:
     IsLogicalSymbolOr|bool.
     IsFirstAssign|bool.
     IsAssign|bool.
+    IsValueString|bool.
     VariablePattern|string.
     ValueInt|string.
     DecimalValue|string.
@@ -95,6 +98,14 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitRaiseException:
+        assign: IsRaiseException, true.
+        push.
+    .
+    exitExceptionDefinition:
+        assign: IsExceptionDefinition, true.
+        push.
     .
     exitLoop:
         assign: IsLoop, true.
@@ -447,6 +458,13 @@ labels:
 
         del: emptyString.
     .
+    exitValueString:
+        code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        push.
+
+        assign: IsValueString, true.
+        push.
+    .
     exitValueDecimal:
         code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
         push.
@@ -474,6 +492,59 @@ main:
 .
 
 tests:
+    raiseExceptionWithParent:
+        decl: myInput|string.
+        read: myInput, "./test_files/raiseException/input.with_parent.pangolin".
+        match: myInput, $raiseException.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsRaiseException.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    raiseException:
+        decl: myInput|string.
+        read: myInput, "./test_files/raiseException/input.simple.pangolin".
+        match: myInput, $raiseException.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsRaiseException.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    exceptionDefinition:
+        decl: myInput|string.
+        read: myInput, "./test_files/exceptionDefinition/input.simple.pangolin".
+        match: myInput, $exceptionDefinition.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsExceptionDefinition.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+
+    IsExceptionDefinition
     loopWithRelational:
         decl: myInput|string.
         read: myInput, "./test_files/loop/input.relational.pangolin".
@@ -1319,6 +1390,34 @@ tests:
     complexTypeWithListType:
         decl: myInput|string.
         read: myInput, "./test_files/complexType/input.list_type.pangolin".
+        match: myInput, $complexType.
+
+        pop.
+
+        decl: isComplexType|bool.
+        assign: isComplexType, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexType, IsComplexType.
+        assert_if: isNotEqual.
+    .
+    complexTypeWithMapType:
+        decl: myInput|string.
+        read: myInput, "./test_files/complexType/input.map_type.pangolin".
+        match: myInput, $complexType.
+
+        pop.
+
+        decl: isComplexType|bool.
+        assign: isComplexType, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isComplexType, IsComplexType.
+        assert_if: isNotEqual.
+    .
+    complexTypeWithExceptionType:
+        decl: myInput|string.
+        read: myInput, "./test_files/complexType/input.exception_type.pangolin".
         match: myInput, $complexType.
 
         pop.
@@ -2245,6 +2344,34 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isFirstAssign, IsFirstAssign.
+        assert_if: isNotEqual.
+    .
+    valueStringWithString:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueString/input.string.pangolin".
+        match: myInput, $valueString.
+
+        pop.
+
+        decl: isValueString|bool.
+        assign: isValueString, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isValueString, IsValueString.
+        assert_if: isNotEqual.
+    .
+    valueStringWithVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/valueString/input.variable.pangolin".
+        match: myInput, $valueString.
+
+        pop.
+
+        decl: isValueString|bool.
+        assign: isValueString, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isValueString, IsValueString.
         assert_if: isNotEqual.
     .
     valueDecimalWithVariable:
