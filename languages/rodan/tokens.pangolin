@@ -13,6 +13,7 @@ assignment
 
 assignee
     : VAL_VARIABLE_PATTERN
+    | UNDERSCORE
     ;
 
 assignable
@@ -23,6 +24,28 @@ assignable
     | listDefinition
     | mapDefinition
     | value
+    ;
+
+funcCallAssignment
+    : funcCallAssignee assignSymbol funcCall
+    ;
+
+funcCall
+    : VAL_VARIABLE_PATTERN OPEN_PARENTHESIS funcCallParameter CLOSE_PARENTHESIS
+    ;
+
+funcCallParameter
+    : mapDefinition
+    | VAL_VARIABLE_PATTERN
+    ;
+
+funcCallAssignee
+    : assignee COMMA exceptionAssignee
+    ;
+
+exceptionAssignee
+    : EXCEPTION_VARIABLE
+    | UNDERSCORE
     ;
 
 raiseException
@@ -96,6 +119,7 @@ bracketCode
 
 code
     : assignment
+    | funcCallAssignment
     | ifDefinition
     | loop
     | RETURN

@@ -56,6 +56,11 @@ language:
         loop: CurrentToken, |exitLoop.
         exceptionDefinition: CurrentToken, |exitExceptionDefinition.
         raiseException: CurrentToken, |exitRaiseException.
+        exceptionAssignee: CurrentToken, |exitExceptionAssignee.
+        funcCallAssignee: CurrentToken, |exitFuncCallAssignee.
+        funcCallParameter: CurrentToken, |exitFuncCallParameter.
+        funcCall: CurrentToken, |exitFuncCall.
+        funcCallAssignment: CurrentToken, |exitFuncCallAssignment.
     .
     targets:
         pangolin:

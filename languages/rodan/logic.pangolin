@@ -8,6 +8,12 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsFuncCallAssignment|bool.
+    IsFuncCall|bool.
+    IsFuncCallParameter|bool.
+    FuncCallParameterVariableName|bool.
+    IsFuncCallAssignee|bool.
+    IsExceptionAssignee|bool.
     IsRaiseException|bool.
     IsExceptionDefinition|bool.
     IsLoop|bool.
@@ -98,6 +104,29 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitFuncCallAssignment:
+        assign: IsFuncCallAssignment, true.
+        push.
+    .
+    exitFuncCall:
+        assign: IsFuncCall, true.
+        push.
+    .
+    exitFuncCallParameter:
+        code: FuncCallParameterVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        push.
+
+        assign: IsFuncCallParameter, true.
+        push.
+    .
+    exitFuncCallAssignee:
+        assign: IsFuncCallAssignee, true.
+        push.
+    .
+    exitExceptionAssignee:
+        assign: IsExceptionAssignee, true.
+        push.
     .
     exitRaiseException:
         assign: IsRaiseException, true.
@@ -492,6 +521,142 @@ main:
 .
 
 tests:
+    funcCallAssignment:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCallAssignment/input.simple.pangolin".
+        match: myInput, $funcCallAssignment.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCallAssignment.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcCall:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCall/input.simple.pangolin".
+        match: myInput, $funcCall.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCall.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    funcCallParameterWithVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCallParameter/input.variable.pangolin".
+        match: myInput, $funcCallParameter.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCallParameter.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedVariableName|string.
+        read: expectedVariableName, "./test_files/funcCallParameter/expected.variable.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FuncCallParameterVariableName, expectedVariableName.
+        assert_if: isNotEqual.
+    .
+    funcCallParameterWithMapDefinition:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCallParameter/input.map_definition.pangolin".
+        match: myInput, $funcCallParameter.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCallParameter.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedVariableName|string.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FuncCallParameterVariableName, expectedVariableName.
+        assert_if: isNotEqual.
+    .
+    funcCallAssignee:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCallAssignee/input.simple.pangolin".
+        match: myInput, $funcCallAssignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCallAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    exceptionAssigneeWithSkip:
+        decl: myInput|string.
+        read: myInput, "./test_files/exceptionAssignee/input.skip.pangolin".
+        match: myInput, $exceptionAssignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsExceptionAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    exceptionAssigneeWithVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/exceptionAssignee/input.variable.pangolin".
+        match: myInput, $exceptionAssignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsExceptionAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
     raiseExceptionWithParent:
         decl: myInput|string.
         read: myInput, "./test_files/raiseException/input.with_parent.pangolin".
