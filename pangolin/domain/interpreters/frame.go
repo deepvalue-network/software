@@ -51,15 +51,8 @@ func (app *frame) Standard(first string, second string, result string, operation
 
 	if operation.IsMisc() {
 		misc := operation.Misc()
-		if misc.IsFrameAssignment() {
-
-			res := app.variables[result]
-			if !res.IsStackFrame() {
-				str := fmt.Sprintf("the variable (%s) was expected to be of type StackFrame, since its being used as a return variable in a frame_assign instruction", result)
-				return errors.New(str)
-			}
-
-			str := fmt.Sprintf("finish frame assignment in frame: %v, %v", res, app.variables[second])
+		if misc.IsConcatenation() {
+			str := fmt.Sprintf("finish concatenation")
 			return errors.New(str)
 		}
 	}

@@ -70,7 +70,6 @@ type parser struct {
 	stackFrameBuilder         StackFrameBuilder
 	pushBuilder               PushBuilder
 	popBuilder                PopBuilder
-	frameAssignmentBuilder    FrameAssignmentBuiler
 	identifierBuilder         IdentifierBuilder
 	variableNameBuilder       VariableNameBuilder
 	program                   map[string]Program
@@ -141,7 +140,6 @@ type parser struct {
 	stackFrame                map[string]StackFrame
 	push                      map[string]Push
 	pop                       map[string]Pop
-	frameAssignment           map[string]FrameAssignment
 	identifier                map[string]Identifier
 	variableName              map[string]VariableName
 }
@@ -206,7 +204,6 @@ func createParser(
 	stackFrameBuilder StackFrameBuilder,
 	pushBuilder PushBuilder,
 	popBuilder PopBuilder,
-	frameAssignmentBuilder FrameAssignmentBuiler,
 	identifierBuilder IdentifierBuilder,
 	variableNameBuilder VariableNameBuilder,
 ) (*parser, error) {
@@ -270,7 +267,6 @@ func createParser(
 		stackFrameBuilder:         stackFrameBuilder,
 		pushBuilder:               pushBuilder,
 		popBuilder:                popBuilder,
-		frameAssignmentBuilder:    frameAssignmentBuilder,
 		identifierBuilder:         identifierBuilder,
 		variableNameBuilder:       variableNameBuilder,
 	}
@@ -559,10 +555,6 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			OnExit: app.exitPop,
 		},
 		lparser.ToEventsParams{
-			Token:  "frameAssignment",
-			OnExit: app.exitFrameAssignment,
-		},
-		lparser.ToEventsParams{
 			Token:  "identifier",
 			OnExit: app.exitIdentifier,
 		},
@@ -673,7 +665,6 @@ func (app *parser) init() {
 	app.stackFrame = map[string]StackFrame{}
 	app.push = map[string]Push{}
 	app.pop = map[string]Pop{}
-	app.frameAssignment = map[string]FrameAssignment{}
 	app.identifier = map[string]Identifier{}
 	app.variableName = map[string]VariableName{}
 }
@@ -2500,7 +2491,6 @@ func (app *parser) exitStackFrame(tree lexers.NodeTree) (interface{}, error) {
 	section, code := tree.BestMatchFromNames([]string{
 		"push",
 		"pop",
-		"frameAssignment",
 	})
 
 	switch section {
@@ -2513,12 +2503,6 @@ func (app *parser) exitStackFrame(tree lexers.NodeTree) (interface{}, error) {
 	case "pop":
 		if pop, ok := app.pop[code]; ok {
 			builder.WithPop(pop)
-		}
-
-		break
-	case "frameAssignment":
-		if ass, ok := app.frameAssignment[code]; ok {
-			builder.WithAssignment(ass)
 		}
 
 		break
@@ -2566,24 +2550,6 @@ func (app *parser) exitPop(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.pop[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitFrameAssignment(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.frameAssignmentBuilder.Create()
-	standardOperationCode := tree.CodeFromName("standardOperation")
-	if standardOperationCode != "" {
-		if std, ok := app.standardOperation[standardOperationCode]; ok {
-			builder.WithStandard(std)
-		}
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.frameAssignment[tree.Code()] = ins
 	return ins, nil
 }
 

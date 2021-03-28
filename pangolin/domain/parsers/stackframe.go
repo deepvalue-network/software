@@ -1,45 +1,28 @@
 package parsers
 
 type stackFrame struct {
-	assignment FrameAssignment
-	push       Push
-	pop        Pop
-}
-
-func createStackFrameWithAssignment(assignment FrameAssignment) StackFrame {
-	return createStackFrameInternally(assignment, nil, nil)
+	push Push
+	pop  Pop
 }
 
 func createStackFrameWithPush(push Push) StackFrame {
-	return createStackFrameInternally(nil, push, nil)
+	return createStackFrameInternally(push, nil)
 }
 
 func createStackFrameWithPop(pop Pop) StackFrame {
-	return createStackFrameInternally(nil, nil, pop)
+	return createStackFrameInternally(nil, pop)
 }
 
 func createStackFrameInternally(
-	assignment FrameAssignment,
 	push Push,
 	pop Pop,
 ) StackFrame {
 	out := stackFrame{
-		assignment: assignment,
-		push:       push,
-		pop:        pop,
+		push: push,
+		pop:  pop,
 	}
 
 	return &out
-}
-
-// IsAssignment returns true if there is an assignment, false otherwise
-func (obj *stackFrame) IsAssignment() bool {
-	return obj.assignment != nil
-}
-
-// Assignment returns the assignment, if any
-func (obj *stackFrame) Assignment() FrameAssignment {
-	return obj.assignment
 }
 
 // IsPush returns true if there is a push, false otherwise

@@ -1,22 +1,16 @@
 package standard
 
 type misc struct {
-	isConcat          bool
-	isFrameAssignment bool
+	isConcat bool
 }
 
 func createMiscWithConcatenation() Misc {
-	return createMiscInternally(true, false)
+	return createMiscInternally(true)
 }
 
-func createMiscWithFrameAssignment() Misc {
-	return createMiscInternally(false, true)
-}
-
-func createMiscInternally(isConcat bool, isFrameAssignment bool) Misc {
+func createMiscInternally(isConcat bool) Misc {
 	out := misc{
-		isConcat:          isConcat,
-		isFrameAssignment: isFrameAssignment,
+		isConcat: isConcat,
 	}
 
 	return &out
@@ -25,9 +19,4 @@ func createMiscInternally(isConcat bool, isFrameAssignment bool) Misc {
 // IsConcatenation returns true if concatenation, false otherwise
 func (obj *misc) IsConcatenation() bool {
 	return obj.isConcat
-}
-
-// IsFrameAssignment returns true if frameAssignment, false otherwise
-func (obj *misc) IsFrameAssignment() bool {
-	return obj.isFrameAssignment
 }

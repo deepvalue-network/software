@@ -3,14 +3,12 @@ package standard
 import "errors"
 
 type miscBuilder struct {
-	isConcat          bool
-	isFrameAssignment bool
+	isConcat bool
 }
 
 func createMiscBuilder() MiscBuilder {
 	out := miscBuilder{
-		isConcat:          false,
-		isFrameAssignment: false,
+		isConcat: false,
 	}
 
 	return &out
@@ -27,20 +25,10 @@ func (app *miscBuilder) IsConcatenation() MiscBuilder {
 	return app
 }
 
-// IsFrameAssignment flags the builder as a frameAssignment
-func (app *miscBuilder) IsFrameAssignment() MiscBuilder {
-	app.isFrameAssignment = true
-	return app
-}
-
 // Now builds a new Misc instance
 func (app *miscBuilder) Now() (Misc, error) {
 	if app.isConcat {
 		return createMiscWithConcatenation(), nil
-	}
-
-	if app.isFrameAssignment {
-		return createMiscWithFrameAssignment(), nil
 	}
 
 	return nil, errors.New("the Misc is invalid")

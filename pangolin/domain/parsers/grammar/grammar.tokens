@@ -341,7 +341,6 @@ call
 stackFrame
     : push
     | pop
-    | frameAssignment
     ;
 
 push
@@ -352,10 +351,6 @@ push
 pop
     : POP COLON transformOperation
     | POP
-    ;
-
-frameAssignment
-    : FRAME_ASSIGN COLON standardOperation
     ;
 
 identifier

@@ -318,16 +318,6 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 				builder.WithStackframe(stackframe)
 			}
 		}
-
-		if stackFrame.IsAssignment() {
-			standard := stackFrame.Assignment().Standard()
-			st, err := app.standard(standard).IsFrameAssignment().Now()
-			if err != nil {
-				return nil, err
-			}
-
-			builder.WithStandard(st)
-		}
 	}
 
 	if parsed.IsJump() {

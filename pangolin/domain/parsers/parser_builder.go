@@ -66,7 +66,6 @@ type parserBuilder struct {
 	stackFrameBuilder         StackFrameBuilder
 	pushBuilder               PushBuilder
 	popBuilder                PopBuilder
-	frameAssignmentBuilder    FrameAssignmentBuiler
 	identifierBuilder         IdentifierBuilder
 	variableNameBuilder       VariableNameBuilder
 	lexerAdapter              lexers.Adapter
@@ -131,7 +130,6 @@ func createParserBuilder(
 	stackFrameBuilder StackFrameBuilder,
 	pushBuilder PushBuilder,
 	popBuilder PopBuilder,
-	frameAssignmentBuilder FrameAssignmentBuiler,
 	identifierBuilder IdentifierBuilder,
 	variableNameBuilder VariableNameBuilder,
 ) ParserBuilder {
@@ -194,7 +192,6 @@ func createParserBuilder(
 		stackFrameBuilder:         stackFrameBuilder,
 		pushBuilder:               pushBuilder,
 		popBuilder:                popBuilder,
-		frameAssignmentBuilder:    frameAssignmentBuilder,
 		identifierBuilder:         identifierBuilder,
 		variableNameBuilder:       variableNameBuilder,
 		lexerAdapter:              nil,
@@ -264,7 +261,6 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.stackFrameBuilder,
 		app.pushBuilder,
 		app.popBuilder,
-		app.frameAssignmentBuilder,
 		app.identifierBuilder,
 		app.variableNameBuilder,
 	)
@@ -342,7 +338,6 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.stackFrameBuilder,
 		app.pushBuilder,
 		app.popBuilder,
-		app.frameAssignmentBuilder,
 		app.identifierBuilder,
 		app.variableNameBuilder,
 	)

@@ -24,7 +24,6 @@ type Builder interface {
 	WithSecond(second string) Builder
 	WithOperation(operation Operation) Builder
 	IsConcatenation() Builder
-	IsFrameAssignment() Builder
 	IsAdd() Builder
 	IsSub() Builder
 	IsMul() Builder
@@ -70,14 +69,12 @@ type Operation interface {
 type MiscBuilder interface {
 	Create() MiscBuilder
 	IsConcatenation() MiscBuilder
-	IsFrameAssignment() MiscBuilder
 	Now() (Misc, error)
 }
 
 // Misc represents a misc operation
 type Misc interface {
 	IsConcatenation() bool
-	IsFrameAssignment() bool
 }
 
 // ArythmeticBuilder represents an arythmetic builder

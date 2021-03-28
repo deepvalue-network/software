@@ -13,7 +13,6 @@ type builder struct {
 	first             string
 	second            string
 	isConcatenation   bool
-	isFrameAssignment bool
 	isAdd             bool
 	isSub             bool
 	isMul             bool
@@ -42,7 +41,6 @@ func createBuilder(
 		first:             "",
 		second:            "",
 		isConcatenation:   false,
-		isFrameAssignment: false,
 		isAdd:             false,
 		isSub:             false,
 		isMul:             false,
@@ -94,12 +92,6 @@ func (app *builder) WithOperation(operation Operation) Builder {
 // IsConcatenation flags a builder as concatenation
 func (app *builder) IsConcatenation() Builder {
 	app.isConcatenation = true
-	return app
-}
-
-// IsFrameAssignment flags a builder as frameAssignment
-func (app *builder) IsFrameAssignment() Builder {
-	app.isFrameAssignment = true
 	return app
 }
 
@@ -170,17 +162,8 @@ func (app *builder) Now() (Standard, error) {
 	}
 
 	operationBuilder := app.operationBuilder.Create()
-	if app.isConcatenation || app.isFrameAssignment {
-		builder := app.miscBuilder.Create()
-		if app.isConcatenation {
-			builder.IsConcatenation()
-		}
-
-		if app.isFrameAssignment {
-			builder.IsFrameAssignment()
-		}
-
-		misc, err := builder.Now()
+	if app.isConcatenation {
+		misc, err := app.miscBuilder.Create().IsConcatenation().Now()
 		if err != nil {
 			return nil, err
 		}

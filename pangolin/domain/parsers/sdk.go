@@ -71,7 +71,6 @@ func NewParserBuilder() ParserBuilder {
 	stackFrameBuilder := createStackFrameBuilder()
 	pushBuilder := createPushBuilder()
 	popBuilder := createPopBuilder()
-	frameAssignmentBuilder := createFrameAssignmentBuilder()
 	identifierBuilder := createIdentifierBuilder()
 	variableNameBuilder := createVariableNameBuilder()
 
@@ -134,7 +133,6 @@ func NewParserBuilder() ParserBuilder {
 		stackFrameBuilder,
 		pushBuilder,
 		popBuilder,
-		frameAssignmentBuilder,
 		identifierBuilder,
 		variableNameBuilder,
 	)
@@ -1103,7 +1101,6 @@ type Call interface {
 // StackFrameBuilder represents a stackFrame builder
 type StackFrameBuilder interface {
 	Create() StackFrameBuilder
-	WithAssignment(assignment FrameAssignment) StackFrameBuilder
 	WithPush(push Push) StackFrameBuilder
 	WithPop(pop Pop) StackFrameBuilder
 	Now() (StackFrame, error)
@@ -1111,8 +1108,6 @@ type StackFrameBuilder interface {
 
 // StackFrame represents a stackFrame related instruction
 type StackFrame interface {
-	IsAssignment() bool
-	Assignment() FrameAssignment
 	IsPush() bool
 	Push() Push
 	IsPop() bool
@@ -1143,18 +1138,6 @@ type PopBuilder interface {
 type Pop interface {
 	HasStackFrame() bool
 	StackFrame() TransformOperation
-}
-
-// FrameAssignmentBuiler represnets a frameAssignment builder
-type FrameAssignmentBuiler interface {
-	Create() FrameAssignmentBuiler
-	WithStandard(standard StandardOperation) FrameAssignmentBuiler
-	Now() (FrameAssignment, error)
-}
-
-// FrameAssignment represents a frame assignment
-type FrameAssignment interface {
-	Standard() StandardOperation
 }
 
 // IdentifierBuilder represents an identifier builder

@@ -3,16 +3,14 @@ package parsers
 import "errors"
 
 type stackFrameBuilder struct {
-	assignment FrameAssignment
-	push       Push
-	pop        Pop
+	push Push
+	pop  Pop
 }
 
 func createStackFrameBuilder() StackFrameBuilder {
 	out := stackFrameBuilder{
-		assignment: nil,
-		push:       nil,
-		pop:        nil,
+		push: nil,
+		pop:  nil,
 	}
 
 	return &out
@@ -21,12 +19,6 @@ func createStackFrameBuilder() StackFrameBuilder {
 // Create initializes the builder
 func (app *stackFrameBuilder) Create() StackFrameBuilder {
 	return createStackFrameBuilder()
-}
-
-// WithAssignment adds an assignment to the builder
-func (app *stackFrameBuilder) WithAssignment(assignment FrameAssignment) StackFrameBuilder {
-	app.assignment = assignment
-	return app
 }
 
 // WithPush adds a push to the builder
@@ -43,10 +35,6 @@ func (app *stackFrameBuilder) WithPop(pop Pop) StackFrameBuilder {
 
 // Now builds a new StackFrame instance
 func (app *stackFrameBuilder) Now() (StackFrame, error) {
-	if app.assignment != nil {
-		return createStackFrameWithAssignment(app.assignment), nil
-	}
-
 	if app.push != nil {
 		return createStackFrameWithPush(app.push), nil
 	}
