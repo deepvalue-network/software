@@ -8,7 +8,6 @@ import (
 
 type builder struct {
 	isGlobal    bool
-	isImmutable bool
 	isMandatory bool
 	isIncoming  bool
 	isOutgoing  bool
@@ -19,7 +18,6 @@ type builder struct {
 func createBuilder() Builder {
 	out := builder{
 		isGlobal:    false,
-		isImmutable: false,
 		isMandatory: false,
 		isIncoming:  false,
 		isOutgoing:  false,
@@ -38,12 +36,6 @@ func (app *builder) Create() Builder {
 // IsGlobal sets the builder as global
 func (app *builder) IsGlobal() Builder {
 	app.isGlobal = true
-	return app
-}
-
-// IsImmutable sets the builder as immutable
-func (app *builder) IsImmutable() Builder {
-	app.isImmutable = true
 	return app
 }
 
@@ -89,7 +81,6 @@ func (app *builder) Now() (Variable, error) {
 
 	return createVariable(
 		app.isGlobal,
-		app.isImmutable,
 		app.isMandatory,
 		app.isIncoming,
 		app.isOutgoing,

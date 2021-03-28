@@ -27,7 +27,6 @@ type AdapterBuilder interface {
 
 // Adapter represents the variables adapter
 type Adapter interface {
-	FromConstant(declaration parsers.ConstantDeclaration) (Variable, error)
 	FromVariable(declaration parsers.VariableDeclaration) (Variable, error)
 }
 
@@ -35,7 +34,6 @@ type Adapter interface {
 type Builder interface {
 	Create() Builder
 	IsGlobal() Builder
-	IsImmutable() Builder
 	WithName(name string) Builder
 	WithValue(val var_value.Value) Builder
 	IsIncoming() Builder
@@ -47,7 +45,6 @@ type Builder interface {
 // Variable represents a variable
 type Variable interface {
 	IsGlobal() bool
-	IsImmutable() bool
 	IsMandatory() bool
 	IsIncoming() bool
 	IsOutgoing() bool

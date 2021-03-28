@@ -110,7 +110,6 @@ type Machine interface {
 type StackFrameBuilder interface {
 	Create() StackFrameBuilder
 	WithVariables(variables map[string]computable.Value) StackFrameBuilder
-	WithConstants(constants map[string]computable.Value) StackFrameBuilder
 	Now() StackFrame
 }
 
@@ -125,7 +124,6 @@ type StackFrame interface {
 type FrameBuilder interface {
 	Create() FrameBuilder
 	WithVariables(variables map[string]computable.Value) FrameBuilder
-	WithConstants(constants map[string]computable.Value) FrameBuilder
 	Now() Frame
 }
 

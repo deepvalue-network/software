@@ -10,21 +10,18 @@ import (
 type stackFrame struct {
 	frameBuilder FrameBuilder
 	variables    map[string]computable.Value
-	constants    map[string]computable.Value
 	frames       []Frame
 }
 
 func createStackFrame(
 	frameBuilder FrameBuilder,
 	variables map[string]computable.Value,
-	constants map[string]computable.Value,
 ) StackFrame {
 	out := stackFrame{
 		frameBuilder: frameBuilder,
 		variables:    variables,
-		constants:    constants,
 		frames: []Frame{
-			frameBuilder.Create().WithVariables(variables).WithConstants(constants).Now(),
+			frameBuilder.Create().WithVariables(variables).Now(),
 		},
 	}
 
@@ -39,7 +36,7 @@ func (app *stackFrame) PushTo(name string) error {
 
 // Push pushes the current frame to the stack
 func (app *stackFrame) Push() {
-	newFrame := app.frameBuilder.Create().WithConstants(app.constants).WithVariables(app.variables).Now()
+	newFrame := app.frameBuilder.Create().WithVariables(app.variables).Now()
 	app.frames = append(app.frames, newFrame)
 }
 

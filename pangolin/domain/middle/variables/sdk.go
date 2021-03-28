@@ -19,7 +19,6 @@ func NewBuilder() Builder {
 
 // Adapter represents the variables adapter
 type Adapter interface {
-	FromConstants(section parsers.ConstantSection) (Variables, error)
 	FromVariables(section parsers.VariableSection) (Variables, error)
 }
 

@@ -8,7 +8,6 @@ type frameBuilder struct {
 	computer  Computer
 	builder   computable.Builder
 	variables map[string]computable.Value
-	constants map[string]computable.Value
 }
 
 func createFrameBuilder(
@@ -19,7 +18,6 @@ func createFrameBuilder(
 		computer:  computer,
 		builder:   builder,
 		variables: map[string]computable.Value{},
-		constants: map[string]computable.Value{},
 	}
 
 	return &out
@@ -36,12 +34,6 @@ func (app *frameBuilder) WithVariables(variables map[string]computable.Value) Fr
 	return app
 }
 
-// WithConstants add constants to the builder
-func (app *frameBuilder) WithConstants(constants map[string]computable.Value) FrameBuilder {
-	app.constants = constants
-	return app
-}
-
 // Now builds a new Frame instance
 func (app *frameBuilder) Now() Frame {
 
@@ -50,10 +42,5 @@ func (app *frameBuilder) Now() Frame {
 		variables[keyname] = value
 	}
 
-	constants := map[string]computable.Value{}
-	for keyname, value := range app.constants {
-		constants[keyname] = value
-	}
-
-	return createFrame(app.computer, app.builder, variables, constants)
+	return createFrame(app.computer, app.builder, variables)
 }

@@ -23,25 +23,6 @@ func createAdapter(valueFactory value.Factory, valueAdapter value.Adapter, build
 	return &out
 }
 
-// FromConstant converts a constant declaration to a variable
-func (app *adapter) FromConstant(declaration parsers.ConstantDeclaration) (Variable, error) {
-	parsedValue := declaration.Value()
-	val, err := app.valueAdapter.ToValue(parsedValue)
-	if err != nil {
-		return nil, err
-	}
-
-	// make sure the value fits the declaration type:
-
-	name := declaration.Constant()
-	builder := app.builder.Create().IsImmutable().WithName(name).WithValue(val)
-	if app.isGLobal {
-		builder.IsGlobal()
-	}
-
-	return builder.Now()
-}
-
 // FromVariable converts a variable declaration to a variable
 func (app *adapter) FromVariable(declaration parsers.VariableDeclaration) (Variable, error) {
 	typ := declaration.Type()

@@ -15,7 +15,6 @@ type frame struct {
 	computer  Computer
 	builder   computable.Builder
 	variables map[string]computable.Value
-	constants map[string]computable.Value
 	isStopped bool
 }
 
@@ -23,13 +22,11 @@ func createFrame(
 	computer Computer,
 	builder computable.Builder,
 	variables map[string]computable.Value,
-	constants map[string]computable.Value,
 ) Frame {
 	out := frame{
 		computer:  computer,
 		builder:   builder,
 		variables: variables,
-		constants: constants,
 		isStopped: false,
 	}
 

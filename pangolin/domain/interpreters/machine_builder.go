@@ -29,7 +29,6 @@ type machineBuilder struct {
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder
 	stackFrameBuilder               StackFrameBuilder
 	events                          []lexers.Event
-	globalConstants                 map[string]computable.Value
 	globalVariables                 map[string]computable.Value
 	lbls                            map[string]label_instructions.Instructions
 	lang                            linkers.Language
@@ -58,7 +57,6 @@ func createMachineBuilder(
 		grammarRetrieverCriteriaBuilder: grammarRetrieverCriteriaBuilder,
 		stackFrameBuilder:               stackFrameBuilder,
 		events:                          events,
-		globalConstants:                 map[string]computable.Value{},
 		globalVariables:                 map[string]computable.Value{},
 		lbls:                            map[string]label_instructions.Instructions{},
 		lang:                            nil,
@@ -129,7 +127,6 @@ func (app *machineBuilder) Now() (Machine, error) {
 	}
 
 	stackFrame := app.stackFrameBuilder.Create().
-		WithConstants(app.globalConstants).
 		WithVariables(app.globalVariables).
 		Now()
 
@@ -188,56 +185,32 @@ func (app *machineBuilder) variable(variable variable.Variable) error {
 		return errors.New(str)
 	}
 
-	isImmutable := false
-	if variable.IsImmutable() {
-		isImmutable = true
-	}
-
 	// if the variable has an incoming:
 	if variable.IsIncoming() {
 		// if there is an input with that name:
 		if inputVal, ok := app.input[name]; ok {
-			if isImmutable {
-				app.globalConstants[name] = inputVal
-				return nil
-			}
-
 			app.globalVariables[name] = inputVal
 			return nil
 		}
 	}
 
 	val := variable.Value()
-	compValue, err := app.fetchComputableValue(val, isImmutable)
+	compValue, err := app.fetchComputableValue(val)
 	if err != nil {
 		return err
-	}
-
-	if isImmutable {
-		app.globalConstants[name] = compValue
-		return nil
 	}
 
 	app.globalVariables[name] = compValue
 	return nil
 }
 
-func (app *machineBuilder) fetchComputableValue(val var_value.Value, isImmutable bool) (computable.Value, error) {
+func (app *machineBuilder) fetchComputableValue(val var_value.Value) (computable.Value, error) {
 	if val.IsComputable() {
 		return val.Computable(), nil
 	}
 
 	if val.IsGlobalVariable() {
 		global := val.GlobalVariable()
-		if isImmutable {
-			if val, ok := app.globalConstants[global]; ok {
-				return val, nil
-			}
-
-			str := fmt.Sprintf("the global constant (%s) is not declared", global)
-			return nil, errors.New(str)
-		}
-
 		if val, ok := app.globalVariables[global]; ok {
 			return val, nil
 		}

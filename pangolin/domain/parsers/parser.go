@@ -37,8 +37,6 @@ type parser struct {
 	headSectionBuilder         HeadSectionBuilder
 	headValueBuilder           HeadValueBuilder
 	importSingleBuilder        ImportSingleBuilder
-	constantSectionBuilder     ConstantSectionBuilder
-	constantDeclarationBuilder ConstantDeclarationBuilder
 	variableSectionBuilder     VariableSectionBuilder
 	variableDeclarationBuilder VariableDeclarationBuilder
 	variableDirectionBuilder   VariableDirectionBuilder
@@ -106,8 +104,6 @@ type parser struct {
 	headSection                map[string]HeadSection
 	headValue                  map[string]HeadValue
 	importSingle               map[string]ImportSingle
-	constantSection            map[string]ConstantSection
-	constantDeclaration        map[string]ConstantDeclaration
 	variableSection            map[string]VariableSection
 	variableDeclaration        map[string]VariableDeclaration
 	variableDirection          map[string]VariableDirection
@@ -187,8 +183,6 @@ func createParser(
 	headSectionBuilder HeadSectionBuilder,
 	headValueBuilder HeadValueBuilder,
 	importSingleBuilder ImportSingleBuilder,
-	constantSectionBuilder ConstantSectionBuilder,
-	constantDeclarationBuilder ConstantDeclarationBuilder,
 	variableSectionBuilder VariableSectionBuilder,
 	variableDeclarationBuilder VariableDeclarationBuilder,
 	variableDirectionBuilder VariableDirectionBuilder,
@@ -258,8 +252,6 @@ func createParser(
 		headSectionBuilder:         headSectionBuilder,
 		headValueBuilder:           headValueBuilder,
 		importSingleBuilder:        importSingleBuilder,
-		constantSectionBuilder:     constantSectionBuilder,
-		constantDeclarationBuilder: constantDeclarationBuilder,
 		variableSectionBuilder:     variableSectionBuilder,
 		variableDeclarationBuilder: variableDeclarationBuilder,
 		variableDirectionBuilder:   variableDirectionBuilder,
@@ -417,14 +409,6 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 		lparser.ToEventsParams{
 			Token:  "importSingle",
 			OnExit: app.exitImportSingle,
-		},
-		lparser.ToEventsParams{
-			Token:  "constantSection",
-			OnExit: app.exitConstantSection,
-		},
-		lparser.ToEventsParams{
-			Token:  "constantDeclaration",
-			OnExit: app.exitConstantDeclaration,
 		},
 		lparser.ToEventsParams{
 			Token:  "variableSection",
@@ -687,8 +671,6 @@ func (app *parser) init() {
 	app.headSection = map[string]HeadSection{}
 	app.headValue = map[string]HeadValue{}
 	app.importSingle = map[string]ImportSingle{}
-	app.constantSection = map[string]ConstantSection{}
-	app.constantDeclaration = map[string]ConstantDeclaration{}
 	app.variableSection = map[string]VariableSection{}
 	app.variableDeclaration = map[string]VariableDeclaration{}
 	app.variableDirection = map[string]VariableDirection{}
@@ -1460,47 +1442,6 @@ func (app *parser) exitImportSingle(tree lexers.NodeTree) (interface{}, error) {
 	return ins, nil
 }
 
-func (app *parser) exitConstantSection(tree lexers.NodeTree) (interface{}, error) {
-	lst := []ConstantDeclaration{}
-	codes := tree.CodesFromName("constantDeclaration")
-	for _, oneCode := range codes {
-		if ins, ok := app.constantDeclaration[oneCode]; ok {
-			lst = append(lst, ins)
-		}
-	}
-
-	ins, err := app.constantSectionBuilder.Create().WithDeclarations(lst).Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.constantSection[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitConstantDeclaration(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.constantDeclarationBuilder.Create()
-
-	typeCode := tree.CodeFromName("type")
-	if typ, ok := app.typ[typeCode]; ok {
-		builder.WithType(typ)
-	}
-
-	valueCode := tree.CodeFromName("value")
-	if val, ok := app.value[valueCode]; ok {
-		builder.WithValue(val)
-	}
-
-	constant := tree.CodeFromName("CONSTANT_PATTERN")
-	ins, err := builder.WithConstant(constant).Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.constantDeclaration[tree.Code()] = ins
-	return ins, nil
-}
-
 func (app *parser) exitVariableSection(tree lexers.NodeTree) (interface{}, error) {
 	lst := []VariableDeclaration{}
 	codes := tree.CodesFromName("variableDeclaration")
@@ -1591,13 +1532,6 @@ func (app *parser) exitVariableIncoming(tree lexers.NodeTree) (interface{}, erro
 
 func (app *parser) exitDefinitionSection(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.definitionSectionBuilder.Create()
-	constantSectionCode := tree.CodeFromName("constantSection")
-	if constantSectionCode != "" {
-		if cons, ok := app.constantSection[constantSectionCode]; ok {
-			builder.WithConstants(cons)
-		}
-	}
-
 	variableSectionCode := tree.CodeFromName("variableSection")
 	if variableSectionCode != "" {
 		if vr, ok := app.variableSection[variableSectionCode]; ok {

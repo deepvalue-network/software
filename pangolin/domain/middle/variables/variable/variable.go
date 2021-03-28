@@ -6,7 +6,6 @@ import (
 
 type variable struct {
 	isGlobal    bool
-	isImmutable bool
 	isMandatory bool
 	isIncoming  bool
 	isOutgoing  bool
@@ -16,7 +15,6 @@ type variable struct {
 
 func createVariable(
 	isGlobal bool,
-	isImmutable bool,
 	isMandatory bool,
 	isIncoming bool,
 	isOutgoing bool,
@@ -25,7 +23,6 @@ func createVariable(
 ) Variable {
 	out := variable{
 		isGlobal:    isGlobal,
-		isImmutable: isImmutable,
 		isMandatory: isMandatory,
 		isIncoming:  isIncoming,
 		isOutgoing:  isOutgoing,
@@ -39,11 +36,6 @@ func createVariable(
 // IsGlobal returns true if the variable is global, false otherwise
 func (obj *variable) IsGlobal() bool {
 	return obj.isGlobal
-}
-
-// IsImmutable returns true if the variable is immutable, false otherwise
-func (obj *variable) IsImmutable() bool {
-	return obj.isImmutable
 }
 
 // IsMandatory returns true if the variable is mandatory, false otherwise

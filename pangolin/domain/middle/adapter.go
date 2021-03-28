@@ -211,16 +211,6 @@ func (app *adapter) application(parsed parsers.Application) (Application, error)
 
 	if parsed.HasDefinition() {
 		defSection := parsed.Definition()
-		if defSection.HasConstants() {
-			section := defSection.Constants()
-			variables, err := app.variablesAdapter.FromConstants(section)
-			if err != nil {
-				return nil, err
-			}
-
-			applicationBuilder.WithVariables(variables)
-		}
-
 		if defSection.HasVariables() {
 			section := defSection.Variables()
 			variables, err := app.variablesAdapter.FromVariables(section)

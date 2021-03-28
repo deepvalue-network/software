@@ -38,8 +38,6 @@ func NewParserBuilder() ParserBuilder {
 	headSectionBuilder := createHeadSectionBuilder()
 	headValueBuilder := createHeadValueBuilder()
 	importSingleBuilder := createImportSingleBuilder()
-	constantSectionBuilder := createConstantSectionBuilder()
-	constantDeclarationBuilder := createConstantDeclarationBuilder()
 	variableSectionBuilder := createVariableSectionBuilder()
 	variableDeclarationBuilder := createVariableDeclarationBuilder()
 	variableDirectionBuilder := createVariableDirectionBuilder()
@@ -108,8 +106,6 @@ func NewParserBuilder() ParserBuilder {
 		headSectionBuilder,
 		headValueBuilder,
 		importSingleBuilder,
-		constantSectionBuilder,
-		constantDeclarationBuilder,
 		variableSectionBuilder,
 		variableDeclarationBuilder,
 		variableDirectionBuilder,
@@ -574,45 +570,14 @@ type HeadValue interface {
 // DefinitionSectionBuilder represents a definition section builder
 type DefinitionSectionBuilder interface {
 	Create() DefinitionSectionBuilder
-	WithConstants(constants ConstantSection) DefinitionSectionBuilder
 	WithVariables(variables VariableSection) DefinitionSectionBuilder
 	Now() (DefinitionSection, error)
 }
 
 // DefinitionSection represents a definition section
 type DefinitionSection interface {
-	HasConstants() bool
-	Constants() ConstantSection
 	HasVariables() bool
 	Variables() VariableSection
-}
-
-// ConstantSectionBuilder represents the constantSection builder
-type ConstantSectionBuilder interface {
-	Create() ConstantSectionBuilder
-	WithDeclarations(declarations []ConstantDeclaration) ConstantSectionBuilder
-	Now() (ConstantSection, error)
-}
-
-// ConstantSection represents the constant section
-type ConstantSection interface {
-	Declarations() []ConstantDeclaration
-}
-
-// ConstantDeclarationBuilder represents the constant declaration builder
-type ConstantDeclarationBuilder interface {
-	Create() ConstantDeclarationBuilder
-	WithConstant(constant string) ConstantDeclarationBuilder
-	WithType(typ Type) ConstantDeclarationBuilder
-	WithValue(value Value) ConstantDeclarationBuilder
-	Now() (ConstantDeclaration, error)
-}
-
-// ConstantDeclaration represents the constant declaration
-type ConstantDeclaration interface {
-	Constant() string
-	Type() Type
-	Value() Value
 }
 
 // VariableSectionBuilder represents the variableSection builder

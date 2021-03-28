@@ -7,14 +7,12 @@ import (
 type stackFrameBuilder struct {
 	frameBuilder FrameBuilder
 	variables    map[string]computable.Value
-	constants    map[string]computable.Value
 }
 
 func createStackFrameBuilder(frameBuilder FrameBuilder) StackFrameBuilder {
 	out := stackFrameBuilder{
 		frameBuilder: frameBuilder,
 		variables:    map[string]computable.Value{},
-		constants:    map[string]computable.Value{},
 	}
 
 	return &out
@@ -31,13 +29,7 @@ func (app *stackFrameBuilder) WithVariables(variables map[string]computable.Valu
 	return app
 }
 
-// WithConstants add constants to the builder
-func (app *stackFrameBuilder) WithConstants(constants map[string]computable.Value) StackFrameBuilder {
-	app.constants = constants
-	return app
-}
-
 // Now builds a new StackFrame instance
 func (app *stackFrameBuilder) Now() StackFrame {
-	return createStackFrame(app.frameBuilder, app.variables, app.constants)
+	return createStackFrame(app.frameBuilder, app.variables)
 }

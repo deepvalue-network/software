@@ -33,8 +33,6 @@ type parserBuilder struct {
 	headSectionBuilder         HeadSectionBuilder
 	headValueBuilder           HeadValueBuilder
 	importSingleBuilder        ImportSingleBuilder
-	constantSectionBuilder     ConstantSectionBuilder
-	constantDeclarationBuilder ConstantDeclarationBuilder
 	variableSectionBuilder     VariableSectionBuilder
 	variableDeclarationBuilder VariableDeclarationBuilder
 	variableDirectionBuilder   VariableDirectionBuilder
@@ -105,8 +103,6 @@ func createParserBuilder(
 	headSectionBuilder HeadSectionBuilder,
 	headValueBuilder HeadValueBuilder,
 	importSingleBuilder ImportSingleBuilder,
-	constantSectionBuilder ConstantSectionBuilder,
-	constantDeclarationBuilder ConstantDeclarationBuilder,
 	variableSectionBuilder VariableSectionBuilder,
 	variableDeclarationBuilder VariableDeclarationBuilder,
 	variableDirectionBuilder VariableDirectionBuilder,
@@ -175,8 +171,6 @@ func createParserBuilder(
 		headSectionBuilder:         headSectionBuilder,
 		headValueBuilder:           headValueBuilder,
 		importSingleBuilder:        importSingleBuilder,
-		constantSectionBuilder:     constantSectionBuilder,
-		constantDeclarationBuilder: constantDeclarationBuilder,
 		variableSectionBuilder:     variableSectionBuilder,
 		variableDeclarationBuilder: variableDeclarationBuilder,
 		variableDirectionBuilder:   variableDirectionBuilder,
@@ -252,8 +246,6 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.headSectionBuilder,
 		app.headValueBuilder,
 		app.importSingleBuilder,
-		app.constantSectionBuilder,
-		app.constantDeclarationBuilder,
 		app.variableSectionBuilder,
 		app.variableDeclarationBuilder,
 		app.variableDirectionBuilder,
@@ -337,8 +329,6 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.headSectionBuilder,
 		app.headValueBuilder,
 		app.importSingleBuilder,
-		app.constantSectionBuilder,
-		app.constantDeclarationBuilder,
 		app.variableSectionBuilder,
 		app.variableDeclarationBuilder,
 		app.variableDirectionBuilder,
