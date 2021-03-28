@@ -4,116 +4,10 @@ head:
 .
 
 variables:
-    in Input|string.
-    out Output|string.
-    Program|string.
-    PrintCommand|string.
-    IsAssignee|bool.
-    VariableName|string.
-    IsListAssigneeIndex|bool.
-    IsMapAssignee|bool.
-    IsVariableWithDot|bool.
-    IsImportDefinition|bool.
-    IsImportDefinitionSingle|bool.
-    ImportName|string.
-    IsRelativePath|bool.
-    IsFolderSection|bool.
-    IsFolderSectionWithSlash|bool.
-    FileName|string.
-    IsLoadModuleDefinition|bool.
-    IsModuleNames|bool.
-    IsModuleNameWithComma|bool.
-    ModuleName|string.
-    IsFuncCallAssignment|bool.
-    IsFuncCall|bool.
-    IsFuncCallName|bool.
-    FuncCallModule|string.
-    FuncCallImport|string.
-    FuncCallName|string.
-    IsFuncCallParameter|bool.
-    IsFuncCallAssignee|bool.
-    IsExceptionAssignee|bool.
-    IsRaiseException|bool.
-    IsExceptionDefinition|bool.
-    IsLoop|bool.
-    IsRelationalLoop|bool.
-    IsIterableLoop|bool.
-    IsIterableAssignment|bool.
-    IsIterableAssignee|bool.
     IterableAssigneeVarAmount|int64.
     IterableAssigneeVariableName|string.
-    IsIterableAssigneeKeyname|bool.
-    IsIterable|bool.
-    IterableVariableName|string.
-    IsIfDefinition|bool.
-    IsFuncDefinition|bool.
-    IsFuncSignature|bool.
-    IsFuncParams|bool.
-    IsFuncParamContent|bool.
-    IsFuncParamElement|bool.
-    IsFuncParamEntry|bool.
-    IsFuncParamEntryOptional|bool.
-    FuncParamEntryVariableName|string.
-    IsBracketCode|bool.
-    IsCode|bool.
-    IsCodeReturn|bool.
-    IsCodeContinue|bool.
-    IsMapDefinition|bool.
-    IsMapDefinitionContent|bool.
-    IsMapDefinitionContentElement|bool.
-    IsMapDefinitionContentEntry|bool.
-    MapDefinitionContentEntryKeyname|string.
-    IsListDefinition|bool.
-    IsListDefInternal|bool.
-    IsListDefCon|bool.
-    IsListDefConEl|bool.
-    IsComplexType|bool.
-    IsListType|bool.
-    ListTypeDimension|string.
-    IsPrimTypeBool|bool.
-    IsPrimTypeByte|bool.
-    IsPrimTypeFloatThirtyTwo|bool.
-    IsPrimTypeFloatSixtyFour|bool.
-    IsPrimTypeIntHeight|bool.
-    IsPrimTypeIntSixteen|bool.
-    IsPrimTypeIntThirtyTwo|bool.
-    IsPrimTypeIntSixtyFour|bool.
-    IsPrimTypeString|bool.
-    IsPrimTypeUintHeight|bool.
-    IsPrimTypeUintSixteen|bool.
-    IsPrimTypeUintThirtyTwo|bool.
-    IsPrimTypeUintSixtyFour|bool.
-    IsLogOp|bool.
-    IsLogOpOperand|bool.
-    IsRelOp|bool.
-    IsRelOpDec|bool.
-    IsRelOpInt|bool.
-    IsAryOp|bool.
-    IsAryOpDec|bool.
-    IsValueDecimalComplex|bool.
-    IsAryOpInt|bool.
-    IsValueIntComplex|bool.
-    IsArySymbolAdd|bool.
-    IsArySymbolDiv|bool.
-    IsArySymbolMod|bool.
-    IsArySymbolMul|bool.
-    IsArySymbolSub|bool.
-    IsRelSymbolBiggerThanOrEqual|bool.
-    IsRelSymbolBiggerThan|bool.
-    IsRelSymbolLessThanOrEqual|bool.
-    IsRelSymbolLessThan|bool.
-    IsRelSymbolEqual|bool.
-    IsRelSymbolNotEqual|bool.
-    IsLogicalSymbolAnd|bool.
-    IsLogicalSymbolOr|bool.
-    IsFirstAssign|bool.
-    IsAssign|bool.
-    IsValueString|bool.
-    VariablePattern|string.
-    ValueInt|string.
     DecimalValue|string.
     DecimalValueAmount|int64.
-    StringValue|string.
     CurrentToken|token.
 .
 
@@ -125,122 +19,157 @@ labels:
         print: "printCommand".
     .
     exitAssignee:
-        code: VariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        decl: variableName|bool.
+        code: variableName, CurrentToken, @VAL_VARIABLE_PATTERN.
         push.
 
-        assign: IsAssignee, true.
+        decl: isAssignee|bool.
+        assign: isAssignee, true.
         push.
     .
     exitListAssigneeIndex:
-        assign: IsListAssigneeIndex, true.
+        decl: isListAssigneeIndex|bool.
+        assign: isListAssigneeIndex, true.
         push.
     .
     exitMapAssignee:
-        assign: IsMapAssignee, true.
+        decl: isMapAssignee|bool.
+        assign: isMapAssignee, true.
         push.
     .
     exitVariableWithDot:
-        assign: IsVariableWithDot, true.
+        decl: isVariableWithDot|bool.
+        assign: isVariableWithDot, true.
         push.
     .
     exitImportDefinition:
-        assign: IsImportDefinition, true.
+        decl: isImportDefinition|bool.
+        assign: isImportDefinition, true.
         push.
     .
     exitImportDefinitionSingle:
-        code: ImportName, CurrentToken, @IMPORT_NAME_PATTERN.
+        decl: importName|bool.
+        code: importName, CurrentToken, @IMPORT_NAME_PATTERN.
         push.
 
-        assign: IsImportDefinitionSingle, true.
+        decl: isImportDefinitionSingle|bool.
+        assign: isImportDefinitionSingle, true.
         push.
     .
     exitRelativePath:
-        assign: IsRelativePath, true.
+        decl: isRelativePath|bool.
+        assign: isRelativePath, true.
         push.
     .
     exitFolderSection:
-        code: FileName, CurrentToken, @FILE_PATTERN.
+        decl: fileName|string.
+        code: fileName, CurrentToken, @FILE_PATTERN.
         push.
 
-        assign: IsFolderSection, true.
+        decl: isFolderSection|bool.
+        assign: isFolderSection, true.
         push.
     .
     exitFolderSectionWithSlash:
-        code: FileName, CurrentToken, @FILE_PATTERN.
+        decl: fileName|string.
+        code: fileName, CurrentToken, @FILE_PATTERN.
         push.
 
-        assign: IsFolderSectionWithSlash, true.
+        decl: isFolderSectionWithSlash|bool.
+        assign: isFolderSectionWithSlash, true.
         push.
     .
     exitLoadModuleDefinition:
-        assign: IsLoadModuleDefinition, true.
+        decl: isLoadModuleDefinition|bool.
+        assign: isLoadModuleDefinition, true.
         push.
     .
     exitModuleNames:
-        code: ModuleName, CurrentToken, @MODULE_NAME_PATTERN.
+        decl: moduleName|string.
+        code: moduleName, CurrentToken, @MODULE_NAME_PATTERN.
         push.
 
-        assign: IsModuleNames, true.
+        decl: isModuleNames|bool.
+        assign: isModuleNames, true.
         push.
     .
     exitModuleNameWithComma:
-        code: ModuleName, CurrentToken, @MODULE_NAME_PATTERN.
+        decl: moduleName|string.
+        code: moduleName, CurrentToken, @MODULE_NAME_PATTERN.
         push.
 
-        assign: IsModuleNameWithComma, true.
+        decl: isModuleNameWithComma|bool.
+        assign: isModuleNameWithComma, true.
         push.
     .
     exitFuncCallAssignment:
-        assign: IsFuncCallAssignment, true.
+        decl: isFuncCallAssignment|bool.
+        assign: isFuncCallAssignment, true.
         push.
     .
     exitFuncCall:
-        assign: IsFuncCall, true.
+        decl: isFuncCall|bool.
+        assign: isFuncCall, true.
         push.
     .
     exitFuncCallName:
-        code: FuncCallModule, CurrentToken, @MODULE_NAME_PATTERN.
-        code: FuncCallImport, CurrentToken, @IMPORT_NAME_PATTERN.
-        code: FuncCallName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        decl: funcCallModule|string.
+        code: funcCallModule, CurrentToken, @MODULE_NAME_PATTERN.
+
+        decl: funcCallImport|string.
+        code: funcCallImport, CurrentToken, @IMPORT_NAME_PATTERN.
+
+        decl: funcCallName|string.
+        code: funcCallName, CurrentToken, @VAL_VARIABLE_PATTERN.
         push.
 
-        assign: IsFuncCallName, true.
+        decl: isFuncCallName|bool.
+        assign: isFuncCallName, true.
         push.
     .
     exitFuncCallParameter:
-        assign: IsFuncCallParameter, true.
+        decl: isFuncCallParameter|bool.
+        assign: isFuncCallParameter, true.
         push.
     .
     exitFuncCallAssignee:
-        assign: IsFuncCallAssignee, true.
+        decl: isFuncCallAssignee|bool.
+        assign: isFuncCallAssignee, true.
         push.
     .
     exitExceptionAssignee:
-        assign: IsExceptionAssignee, true.
+        decl: isExceptionAssignee|bool.
+        assign: isExceptionAssignee, true.
         push.
     .
     exitRaiseException:
-        assign: IsRaiseException, true.
+        decl: isRaiseException|bool.
+        assign: isRaiseException, true.
         push.
     .
     exitExceptionDefinition:
-        assign: IsExceptionDefinition, true.
+        decl: isExceptionDefinition|bool.
+        assign: isExceptionDefinition, true.
         push.
     .
     exitLoop:
-        assign: IsLoop, true.
+        decl: isLoop|bool.
+        assign: isLoop, true.
         push.
     .
     exitRelationalLoop:
-        assign: IsRelationalLoop, true.
+        decl: isRelationalLoop|bool.
+        assign: isRelationalLoop, true.
         push.
     .
     exitIterableLoop:
-        assign: IsIterableLoop, true.
+        decl: isIterableLoop|bool.
+        assign: isIterableLoop, true.
         push.
     .
     exitIterableAssignment:
-        assign: IsIterableAssignment, true.
+        decl: isIterableAssignment|bool.
+        assign: isIterableAssignment, true.
         push.
     .
     exitIterableAssignee:
@@ -251,64 +180,80 @@ labels:
 
         decl: underscore|string.
         code: underscore, CurrentToken, @UNDERSCORE.
-        not_equal: IsIterableAssigneeKeyname, underscore, emptyString.
+
+        decl: isIterableAssigneeKeyname|bool.
+        not_equal: isIterableAssigneeKeyname, underscore, emptyString.
         del: underscore.
 
         del: emptyString.
         push.
 
-        assign: IsIterableAssignee, true.
+        decl: isIterableAssignee|bool.
+        assign: isIterableAssignee, true.
         push.
     .
     exitIterable:
-        code: IterableVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        decl: iterableVariableName|bool.
+        code: iterableVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
         push.
 
-        assign: IsIterable, true.
+        decl: isIterable|bool.
+        assign: isIterable, true.
         push.
     .
     exitIfDefinition:
-        assign: IsIfDefinition, true.
+        decl: isIfDefinition|bool.
+        assign: isIfDefinition, true.
         push.
     .
     exitFuncDefinition:
-        assign: IsFuncDefinition, true.
+        decl: isFuncDefinition|bool.
+        assign: isFuncDefinition, true.
         push.
     .
     exitFuncSignature:
-        assign: IsFuncSignature, true.
+        decl: isFuncSignature|bool.
+        assign: isFuncSignature, true.
         push.
     .
     exitFuncParams:
-        assign: IsFuncParams, true.
+        decl: isFuncParams|bool.
+        assign: isFuncParams, true.
         push.
     .
     exitFuncParamContent:
-        assign: IsFuncParamContent, true.
+        decl: isFuncParamContent|bool.
+        assign: isFuncParamContent, true.
         push.
     .
     exitFuncParamElement:
-        assign: IsFuncParamElement, true.
+        decl: isFuncParamElement|bool.
+        assign: isFuncParamElement, true.
         push.
     .
     exitFuncParamEntry:
-        code: FuncParamEntryVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        decl: funcParamEntryVariableName|string.
+        code: funcParamEntryVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
 
         decl: emptyString|string.
 
         decl: str|string.
         code: str, CurrentToken, @QUESTION_MARK.
-        not_equal: IsFuncParamEntryOptional, str, emptyString.
+
+        decl: isFuncParamEntryOptional|bool.
+        not_equal: isFuncParamEntryOptional, str, emptyString.
         del: str.
 
         del: emptyString.
         push.
 
-        assign: IsFuncParamEntry, true.
+        decl: isFuncParamEntry|bool.
+        assign: isFuncParamEntry, true.
         push.
     .
     exitBracketCode:
-        assign: IsBracketCode, true.
+        decl: isBracketCode|bool.
+        assign: isBracketCode, true.
         push.
     .
     exitCode:
@@ -316,60 +261,79 @@ labels:
 
         decl: str|string.
         code: str, CurrentToken, @RETURN.
-        not_equal: IsCodeReturn, str, emptyString.
+
+        decl: isCodeReturn|bool.
+        not_equal: isCodeReturn, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @CONTINUE.
-        not_equal: IsCodeContinue, str, emptyString.
+
+        decl: isCodeContinue|bool.
+        not_equal: isCodeContinue, str, emptyString.
         del: str.
 
         del: emptyString.
         push.
 
-        assign: IsCode, true.
+        decl: isCode|bool.
+        assign: isCode, true.
         push.
     .
     exitMapDefinition:
-        assign: IsMapDefinition, true.
+        decl: isMapDefinition|bool.
+        assign: isMapDefinition, true.
         push.
     .
     exitMapDefinitionContent:
-        assign: IsMapDefinitionContent, true.
+        decl: isMapDefinitionContent|bool.
+        assign: isMapDefinitionContent, true.
         push.
     .
     exitMapDefinitionContentElement:
-        assign: IsMapDefinitionContentElement, true.
+        decl: isMapDefinitionContentElement|bool.
+        assign: isMapDefinitionContentElement, true.
         push.
     .
     exitMapDefinitionContentEntry:
-        code: MapDefinitionContentEntryKeyname, CurrentToken, @VAL_VARIABLE_PATTERN.
-        assign: IsMapDefinitionContentEntry, true.
+        decl: mapDefinitionContentEntryKeyname|string.
+        code: mapDefinitionContentEntryKeyname, CurrentToken, @VAL_VARIABLE_PATTERN.
+
+        decl: isMapDefinitionContentEntry|bool.
+        assign: isMapDefinitionContentEntry, true.
         push.
     .
     exitListDefinition:
-        assign: IsListDefinition, true.
+        decl: isListDefinition|bool.
+        assign: isListDefinition, true.
         push.
     .
     exitListDefinitionInternal:
-        assign: IsListDefInternal, true.
+        decl: isListDefInternal|bool.
+        assign: isListDefInternal, true.
         push.
     .
     exitListDefinitionContent:
-        assign: IsListDefCon, true.
+        decl: isListDefCon|bool.
+        assign: isListDefCon, true.
         push.
     .
     exitListDefinitionContentElement:
-        assign: IsListDefConEl, true.
+        decl: isListDefConEl|bool.
+        assign: isListDefConEl, true.
         push.
     .
     exitComplexType:
-        assign: IsComplexType, true.
+        decl: isComplexType|bool.
+        assign: isComplexType, true.
         push.
     .
     exitListType:
-        assign: IsListType, true.
-        code: ListTypeDimension, CurrentToken, @LIST_DIMENSION.
+        decl: isListType|bool.
+        assign: isListType, true.
+
+        decl: listTypeDimension|string.
+        code: listTypeDimension, CurrentToken, @LIST_DIMENSION.
         push.
     .
     exitPrimitiveType:
@@ -377,110 +341,146 @@ labels:
 
         decl: str|string.
         code: str, CurrentToken, @BOOL.
-        not_equal: IsPrimTypeBool, str, emptyString.
+
+        decl: isPrimTypeBool|bool.
+        not_equal: isPrimTypeBool, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @BYTE.
-        not_equal: IsPrimTypeByte, str, emptyString.
+
+        decl: isPrimTypeByte|bool.
+        not_equal: isPrimTypeByte, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @INT_HEIGHT.
-        not_equal: IsPrimTypeIntHeight, str, emptyString.
+
+        decl: isPrimTypeIntHeight|bool.
+        not_equal: isPrimTypeIntHeight, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @INT_SIXTEEN.
-        not_equal: IsPrimTypeIntSixteen, str, emptyString.
+
+        decl: isPrimTypeIntSixteen|bool.
+        not_equal: isPrimTypeIntSixteen, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @INT_THIRTY_TWO.
-        not_equal: IsPrimTypeIntThirtyTwo, str, emptyString.
+
+        decl: isPrimTypeIntThirtyTwo|bool.
+        not_equal: isPrimTypeIntThirtyTwo, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @INT_SIXTY_FOUR.
-        not_equal: IsPrimTypeIntSixtyFour, str, emptyString.
+
+        decl: isPrimTypeIntSixtyFour|bool.
+        not_equal: isPrimTypeIntSixtyFour, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @UINT_HEIGHT.
-        not_equal: IsPrimTypeUintHeight, str, emptyString.
+
+        decl: isPrimTypeUintHeight|bool.
+        not_equal: isPrimTypeUintHeight, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @UINT_SIXTEEN.
-        not_equal: IsPrimTypeUintSixteen, str, emptyString.
+
+        decl: isPrimTypeUintSixteen|bool.
+        not_equal: isPrimTypeUintSixteen, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @UINT_THIRTY_TWO.
-        not_equal: IsPrimTypeUintThirtyTwo, str, emptyString.
+
+        decl: isPrimTypeUintThirtyTwo|bool.
+        not_equal: isPrimTypeUintThirtyTwo, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @UINT_SIXTY_FOUR.
-        not_equal: IsPrimTypeUintSixtyFour, str, emptyString.
+
+        decl: isPrimTypeUintSixtyFour|bool.
+        not_equal: isPrimTypeUintSixtyFour, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @FLOAT_THIRTY_TWO.
-        not_equal: IsPrimTypeFloatThirtyTwo, str, emptyString.
+
+        decl: isPrimTypeFloatThirtyTwo|bool.
+        not_equal: isPrimTypeFloatThirtyTwo, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @FLOAT_SIXTY_FOUR.
-        not_equal: IsPrimTypeFloatSixtyFour, str, emptyString.
+
+        decl: isPrimTypeFloatSixtyFour|bool.
+        not_equal: isPrimTypeFloatSixtyFour, str, emptyString.
         del: str.
 
         decl: str|string.
         code: str, CurrentToken, @STRING.
-        not_equal: IsPrimTypeString, str, emptyString.
+
+        decl: isPrimTypeString|bool.
+        not_equal: isPrimTypeString, str, emptyString.
         del: str.
 
         del: emptyString.
         push.
     .
     exitLogicalOperation:
-        assign: IsLogOp, true.
+        decl: isLogOp|bool.
+        assign: isLogOp, true.
         push.
     .
     exitLogicalOperationOperand:
-        assign: IsLogOpOperand, true.
+        decl: isLogOpOperand|bool.
+        assign: isLogOpOperand, true.
         push.
     .
     exitRelationalOperation:
-        assign: IsRelOp, true.
+        decl: isRelOp|bool.
+        assign: isRelOp, true.
         push.
     .
     exitRelationalOperationDecimal:
-        assign: IsRelOpDec, true.
+        decl: isRelOpDec|bool.
+        assign: isRelOpDec, true.
         push.
     .
     exitRelationalOperationInt:
-        assign: IsRelOpInt, true.
+        decl: isRelOpInt|bool.
+        assign: isRelOpInt, true.
         push.
     .
     exitArythmeticOperation:
-        assign: IsAryOp, true.
+        decl: isAryOp|bool.
+        assign: isAryOp, true.
         push.
     .
     exitArythmeticOperationDecimal:
-        assign: IsAryOpDec, true.
+        decl: isAryOpDec|bool.
+        assign: isAryOpDec, true.
         push.
     .
     exitValueDecimalComplex:
-        assign: IsValueDecimalComplex, true.
+        decl: isValueDecimalComplex|bool.
+        assign: isValueDecimalComplex, true.
         push.
     .
     exitArythmeticOperationInt:
-        assign: IsAryOpInt, true.
+        decl: isAryOpInt|bool.
+        assign: isAryOpInt, true.
         push.
     .
     exitValueIntComplex:
-        assign: IsValueIntComplex, true.
+        decl: isValueIntComplex|bool.
+        assign: isValueIntComplex, true.
         push.
     .
     exitArythmeticSymbol:
@@ -488,27 +488,37 @@ labels:
 
         decl: addStr|string.
         code: addStr, CurrentToken, @ARY_ADD.
-        not_equal: IsArySymbolAdd, addStr, emptyString.
+
+        decl: isArySymbolAdd|bool.
+        not_equal: isArySymbolAdd, addStr, emptyString.
         del: addStr.
 
         decl: divStr|string.
         code: divStr, CurrentToken, @ARY_DIV.
-        not_equal: IsArySymbolDiv, divStr, emptyString.
+
+        decl: isArySymbolDiv|bool.
+        not_equal: isArySymbolDiv, divStr, emptyString.
         del: divStr.
 
         decl: modStr|string.
         code: modStr, CurrentToken, @ARY_MOD.
-        not_equal: IsArySymbolMod, modStr, emptyString.
+
+        decl: isArySymbolMod|bool.
+        not_equal: isArySymbolMod, modStr, emptyString.
         del: modStr.
 
         decl: mulStr|string.
         code: mulStr, CurrentToken, @ARY_MUL.
-        not_equal: IsArySymbolMul, mulStr, emptyString.
+
+        decl: isArySymbolMul|bool.
+        not_equal: isArySymbolMul, mulStr, emptyString.
         del: mulStr.
 
         decl: subStr|string.
         code: subStr, CurrentToken, @ARY_SUB.
-        not_equal: IsArySymbolSub, subStr, emptyString.
+
+        decl: isArySymbolSub|bool.
+        not_equal: isArySymbolSub, subStr, emptyString.
         del: subStr.
 
         del: emptyString.
@@ -518,32 +528,44 @@ labels:
 
         decl: biggerThanOrEqual|string.
         code: biggerThanOrEqual, CurrentToken, @REL_BIGGER_THAN_OR_EQUAL.
-        not_equal: IsRelSymbolBiggerThanOrEqual, biggerThanOrEqual, emptyString.
+
+        decl: isRelSymbolBiggerThanOrEqual|bool.
+        not_equal: isRelSymbolBiggerThanOrEqual, biggerThanOrEqual, emptyString.
         del: biggerThanOrEqual.
 
         decl: biggerThan|string.
         code: biggerThan, CurrentToken, @REL_BIGGER_THAN.
-        not_equal: IsRelSymbolBiggerThan, biggerThan, emptyString.
+
+        decl: isRelSymbolBiggerThan|bool.
+        not_equal: isRelSymbolBiggerThan, biggerThan, emptyString.
         del: biggerThan.
 
         decl: lessThanOrEqual|string.
         code: lessThanOrEqual, CurrentToken, @REL_LESS_THAN_OR_EQUAL.
-        not_equal: IsRelSymbolLessThanOrEqual, lessThanOrEqual, emptyString.
+
+        decl: isRelSymbolLessThanOrEqual|bool.
+        not_equal: isRelSymbolLessThanOrEqual, lessThanOrEqual, emptyString.
         del: lessThanOrEqual.
 
         decl: lessThan|string.
         code: lessThan, CurrentToken, @REL_LESS_THAN.
-        not_equal: IsRelSymbolLessThan, lessThan, emptyString.
+
+        decl: isRelSymbolLessThan|bool.
+        not_equal: isRelSymbolLessThan, lessThan, emptyString.
         del: lessThan.
 
         decl: equal|string.
         code: equal, CurrentToken, @REL_EQUAL.
-        not_equal: IsRelSymbolEqual, equal, emptyString.
+
+        decl: isRelSymbolEqual|bool.
+        not_equal: isRelSymbolEqual, equal, emptyString.
         del: equal.
 
         decl: notEqual|string.
         code: notEqual, CurrentToken, @REL_NOT_EQUAL.
-        not_equal: IsRelSymbolNotEqual, notEqual, emptyString.
+
+        decl: isRelSymbolNotEqual|bool.
+        not_equal: isRelSymbolNotEqual, notEqual, emptyString.
         del: notEqual.
 
         del: emptyString.
@@ -553,12 +575,16 @@ labels:
 
         decl: isAnd|string.
         code: isAnd, CurrentToken, @LOG_AND.
-        not_equal: IsLogicalSymbolAnd, isAnd, emptyString.
+
+        decl: isLogicalSymbolAnd|bool.
+        not_equal: isLogicalSymbolAnd, isAnd, emptyString.
         del: isAnd.
 
         decl: isOr|string.
         code: isOr, CurrentToken, @LOG_OR.
-        not_equal: IsLogicalSymbolOr, isOr, emptyString.
+
+        decl: isLogicalSymbolOr|bool.
+        not_equal: isLogicalSymbolOr, isOr, emptyString.
         del: isOr.
 
         del: emptyString.
@@ -568,41 +594,55 @@ labels:
 
         decl: firstAssign|string.
         code: firstAssign, CurrentToken, @FIRST_ASSIGN.
-        not_equal: IsFirstAssign, firstAssign, emptyString.
+
+        decl: isFirstAssign|bool.
+        not_equal: isFirstAssign, firstAssign, emptyString.
         del: firstAssign.
 
         decl: assign|string.
         code: assign, CurrentToken, @ASSIGN.
-        not_equal: IsAssign, assign, emptyString.
+
+        decl: isAssign|bool.
+        not_equal: isAssign, assign, emptyString.
         del: assign.
 
         del: emptyString.
     .
     exitValueString:
-        code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        decl: variablePattern|string.
+        code: variablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
         push.
 
-        assign: IsValueString, true.
+        decl: isValueString|bool.
+        assign: isValueString, true.
         push.
     .
     exitValueDecimal:
-        code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        decl: variablePattern|string.
+        code: variablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
         push.
     .
     exitValueInt:
-        code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
-        code: ValueInt, CurrentToken, @VAL_INT.
+        decl: variablePattern|string.
+        code: variablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+
+        decl: valueInt|string.
+        code: valueInt, CurrentToken, @VAL_INT.
         push.
     .
     exitValue:
-        code: VariablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
-        code: ValueInt, CurrentToken, @VAL_INT.
+        decl: variablePattern|string.
+        code: variablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+
+        decl: valueInt|string.
+        code: valueInt, CurrentToken, @VAL_INT.
     .
     exitDecimalValue:
         code: DecimalValue, DecimalValueAmount, CurrentToken, @VAL_INT.
     .
     exitStringValue:
-        code: StringValue, CurrentToken, @EVERYTHING_EXCEPT_QUOTATION.
+        decl: stringValue|string.
+        code: stringValue, CurrentToken, @EVERYTHING_EXCEPT_QUOTATION.
     .
 .
 
@@ -623,7 +663,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsAssignee.
+        not_equal: isNotEqual, isTrue, isAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -640,7 +680,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsAssignee.
+        not_equal: isNotEqual, isTrue, isAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -657,7 +697,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsAssignee.
+        not_equal: isNotEqual, isTrue, isAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -674,7 +714,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsAssignee.
+        not_equal: isNotEqual, isTrue, isAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -686,8 +726,11 @@ tests:
         read: expectedVariableName, "./test_files/assignee/expected.variable.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, VariableName, expectedVariableName.
+        not_equal: isNotEqual, variableName, expectedVariableName.
         assert_if: isNotEqual.
+
+        del: isNotEqual.
+        del: expectedVariableName.
     .
     assigneeWithVariableWithIndex:
         decl: myInput|string.
@@ -700,7 +743,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsAssignee.
+        not_equal: isNotEqual, isTrue, isAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -712,8 +755,11 @@ tests:
         read: expectedVariableName, "./test_files/assignee/expected.variable.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, VariableName, expectedVariableName.
+        not_equal: isNotEqual, variableName, expectedVariableName.
         assert_if: isNotEqual.
+
+        del: isNotEqual.
+        del: expectedVariableName.
     .
     assigneeWithVariable:
         decl: myInput|string.
@@ -726,7 +772,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsAssignee.
+        not_equal: isNotEqual, isTrue, isAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -738,8 +784,11 @@ tests:
         read: expectedVariableName, "./test_files/assignee/expected.variable.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, VariableName, expectedVariableName.
+        not_equal: isNotEqual, variableName, expectedVariableName.
         assert_if: isNotEqual.
+
+        del: isNotEqual.
+        del: expectedVariableName.
     .
     listAssigneeIndex:
         decl: myInput|string.
@@ -752,7 +801,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsListAssigneeIndex.
+        not_equal: isNotEqual, isTrue, isListAssigneeIndex.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -769,7 +818,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsMapAssignee.
+        not_equal: isNotEqual, isTrue, isMapAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -786,7 +835,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsMapAssignee.
+        not_equal: isNotEqual, isTrue, isMapAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -803,7 +852,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsVariableWithDot.
+        not_equal: isNotEqual, isTrue, isVariableWithDot.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -820,7 +869,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsImportDefinition.
+        not_equal: isNotEqual, isTrue, isImportDefinition.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -837,7 +886,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsImportDefinition.
+        not_equal: isNotEqual, isTrue, isImportDefinition.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -854,7 +903,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsImportDefinitionSingle.
+        not_equal: isNotEqual, isTrue, isImportDefinitionSingle.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -866,7 +915,7 @@ tests:
         read: expectedName, "./test_files/importDefinitionSingle/expected.name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ImportName, expectedName.
+        not_equal: isNotEqual, importName, expectedName.
         assert_if: isNotEqual.
     .
     relativePath:
@@ -880,7 +929,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsRelativePath.
+        not_equal: isNotEqual, isTrue, isRelativePath.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -897,7 +946,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFolderSection.
+        not_equal: isNotEqual, isTrue, isFolderSection.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -909,7 +958,7 @@ tests:
         read: expectedFileName, "./test_files/folderSection/expected.path.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, FileName, expectedFileName.
+        not_equal: isNotEqual, fileName, expectedFileName.
         assert_if: isNotEqual.
     .
     folderSectionWithFile:
@@ -923,7 +972,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFolderSection.
+        not_equal: isNotEqual, isTrue, isFolderSection.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -935,7 +984,7 @@ tests:
         read: expectedFileName, "./test_files/folderSection/expected.file.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, FileName, expectedFileName.
+        not_equal: isNotEqual, fileName, expectedFileName.
         assert_if: isNotEqual.
     .
     folderSectionWithSlash:
@@ -949,7 +998,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFolderSectionWithSlash.
+        not_equal: isNotEqual, isTrue, isFolderSectionWithSlash.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -961,7 +1010,7 @@ tests:
         read: expectedFileName, "./test_files/folderSectionWithSlash/expected.file.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, FileName, expectedFileName.
+        not_equal: isNotEqual, fileName, expectedFileName.
         assert_if: isNotEqual.
     .
     loadModuleDefinition:
@@ -975,7 +1024,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsLoadModuleDefinition.
+        not_equal: isNotEqual, isTrue, isLoadModuleDefinition.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -992,7 +1041,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsModuleNames.
+        not_equal: isNotEqual, isTrue, isModuleNames.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1004,7 +1053,7 @@ tests:
         read: expectedModuleName, "./test_files/moduleNames/expected.first.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        not_equal: isNotEqual, moduleName, expectedModuleName.
         assert_if: isNotEqual.
 
         pop.
@@ -1014,7 +1063,7 @@ tests:
         read: expectedModuleName, "./test_files/moduleNames/expected.third.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        not_equal: isNotEqual, moduleName, expectedModuleName.
         assert_if: isNotEqual.
 
         pop.
@@ -1024,7 +1073,7 @@ tests:
         read: expectedModuleName, "./test_files/moduleNames/expected.second.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        not_equal: isNotEqual, moduleName, expectedModuleName.
         assert_if: isNotEqual.
     .
     moduleNamesWithTwoModules:
@@ -1038,7 +1087,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsModuleNames.
+        not_equal: isNotEqual, isTrue, isModuleNames.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1050,7 +1099,7 @@ tests:
         read: expectedModuleName, "./test_files/moduleNames/expected.first.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        not_equal: isNotEqual, moduleName, expectedModuleName.
         assert_if: isNotEqual.
 
         pop.
@@ -1060,7 +1109,7 @@ tests:
         read: expectedModuleName, "./test_files/moduleNames/expected.second.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        not_equal: isNotEqual, moduleName, expectedModuleName.
         assert_if: isNotEqual.
     .
     moduleNamesWithSingle:
@@ -1074,7 +1123,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsModuleNames.
+        not_equal: isNotEqual, isTrue, isModuleNames.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1086,7 +1135,7 @@ tests:
         read: expectedModuleName, "./test_files/moduleNames/expected.first.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        not_equal: isNotEqual, moduleName, expectedModuleName.
         assert_if: isNotEqual.
     .
     moduleNameWithComma:
@@ -1100,7 +1149,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsModuleNameWithComma.
+        not_equal: isNotEqual, isTrue, isModuleNameWithComma.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1112,7 +1161,7 @@ tests:
         read: expectedModuleName, "./test_files/moduleNameWithComma/expected.name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ModuleName, expectedModuleName.
+        not_equal: isNotEqual, moduleName, expectedModuleName.
         assert_if: isNotEqual.
     .
     funcCallAssignment:
@@ -1126,7 +1175,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCallAssignment.
+        not_equal: isNotEqual, isTrue, isFuncCallAssignment.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1143,7 +1192,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCall.
+        not_equal: isNotEqual, isTrue, isFuncCall.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1160,7 +1209,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCallName.
+        not_equal: isNotEqual, isTrue, isFuncCallName.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1172,7 +1221,7 @@ tests:
         read: expectedFuncName, "./test_files/funcCallName/expected.name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, FuncCallName, expectedFuncName.
+        not_equal: isNotEqual, funcCallName, expectedFuncName.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -1187,7 +1236,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCallName.
+        not_equal: isNotEqual, isTrue, isFuncCallName.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1199,7 +1248,7 @@ tests:
         read: expectedImportName, "./test_files/funcCallName/expected.import.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, FuncCallImport, expectedImportName.
+        not_equal: isNotEqual, funcCallImport, expectedImportName.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1208,7 +1257,7 @@ tests:
         read: expectedFuncName, "./test_files/funcCallName/expected.name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, FuncCallName, expectedFuncName.
+        not_equal: isNotEqual, funcCallName, expectedFuncName.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -1223,7 +1272,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCallName.
+        not_equal: isNotEqual, isTrue, isFuncCallName.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1235,7 +1284,7 @@ tests:
         read: expectedModuleName, "./test_files/funcCallName/expected.module.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, FuncCallModule, expectedModuleName.
+        not_equal: isNotEqual, funcCallModule, expectedModuleName.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1244,7 +1293,7 @@ tests:
         read: expectedFuncName, "./test_files/funcCallName/expected.name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, FuncCallName, expectedFuncName.
+        not_equal: isNotEqual, funcCallName, expectedFuncName.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -1259,7 +1308,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCallParameter.
+        not_equal: isNotEqual, isTrue, isFuncCallParameter.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1276,7 +1325,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCallParameter.
+        not_equal: isNotEqual, isTrue, isFuncCallParameter.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1293,7 +1342,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncCallAssignee.
+        not_equal: isNotEqual, isTrue, isFuncCallAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1310,7 +1359,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsExceptionAssignee.
+        not_equal: isNotEqual, isTrue, isExceptionAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1327,7 +1376,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsExceptionAssignee.
+        not_equal: isNotEqual, isTrue, isExceptionAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1344,7 +1393,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsRaiseException.
+        not_equal: isNotEqual, isTrue, isRaiseException.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1361,7 +1410,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsRaiseException.
+        not_equal: isNotEqual, isTrue, isRaiseException.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1378,14 +1427,12 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsExceptionDefinition.
+        not_equal: isNotEqual, isTrue, isExceptionDefinition.
         assert_if: isNotEqual.
         del: isNotEqual.
 
         del: isTrue.
     .
-
-    IsExceptionDefinition
     loopWithRelational:
         decl: myInput|string.
         read: myInput, "./test_files/loop/input.relational.pangolin".
@@ -1397,7 +1444,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsLoop.
+        not_equal: isNotEqual, isTrue, isLoop.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1414,7 +1461,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsLoop.
+        not_equal: isNotEqual, isTrue, isLoop.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1431,7 +1478,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsRelationalLoop.
+        not_equal: isNotEqual, isTrue, isRelationalLoop.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1448,7 +1495,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIterableLoop.
+        not_equal: isNotEqual, isTrue, isIterableLoop.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1465,7 +1512,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIterableAssignment.
+        not_equal: isNotEqual, isTrue, isIterableAssignment.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1482,7 +1529,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIterableAssignee.
+        not_equal: isNotEqual, isTrue, isIterableAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1492,7 +1539,7 @@ tests:
         assign: isTrue, true.
 
         decl: isEqual|bool.
-        equal: isEqual, isTrue, IsIterableAssigneeKeyname.
+        equal: isEqual, isTrue, isIterableAssigneeKeyname.
         assert_if: isEqual.
         del: isEqual.
 
@@ -1525,7 +1572,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIterableAssignee.
+        not_equal: isNotEqual, isTrue, isIterableAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1535,7 +1582,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIterableAssigneeKeyname.
+        not_equal: isNotEqual, isTrue, isIterableAssigneeKeyname.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1568,7 +1615,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIterableAssignee.
+        not_equal: isNotEqual, isTrue, isIterableAssignee.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1578,7 +1625,7 @@ tests:
         assign: isTrue, true.
 
         decl: isEqual|bool.
-        equal: isEqual, isTrue, IsIterableAssigneeKeyname.
+        equal: isEqual, isTrue, isIterableAssigneeKeyname.
         assert_if: isEqual.
         del: isEqual.
 
@@ -1619,7 +1666,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIterable.
+        not_equal: isNotEqual, isTrue, isIterable.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1631,7 +1678,7 @@ tests:
         read: expectedVariableName, "./test_files/iterable/expected.variable_name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, expectedVariableName, IterableVariableName.
+        not_equal: isNotEqual, expectedVariableName, iterableVariableName.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -1646,7 +1693,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIterable.
+        not_equal: isNotEqual, isTrue, isIterable.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1663,7 +1710,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIterable.
+        not_equal: isNotEqual, isTrue, isIterable.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1680,7 +1727,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsIfDefinition.
+        not_equal: isNotEqual, isTrue, isIfDefinition.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1697,7 +1744,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncDefinition.
+        not_equal: isNotEqual, isTrue, isFuncDefinition.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1714,7 +1761,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncSignature.
+        not_equal: isNotEqual, isTrue, isFuncSignature.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1731,7 +1778,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncSignature.
+        not_equal: isNotEqual, isTrue, isFuncSignature.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1748,7 +1795,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncParams.
+        not_equal: isNotEqual, isTrue, isFuncParams.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1765,7 +1812,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncParams.
+        not_equal: isNotEqual, isTrue, isFuncParams.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1782,7 +1829,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncParamContent.
+        not_equal: isNotEqual, isTrue, isFuncParamContent.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1799,7 +1846,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncParamContent.
+        not_equal: isNotEqual, isTrue, isFuncParamContent.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1816,7 +1863,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncParamElement.
+        not_equal: isNotEqual, isTrue, isFuncParamElement.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1832,7 +1879,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncParamEntry.
+        not_equal: isNotEqual, isTrue, isFuncParamEntry.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1844,7 +1891,7 @@ tests:
         assign: isTrue, true.
 
         decl: isEqual|bool.
-        equal: isEqual, isTrue, IsFuncParamEntryOptional.
+        equal: isEqual, isTrue, isFuncParamEntryOptional.
         assert_if: isEqual.
         del: isEqual.
 
@@ -1852,7 +1899,7 @@ tests:
         read: expectedVariableName, "./test_files/funcParamEntry/expected.variable_name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, expectedVariableName, FuncParamEntryVariableName.
+        not_equal: isNotEqual, expectedVariableName, funcParamEntryVariableName.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1868,7 +1915,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncParamEntry.
+        not_equal: isNotEqual, isTrue, isFuncParamEntry.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1880,7 +1927,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsFuncParamEntryOptional.
+        not_equal: isNotEqual, isTrue, isFuncParamEntryOptional.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1888,7 +1935,7 @@ tests:
         read: expectedVariableName, "./test_files/funcParamEntry/expected.variable_name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, expectedVariableName, FuncParamEntryVariableName.
+        not_equal: isNotEqual, expectedVariableName, funcParamEntryVariableName.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1904,7 +1951,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsBracketCode.
+        not_equal: isNotEqual, isTrue, isBracketCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1920,7 +1967,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsBracketCode.
+        not_equal: isNotEqual, isTrue, isBracketCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1936,7 +1983,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsBracketCode.
+        not_equal: isNotEqual, isTrue, isBracketCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1952,7 +1999,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsCode.
+        not_equal: isNotEqual, isTrue, isCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1969,7 +2016,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsCode.
+        not_equal: isNotEqual, isTrue, isCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1981,7 +2028,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsCodeReturn.
+        not_equal: isNotEqual, isTrue, isCodeReturn.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -1998,7 +2045,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsCode.
+        not_equal: isNotEqual, isTrue, isCode.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -2010,7 +2057,7 @@ tests:
         assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isTrue, IsCodeContinue.
+        not_equal: isNotEqual, isTrue, isCodeContinue.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -2028,7 +2075,7 @@ tests:
         assign: isDef, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isDef, IsMapDefinition.
+        not_equal: isNotEqual, isDef, isMapDefinition.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -2043,7 +2090,7 @@ tests:
         assign: isDef, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isDef, IsMapDefinition.
+        not_equal: isNotEqual, isDef, isMapDefinition.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -2058,7 +2105,7 @@ tests:
         assign: isDef, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isDef, IsMapDefinition.
+        not_equal: isNotEqual, isDef, isMapDefinition.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -2073,7 +2120,7 @@ tests:
         assign: isContent, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isContent, IsMapDefinitionContent.
+        not_equal: isNotEqual, isContent, isMapDefinitionContent.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -2088,7 +2135,7 @@ tests:
         assign: isContent, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isContent, IsMapDefinitionContent.
+        not_equal: isNotEqual, isContent, isMapDefinitionContent.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -2103,7 +2150,7 @@ tests:
         assign: isElement, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isElement, IsMapDefinitionContentElement.
+        not_equal: isNotEqual, isElement, isMapDefinitionContentElement.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -2118,7 +2165,7 @@ tests:
         read: expectedKeyname, "./test_files/mapDefinitionContentEntry/expected.keyname.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, expectedKeyname, MapDefinitionContentEntryKeyname.
+        not_equal: isNotEqual, expectedKeyname, mapDefinitionContentEntryKeyname.
         assert_if: isNotEqual.
         del: isNotEqual.
 
@@ -2126,7 +2173,7 @@ tests:
         assign: isEntry, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isEntry, IsMapDefinitionContentEntry.
+        not_equal: isNotEqual, isEntry, isMapDefinitionContentEntry.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -2137,11 +2184,11 @@ tests:
 
         pop.
 
-        decl: isListDefinition|bool.
-        assign: isListDefinition, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isListDefinition, IsListDefinition.
+        not_equal: isNotEqual, isTrue, isListDefinition.
         assert_if: isNotEqual.
     .
     listDefinitionInternalWithElements:
@@ -2151,11 +2198,11 @@ tests:
 
         pop.
 
-        decl: isListDefInternal|bool.
-        assign: isListDefInternal, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isListDefInternal, IsListDefInternal.
+        not_equal: isNotEqual, isTrue, isListDefInternal.
         assert_if: isNotEqual.
     .
     listDefinitionInternalWithEmpty:
@@ -2165,11 +2212,11 @@ tests:
 
         pop.
 
-        decl: isListDefInternal|bool.
-        assign: isListDefInternal, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isListDefInternal, IsListDefInternal.
+        not_equal: isNotEqual, isTrue, isListDefInternal.
         assert_if: isNotEqual.
     .
     listDefinitionContentWithMultipleElements:
@@ -2179,11 +2226,11 @@ tests:
 
         pop.
 
-        decl: isListDefCon|bool.
-        assign: isListDefCon, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isListDefCon, IsListDefCon.
+        not_equal: isNotEqual, isTrue, isListDefCon.
         assert_if: isNotEqual.
     .
     listDefinitionContentWithOneElement:
@@ -2193,11 +2240,11 @@ tests:
 
         pop.
 
-        decl: isListDefCon|bool.
-        assign: isListDefCon, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isListDefCon, IsListDefCon.
+        not_equal: isNotEqual, isTrue, isListDefCon.
         assert_if: isNotEqual.
     .
     listDefinitionContentElementWithSimple:
@@ -2207,11 +2254,11 @@ tests:
 
         pop.
 
-        decl: isListDefConEl|bool.
-        assign: isListDefConEl, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isListDefConEl, IsListDefConEl.
+        not_equal: isNotEqual, isTrue, isListDefConEl.
         assert_if: isNotEqual.
     .
     complexTypeWithPrimitiveType:
@@ -2221,11 +2268,11 @@ tests:
 
         pop.
 
-        decl: isComplexType|bool.
-        assign: isComplexType, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexType, IsComplexType.
+        not_equal: isNotEqual, isTrue, isComplexType.
         assert_if: isNotEqual.
     .
     complexTypeWithListType:
@@ -2235,11 +2282,11 @@ tests:
 
         pop.
 
-        decl: isComplexType|bool.
-        assign: isComplexType, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexType, IsComplexType.
+        not_equal: isNotEqual, isTrue, isComplexType.
         assert_if: isNotEqual.
     .
     complexTypeWithMapType:
@@ -2249,11 +2296,11 @@ tests:
 
         pop.
 
-        decl: isComplexType|bool.
-        assign: isComplexType, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexType, IsComplexType.
+        not_equal: isNotEqual, isTrue, isComplexType.
         assert_if: isNotEqual.
     .
     complexTypeWithExceptionType:
@@ -2263,11 +2310,11 @@ tests:
 
         pop.
 
-        decl: isComplexType|bool.
-        assign: isComplexType, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexType, IsComplexType.
+        not_equal: isNotEqual, isTrue, isComplexType.
         assert_if: isNotEqual.
     .
     listType:
@@ -2281,15 +2328,15 @@ tests:
         read: expectedDimension, "./test_files/listType/expected.dimension.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, expectedDimension, ListTypeDimension.
+        not_equal: isNotEqual, expectedDimension, listTypeDimension.
         assert_if: isNotEqual.
         del: isNotEqual.
 
-        decl: isListType|bool.
-        assign: isListType, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isListType, IsListType.
+        not_equal: isNotEqual, isTrue, isListType.
         assert_if: isNotEqual.
         del: isNotEqual.
     .
@@ -2300,11 +2347,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeString|bool.
-        assign: isPrimTypeString, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeString, IsPrimTypeString.
+        not_equal: isNotEqual, isTrue, isPrimTypeString.
         assert_if: isNotEqual.
     .
     primitiveTypeWithUintSixtyFour:
@@ -2314,11 +2361,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeUint|bool.
-        assign: isPrimTypeUint, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeUint, IsPrimTypeUintSixtyFour.
+        not_equal: isNotEqual, isTrue, isPrimTypeUintSixtyFour.
         assert_if: isNotEqual.
     .
     primitiveTypeWithUintThirtyTwo:
@@ -2328,11 +2375,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeUint|bool.
-        assign: isPrimTypeUint, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeUint, IsPrimTypeUintThirtyTwo.
+        not_equal: isNotEqual, isTrue, isPrimTypeUintThirtyTwo.
         assert_if: isNotEqual.
     .
     primitiveTypeWithUintSixteen:
@@ -2342,11 +2389,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeUint|bool.
-        assign: isPrimTypeUint, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeUint, IsPrimTypeUintSixteen.
+        not_equal: isNotEqual, isTrue, isPrimTypeUintSixteen.
         assert_if: isNotEqual.
     .
     primitiveTypeWithUintHeight:
@@ -2356,11 +2403,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeUint|bool.
-        assign: isPrimTypeUint, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeUint, IsPrimTypeUintHeight.
+        not_equal: isNotEqual, isTrue, isPrimTypeUintHeight.
         assert_if: isNotEqual.
     .
     primitiveTypeWithIntSixtyFour:
@@ -2370,11 +2417,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeInt|bool.
-        assign: isPrimTypeInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeInt, IsPrimTypeIntSixtyFour.
+        not_equal: isNotEqual, isTrue, isPrimTypeIntSixtyFour.
         assert_if: isNotEqual.
     .
     primitiveTypeWithIntThirtyTwo:
@@ -2384,11 +2431,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeInt|bool.
-        assign: isPrimTypeInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeInt, IsPrimTypeIntThirtyTwo.
+        not_equal: isNotEqual, isTrue, isPrimTypeIntThirtyTwo.
         assert_if: isNotEqual.
     .
     primitiveTypeWithIntSixteen:
@@ -2398,11 +2445,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeInt|bool.
-        assign: isPrimTypeInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeInt, IsPrimTypeIntSixteen.
+        not_equal: isNotEqual, isTrue, isPrimTypeIntSixteen.
         assert_if: isNotEqual.
     .
     primitiveTypeWithIntHeight:
@@ -2412,11 +2459,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeInt|bool.
-        assign: isPrimTypeInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeInt, IsPrimTypeIntHeight.
+        not_equal: isNotEqual, isTrue, isPrimTypeIntHeight.
         assert_if: isNotEqual.
     .
     primitiveTypeWithFloatSixtyFour:
@@ -2426,11 +2473,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeFloat|bool.
-        assign: isPrimTypeFloat, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeFloat, IsPrimTypeFloatSixtyFour.
+        not_equal: isNotEqual, isTrue, isPrimTypeFloatSixtyFour.
         assert_if: isNotEqual.
     .
     primitiveTypeWithFloatThirtyTwo:
@@ -2440,11 +2487,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeFloat|bool.
-        assign: isPrimTypeFloat, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeFloat, IsPrimTypeFloatThirtyTwo.
+        not_equal: isNotEqual, isTrue, isPrimTypeFloatThirtyTwo.
         assert_if: isNotEqual.
     .
     primitiveTypeWithByte:
@@ -2454,11 +2501,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeByte|bool.
-        assign: isPrimTypeByte, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeByte, IsPrimTypeByte.
+        not_equal: isNotEqual, isTrue, isPrimTypeByte.
         assert_if: isNotEqual.
     .
     primitiveTypeWithBool:
@@ -2468,11 +2515,11 @@ tests:
 
         pop.
 
-        decl: isPrimTypeBool|bool.
-        assign: isPrimTypeBool, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isPrimTypeBool, IsPrimTypeBool.
+        not_equal: isNotEqual, isTrue, isPrimTypeBool.
         assert_if: isNotEqual.
     .
     logicalOperationWithComplexWithParenthesis:
@@ -2482,11 +2529,11 @@ tests:
 
         pop.
 
-        decl: isLogOp|bool.
-        assign: isLogOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLogOp, IsLogOp.
+        not_equal: isNotEqual, isTrue, isLogOp.
         assert_if: isNotEqual.
     .
     logicalOperationWithComplex:
@@ -2496,11 +2543,11 @@ tests:
 
         pop.
 
-        decl: isLogOp|bool.
-        assign: isLogOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLogOp, IsLogOp.
+        not_equal: isNotEqual, isTrue, isLogOp.
         assert_if: isNotEqual.
     .
     logicalOperationWithSimpleWithParenthesis:
@@ -2510,11 +2557,11 @@ tests:
 
         pop.
 
-        decl: isLogOp|bool.
-        assign: isLogOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLogOp, IsLogOp.
+        not_equal: isNotEqual, isTrue, isLogOp.
         assert_if: isNotEqual.
     .
     logicalOperationWithSimple:
@@ -2524,11 +2571,11 @@ tests:
 
         pop.
 
-        decl: isLogOp|bool.
-        assign: isLogOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLogOp, IsLogOp.
+        not_equal: isNotEqual, isTrue, isLogOp.
         assert_if: isNotEqual.
     .
     logicalOperationOperandWithLogicalOperationWithParenthesis:
@@ -2538,11 +2585,11 @@ tests:
 
         pop.
 
-        decl: isLogOpOperand|bool.
-        assign: isLogOpOperand, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLogOpOperand, IsLogOpOperand.
+        not_equal: isNotEqual, isTrue, isLogOpOperand.
         assert_if: isNotEqual.
     .
     logicalOperationOperandWithLogicalOperation:
@@ -2552,11 +2599,11 @@ tests:
 
         pop.
 
-        decl: isLogOpOperand|bool.
-        assign: isLogOpOperand, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLogOpOperand, IsLogOpOperand.
+        not_equal: isNotEqual, isTrue, isLogOpOperand.
         assert_if: isNotEqual.
     .
     logicalOperationOperandWithRelationalOperationWithParenthesis:
@@ -2566,11 +2613,11 @@ tests:
 
         pop.
 
-        decl: isLogOpOperand|bool.
-        assign: isLogOpOperand, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLogOpOperand, IsLogOpOperand.
+        not_equal: isNotEqual, isTrue, isLogOpOperand.
         assert_if: isNotEqual.
     .
     logicalOperationOperandWithRelationalOperation:
@@ -2580,11 +2627,11 @@ tests:
 
         pop.
 
-        decl: isLogOpOperand|bool.
-        assign: isLogOpOperand, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLogOpOperand, IsLogOpOperand.
+        not_equal: isNotEqual, isTrue, isLogOpOperand.
         assert_if: isNotEqual.
     .
     relationalOperationWithDecWithParenthesis:
@@ -2594,11 +2641,11 @@ tests:
 
         pop.
 
-        decl: isRelOp|bool.
-        assign: isRelOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOp, IsRelOp.
+        not_equal: isNotEqual, isTrue, isRelOp.
         assert_if: isNotEqual.
     .
     relationalOperationWithDec:
@@ -2608,11 +2655,11 @@ tests:
 
         pop.
 
-        decl: isRelOp|bool.
-        assign: isRelOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOp, IsRelOp.
+        not_equal: isNotEqual, isTrue, isRelOp.
         assert_if: isNotEqual.
     .
     relationalOperationnWithIntWithParenthesis:
@@ -2622,11 +2669,11 @@ tests:
 
         pop.
 
-        decl: isRelOp|bool.
-        assign: isRelOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOp, IsRelOp.
+        not_equal: isNotEqual, isTrue, isRelOp.
         assert_if: isNotEqual.
     .
     relationalOperationWithInt:
@@ -2636,11 +2683,11 @@ tests:
 
         pop.
 
-        decl: isRelOp|bool.
-        assign: isRelOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOp, IsRelOp.
+        not_equal: isNotEqual, isTrue, isRelOp.
         assert_if: isNotEqual.
     .
     relationalOperationDecimalWithVariableThenVariable:
@@ -2650,11 +2697,11 @@ tests:
 
         pop.
 
-        decl: isRelOpDec|bool.
-        assign: isRelOpDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOpDec, IsRelOpDec.
+        not_equal: isNotEqual, isTrue, isRelOpDec.
         assert_if: isNotEqual.
     .
     relationalOperationDecimalWithVariableThenInt:
@@ -2664,11 +2711,11 @@ tests:
 
         pop.
 
-        decl: isRelOpDec|bool.
-        assign: isRelOpDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOpDec, IsRelOpDec.
+        not_equal: isNotEqual, isTrue, isRelOpDec.
         assert_if: isNotEqual.
     .
     relationalOperationDecimalWithIntThenVariable:
@@ -2678,11 +2725,11 @@ tests:
 
         pop.
 
-        decl: isRelOpDec|bool.
-        assign: isRelOpDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOpDec, IsRelOpDec.
+        not_equal: isNotEqual, isTrue, isRelOpDec.
         assert_if: isNotEqual.
     .
     relationalOperationDecimalWithIntThenInt:
@@ -2692,11 +2739,11 @@ tests:
 
         pop.
 
-        decl: isRelOpDec|bool.
-        assign: isRelOpDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOpDec, IsRelOpDec.
+        not_equal: isNotEqual, isTrue, isRelOpDec.
         assert_if: isNotEqual.
     .
     relationalOperationIntWithVariableThenVariable:
@@ -2706,11 +2753,11 @@ tests:
 
         pop.
 
-        decl: isRelOpInt|bool.
-        assign: isRelOpInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOpInt, IsRelOpInt.
+        not_equal: isNotEqual, isTrue, isRelOpInt.
         assert_if: isNotEqual.
     .
     relationalOperationIntWithVariableThenInt:
@@ -2720,11 +2767,11 @@ tests:
 
         pop.
 
-        decl: isRelOpInt|bool.
-        assign: isRelOpInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOpInt, IsRelOpInt.
+        not_equal: isNotEqual, isTrue, isRelOpInt.
         assert_if: isNotEqual.
     .
     relationalOperationIntWithIntThenVariable:
@@ -2734,11 +2781,11 @@ tests:
 
         pop.
 
-        decl: isRelOpInt|bool.
-        assign: isRelOpInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOpInt, IsRelOpInt.
+        not_equal: isNotEqual, isTrue, isRelOpInt.
         assert_if: isNotEqual.
     .
     relationalOperationIntWithIntThenInt:
@@ -2748,11 +2795,11 @@ tests:
 
         pop.
 
-        decl: isRelOpInt|bool.
-        assign: isRelOpInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelOpInt, IsRelOpInt.
+        not_equal: isNotEqual, isTrue, isRelOpInt.
         assert_if: isNotEqual.
     .
     arythmeticOperationWithDecWithParenthesis:
@@ -2762,11 +2809,11 @@ tests:
 
         pop.
 
-        decl: isAryOp|bool.
-        assign: isAryOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOp, IsAryOp.
+        not_equal: isNotEqual, isTrue, isAryOp.
         assert_if: isNotEqual.
     .
     arythmeticOperationWithDec:
@@ -2776,11 +2823,11 @@ tests:
 
         pop.
 
-        decl: isAryOp|bool.
-        assign: isAryOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOp, IsAryOp.
+        not_equal: isNotEqual, isTrue, isAryOp.
         assert_if: isNotEqual.
     .
     valueDecimalComplexWithArythmeticOperationComplex:
@@ -2790,11 +2837,11 @@ tests:
 
         pop.
 
-        decl: isComplexDec|bool.
-        assign: isComplexDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexDec, IsValueDecimalComplex.
+        not_equal: isNotEqual, isTrue, isValueDecimalComplex.
         assert_if: isNotEqual.
     .
     valueDecimalComplexWithArythmeticOperation:
@@ -2804,11 +2851,11 @@ tests:
 
         pop.
 
-        decl: isComplexDec|bool.
-        assign: isComplexDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexDec, IsValueDecimalComplex.
+        not_equal: isNotEqual, isTrue, isValueDecimalComplex.
         assert_if: isNotEqual.
     .
     valueDecimalComplexWithInt:
@@ -2818,11 +2865,11 @@ tests:
 
         pop.
 
-        decl: isComplexDec|bool.
-        assign: isComplexDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexDec, IsValueDecimalComplex.
+        not_equal: isNotEqual, isTrue, isValueDecimalComplex.
         assert_if: isNotEqual.
     .
     arythmeticOperationWithIntWithParenthesis:
@@ -2832,11 +2879,11 @@ tests:
 
         pop.
 
-        decl: isAryOp|bool.
-        assign: isAryOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOp, IsAryOp.
+        not_equal: isNotEqual, isTrue, isAryOp.
         assert_if: isNotEqual.
     .
     arythmeticOperationWithInt:
@@ -2846,11 +2893,11 @@ tests:
 
         pop.
 
-        decl: isAryOp|bool.
-        assign: isAryOp, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOp, IsAryOp.
+        not_equal: isNotEqual, isTrue, isAryOp.
         assert_if: isNotEqual.
     .
     valueIntComplexWithArythmeticOperationComplex:
@@ -2860,11 +2907,11 @@ tests:
 
         pop.
 
-        decl: isComplexInt|bool.
-        assign: isComplexInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexInt, IsValueIntComplex.
+        not_equal: isNotEqual, isTrue, isValueIntComplex.
         assert_if: isNotEqual.
     .
     valueIntComplexWithArythmeticOperation:
@@ -2874,11 +2921,11 @@ tests:
 
         pop.
 
-        decl: isComplexInt|bool.
-        assign: isComplexInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexInt, IsValueIntComplex.
+        not_equal: isNotEqual, isTrue, isValueIntComplex.
         assert_if: isNotEqual.
     .
     valueIntComplexWithInt:
@@ -2888,11 +2935,11 @@ tests:
 
         pop.
 
-        decl: isComplexInt|bool.
-        assign: isComplexInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isComplexInt, IsValueIntComplex.
+        not_equal: isNotEqual, isTrue, isValueIntComplex.
         assert_if: isNotEqual.
     .
     arythmeticOperationDecVariableThenVariable:
@@ -2902,11 +2949,11 @@ tests:
 
         pop.
 
-        decl: isAryOpDec|bool.
-        assign: isAryOpDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOpDec, IsAryOpDec.
+        not_equal: isNotEqual, isTrue, isAryOpDec.
         assert_if: isNotEqual.
     .
     arythmeticOperationDecVariableThenDec:
@@ -2916,11 +2963,11 @@ tests:
 
         pop.
 
-        decl: isAryOpDec|bool.
-        assign: isAryOpDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOpDec, IsAryOpDec.
+        not_equal: isNotEqual, isTrue, isAryOpDec.
         assert_if: isNotEqual.
     .
     arythmeticOperationDecDecThenVariable:
@@ -2930,11 +2977,11 @@ tests:
 
         pop.
 
-        decl: isAryOpDec|bool.
-        assign: isAryOpDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOpDec, IsAryOpDec.
+        not_equal: isNotEqual, isTrue, isAryOpDec.
         assert_if: isNotEqual.
     .
     arythmeticOperationDecDecThenDec:
@@ -2944,11 +2991,11 @@ tests:
 
         pop.
 
-        decl: isAryOpDec|bool.
-        assign: isAryOpDec, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOpDec, IsAryOpDec.
+        not_equal: isNotEqual, isTrue, isAryOpDec.
         assert_if: isNotEqual.
     .
     arythmeticOperationIntVariableThenVariable:
@@ -2958,11 +3005,11 @@ tests:
 
         pop.
 
-        decl: isAryOpInt|bool.
-        assign: isAryOpInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
+        not_equal: isNotEqual, isTrue, isAryOpInt.
         assert_if: isNotEqual.
     .
     arythmeticOperationIntVariableThenInt:
@@ -2972,11 +3019,11 @@ tests:
 
         pop.
 
-        decl: isAryOpInt|bool.
-        assign: isAryOpInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
+        not_equal: isNotEqual, isTrue, isAryOpInt.
         assert_if: isNotEqual.
     .
     arythmeticOperationIntIntThenVariable:
@@ -2986,11 +3033,11 @@ tests:
 
         pop.
 
-        decl: isAryOpInt|bool.
-        assign: isAryOpInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
+        not_equal: isNotEqual, isTrue, isAryOpInt.
         assert_if: isNotEqual.
     .
     arythmeticOperationIntIntThenInt:
@@ -3000,11 +3047,11 @@ tests:
 
         pop.
 
-        decl: isAryOpInt|bool.
-        assign: isAryOpInt, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAryOpInt, IsAryOpInt.
+        not_equal: isNotEqual, isTrue, isAryOpInt.
         assert_if: isNotEqual.
     .
     arythmeticSymbolSub:
@@ -3012,11 +3059,11 @@ tests:
         read: myInput, "./test_files/arythmeticSymbol/input.sub.pangolin".
         match: myInput, $arythmeticSymbol.
 
-        decl: isSub|bool.
-        assign: isSub, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isSub, IsArySymbolSub.
+        not_equal: isNotEqual, isTrue, isArySymbolSub.
         assert_if: isNotEqual.
     .
     arythmeticSymbolMul:
@@ -3024,11 +3071,11 @@ tests:
         read: myInput, "./test_files/arythmeticSymbol/input.mul.pangolin".
         match: myInput, $arythmeticSymbol.
 
-        decl: isMul|bool.
-        assign: isMul, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isMul, IsArySymbolMul.
+        not_equal: isNotEqual, isTrue, isArySymbolMul.
         assert_if: isNotEqual.
     .
     arythmeticSymbolMod:
@@ -3036,11 +3083,11 @@ tests:
         read: myInput, "./test_files/arythmeticSymbol/input.mod.pangolin".
         match: myInput, $arythmeticSymbol.
 
-        decl: isMod|bool.
-        assign: isMod, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isMod, IsArySymbolMod.
+        not_equal: isNotEqual, isTrue, isArySymbolMod.
         assert_if: isNotEqual.
     .
     arythmeticSymbolDiv:
@@ -3048,11 +3095,11 @@ tests:
         read: myInput, "./test_files/arythmeticSymbol/input.div.pangolin".
         match: myInput, $arythmeticSymbol.
 
-        decl: isDiv|bool.
-        assign: isDiv, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isDiv, IsArySymbolDiv.
+        not_equal: isNotEqual, isTrue, isArySymbolDiv.
         assert_if: isNotEqual.
     .
     arythmeticSymbolAdd:
@@ -3060,11 +3107,11 @@ tests:
         read: myInput, "./test_files/arythmeticSymbol/input.add.pangolin".
         match: myInput, $arythmeticSymbol.
 
-        decl: isAdd|bool.
-        assign: isAdd, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAdd, IsArySymbolAdd.
+        not_equal: isNotEqual, isTrue, isArySymbolAdd.
         assert_if: isNotEqual.
     .
     relationalSymbolNotEqual:
@@ -3072,11 +3119,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.not_equal.pangolin".
         match: myInput, $relationalSymbol.
 
-        decl: isRelNotEqual|bool.
-        assign: isRelNotEqual, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelNotEqual, IsRelSymbolNotEqual.
+        not_equal: isNotEqual, isTrue, isRelSymbolNotEqual.
         assert_if: isNotEqual.
     .
     relationalSymbolEqual:
@@ -3084,11 +3131,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.equal.pangolin".
         match: myInput, $relationalSymbol.
 
-        decl: isRelEqual|bool.
-        assign: isRelEqual, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isRelEqual, IsRelSymbolEqual.
+        not_equal: isNotEqual, isTrue, isRelSymbolEqual.
         assert_if: isNotEqual.
     .
     relationalSymbolLessThan:
@@ -3096,11 +3143,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.less_than.pangolin".
         match: myInput, $relationalSymbol.
 
-        decl: isLessThan|bool.
-        assign: isLessThan, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLessThan, IsRelSymbolLessThan.
+        not_equal: isNotEqual, isTrue, isRelSymbolLessThan.
         assert_if: isNotEqual.
     .
     relationalSymbolLessThanOrEqual:
@@ -3108,11 +3155,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.less_than_or_equal.pangolin".
         match: myInput, $relationalSymbol.
 
-        decl: isLessThanOrEqual|bool.
-        assign: isLessThanOrEqual, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isLessThanOrEqual, IsRelSymbolLessThanOrEqual.
+        not_equal: isNotEqual, isTrue, isRelSymbolLessThanOrEqual.
         assert_if: isNotEqual.
     .
     relationalSymbolBiggerThan:
@@ -3120,11 +3167,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.bigger_than.pangolin".
         match: myInput, $relationalSymbol.
 
-        decl: isBiggerThan|bool.
-        assign: isBiggerThan, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isBiggerThan, IsRelSymbolBiggerThan.
+        not_equal: isNotEqual, isTrue, isRelSymbolBiggerThan.
         assert_if: isNotEqual.
     .
     relationalSymbolBiggerThanOrEqual:
@@ -3132,11 +3179,11 @@ tests:
         read: myInput, "./test_files/relationalSymbol/input.bigger_than_or_equal.pangolin".
         match: myInput, $relationalSymbol.
 
-        decl: isBiggerThanOrEqual|bool.
-        assign: isBiggerThanOrEqual, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isBiggerThanOrEqual, IsRelSymbolBiggerThanOrEqual.
+        not_equal: isNotEqual, isTrue, isRelSymbolBiggerThanOrEqual.
         assert_if: isNotEqual.
     .
     logicalSymbolOr:
@@ -3144,11 +3191,11 @@ tests:
         read: myInput, "./test_files/logicalSymbol/input.or.pangolin".
         match: myInput, $logicalSymbol.
 
-        decl: isOr|bool.
-        assign: isOr, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isOr, IsLogicalSymbolOr.
+        not_equal: isNotEqual, isTrue, isLogicalSymbolOr.
         assert_if: isNotEqual.
     .
     logicalSymbolAnd:
@@ -3156,11 +3203,11 @@ tests:
         read: myInput, "./test_files/logicalSymbol/input.and.pangolin".
         match: myInput, $logicalSymbol.
 
-        decl: isAnd|bool.
-        assign: isAnd, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAnd, IsLogicalSymbolAnd.
+        not_equal: isNotEqual, isTrue, isLogicalSymbolAnd.
         assert_if: isNotEqual.
     .
     assignSymbolWithAssign:
@@ -3168,11 +3215,11 @@ tests:
         read: myInput, "./test_files/assignSymbol/input.assign.pangolin".
         match: myInput, $assignSymbol.
 
-        decl: isAssign|bool.
-        assign: isAssign, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isAssign, IsAssign.
+        not_equal: isNotEqual, isTrue, isAssign.
         assert_if: isNotEqual.
     .
     assignSymbolWithFirstAssign:
@@ -3180,11 +3227,11 @@ tests:
         read: myInput, "./test_files/assignSymbol/input.first_assign.pangolin".
         match: myInput, $assignSymbol.
 
-        decl: isFirstAssign|bool.
-        assign: isFirstAssign, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isFirstAssign, IsFirstAssign.
+        not_equal: isNotEqual, isTrue, isFirstAssign.
         assert_if: isNotEqual.
     .
     valueStringWithString:
@@ -3194,11 +3241,11 @@ tests:
 
         pop.
 
-        decl: isValueString|bool.
-        assign: isValueString, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isValueString, IsValueString.
+        not_equal: isNotEqual, isTrue, isValueString.
         assert_if: isNotEqual.
     .
     valueStringWithVariable:
@@ -3208,11 +3255,11 @@ tests:
 
         pop.
 
-        decl: isValueString|bool.
-        assign: isValueString, true.
+        decl: isTrue|bool.
+        assign: isTrue, true.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, isValueString, IsValueString.
+        not_equal: isNotEqual, isTrue, isValueString.
         assert_if: isNotEqual.
     .
     valueDecimalWithVariable:
@@ -3223,7 +3270,7 @@ tests:
         pop.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, VariablePattern, myInput.
+        not_equal: isNotEqual, variablePattern, myInput.
         assert_if: isNotEqual.
     .
     valueDecimalWithDecimal:
@@ -3264,7 +3311,7 @@ tests:
         pop.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, VariablePattern, myInput.
+        not_equal: isNotEqual, variablePattern, myInput.
         assert_if: isNotEqual.
     .
     valueIntWithInt:
@@ -3275,7 +3322,7 @@ tests:
         pop.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ValueInt, myInput.
+        not_equal: isNotEqual, valueInt, myInput.
         assert_if: isNotEqual.
     .
     valueWithString:
@@ -3287,7 +3334,7 @@ tests:
         read: expectedOutput, "./test_files/value/string.expected.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, StringValue, expectedOutput.
+        not_equal: isNotEqual, stringValue, expectedOutput.
         assert_if: isNotEqual.
     .
     valueWithVariable:
@@ -3296,7 +3343,7 @@ tests:
         match: myInput, $value.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, VariablePattern, myInput.
+        not_equal: isNotEqual, variablePattern, myInput.
         assert_if: isNotEqual.
     .
     valueWithDecimal:
@@ -3333,7 +3380,7 @@ tests:
         match: myInput, $value.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, ValueInt, myInput.
+        not_equal: isNotEqual, valueInt, myInput.
         assert_if: isNotEqual.
     .
     decimalValue:
@@ -3373,7 +3420,7 @@ tests:
         read: expectedOutput, "./test_files/stringValue/output.expected.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, StringValue, expectedOutput.
+        not_equal: isNotEqual, stringValue, expectedOutput.
         assert_if: isNotEqual.
     .
 .
