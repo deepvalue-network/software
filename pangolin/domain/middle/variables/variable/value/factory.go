@@ -70,14 +70,6 @@ func (app *factory) Create(typ parsers.Type) (Value, error) {
 		builder.WithFloat64(float64(defaultFloat))
 	}
 
-	if typ.IsStackFrame() {
-		builder.IsStackFrame()
-	}
-
-	if typ.IsFrame() {
-		builder.IsFrame()
-	}
-
 	computable, err := builder.Now()
 	if err != nil {
 		return nil, err

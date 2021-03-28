@@ -3,42 +3,36 @@ package parsers
 import "errors"
 
 type typeBuilder struct {
-	isNil        bool
-	isBool       bool
-	isInt8       bool
-	isInt16      bool
-	isInt32      bool
-	isInt64      bool
-	isFloat32    bool
-	isFloat64    bool
-	isUint8      bool
-	isUint16     bool
-	isUint32     bool
-	isUint64     bool
-	isString     bool
-	isStackFrame bool
-	isFrame      bool
-	isToken      bool
+	isNil     bool
+	isBool    bool
+	isInt8    bool
+	isInt16   bool
+	isInt32   bool
+	isInt64   bool
+	isFloat32 bool
+	isFloat64 bool
+	isUint8   bool
+	isUint16  bool
+	isUint32  bool
+	isUint64  bool
+	isString  bool
 }
 
 func createTypeBuilder() TypeBuilder {
 	out := typeBuilder{
-		isNil:        false,
-		isBool:       false,
-		isInt8:       false,
-		isInt16:      false,
-		isInt32:      false,
-		isInt64:      false,
-		isFloat32:    false,
-		isFloat64:    false,
-		isUint8:      false,
-		isUint16:     false,
-		isUint32:     false,
-		isUint64:     false,
-		isString:     false,
-		isStackFrame: false,
-		isFrame:      false,
-		isToken:      false,
+		isNil:     false,
+		isBool:    false,
+		isInt8:    false,
+		isInt16:   false,
+		isInt32:   false,
+		isInt64:   false,
+		isFloat32: false,
+		isFloat64: false,
+		isUint8:   false,
+		isUint16:  false,
+		isUint32:  false,
+		isUint64:  false,
+		isString:  false,
 	}
 
 	return &out
@@ -127,24 +121,6 @@ func (app *typeBuilder) IsString() TypeBuilder {
 	return app
 }
 
-// IsStackFrame flags the type as stackframe
-func (app *typeBuilder) IsStackFrame() TypeBuilder {
-	app.isStackFrame = true
-	return app
-}
-
-// IsFrame flags the type as frame
-func (app *typeBuilder) IsFrame() TypeBuilder {
-	app.isFrame = true
-	return app
-}
-
-// IsToken flags the type as token
-func (app *typeBuilder) IsToken() TypeBuilder {
-	app.isToken = true
-	return app
-}
-
 // Now builds a new Type instance
 func (app *typeBuilder) Now() (Type, error) {
 	if app.isNil {
@@ -197,18 +173,6 @@ func (app *typeBuilder) Now() (Type, error) {
 
 	if app.isString {
 		return createTypeWithString(), nil
-	}
-
-	if app.isStackFrame {
-		return createTypeWithStackFrame(), nil
-	}
-
-	if app.isFrame {
-		return createTypeWithFrame(), nil
-	}
-
-	if app.isToken {
-		return createTypeWithToken(), nil
 	}
 
 	return nil, errors.New("the Type is invalid")

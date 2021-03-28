@@ -2061,8 +2061,6 @@ func (app *parser) exitType(tree lexers.NodeTree) (interface{}, error) {
 		"UINT_THIRTY_TWO",
 		"UINT_SIXTY_FOUR",
 		"STRING",
-		"STACKFRAME",
-		"FRAME",
 	})
 
 	switch section {
@@ -2104,12 +2102,6 @@ func (app *parser) exitType(tree lexers.NodeTree) (interface{}, error) {
 		break
 	case "STRING":
 		builder.IsString()
-		break
-	case "STACKFRAME":
-		builder.IsStackFrame()
-		break
-	case "FRAME":
-		builder.IsFrame()
 		break
 	}
 
