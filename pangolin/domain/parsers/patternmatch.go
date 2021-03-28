@@ -1,20 +1,17 @@
 package parsers
 
 type patternMatch struct {
-	pattern  string
-	labels   PatternLabels
-	variable string
+	pattern string
+	labels  PatternLabels
 }
 
 func createPatternMatch(
 	pattern string,
 	labels PatternLabels,
-	variable string,
 ) PatternMatch {
 	out := patternMatch{
-		pattern:  pattern,
-		labels:   labels,
-		variable: variable,
+		pattern: pattern,
+		labels:  labels,
 	}
 
 	return &out
@@ -28,9 +25,4 @@ func (obj *patternMatch) Pattern() string {
 // Labels returns the pattern labels
 func (obj *patternMatch) Labels() PatternLabels {
 	return obj.labels
-}
-
-// Variable returns the variable name
-func (obj *patternMatch) Variable() string {
-	return obj.variable
 }

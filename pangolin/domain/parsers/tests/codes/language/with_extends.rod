@@ -9,7 +9,7 @@ language:
         "./my/first/path.json".
     .
     matches:
-        myThird: MyTokenVariable, myEnter.
+        myThird: myEnter.
     .
     targets:
         my_target:

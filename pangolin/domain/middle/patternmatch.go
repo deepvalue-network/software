@@ -1,48 +1,42 @@
 package middle
 
 type patternMatch struct {
-	pattern  string
-	variable string
-	enter    string
-	exit     string
+	pattern string
+	enter   string
+	exit    string
 }
 
 func createPatternMatchWithEnterAndExit(
 	pattern string,
-	variable string,
 	enter string,
 	exit string,
 ) PatternMatch {
-	return createPatternMatchInternally(pattern, variable, enter, exit)
+	return createPatternMatchInternally(pattern, enter, exit)
 }
 
 func createPatternMatchWithEnter(
 	pattern string,
-	variable string,
 	enter string,
 ) PatternMatch {
-	return createPatternMatchInternally(pattern, variable, enter, "")
+	return createPatternMatchInternally(pattern, enter, "")
 }
 
 func createPatternMatchWithExit(
 	pattern string,
-	variable string,
 	exit string,
 ) PatternMatch {
-	return createPatternMatchInternally(pattern, variable, "", exit)
+	return createPatternMatchInternally(pattern, "", exit)
 }
 
 func createPatternMatchInternally(
 	pattern string,
-	variable string,
 	enter string,
 	exit string,
 ) PatternMatch {
 	out := patternMatch{
-		pattern:  pattern,
-		variable: variable,
-		enter:    enter,
-		exit:     exit,
+		pattern: pattern,
+		enter:   enter,
+		exit:    exit,
 	}
 
 	return &out
@@ -51,11 +45,6 @@ func createPatternMatchInternally(
 // Pattern returns the pattern
 func (obj *patternMatch) Pattern() string {
 	return obj.pattern
-}
-
-// Variable returns the variable
-func (obj *patternMatch) Variable() string {
-	return obj.variable
 }
 
 // HasEnterLabel returns true if there is an enter label, false otherwise

@@ -111,9 +111,8 @@ func (app *adapter) language(parsed parsers.Language) (Language, error) {
 	matches := parsed.PatternMatches()
 	for _, onePatternMatch := range matches {
 		pattern := onePatternMatch.Pattern()
-		variable := onePatternMatch.Variable()
 		labels := onePatternMatch.Labels()
-		matchBuilder := app.patternMatchBuilder.Create().WithPattern(pattern).WithVariable(variable)
+		matchBuilder := app.patternMatchBuilder.Create().WithPattern(pattern)
 		if labels.HasEnterLabel() {
 			enter := labels.EnterLabel()
 			matchBuilder.WithEnterLabel(enter)

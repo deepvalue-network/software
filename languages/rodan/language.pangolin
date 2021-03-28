@@ -6,74 +6,74 @@ language:
     in: Input.
     out: Output.
     matches:
-        program: CurrentToken, |exitProgram.
-        printCommand: CurrentToken, |exitPrintCommand.
-        value: CurrentToken, |exitValue.
-        valueInt: CurrentToken, |exitValueInt.
-        valueDecimal: CurrentToken, |exitValueDecimal.
-        valueString: CurrentToken, |exitValueString.
-        decimalValue: CurrentToken, |exitDecimalValue.
-        stringValue: CurrentToken, |exitStringValue.
-        assignSymbol: CurrentToken, |exitAssignSymbol.
-        logicalSymbol: CurrentToken, |exitLogicalSymbol.
-        relationalSymbol: CurrentToken, |exitRelationalSymbol.
-        arythmeticSymbol: CurrentToken, |exitArythmeticSymbol.
-        valueIntComplex: CurrentToken, |exitValueIntComplex.
-        arythmeticOperationInt: CurrentToken, |exitArythmeticOperationInt.
-        valueDecimalComplex: CurrentToken, |exitValueDecimalComplex.
-        arythmeticOperationDecimal: CurrentToken, |exitArythmeticOperationDecimal.
-        arythmeticOperation: CurrentToken, |exitArythmeticOperation.
-        relationalOperationInt: CurrentToken, |exitRelationalOperationInt.
-        relationalOperationDecimal: CurrentToken, |exitRelationalOperationDecimal.
-        relationalOperation: CurrentToken, |exitRelationalOperation.
-        logicalOperationOperand: CurrentToken, |exitLogicalOperationOperand.
-        logicalOperation: CurrentToken, |exitLogicalOperation.
-        primitiveType: CurrentToken, |exitPrimitiveType.
-        listType: CurrentToken, |exitListType.
-        complexType: CurrentToken, |exitComplexType.
-        listDefinitionContentElement: CurrentToken, |exitListDefinitionContentElement.
-        listDefinitionContent: CurrentToken, |exitListDefinitionContent.
-        listDefinitionInternal: CurrentToken, |exitListDefinitionInternal.
-        listDefinition: CurrentToken, |exitListDefinition.
-        mapDefinitionContentEntry: CurrentToken, |exitMapDefinitionContentEntry.
-        mapDefinitionContentElement: CurrentToken, |exitMapDefinitionContentElement.
-        mapDefinitionContent: CurrentToken, |exitMapDefinitionContent.
-        mapDefinition: CurrentToken, |exitMapDefinition.
-        code: CurrentToken, |exitCode.
-        bracketCode: CurrentToken, |exitBracketCode.
-        funcParamEntry: CurrentToken, |exitFuncParamEntry.
-        funcParamElement: CurrentToken, |exitFuncParamElement.
-        funcParamContent: CurrentToken, |exitFuncParamContent.
-        funcParams: CurrentToken, |exitFuncParams.
-        funcSignature: CurrentToken, |exitFuncSignature.
-        funcDefinition: CurrentToken, |exitFuncDefinition.
-        ifDefinition: CurrentToken, |exitIfDefinition.
-        iterable: CurrentToken, |exitIterable.
-        iterableAssignee: CurrentToken, |exitIterableAssignee.
-        iterableAssignment: CurrentToken, |exitIterableAssignment.
-        iterableLoop: CurrentToken, |exitIterableLoop.
-        relationalLoop: CurrentToken, |exitRelationalLoop.
-        loop: CurrentToken, |exitLoop.
-        exceptionDefinition: CurrentToken, |exitExceptionDefinition.
-        raiseException: CurrentToken, |exitRaiseException.
-        exceptionAssignee: CurrentToken, |exitExceptionAssignee.
-        funcCallAssignee: CurrentToken, |exitFuncCallAssignee.
-        funcCallParameter: CurrentToken, |exitFuncCallParameter.
-        funcCallName: CurrentToken, |exitFuncCallName.
-        funcCall: CurrentToken, |exitFuncCall.
-        funcCallAssignment: CurrentToken, |exitFuncCallAssignment.
-        moduleNameWithComma: CurrentToken, |exitModuleNameWithComma.
-        moduleNames: CurrentToken, |exitModuleNames.
-        loadModuleDefinition: CurrentToken, |exitLoadModuleDefinition.
-        folderSectionWithSlash: CurrentToken, |exitFolderSectionWithSlash.
-        folderSection: CurrentToken, |exitFolderSection.
-        relativePath: CurrentToken, |exitRelativePath.
-        importDefinitionSingle: CurrentToken, |exitImportDefinitionSingle.
-        importDefinition: CurrentToken, |exitImportDefinition.
-        variableWithDot: CurrentToken, |exitVariableWithDot.
-        mapAssignee: CurrentToken, |exitMapAssignee.
-        listAssigneeIndex: CurrentToken, |exitListAssigneeIndex.
-        assignee: CurrentToken, |exitAssignee.
+        program: |exitProgram.
+        printCommand: |exitPrintCommand.
+        value: |exitValue.
+        valueInt: |exitValueInt.
+        valueDecimal: |exitValueDecimal.
+        valueString: |exitValueString.
+        decimalValue: |exitDecimalValue.
+        stringValue: |exitStringValue.
+        assignSymbol: |exitAssignSymbol.
+        logicalSymbol: |exitLogicalSymbol.
+        relationalSymbol: |exitRelationalSymbol.
+        arythmeticSymbol: |exitArythmeticSymbol.
+        valueIntComplex: |exitValueIntComplex.
+        arythmeticOperationInt: |exitArythmeticOperationInt.
+        valueDecimalComplex: |exitValueDecimalComplex.
+        arythmeticOperationDecimal: |exitArythmeticOperationDecimal.
+        arythmeticOperation: |exitArythmeticOperation.
+        relationalOperationInt: |exitRelationalOperationInt.
+        relationalOperationDecimal: |exitRelationalOperationDecimal.
+        relationalOperation: |exitRelationalOperation.
+        logicalOperationOperand: |exitLogicalOperationOperand.
+        logicalOperation: |exitLogicalOperation.
+        primitiveType: |exitPrimitiveType.
+        listType: |exitListType.
+        complexType: |exitComplexType.
+        listDefinitionContentElement: |exitListDefinitionContentElement.
+        listDefinitionContent: |exitListDefinitionContent.
+        listDefinitionInternal: |exitListDefinitionInternal.
+        listDefinition: |exitListDefinition.
+        mapDefinitionContentEntry: |exitMapDefinitionContentEntry.
+        mapDefinitionContentElement: |exitMapDefinitionContentElement.
+        mapDefinitionContent: |exitMapDefinitionContent.
+        mapDefinition: |exitMapDefinition.
+        code: |exitCode.
+        bracketCode: |exitBracketCode.
+        funcParamEntry: |exitFuncParamEntry.
+        funcParamElement: |exitFuncParamElement.
+        funcParamContent: |exitFuncParamContent.
+        funcParams: |exitFuncParams.
+        funcSignature: |exitFuncSignature.
+        funcDefinition: |exitFuncDefinition.
+        ifDefinition: |exitIfDefinition.
+        iterable: |exitIterable.
+        iterableAssignee: |exitIterableAssignee.
+        iterableAssignment: |exitIterableAssignment.
+        iterableLoop: |exitIterableLoop.
+        relationalLoop: |exitRelationalLoop.
+        loop: |exitLoop.
+        exceptionDefinition: |exitExceptionDefinition.
+        raiseException: |exitRaiseException.
+        exceptionAssignee: |exitExceptionAssignee.
+        funcCallAssignee: |exitFuncCallAssignee.
+        funcCallParameter: |exitFuncCallParameter.
+        funcCallName: |exitFuncCallName.
+        funcCall: |exitFuncCall.
+        funcCallAssignment: |exitFuncCallAssignment.
+        moduleNameWithComma: |exitModuleNameWithComma.
+        moduleNames: |exitModuleNames.
+        loadModuleDefinition: |exitLoadModuleDefinition.
+        folderSectionWithSlash: |exitFolderSectionWithSlash.
+        folderSection: |exitFolderSection.
+        relativePath: |exitRelativePath.
+        importDefinitionSingle: |exitImportDefinitionSingle.
+        importDefinition: |exitImportDefinition.
+        variableWithDot: |exitVariableWithDot.
+        mapAssignee: |exitMapAssignee.
+        listAssigneeIndex: |exitListAssigneeIndex.
+        assignee: |exitAssignee.
     .
     targets:
         pangolin:

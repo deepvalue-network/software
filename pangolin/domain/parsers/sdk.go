@@ -368,7 +368,6 @@ type PatternMatchBuilder interface {
 	Create() PatternMatchBuilder
 	WithPattern(pattern string) PatternMatchBuilder
 	WithLabels(labels PatternLabels) PatternMatchBuilder
-	WithVariable(variable string) PatternMatchBuilder
 	Now() (PatternMatch, error)
 }
 
@@ -376,7 +375,6 @@ type PatternMatchBuilder interface {
 type PatternMatch interface {
 	Pattern() string
 	Labels() PatternLabels
-	Variable() string
 }
 
 // PatternLabelsBuilder represents the pattern labels builder

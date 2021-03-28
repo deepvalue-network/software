@@ -1,1 +1,1 @@
-myPattern: MyTokenVariable, myEnter|myExit.
+myPattern: myEnter|myExit.

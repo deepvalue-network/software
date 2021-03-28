@@ -7,9 +7,9 @@ language:
     in: MyInputVar.
     out: MyOutputVar.
     matches:
-        myFirst: MyTokenVariable, |myExit.
-        mySecond: MyTokenVariable, myEnter|myExit.
-        myThird: MyTokenVariable, myEnter.
+        myFirst: |myExit.
+        mySecond: myEnter|myExit.
+        myThird: myEnter.
     .
     targets:
         my_target:

@@ -17,16 +17,16 @@ import (
 )
 
 type machine struct {
-	variableBuilder          var_variable.Builder
-	valueBuilder             var_value.Builder
-	computableValueBuilder   computable.Builder
-	lexerParserApplication   lexer_parser.Application
-	lexerParserBuilder       lexer_parser.Builder
-	stkFrame                 StackFrame
-	lbls                     map[string]label_instructions.Instructions
-	patternMatches           map[string]middle.PatternMatch
-	lexerAdapterBuilder      lexers.AdapterBuilder
-	currentTokenVariableName string
+	variableBuilder        var_variable.Builder
+	valueBuilder           var_value.Builder
+	computableValueBuilder computable.Builder
+	lexerParserApplication lexer_parser.Application
+	lexerParserBuilder     lexer_parser.Builder
+	stkFrame               StackFrame
+	lbls                   map[string]label_instructions.Instructions
+	patternMatches         map[string]middle.PatternMatch
+	lexerAdapterBuilder    lexers.AdapterBuilder
+	currentToken           lexers.NodeTree
 }
 
 func createMachine(
@@ -67,16 +67,16 @@ func createMachineInternally(
 	lexerAdapterBuilder lexers.AdapterBuilder,
 ) Machine {
 	out := machine{
-		variableBuilder:          variableBuilder,
-		valueBuilder:             valueBuilder,
-		computableValueBuilder:   computableValueBuilder,
-		lexerParserApplication:   lexerParserApplication,
-		lexerParserBuilder:       lexerParserBuilder,
-		stkFrame:                 stkFrame,
-		lbls:                     lbls,
-		patternMatches:           patternMatches,
-		lexerAdapterBuilder:      lexerAdapterBuilder,
-		currentTokenVariableName: "",
+		variableBuilder:        variableBuilder,
+		valueBuilder:           valueBuilder,
+		computableValueBuilder: computableValueBuilder,
+		lexerParserApplication: lexerParserApplication,
+		lexerParserBuilder:     lexerParserBuilder,
+		stkFrame:               stkFrame,
+		lbls:                   lbls,
+		patternMatches:         patternMatches,
+		lexerAdapterBuilder:    lexerAdapterBuilder,
+		currentToken:           nil,
 	}
 
 	return &out
@@ -92,7 +92,8 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 	if ins.IsStackframe() {
 		stkFrame := ins.Stackframe()
 		if stkFrame.IsPush() {
-			return app.push()
+			app.stkFrame.Push()
+			return nil
 		}
 
 		return app.stkFrame.Pop()
@@ -114,11 +115,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			misc := operation.Misc()
 			if misc.IsPush() {
 				current := app.stkFrame.Current()
-				err := app.push()
-				if err != nil {
-					return err
-				}
-
+				app.stkFrame.Push()
 				return app.stkFrame.Current().PushTo(name, current)
 			}
 
@@ -234,7 +231,6 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 				Token: onePatternMatch.Pattern(),
 			}
 
-			patternVariable := onePatternMatch.Variable()
 			if onePatternMatch.HasEnterLabel() {
 				enter := onePatternMatch.EnterLabel()
 				if _, ok := app.lbls[enter]; !ok {
@@ -243,7 +239,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 				}
 
 				evt.OnEnter = func(tree lexers.NodeTree) (interface{}, error) {
-					err := app.treeLabelInstructions(app.lbls[enter], patternVariable, tree)
+					err := app.treeLabelInstructions(app.lbls[enter], tree)
 					if err != nil {
 						return nil, err
 					}
@@ -260,7 +256,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 				}
 
 				evt.OnExit = func(tree lexers.NodeTree) (interface{}, error) {
-					err := app.treeLabelInstructions(app.lbls[exit], patternVariable, tree)
+					err := app.treeLabelInstructions(app.lbls[exit], tree)
 					if err != nil {
 						return nil, err
 					}
@@ -326,23 +322,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			retName := codeMatch.Return()
 			sectionName := codeMatch.SectionName()
 			patternNames := codeMatch.Patterns()
-
-			token, err := app.StackFrame().Current().Fetch(app.currentTokenVariableName)
-			if err != nil {
-				return err
-			}
-
-			if token == nil {
-				return nil
-			}
-
-			if !token.IsToken() {
-				str := fmt.Sprintf("the variable (name: %s) was expected to be of type Token", app.currentTokenVariableName)
-				return errors.New(str)
-			}
-
-			tok := token.Token()
-			section, code := tok.BestMatchFromNames(patternNames)
+			section, code := app.currentToken.BestMatchFromNames(patternNames)
 
 			// section:
 			computableSection, err := app.computableValueBuilder.Create().WithString(section).Now()
@@ -372,31 +352,11 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 		if token.IsCode() {
 			code := token.Code()
 			retName := code.Return()
-			token, err := app.StackFrame().Current().Fetch(app.currentTokenVariableName)
-			if err != nil {
-				return err
-			}
-
-			if token == nil {
-				return nil
-			}
-
-			if !token.IsToken() {
-				str := fmt.Sprintf("the variable (name: %s) was expected to be of type Token", app.currentTokenVariableName)
-				return errors.New(str)
-			}
-
-			tok := token.Token()
-			if tok == nil {
-				str := fmt.Sprintf("the Token (variable name: %s) was not expected to be nil", app.currentTokenVariableName)
-				return errors.New(str)
-			}
-
 			hasPattern := code.HasPattern()
 			hasAmount := code.HasAmount()
 			if !hasPattern && !hasAmount {
 				// fetch code from token:
-				code := tok.Code()
+				code := app.currentToken.Code()
 
 				// code:
 				computableCode, err := app.computableValueBuilder.Create().WithString(code).Now()
@@ -415,7 +375,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			if hasPattern && !hasAmount {
 				// fetch code from token's name:
 				pattern := code.Pattern()
-				code := tok.CodeFromName(pattern)
+				code := app.currentToken.CodeFromName(pattern)
 
 				// code:
 				computableCode, err := app.computableValueBuilder.Create().WithString(code).Now()
@@ -434,12 +394,8 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			if hasPattern && hasAmount {
 				// fetch code from token's name:
 				pattern := code.Pattern()
-				codes := tok.CodesFromName(pattern)
+				codes := app.currentToken.CodesFromName(pattern)
 				amount := code.Amount()
-				if err != nil {
-					str := fmt.Sprintf("the variable (%s) was expected to be declared", amount)
-					return errors.New(str)
-				}
 
 				// add the codes:
 				for _, oneCode := range codes {
@@ -464,10 +420,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 					}
 
 					// push:
-					err = app.push()
-					if err != nil {
-						return err
-					}
+					app.stkFrame.Push()
 				}
 
 				// amount:
@@ -510,28 +463,8 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 	return errors.New("the instruction is invalid")
 }
 
-func (app *machine) push() error {
-	computable, err := app.stkFrame.Current().Fetch(app.currentTokenVariableName)
-	if err != nil {
-		return err
-	}
-
-	app.stkFrame.Push()
-	return app.StackFrame().Current().UpdateValue(app.currentTokenVariableName, computable)
-}
-
-func (app *machine) treeLabelInstructions(lblIns label_instructions.Instructions, variable string, tree lexers.NodeTree) error {
-	computable, err := app.computableValueBuilder.Create().WithToken(tree).Now()
-	if err != nil {
-		return err
-	}
-
-	app.currentTokenVariableName = variable
-	err = app.StackFrame().Current().UpdateValue(app.currentTokenVariableName, computable)
-	if err != nil {
-		return err
-	}
-
+func (app *machine) treeLabelInstructions(lblIns label_instructions.Instructions, tree lexers.NodeTree) error {
+	app.currentToken = tree
 	return app.labelInstructions(lblIns)
 }
 

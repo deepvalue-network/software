@@ -58,7 +58,7 @@ singleExtend
     ;
 
 patternMatch
-    : PATTERN_PATTERN COLON GLOBAL_VARIABLE_PATTERN COMMA patternLabels DOT
+    : PATTERN_PATTERN COLON patternLabels DOT
     ;
 
 patternLabels

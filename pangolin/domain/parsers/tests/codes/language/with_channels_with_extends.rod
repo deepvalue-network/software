@@ -12,7 +12,7 @@ language:
         "third/path".
     .
     matches:
-        myFirst: MyTokenVariable, |myExit.
+        myFirst: |myExit.
     .
     targets:
         my_target:

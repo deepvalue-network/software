@@ -164,7 +164,6 @@ type Language interface {
 type PatternMatchBuilder interface {
 	Create() PatternMatchBuilder
 	WithPattern(pattern string) PatternMatchBuilder
-	WithVariable(variable string) PatternMatchBuilder
 	WithEnterLabel(enter string) PatternMatchBuilder
 	WithExitLabel(exit string) PatternMatchBuilder
 	Now() (PatternMatch, error)
@@ -173,7 +172,6 @@ type PatternMatchBuilder interface {
 // PatternMatch represents a pattern match
 type PatternMatch interface {
 	Pattern() string
-	Variable() string
 	HasEnterLabel() bool
 	EnterLabel() string
 	HasExitLabel() bool

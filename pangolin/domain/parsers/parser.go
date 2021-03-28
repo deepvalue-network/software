@@ -1073,11 +1073,6 @@ func (app *parser) exitPatternMatch(tree lexers.NodeTree) (interface{}, error) {
 		}
 	}
 
-	variable := tree.CodeFromName("GLOBAL_VARIABLE_PATTERN")
-	if variable != "" {
-		builder.WithVariable(variable)
-	}
-
 	ins, err := builder.Now()
 	if err != nil {
 		return nil, err

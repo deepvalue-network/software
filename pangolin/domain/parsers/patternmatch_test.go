@@ -25,9 +25,4 @@ func Test_patternMatch_Success(t *testing.T) {
 		t.Errorf("the patternLabels was expected to be valid")
 		return
 	}
-
-	if match.Variable() != "MyTokenVariable" {
-		t.Errorf("the variable was expected to be %s, %s returned", "MyTokenVariable", match.Variable())
-		return
-	}
 }

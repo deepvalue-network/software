@@ -3,18 +3,16 @@ package middle
 import "errors"
 
 type patternMatchBuilder struct {
-	pattern  string
-	variable string
-	enter    string
-	exit     string
+	pattern string
+	enter   string
+	exit    string
 }
 
 func createPatternMatchBuilder() PatternMatchBuilder {
 	out := patternMatchBuilder{
-		pattern:  "",
-		variable: "",
-		enter:    "",
-		exit:     "",
+		pattern: "",
+		enter:   "",
+		exit:    "",
 	}
 
 	return &out
@@ -28,12 +26,6 @@ func (app *patternMatchBuilder) Create() PatternMatchBuilder {
 // WithPattern adds a pattern to the builder
 func (app *patternMatchBuilder) WithPattern(pattern string) PatternMatchBuilder {
 	app.pattern = pattern
-	return app
-}
-
-// WithVariable adds a variable to the builder
-func (app *patternMatchBuilder) WithVariable(variable string) PatternMatchBuilder {
-	app.variable = variable
 	return app
 }
 
@@ -55,20 +47,16 @@ func (app *patternMatchBuilder) Now() (PatternMatch, error) {
 		return nil, errors.New("the pattern is mandatory in order to build a PatternMatch instance")
 	}
 
-	if app.variable == "" {
-		return nil, errors.New("the variable is mandatory in order to build a PatternMatch instance")
-	}
-
 	if app.enter != "" && app.exit != "" {
-		return createPatternMatchWithEnterAndExit(app.pattern, app.variable, app.enter, app.exit), nil
+		return createPatternMatchWithEnterAndExit(app.pattern, app.enter, app.exit), nil
 	}
 
 	if app.enter != "" {
-		return createPatternMatchWithEnter(app.pattern, app.variable, app.enter), nil
+		return createPatternMatchWithEnter(app.pattern, app.enter), nil
 	}
 
 	if app.exit != "" {
-		return createPatternMatchWithExit(app.pattern, app.variable, app.exit), nil
+		return createPatternMatchWithExit(app.pattern, app.exit), nil
 	}
 
 	return nil, errors.New("the PatternMatch is invalid")

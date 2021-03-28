@@ -1,5 +1,5 @@
 matches:
-    myFirst: MyTokenVariable, |myExit.
-    mySecond: MyTokenVariable, myEnter|myExit.
-    myThird: MyTokenVariable, myEnter.
+    myFirst: |myExit.
+    mySecond: myEnter|myExit.
+    myThird: myEnter.
 .
