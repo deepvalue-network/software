@@ -1,12 +1,12 @@
 package parsers
 
 type trigger struct {
-	variableName VariableName
+	variableName string
 	event        string
 }
 
 func createTrigger(
-	variableName VariableName,
+	variableName string,
 	event string,
 ) Trigger {
 	out := trigger{
@@ -18,7 +18,7 @@ func createTrigger(
 }
 
 // Variable returns the variable name
-func (obj *trigger) Variable() VariableName {
+func (obj *trigger) Variable() string {
 	return obj.variableName
 }
 

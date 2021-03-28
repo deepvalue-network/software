@@ -3,15 +3,15 @@ package parsers
 import "errors"
 
 type codeMatchBuilder struct {
-	content          VariableName
-	section          VariableName
+	content          string
+	section          string
 	patternVariables []string
 }
 
 func createCodeMatchBuilder() CodeMatchBuilder {
 	out := codeMatchBuilder{
-		content:          nil,
-		section:          nil,
+		content:          "",
+		section:          "",
 		patternVariables: nil,
 	}
 
@@ -24,13 +24,13 @@ func (app *codeMatchBuilder) Create() CodeMatchBuilder {
 }
 
 // WithContent adds a content to the builder
-func (app *codeMatchBuilder) WithContent(content VariableName) CodeMatchBuilder {
+func (app *codeMatchBuilder) WithContent(content string) CodeMatchBuilder {
 	app.content = content
 	return app
 }
 
 // WithSection adds a section to the builder
-func (app *codeMatchBuilder) WithSection(section VariableName) CodeMatchBuilder {
+func (app *codeMatchBuilder) WithSection(section string) CodeMatchBuilder {
 	app.section = section
 	return app
 }
@@ -43,12 +43,12 @@ func (app *codeMatchBuilder) WithPatternVariables(patterns []string) CodeMatchBu
 
 // Now builds a new CodeMatch instance
 func (app *codeMatchBuilder) Now() (CodeMatch, error) {
-	if app.content == nil {
-		return nil, errors.New("the content VariableName is mandatory in order to build a CodeMatch instance")
+	if app.content == "" {
+		return nil, errors.New("the content string is mandatory in order to build a CodeMatch instance")
 	}
 
-	if app.section == nil {
-		return nil, errors.New("the section VariableName is mandatory in order to build a CodeMatch instance")
+	if app.section == "" {
+		return nil, errors.New("the section string is mandatory in order to build a CodeMatch instance")
 	}
 
 	if app.patternVariables == nil {

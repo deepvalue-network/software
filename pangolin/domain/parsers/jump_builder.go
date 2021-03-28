@@ -4,13 +4,13 @@ import "errors"
 
 type jumpBuilder struct {
 	label     string
-	condition Identifier
+	condition string
 }
 
 func createJumpBuilder() JumpBuilder {
 	out := jumpBuilder{
 		label:     "",
-		condition: nil,
+		condition: "",
 	}
 
 	return &out
@@ -28,7 +28,7 @@ func (obj *jumpBuilder) WithLabel(label string) JumpBuilder {
 }
 
 // WithCondition adds a condition to the builder
-func (obj *jumpBuilder) WithCondition(condition Identifier) JumpBuilder {
+func (obj *jumpBuilder) WithCondition(condition string) JumpBuilder {
 	obj.condition = condition
 	return obj
 }
@@ -39,7 +39,7 @@ func (obj *jumpBuilder) Now() (Jump, error) {
 		return nil, errors.New("the Label is mandatory in order to build a Jump instance")
 	}
 
-	if obj.condition != nil {
+	if obj.condition != "" {
 		return createJumpWithCondition(obj.label, obj.condition), nil
 	}
 

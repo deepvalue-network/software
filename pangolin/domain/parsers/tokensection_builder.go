@@ -3,13 +3,13 @@ package parsers
 import "errors"
 
 type tokenSectionBuilder struct {
-	variableName VariableName
+	variableName string
 	specific     SpecificTokenCode
 }
 
 func createTokenSectionBuilder() TokenSectionBuilder {
 	out := tokenSectionBuilder{
-		variableName: nil,
+		variableName: "",
 		specific:     nil,
 	}
 
@@ -22,7 +22,7 @@ func (app *tokenSectionBuilder) Create() TokenSectionBuilder {
 }
 
 // WithVariableName adds a variableName to the builder
-func (app *tokenSectionBuilder) WithVariableName(variableName VariableName) TokenSectionBuilder {
+func (app *tokenSectionBuilder) WithVariableName(variableName string) TokenSectionBuilder {
 	app.variableName = variableName
 	return app
 }
@@ -35,8 +35,8 @@ func (app *tokenSectionBuilder) WithSpecific(specific SpecificTokenCode) TokenSe
 
 // Now builds a new TokenSection instance
 func (app *tokenSectionBuilder) Now() (TokenSection, error) {
-	if app.variableName != nil {
-		return createTokenSectionWithVariableName(app.variableName), nil
+	if app.variableName != "" {
+		return createTokenSectionWithstring(app.variableName), nil
 	}
 
 	if app.specific != nil {

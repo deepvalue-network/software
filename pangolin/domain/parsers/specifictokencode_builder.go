@@ -3,16 +3,16 @@ package parsers
 import "errors"
 
 type specificTokenCodeBuilder struct {
-	variableName    VariableName
+	variableName    string
 	patternVariable string
-	amount          VariableName
+	amount          string
 }
 
 func createSpecificTokenCodeBuilder() SpecificTokenCodeBuilder {
 	out := specificTokenCodeBuilder{
-		variableName:    nil,
+		variableName:    "",
 		patternVariable: "",
-		amount:          nil,
+		amount:          "",
 	}
 
 	return &out
@@ -24,13 +24,13 @@ func (app *specificTokenCodeBuilder) Create() SpecificTokenCodeBuilder {
 }
 
 // WithVariableName adds a content to the builder
-func (app *specificTokenCodeBuilder) WithVariableName(variableName VariableName) SpecificTokenCodeBuilder {
+func (app *specificTokenCodeBuilder) WithVariableName(variableName string) SpecificTokenCodeBuilder {
 	app.variableName = variableName
 	return app
 }
 
 // WithAmount adds an amount to the builder
-func (app *specificTokenCodeBuilder) WithAmount(amount VariableName) SpecificTokenCodeBuilder {
+func (app *specificTokenCodeBuilder) WithAmount(amount string) SpecificTokenCodeBuilder {
 	app.amount = amount
 	return app
 }
@@ -43,7 +43,7 @@ func (app *specificTokenCodeBuilder) WithPatternVariable(pattern string) Specifi
 
 // Now builds a new SpecificTokenCode
 func (app *specificTokenCodeBuilder) Now() (SpecificTokenCode, error) {
-	if app.variableName == nil {
+	if app.variableName == "" {
 		return nil, errors.New("the variableName is mandatory in order to build a SpecificTokenCode instance")
 	}
 
@@ -51,7 +51,7 @@ func (app *specificTokenCodeBuilder) Now() (SpecificTokenCode, error) {
 		return nil, errors.New("the pattern variable is mandatory in order to build a SpecificTokenCode instance")
 	}
 
-	if app.amount != nil {
+	if app.amount != "" {
 		return createSpecificTokenCodeWithAmount(app.variableName, app.patternVariable, app.amount), nil
 	}
 

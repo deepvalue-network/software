@@ -16,23 +16,23 @@ func Test_format_Success(t *testing.T) {
 	}
 
 	format := ins.(Format)
-	if format.Results().String() != "myResults" {
-		t.Errorf("the results was expected to be %s, %s returned", format.Results().String(), "myResults")
+	if format.Results() != "myResults" {
+		t.Errorf("the results was expected to be %s, %s returned", format.Results(), "myResults")
 		return
 	}
 
-	if format.Pattern().String() != "myPattern" {
-		t.Errorf("the pattern was expected to be %s, %s returned", format.Pattern().String(), "myPattern")
+	if format.Pattern() != "myPattern" {
+		t.Errorf("the pattern was expected to be %s, %s returned", format.Pattern(), "myPattern")
 		return
 	}
 
-	if format.First().String() != "firstVal" {
-		t.Errorf("the first was expected to be %s, %s returned", format.First().String(), "firstVal")
+	if format.First() != "firstVal" {
+		t.Errorf("the first was expected to be %s, %s returned", format.First(), "firstVal")
 		return
 	}
 
-	if format.Second().String() != "secondVal" {
-		t.Errorf("the second was expected to be %s, %s returned", format.Second().String(), "secondVal")
+	if format.Second() != "secondVal" {
+		t.Errorf("the second was expected to be %s, %s returned", format.Second(), "secondVal")
 		return
 	}
 

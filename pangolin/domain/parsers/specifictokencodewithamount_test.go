@@ -16,8 +16,8 @@ func Test_specificTokenCodeWithAmount_Success(t *testing.T) {
 	}
 
 	code := ins.(SpecificTokenCode)
-	if code.VariableName().String() != "myReturnVariable" {
-		t.Errorf("the content variable was expected to be %s, %s returned", "myReturnVariable", code.VariableName().String())
+	if code.VariableName() != "myReturnVariable" {
+		t.Errorf("the content variable was expected to be %s, %s returned", "myReturnVariable", code.VariableName())
 		return
 	}
 
@@ -31,8 +31,8 @@ func Test_specificTokenCodeWithAmount_Success(t *testing.T) {
 		return
 	}
 
-	if code.Amount().String() != "myAmount" {
-		t.Errorf("the amount variable was expected to be %s, %s returned", "myAmount", code.Amount().String())
+	if code.Amount() != "myAmount" {
+		t.Errorf("the amount variable was expected to be %s, %s returned", "myAmount", code.Amount())
 		return
 	}
 }

@@ -43,7 +43,7 @@ func (app *adapter) ToInstruction(testInstruction parsers.TestInstruction) (Inst
 
 	if testInstruction.IsReadFile() {
 		parsedReadFile := testInstruction.ReadFile()
-		variable := parsedReadFile.Variable().String()
+		variable := parsedReadFile.Variable()
 		path := parsedReadFile.Path().String()
 		ins, err := app.readFileBuilder.Create().WithVariable(variable).WithPath(path).Now()
 		if err != nil {
@@ -57,7 +57,7 @@ func (app *adapter) ToInstruction(testInstruction parsers.TestInstruction) (Inst
 		parsedAssert := testInstruction.Assert()
 		assertBuilder := app.assertBuilder.Create()
 		if parsedAssert.HasCondition() {
-			condition := parsedAssert.Condition().String()
+			condition := parsedAssert.Condition()
 			assertBuilder.WithCondition(condition)
 		}
 

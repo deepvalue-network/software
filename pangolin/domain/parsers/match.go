@@ -1,25 +1,25 @@
 package parsers
 
 type match struct {
-	input   Identifier
+	input   string
 	pattern string
 }
 
 func createMatch(
-	input Identifier,
+	input string,
 ) Match {
 	return createMatchInternally(input, "")
 }
 
 func createMatchWithPattern(
-	input Identifier,
+	input string,
 	pattern string,
 ) Match {
 	return createMatchInternally(input, pattern)
 }
 
 func createMatchInternally(
-	input Identifier,
+	input string,
 	pattern string,
 ) Match {
 	out := match{
@@ -31,7 +31,7 @@ func createMatchInternally(
 }
 
 // Input returns the input identifier
-func (obj *match) Input() Identifier {
+func (obj *match) Input() string {
 	return obj.input
 }
 

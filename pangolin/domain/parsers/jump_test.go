@@ -50,16 +50,4 @@ func Test_jumpIf_Success(t *testing.T) {
 		t.Errorf("the Label was expected to be %s, %s returned", "myLabel", lbl)
 		return
 	}
-
-	condition := jmp.Condition()
-	if !condition.IsVariable() {
-		t.Errorf("the Condition was expected to be a variable")
-		return
-	}
-
-	variable := condition.Variable()
-	if !variable.IsLocal() {
-		t.Errorf("the Condition was expected to be a local variable")
-		return
-	}
 }

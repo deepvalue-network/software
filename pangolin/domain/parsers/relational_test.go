@@ -43,7 +43,7 @@ func Test_relational_equal_Success(t *testing.T) {
 func Test_relational_notEqual_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("relational", grammarFile)
-	
+
 	file := "./tests/codes/relational/not_equal.rod"
 	ins, err := pars.ExecuteFile(file)
 	if err != nil {

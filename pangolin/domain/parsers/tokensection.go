@@ -1,12 +1,12 @@
 package parsers
 
 type tokenSection struct {
-	variableName VariableName
+	variableName string
 	specific     SpecificTokenCode
 }
 
-func createTokenSectionWithVariableName(
-	variableName VariableName,
+func createTokenSectionWithstring(
+	variableName string,
 ) TokenSection {
 	return createTokenSectionInternally(variableName, nil)
 }
@@ -14,11 +14,11 @@ func createTokenSectionWithVariableName(
 func createTokenSectionWithSpecific(
 	specific SpecificTokenCode,
 ) TokenSection {
-	return createTokenSectionInternally(nil, specific)
+	return createTokenSectionInternally("", specific)
 }
 
 func createTokenSectionInternally(
-	variableName VariableName,
+	variableName string,
 	specific SpecificTokenCode,
 ) TokenSection {
 	out := tokenSection{
@@ -31,11 +31,11 @@ func createTokenSectionInternally(
 
 // IsVariableName returns true if there is a variableName, false otherwise
 func (obj *tokenSection) IsVariableName() bool {
-	return obj.variableName != nil
+	return obj.variableName != ""
 }
 
 // VariableName returns the variableName, if any
-func (obj *tokenSection) VariableName() VariableName {
+func (obj *tokenSection) VariableName() string {
 	return obj.variableName
 }
 

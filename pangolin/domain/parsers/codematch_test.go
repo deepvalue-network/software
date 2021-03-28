@@ -16,13 +16,13 @@ func Test_codeMatch_Success(t *testing.T) {
 	}
 
 	code := ins.(CodeMatch)
-	if code.Content().String() != "myReturn" {
-		t.Errorf("the content variable was expected to be %s, %s returned", "myReturn", code.Content().String())
+	if code.Content() != "myReturn" {
+		t.Errorf("the content variable was expected to be %s, %s returned", "myReturn", code.Content())
 		return
 	}
 
-	if code.Section().String() != "mySection" {
-		t.Errorf("the content variable was expected to be %s, %s returned", "mySection", code.Section().String())
+	if code.Section() != "mySection" {
+		t.Errorf("the content variable was expected to be %s, %s returned", "mySection", code.Section())
 		return
 	}
 

@@ -1,13 +1,13 @@
 package parsers
 
 type remainingOperation struct {
-	first     Identifier
-	second    Identifier
-	result    VariableName
-	remaining VariableName
+	first     string
+	second    string
+	result    string
+	remaining string
 }
 
-func createRemainingOperation(first Identifier, second Identifier, result VariableName, remaining VariableName) RemainingOperation {
+func createRemainingOperation(first string, second string, result string, remaining string) RemainingOperation {
 	out := remainingOperation{
 		first:     first,
 		second:    second,
@@ -19,21 +19,21 @@ func createRemainingOperation(first Identifier, second Identifier, result Variab
 }
 
 // First returns the first identifier of the operation
-func (obj *remainingOperation) First() Identifier {
+func (obj *remainingOperation) First() string {
 	return obj.first
 }
 
 // Second returns the second identifier of the operation
-func (obj *remainingOperation) Second() Identifier {
+func (obj *remainingOperation) Second() string {
 	return obj.second
 }
 
 // Result returns the result variable of the operation
-func (obj *remainingOperation) Result() VariableName {
+func (obj *remainingOperation) Result() string {
 	return obj.result
 }
 
 // Remaining returns the remaining variable of the operation
-func (obj *remainingOperation) Remaining() VariableName {
+func (obj *remainingOperation) Remaining() string {
 	return obj.remaining
 }

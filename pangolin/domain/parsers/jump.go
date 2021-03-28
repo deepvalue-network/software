@@ -2,18 +2,18 @@ package parsers
 
 type jump struct {
 	label     string
-	condition Identifier
+	condition string
 }
 
 func createJump(label string) Jump {
-	return createJumpInternally(label, nil)
+	return createJumpInternally(label, "")
 }
 
-func createJumpWithCondition(label string, condition Identifier) Jump {
+func createJumpWithCondition(label string, condition string) Jump {
 	return createJumpInternally(label, condition)
 }
 
-func createJumpInternally(label string, condition Identifier) Jump {
+func createJumpInternally(label string, condition string) Jump {
 	out := jump{
 		label:     label,
 		condition: condition,
@@ -29,10 +29,10 @@ func (obj *jump) Label() string {
 
 // HasCondition returns true if there is a condition, false otherwise
 func (obj *jump) HasCondition() bool {
-	return obj.condition != nil
+	return obj.condition != ""
 }
 
 // Condition returns the condition, if any
-func (obj *jump) Condition() Identifier {
+func (obj *jump) Condition() string {
 	return obj.condition
 }

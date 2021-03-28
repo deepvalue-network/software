@@ -2,35 +2,35 @@ package parsers
 
 type value struct {
 	isNil    bool
-	variable VariableName
+	variable string
 	numeric  NumericValue
 	bl       *bool
 	strValue string
 }
 
 func createValueWithNil() Value {
-	return createValueInternally(true, nil, nil, nil, "")
+	return createValueInternally(true, "", nil, nil, "")
 }
 
-func createValueWithVariable(variable VariableName) Value {
+func createValueWithVariable(variable string) Value {
 	return createValueInternally(false, variable, nil, nil, "")
 }
 
 func createValueWithNumeric(numeric NumericValue) Value {
-	return createValueInternally(false, nil, numeric, nil, "")
+	return createValueInternally(false, "", numeric, nil, "")
 }
 
 func createValueWithBool(bl *bool) Value {
-	return createValueInternally(false, nil, nil, bl, "")
+	return createValueInternally(false, "", nil, bl, "")
 }
 
 func createValueWithString(strValue string) Value {
-	return createValueInternally(false, nil, nil, nil, strValue)
+	return createValueInternally(false, "", nil, nil, strValue)
 }
 
 func createValueInternally(
 	isNil bool,
-	variable VariableName,
+	variable string,
 	numeric NumericValue,
 	bl *bool,
 	strValue string,
@@ -53,11 +53,11 @@ func (obj *value) IsNil() bool {
 
 // IsVariable returns true if the value is a variable, false otherwise
 func (obj *value) IsVariable() bool {
-	return obj.variable != nil
+	return obj.variable != ""
 }
 
 // Variable returns the variable, if any
-func (obj *value) Variable() VariableName {
+func (obj *value) Variable() string {
 	return obj.variable
 }
 

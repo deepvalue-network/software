@@ -3,18 +3,18 @@ package parsers
 import "errors"
 
 type formatBuilder struct {
-	results VariableName
-	pattern Identifier
-	first   Identifier
-	second  Identifier
+	results string
+	pattern string
+	first   string
+	second  string
 }
 
 func createFormatBuilder() FormatBuilder {
 	out := formatBuilder{
-		results: nil,
-		pattern: nil,
-		first:   nil,
-		second:  nil,
+		results: "",
+		pattern: "",
+		first:   "",
+		second:  "",
 	}
 
 	return &out
@@ -26,45 +26,45 @@ func (app *formatBuilder) Create() FormatBuilder {
 }
 
 // WithResults adds a results variableName to the builder
-func (app *formatBuilder) WithResults(results VariableName) FormatBuilder {
+func (app *formatBuilder) WithResults(results string) FormatBuilder {
 	app.results = results
 	return app
 }
 
 // WithPattern adds a pattern identifier to the builder
-func (app *formatBuilder) WithPattern(pattern Identifier) FormatBuilder {
+func (app *formatBuilder) WithPattern(pattern string) FormatBuilder {
 	app.pattern = pattern
 	return app
 }
 
 // WithFirst adds a first identifier to the builder
-func (app *formatBuilder) WithFirst(first Identifier) FormatBuilder {
+func (app *formatBuilder) WithFirst(first string) FormatBuilder {
 	app.first = first
 	return app
 }
 
 // WithSecond adds a second identifier to the builder
-func (app *formatBuilder) WithSecond(second Identifier) FormatBuilder {
+func (app *formatBuilder) WithSecond(second string) FormatBuilder {
 	app.second = second
 	return app
 }
 
 // Now builds a new Format instance
 func (app *formatBuilder) Now() (Format, error) {
-	if app.results == nil {
-		return nil, errors.New("the results VariableName is mandatory in order to build a Format instance")
+	if app.results == "" {
+		return nil, errors.New("the results string is mandatory in order to build a Format instance")
 	}
 
-	if app.pattern == nil {
-		return nil, errors.New("the pattern Identifier is mandatory in order to build a Format instance")
+	if app.pattern == "" {
+		return nil, errors.New("the pattern string is mandatory in order to build a Format instance")
 	}
 
-	if app.first == nil {
-		return nil, errors.New("the first Identifier is mandatory in order to build a Format instance")
+	if app.first == "" {
+		return nil, errors.New("the first string is mandatory in order to build a Format instance")
 	}
 
-	if app.second == nil {
-		return nil, errors.New("the second Identifier is mandatory in order to build a Format instance")
+	if app.second == "" {
+		return nil, errors.New("the second string is mandatory in order to build a Format instance")
 	}
 
 	return createFormat(app.results, app.pattern, app.first, app.second), nil

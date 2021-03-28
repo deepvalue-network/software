@@ -1,12 +1,12 @@
 package parsers
 
 type pushBuilder struct {
-	stackframe VariableName
+	stackframe string
 }
 
 func createPushBuilder() PushBuilder {
 	out := pushBuilder{
-		stackframe: nil,
+		stackframe: "",
 	}
 
 	return &out
@@ -18,14 +18,14 @@ func (app *pushBuilder) Create() PushBuilder {
 }
 
 // WithStackframe adds a stackFrame to the builder
-func (app *pushBuilder) WithStackframe(stackframe VariableName) PushBuilder {
+func (app *pushBuilder) WithStackframe(stackframe string) PushBuilder {
 	app.stackframe = stackframe
 	return app
 }
 
 // Now builds a new Push instance
 func (app *pushBuilder) Now() (Push, error) {
-	if app.stackframe != nil {
+	if app.stackframe != "" {
 		return createPushWithStackframe(app.stackframe), nil
 	}
 

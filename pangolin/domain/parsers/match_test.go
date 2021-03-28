@@ -17,8 +17,8 @@ func Test_match_Success(t *testing.T) {
 
 	match := ins.(Match)
 	input := match.Input()
-	if input.String() != "myInput" {
-		t.Errorf("the input Identifier was expected to be %s, %s returned", "myInput", input.String())
+	if input != "myInput" {
+		t.Errorf("the input Identifier was expected to be %s, %s returned", "myInput", input)
 		return
 	}
 
@@ -41,8 +41,8 @@ func Test_match_withPattern_Success(t *testing.T) {
 
 	match := ins.(Match)
 	input := match.Input()
-	if input.String() != "myInput" {
-		t.Errorf("the input Identifier was expected to be %s, %s returned", "myInput", input.String())
+	if input != "myInput" {
+		t.Errorf("the input Identifier was expected to be %s, %s returned", "myInput", input)
 		return
 	}
 

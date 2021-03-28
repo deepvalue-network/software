@@ -120,13 +120,7 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 			}
 
 			parsedVariableName := ass.Variable()
-			variableBuilder := app.varVariableBuilder.Create().WithValue(val)
-			if parsedVariableName.IsLocal() {
-				local := parsedVariableName.Local()
-				variableBuilder.WithName(local)
-			}
-
-			ins, err := variableBuilder.Now()
+			ins, err := app.varVariableBuilder.Create().WithValue(val).WithName(parsedVariableName).Now()
 			if err != nil {
 				return nil, err
 			}
@@ -163,10 +157,7 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 
 		if vr.IsDelete() {
 			del := vr.Delete()
-			if del.IsLocal() {
-				local := del.Local()
-				builder.WithDelete(local)
-			}
+			builder.WithDelete(del)
 		}
 	}
 
@@ -278,8 +269,7 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 			push := stackFrame.Push()
 			if push.HasStackFrame() {
 				variableName := push.StackFrame()
-				varName := app.variableName(variableName)
-				vrName, err := app.variableNameBuilder.Create().WithVariableName(varName).IsPush().Now()
+				vrName, err := app.variableNameBuilder.Create().WithVariableName(variableName).IsPush().Now()
 				if err != nil {
 					return nil, err
 				}
@@ -395,16 +385,16 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 }
 
 func (app *adapter) trigger(parsed parsers.Trigger) (trigger.Trigger, error) {
-	variable := parsed.Variable().String()
+	variable := parsed.Variable()
 	event := parsed.Event()
 	return app.triggerBuilder.Create().WithVariable(variable).WithEvent(event).Now()
 }
 
 func (app *adapter) format(parsed parsers.Format) (format.Format, error) {
-	results := parsed.Results().String()
-	pattern := parsed.Pattern().String()
-	first := parsed.First().String()
-	second := parsed.Second().String()
+	results := parsed.Results()
+	pattern := parsed.Pattern()
+	first := parsed.First()
+	second := parsed.Second()
 	return app.formatBuilder.Create().WithResults(results).WithPattern(pattern).WithFirst(first).WithSecond(second).Now()
 }
 
@@ -412,7 +402,7 @@ func (app *adapter) call(parsed parsers.Call) (call.Call, error) {
 	name := parsed.Name()
 	builder := app.callBuilder.Create().WithName(name)
 	if parsed.HasCondition() {
-		condition := parsed.Condition().String()
+		condition := parsed.Condition()
 		builder.WithCondition(condition)
 	}
 
@@ -422,7 +412,7 @@ func (app *adapter) call(parsed parsers.Call) (call.Call, error) {
 func (app *adapter) exit(parsed parsers.Exit) (exit.Exit, error) {
 	builder := app.exitBuilder.Create()
 	if parsed.HasCondition() {
-		condition := parsed.Condition().String()
+		condition := parsed.Condition()
 		builder.WithCondition(condition)
 	}
 
@@ -455,11 +445,9 @@ func (app *adapter) token(parsed parsers.Token) (token.Token, error) {
 }
 
 func (app *adapter) tokenCodeMatch(parsed parsers.CodeMatch) (token.CodeMatch, error) {
-	paersedContent := parsed.Content()
-	ret := app.variableName(paersedContent)
+	ret := parsed.Content()
 
-	parsedSection := parsed.Section()
-	section := app.variableName(parsedSection)
+	section := parsed.Section()
 	patternVariables := parsed.PatternVariables()
 
 	return app.tokenCodeMatchBuilder.Create().WithReturn(ret).WithSectionName(section).WithPatterns(patternVariables).Now()
@@ -467,8 +455,7 @@ func (app *adapter) tokenCodeMatch(parsed parsers.CodeMatch) (token.CodeMatch, e
 
 func (app *adapter) tokenSection(parsed parsers.TokenSection) (token.Code, error) {
 	if parsed.IsVariableName() {
-		parsedVariableName := parsed.VariableName()
-		ret := app.variableName(parsedVariableName)
+		ret := parsed.VariableName()
 		return app.tokenCodeBuilder.Create().WithReturn(ret).Now()
 	}
 
@@ -477,14 +464,11 @@ func (app *adapter) tokenSection(parsed parsers.TokenSection) (token.Code, error
 }
 
 func (app *adapter) tokenSpecificCode(parsed parsers.SpecificTokenCode) (token.Code, error) {
-	variableName := parsed.VariableName()
-	ret := app.variableName(variableName)
-
+	ret := parsed.VariableName()
 	patternVariable := parsed.PatternVariable()
 	builder := app.tokenCodeBuilder.Create().WithReturn(ret).WithPattern(patternVariable)
 	if parsed.HasAmount() {
-		parsedAmount := parsed.Amount()
-		amount := app.variableName(parsedAmount)
+		amount := parsed.Amount()
 		builder.WithAmount(amount)
 	}
 
@@ -493,12 +477,10 @@ func (app *adapter) tokenSpecificCode(parsed parsers.SpecificTokenCode) (token.C
 
 func (app *adapter) transform(parsed parsers.TransformOperation) transform.Builder {
 	builder := app.transformBuilder.Create()
-	inputIdentifier := parsed.Input()
-	input := app.identifier(inputIdentifier)
+	input := parsed.Input()
 	builder.WithInput(input)
 
-	resultVariableName := parsed.Result()
-	result := app.variableName(resultVariableName)
+	result := parsed.Result()
 	return builder.WithResult(result)
 }
 
@@ -506,8 +488,7 @@ func (app *adapter) conditionFromJump(parsed parsers.Jump) (condition.Condition,
 	label := parsed.Label()
 	propositionBuilder := app.propositionBuilder.Create().WithName(label)
 	if parsed.HasCondition() {
-		conditionID := parsed.Condition()
-		condition := app.identifier(conditionID)
+		condition := parsed.Condition()
 		propositionBuilder.WithCondition(condition)
 	}
 
@@ -520,7 +501,7 @@ func (app *adapter) conditionFromJump(parsed parsers.Jump) (condition.Condition,
 }
 
 func (app *adapter) match(parsed parsers.Match) match.Builder {
-	input := parsed.Input().String()
+	input := parsed.Input()
 	builder := app.matchBuilder.Create().WithInput(input)
 	if parsed.HasPattern() {
 		pattern := parsed.Pattern()
@@ -532,20 +513,16 @@ func (app *adapter) match(parsed parsers.Match) match.Builder {
 
 func (app *adapter) remaining(parsed parsers.RemainingOperation) remaining.Builder {
 	builder := app.remainingBuilder.Create()
-	firstID := parsed.First()
-	first := app.identifier(firstID)
+	first := parsed.First()
 	builder.WithFirst(first)
 
-	secondID := parsed.Second()
-	second := app.identifier(secondID)
+	second := parsed.Second()
 	builder.WithSecond(second)
 
-	resultVarName := parsed.Result()
-	result := app.variableName(resultVarName)
+	result := parsed.Result()
 	builder.WithResult(result)
 
-	remainingVarName := parsed.Remaining()
-	remaining := app.variableName(remainingVarName)
+	remaining := parsed.Remaining()
 	builder.WithRemaining(remaining)
 
 	return builder
@@ -553,33 +530,14 @@ func (app *adapter) remaining(parsed parsers.RemainingOperation) remaining.Build
 
 func (app *adapter) standard(parsed parsers.StandardOperation) standard.Builder {
 	builder := app.standardBuilder.Create()
-	firstID := parsed.First()
-	first := app.identifier(firstID)
+	first := parsed.First()
 	builder.WithFirst(first)
 
-	secondID := parsed.Second()
-	second := app.identifier(secondID)
+	second := parsed.Second()
 	builder.WithSecond(second)
 
-	resultVarName := parsed.Result()
-	result := app.variableName(resultVarName)
+	result := parsed.Result()
 	builder.WithResult(result)
 
 	return builder
-}
-
-func (app *adapter) variableName(parsed parsers.VariableName) string {
-	local := parsed.Local()
-	return local
-}
-
-func (app *adapter) identifier(parsed parsers.Identifier) string {
-	if parsed.IsVariable() {
-		vr := parsed.Variable()
-		local := vr.Local()
-		return local
-	}
-
-	constant := parsed.Constant()
-	return constant
 }

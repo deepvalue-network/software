@@ -192,6 +192,5 @@ func (app *adapter) toValue(parsed parsers.Value) (*float64, *int, *bool, *strin
 	}
 
 	vr := parsed.Variable()
-	local := vr.Local()
-	return nil, nil, nil, nil, "", local, nil
+	return nil, nil, nil, nil, "", vr, nil
 }

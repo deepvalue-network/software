@@ -3,13 +3,13 @@ package parsers
 import "errors"
 
 type readFileBuilder struct {
-	variable VariableName
+	variable string
 	path     RelativePath
 }
 
 func createReadFileBuilder() ReadFileBuilder {
 	out := readFileBuilder{
-		variable: nil,
+		variable: "",
 		path:     nil,
 	}
 
@@ -22,7 +22,7 @@ func (app *readFileBuilder) Create() ReadFileBuilder {
 }
 
 // WithVariable adds a variable to the builder
-func (app *readFileBuilder) WithVariable(variable VariableName) ReadFileBuilder {
+func (app *readFileBuilder) WithVariable(variable string) ReadFileBuilder {
 	app.variable = variable
 	return app
 }
@@ -35,7 +35,7 @@ func (app *readFileBuilder) WithPath(path RelativePath) ReadFileBuilder {
 
 // Now builds a new ReadFile instance
 func (app *readFileBuilder) Now() (ReadFile, error) {
-	if app.variable == nil {
+	if app.variable == "" {
 		return nil, errors.New("the Variablename is mandatory in order to build a ReadFile instance")
 	}
 

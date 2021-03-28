@@ -1,1 +1,1 @@
-not_equal: myVariable, MY_CONSTANT, myOtherVariable
+not_equal: myVariable, myFirst, myOtherVariable

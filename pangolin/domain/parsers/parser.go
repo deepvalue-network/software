@@ -70,8 +70,6 @@ type parser struct {
 	stackFrameBuilder         StackFrameBuilder
 	pushBuilder               PushBuilder
 	popBuilder                PopBuilder
-	identifierBuilder         IdentifierBuilder
-	variableNameBuilder       VariableNameBuilder
 	program                   map[string]Program
 	language                  map[string]Language
 	languageValue             map[string]LanguageValue
@@ -140,8 +138,6 @@ type parser struct {
 	stackFrame                map[string]StackFrame
 	push                      map[string]Push
 	pop                       map[string]Pop
-	identifier                map[string]Identifier
-	variableName              map[string]VariableName
 }
 
 func createParser(
@@ -204,8 +200,6 @@ func createParser(
 	stackFrameBuilder StackFrameBuilder,
 	pushBuilder PushBuilder,
 	popBuilder PopBuilder,
-	identifierBuilder IdentifierBuilder,
-	variableNameBuilder VariableNameBuilder,
 ) (*parser, error) {
 	out := &parser{
 		lexerApplication:          lexerApplication,
@@ -267,8 +261,6 @@ func createParser(
 		stackFrameBuilder:         stackFrameBuilder,
 		pushBuilder:               pushBuilder,
 		popBuilder:                popBuilder,
-		identifierBuilder:         identifierBuilder,
-		variableNameBuilder:       variableNameBuilder,
 	}
 
 	out.init()
@@ -554,14 +546,6 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			Token:  "pop",
 			OnExit: app.exitPop,
 		},
-		lparser.ToEventsParams{
-			Token:  "identifier",
-			OnExit: app.exitIdentifier,
-		},
-		lparser.ToEventsParams{
-			Token:  "variableName",
-			OnExit: app.exitVariableName,
-		},
 	}
 
 	ins, err := app.parserBuilder.Create().WithEventParams(params).WithLexer(lexer).Now()
@@ -665,8 +649,6 @@ func (app *parser) init() {
 	app.stackFrame = map[string]StackFrame{}
 	app.push = map[string]Push{}
 	app.pop = map[string]Pop{}
-	app.identifier = map[string]Identifier{}
-	app.variableName = map[string]VariableName{}
 }
 
 func (app *parser) exitProgram(tree lexers.NodeTree) (interface{}, error) {
@@ -728,7 +710,7 @@ func (app *parser) exitLanguageValue(tree lexers.NodeTree) (interface{}, error) 
 		"LANG_ROOT",
 		"singleExtend",
 		"relativePath",
-		"LOCAL_VARIABLE_PATTERN",
+		"VARIABLE_PATTERN",
 		"LANG_PATTERN_MATCHES",
 		"LANG_TARGETS",
 	})
@@ -776,7 +758,7 @@ func (app *parser) exitLanguageValue(tree lexers.NodeTree) (interface{}, error) 
 			}
 		}
 
-	case "LOCAL_VARIABLE_PATTERN":
+	case "VARIABLE_PATTERN":
 		if tree.CodeFromName("IN") != "" {
 			builder.WithInputVariable(code)
 			break
@@ -1266,11 +1248,9 @@ func (app *parser) exitTestInstruction(tree lexers.NodeTree) (interface{}, error
 
 func (app *parser) exitAssert(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.assertBuilder.Create()
-	identifierCode := tree.CodeFromName("identifier")
-	if identifierCode != "" {
-		if iden, ok := app.identifier[identifierCode]; ok {
-			builder.WithCondition(iden)
-		}
+	condition := tree.CodeFromName("VARIABLE_PATTERN")
+	if condition != "" {
+		builder.WithCondition(condition)
 	}
 
 	ins, err := builder.Now()
@@ -1284,11 +1264,9 @@ func (app *parser) exitAssert(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitReadFile(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.readFileBuilder.Create()
-	nameCode := tree.CodeFromName("variableName")
-	if nameCode != "" {
-		if name, ok := app.variableName[nameCode]; ok {
-			builder.WithVariable(name)
-		}
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
 	}
 
 	relPathCode := tree.CodeFromName("relativePath")
@@ -1544,11 +1522,9 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitTrigger(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.triggerBuilder.Create()
-	variableNameCode := tree.CodeFromName("variableName")
-	if variableNameCode != "" {
-		if vrName, ok := app.variableName[variableNameCode]; ok {
-			builder.WithVariableName(vrName)
-		}
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariableName(variableName)
 	}
 
 	eventName := tree.CodeFromName("EVENT_NAME_PATTERN")
@@ -1567,32 +1543,13 @@ func (app *parser) exitTrigger(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitFormat(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.formatBuilder.Create()
-	variableNameCode := tree.CodeFromName("variableName")
-	if variableNameCode != "" {
-		if results, ok := app.variableName[variableNameCode]; ok {
-			builder.WithResults(results)
-		}
-	}
-
-	identifierCodes := tree.CodesFromName("identifier")
-	if len(identifierCodes) != 3 {
-		str := fmt.Sprintf("%d variableName was expected, %d returned", 3, len(identifierCodes))
+	variableNames := tree.CodesFromName("VARIABLE_PATTERN")
+	if len(variableNames) != 4 {
+		str := fmt.Sprintf("%d variableName was expected, %d returned", 4, len(variableNames))
 		return nil, errors.New(str)
 	}
 
-	if pattern, ok := app.identifier[identifierCodes[0]]; ok {
-		builder.WithPattern(pattern)
-	}
-
-	if first, ok := app.identifier[identifierCodes[1]]; ok {
-		builder.WithFirst(first)
-	}
-
-	if second, ok := app.identifier[identifierCodes[2]]; ok {
-		builder.WithSecond(second)
-	}
-
-	ins, err := builder.Now()
+	ins, err := builder.WithResults(variableNames[0]).WithPattern(variableNames[1]).WithFirst(variableNames[2]).WithSecond(variableNames[3]).Now()
 	if err != nil {
 		return nil, err
 	}
@@ -1631,21 +1588,13 @@ func (app *parser) exitToken(tree lexers.NodeTree) (interface{}, error) {
 }
 
 func (app *parser) exitCodeMatch(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.codeMatchBuilder.Create()
-	variableNameCodes := tree.CodesFromName("variableName")
+	variableNameCodes := tree.CodesFromName("VARIABLE_PATTERN")
 	if len(variableNameCodes) != 2 {
 		str := fmt.Sprintf("%d variableName was expected, %d returned", 2, len(variableNameCodes))
 		return nil, errors.New(str)
 	}
 
-	if content, ok := app.variableName[variableNameCodes[0]]; ok {
-		builder.WithContent(content)
-	}
-
-	if section, ok := app.variableName[variableNameCodes[1]]; ok {
-		builder.WithSection(section)
-	}
-
+	builder := app.codeMatchBuilder.Create().WithContent(variableNameCodes[0]).WithSection(variableNameCodes[1])
 	callPatternsCode := tree.CodeFromName("callPatterns")
 	if callPatternsCode != "" {
 		if callPatterns, ok := app.callPatterns[callPatternsCode]; ok {
@@ -1667,7 +1616,7 @@ func (app *parser) exitTokenSection(tree lexers.NodeTree) (interface{}, error) {
 	section, code := tree.BestMatchFromNames([]string{
 		"specificTokenCodeWithAmount",
 		"specificTokenCode",
-		"variableName",
+		"VARIABLE_PATTERN",
 	})
 
 	switch section {
@@ -1681,10 +1630,8 @@ func (app *parser) exitTokenSection(tree lexers.NodeTree) (interface{}, error) {
 			builder.WithSpecific(specificTokenCode)
 		}
 		break
-	case "variableName":
-		if variableName, ok := app.variableName[code]; ok {
-			builder.WithVariableName(variableName)
-		}
+	case "VARIABLE_PATTERN":
+		builder.WithVariableName(code)
 		break
 	}
 
@@ -1698,21 +1645,13 @@ func (app *parser) exitTokenSection(tree lexers.NodeTree) (interface{}, error) {
 }
 
 func (app *parser) exitSpecificTokenCodeWithAmount(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.specificTokenCodeBuilder.Create()
-	variableNameCodes := tree.CodesFromName("variableName")
-	if len(variableNameCodes) != 2 {
-		str := fmt.Sprintf("%d variableName was expected, %d returned", 2, len(variableNameCodes))
+	variableNames := tree.CodesFromName("VARIABLE_PATTERN")
+	if len(variableNames) != 2 {
+		str := fmt.Sprintf("%d variableName was expected, %d returned", 2, len(variableNames))
 		return nil, errors.New(str)
 	}
 
-	if content, ok := app.variableName[variableNameCodes[0]]; ok {
-		builder.WithVariableName(content)
-	}
-
-	if amount, ok := app.variableName[variableNameCodes[1]]; ok {
-		builder.WithAmount(amount)
-	}
-
+	builder := app.specificTokenCodeBuilder.Create().WithVariableName(variableNames[0]).WithAmount(variableNames[1])
 	callPatternCode := tree.CodeFromName("callPattern")
 	if callPatternCode != "" {
 		if callPattern, ok := app.callPattern[callPatternCode]; ok {
@@ -1731,11 +1670,9 @@ func (app *parser) exitSpecificTokenCodeWithAmount(tree lexers.NodeTree) (interf
 
 func (app *parser) exitSpecificTokenCode(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.specificTokenCodeBuilder.Create()
-	variableNameCode := tree.CodeFromName("variableName")
-	if variableNameCode != "" {
-		if variableName, ok := app.variableName[variableNameCode]; ok {
-			builder.WithVariableName(variableName)
-		}
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariableName(variableName)
 	}
 
 	callPatternCode := tree.CodeFromName("callPattern")
@@ -1818,7 +1755,7 @@ func (app *parser) exitVariable(tree lexers.NodeTree) (interface{}, error) {
 		"declaration",
 		"assignment",
 		"concatenation",
-		"variableName",
+		"VARIABLE_PATTERN",
 	})
 
 	switch section {
@@ -1837,10 +1774,8 @@ func (app *parser) exitVariable(tree lexers.NodeTree) (interface{}, error) {
 			builder.WithConcatenation(concat)
 		}
 		break
-	case "variableName":
-		if variableName, ok := app.variableName[code]; ok {
-			builder.WithDelete(variableName)
-		}
+	case "VARIABLE_PATTERN":
+		builder.WithDelete(code)
 		break
 	}
 
@@ -1873,7 +1808,7 @@ func (app *parser) exitConcatenation(tree lexers.NodeTree) (interface{}, error) 
 
 func (app *parser) exitDeclaration(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.declarationBuilder.Create()
-	variableNameCode := tree.CodeFromName("LOCAL_VARIABLE_PATTERN")
+	variableNameCode := tree.CodeFromName("VARIABLE_PATTERN")
 	if variableNameCode != "" {
 		builder.WithVariable(variableNameCode)
 	}
@@ -1896,11 +1831,9 @@ func (app *parser) exitDeclaration(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitAssignment(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.assignmentBuilder.Create()
-	variableNameCode := tree.CodeFromName("variableName")
-	if variableNameCode != "" {
-		if varName, ok := app.variableName[variableNameCode]; ok {
-			builder.WithVariable(varName)
-		}
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
 	}
 
 	valueCode := tree.CodeFromName("value")
@@ -1922,7 +1855,7 @@ func (app *parser) exitAssignment(tree lexers.NodeTree) (interface{}, error) {
 func (app *parser) exitValue(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.valueBuilder.Create()
 	section, code := tree.BestMatchFromNames([]string{
-		"variableName",
+		"VARIABLE_PATTERN",
 		"numericValue",
 		"boolValue",
 		"stringValue",
@@ -1931,10 +1864,8 @@ func (app *parser) exitValue(tree lexers.NodeTree) (interface{}, error) {
 	})
 
 	switch section {
-	case "variableName":
-		if variableName, ok := app.variableName[code]; ok {
-			builder.WithVariable(variableName)
-		}
+	case "VARIABLE_PATTERN":
+		builder.WithVariable(code)
 		break
 	case "numericValue":
 		if val, ok := app.numericValue[code]; ok {
@@ -2270,21 +2201,13 @@ func (app *parser) exitLogical(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitTransformOperation(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.transformOperationBuilder.Create()
-	variableNameCode := tree.CodeFromName("variableName")
-	if variableNameCode != "" {
-		if varName, ok := app.variableName[variableNameCode]; ok {
-			builder.WithResult(varName)
-		}
+	variableNames := tree.CodesFromName("VARIABLE_PATTERN")
+	if len(variableNames) != 2 {
+		str := fmt.Sprintf("%d variables expected, %d returned", 2, len(variableNames))
+		return nil, errors.New(str)
 	}
 
-	identifierCode := tree.CodeFromName("identifier")
-	if identifierCode != "" {
-		if identifier, ok := app.identifier[identifierCode]; ok {
-			builder.WithInput(identifier)
-		}
-	}
-
-	ins, err := builder.Now()
+	ins, err := builder.WithResult(variableNames[0]).WithInput(variableNames[1]).Now()
 	if err != nil {
 		return nil, err
 	}
@@ -2295,28 +2218,13 @@ func (app *parser) exitTransformOperation(tree lexers.NodeTree) (interface{}, er
 
 func (app *parser) exitStandardOperation(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.standardOperationBuilder.Create()
-	variableNameCode := tree.CodeFromName("variableName")
-	if variableNameCode != "" {
-		if res, ok := app.variableName[variableNameCode]; ok {
-			builder.WithResult(res)
-		}
-	}
-
-	identifiers := tree.CodesFromName("identifier")
-	if len(identifiers) != 2 {
-		str := fmt.Sprintf("two (2) identifiers were expected, %d provided", len(identifiers))
+	variableNames := tree.CodesFromName("VARIABLE_PATTERN")
+	if len(variableNames) != 3 {
+		str := fmt.Sprintf("three (3) variableNames were expected, %d provided", len(variableNames))
 		return nil, errors.New(str)
 	}
 
-	if first, ok := app.identifier[identifiers[0]]; ok {
-		builder.WithFirst(first)
-	}
-
-	if second, ok := app.identifier[identifiers[1]]; ok {
-		builder.WithSecond(second)
-	}
-
-	ins, err := builder.Now()
+	ins, err := builder.WithResult(variableNames[0]).WithFirst(variableNames[1]).WithSecond(variableNames[2]).Now()
 	if err != nil {
 		return nil, err
 	}
@@ -2327,35 +2235,13 @@ func (app *parser) exitStandardOperation(tree lexers.NodeTree) (interface{}, err
 
 func (app *parser) exitRemainingOperation(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.remainingOperationBuilder.Create()
-	variableNames := tree.CodesFromName("variableName")
-	if len(variableNames) != 2 {
-		str := fmt.Sprintf("two (2) variableNames were expected, %d provided", len(variableNames))
+	variableNames := tree.CodesFromName("VARIABLE_PATTERN")
+	if len(variableNames) != 4 {
+		str := fmt.Sprintf("four (4) variableNames were expected, %d provided", len(variableNames))
 		return nil, errors.New(str)
 	}
 
-	identifiers := tree.CodesFromName("identifier")
-	if len(identifiers) != 2 {
-		str := fmt.Sprintf("two (2) identifiers were expected, %d provided", len(identifiers))
-		return nil, errors.New(str)
-	}
-
-	if first, ok := app.identifier[identifiers[0]]; ok {
-		builder.WithFirst(first)
-	}
-
-	if second, ok := app.identifier[identifiers[1]]; ok {
-		builder.WithSecond(second)
-	}
-
-	if res, ok := app.variableName[variableNames[0]]; ok {
-		builder.WithResult(res)
-	}
-
-	if rem, ok := app.variableName[variableNames[1]]; ok {
-		builder.WithRemaining(rem)
-	}
-
-	ins, err := builder.Now()
+	ins, err := builder.WithFirst(variableNames[2]).WithSecond(variableNames[3]).WithResult(variableNames[0]).WithRemaining(variableNames[1]).Now()
 	if err != nil {
 		return nil, err
 	}
@@ -2384,12 +2270,10 @@ func (app *parser) exitPrint(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitJump(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.jumpBuilder.Create()
-	identifierCode := tree.CodeFromName("identifier")
+	condition := tree.CodeFromName("VARIABLE_PATTERN")
 
-	if identifierCode != "" {
-		if identifier, ok := app.identifier[identifierCode]; ok {
-			builder.WithCondition(identifier)
-		}
+	if condition != "" {
+		builder.WithCondition(condition)
 	}
 
 	labelCode := tree.CodeFromName("LABEL_PATTERN")
@@ -2408,9 +2292,9 @@ func (app *parser) exitJump(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitMatch(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.matchBuilder.Create()
-	identifierCode := tree.CodeFromName("identifier")
-	if identifier, ok := app.identifier[identifierCode]; ok {
-		builder.WithInput(identifier)
+	input := tree.CodeFromName("VARIABLE_PATTERN")
+	if input != "" {
+		builder.WithInput(input)
 	}
 
 	patternCode := tree.CodeFromName("matchPattern")
@@ -2439,11 +2323,9 @@ func (app *parser) exitMatchPattern(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitExit(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.exitBuilder.Create()
-	identifierCode := tree.CodeFromName("identifier")
-	if identifierCode != "" {
-		if identifier, ok := app.identifier[identifierCode]; ok {
-			builder.WithCondition(identifier)
-		}
+	condition := tree.CodeFromName("VARIABLE_PATTERN")
+	if condition != "" {
+		builder.WithCondition(condition)
 	}
 
 	ins, err := builder.Now()
@@ -2457,11 +2339,9 @@ func (app *parser) exitExit(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitCall(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.callBuilder.Create()
-	identifierCode := tree.CodeFromName("identifier")
-	if identifierCode != "" {
-		if identifier, ok := app.identifier[identifierCode]; ok {
-			builder.WithCondition(identifier)
-		}
+	condition := tree.CodeFromName("VARIABLE_PATTERN")
+	if condition != "" {
+		builder.WithCondition(condition)
 	}
 
 	name := tree.CodeFromName("NAME_PATTERN")
@@ -2511,11 +2391,9 @@ func (app *parser) exitStackFrame(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitPush(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.pushBuilder.Create()
-	variableNameCode := tree.CodeFromName("variableName")
-	if variableNameCode != "" {
-		if name, ok := app.variableName[variableNameCode]; ok {
-			builder.WithStackframe(name)
-		}
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithStackframe(variableName)
 	}
 
 	ins, err := builder.Now()
@@ -2542,53 +2420,5 @@ func (app *parser) exitPop(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.pop[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitIdentifier(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.identifierBuilder.Create()
-	section, code := tree.BestMatchFromNames([]string{
-		"variableName",
-		"CONSTANT_PATTERN",
-	})
-
-	switch section {
-	case "variableName":
-		if name, ok := app.variableName[code]; ok {
-			builder.WithVariable(name)
-		}
-		break
-	case "CONSTANT_PATTERN":
-		builder.WithConstant(code)
-		break
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.identifier[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitVariableName(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.variableNameBuilder.Create()
-	section, code := tree.BestMatchFromNames([]string{
-		"LOCAL_VARIABLE_PATTERN",
-	})
-
-	switch section {
-	case "LOCAL_VARIABLE_PATTERN":
-		builder.WithLocal(code)
-		break
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.variableName[tree.Code()] = ins
 	return ins, nil
 }

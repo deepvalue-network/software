@@ -1,1 +1,1 @@
-equal: myVariable, MY_CONSTANT, myOtherVariable
+equal: myVariable, myFirst, myOtherVariable

@@ -17,18 +17,18 @@ func Test_concatenation_Success(t *testing.T) {
 
 	concat := ins.(Concatenation)
 	op := concat.Operation()
-	if op.Result().Local() != "answer" {
-		t.Errorf("the Concatenation was expected '%s' as result, %s returned", "answer", op.Result().Local())
+	if op.Result() != "answer" {
+		t.Errorf("the Concatenation was expected '%s' as result, %s returned", "answer", op.Result())
 		return
 	}
 
-	if op.First().Variable().Local() != "first" {
-		t.Errorf("the Concatenation was expected '%s' as result, %s returned", "first", op.Result().Local())
+	if op.First() != "first" {
+		t.Errorf("the Concatenation was expected '%s' as result, %s returned", "first", op.Result())
 		return
 	}
 
-	if op.Second().Variable().Local() != "second" {
-		t.Errorf("the Concatenation was expected '%s' as result, %s returned", "second", op.Result().Local())
+	if op.Second() != "second" {
+		t.Errorf("the Concatenation was expected '%s' as result, %s returned", "second", op.Result())
 		return
 	}
 }

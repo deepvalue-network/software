@@ -1,12 +1,12 @@
 package parsers
 
 type standardOperation struct {
-	first  Identifier
-	second Identifier
-	result VariableName
+	first  string
+	second string
+	result string
 }
 
-func createStandardOperation(first Identifier, second Identifier, result VariableName) StandardOperation {
+func createStandardOperation(first string, second string, result string) StandardOperation {
 	out := standardOperation{
 		first:  first,
 		second: second,
@@ -17,16 +17,16 @@ func createStandardOperation(first Identifier, second Identifier, result Variabl
 }
 
 // First returns the first identifier of the operation
-func (obj *standardOperation) First() Identifier {
+func (obj *standardOperation) First() string {
 	return obj.first
 }
 
 // Second returns the second identifier of the operation
-func (obj *standardOperation) Second() Identifier {
+func (obj *standardOperation) Second() string {
 	return obj.second
 }
 
 // Result returns the result variable of the operation
-func (obj *standardOperation) Result() VariableName {
+func (obj *standardOperation) Result() string {
 	return obj.result
 }

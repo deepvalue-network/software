@@ -1,21 +1,21 @@
 package parsers
 
 type assert struct {
-	condition Identifier
+	condition string
 }
 
 func createAssert() Assert {
-	return createAssertInternally(nil)
+	return createAssertInternally("")
 }
 
 func createAssertWithCondition(
-	condition Identifier,
+	condition string,
 ) Assert {
 	return createAssertInternally(condition)
 }
 
 func createAssertInternally(
-	condition Identifier,
+	condition string,
 ) Assert {
 	out := assert{
 		condition: condition,
@@ -26,10 +26,10 @@ func createAssertInternally(
 
 // HasCondition returns true if there is a condition, false otherwise
 func (obj *assert) HasCondition() bool {
-	return obj.condition != nil
+	return obj.condition != ""
 }
 
 // Condition returns the condition, if any
-func (obj *assert) Condition() Identifier {
+func (obj *assert) Condition() string {
 	return obj.condition
 }

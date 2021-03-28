@@ -25,8 +25,8 @@ languageValue
     | LANG_CHANNELS COLON relativePath DOT
     | LANG_RULES COLON relativePath DOT
     | LANG_LOGIC COLON relativePath DOT
-    | IN COLON LOCAL_VARIABLE_PATTERN DOT
-    | OUT COLON LOCAL_VARIABLE_PATTERN DOT
+    | IN COLON VARIABLE_PATTERN DOT
+    | OUT COLON VARIABLE_PATTERN DOT
     | EXTENDS COLON singleExtend+ DOT
     | LANG_PATTERN_MATCHES COLON patternMatch+ DOT
     | LANG_TARGETS COLON target+ DOT
@@ -112,11 +112,11 @@ testInstruction
 
 assert
     : ASSERT
-    | ASSERT_IF COLON identifier
+    | ASSERT_IF COLON VARIABLE_PATTERN
     ;
 
 readFile
-    : READ COLON variableName COMMA relativePath
+    : READ COLON VARIABLE_PATTERN COMMA relativePath
     ;
 
 headSection
@@ -165,11 +165,11 @@ instruction
     ;
 
 trigger
-    : TRIGGER COLON variableName COMMA EVENT_NAME_PATTERN
+    : TRIGGER COLON VARIABLE_PATTERN COMMA EVENT_NAME_PATTERN
     ;
 
 format
-    : FORMAT COLON variableName COMMA identifier COMMA identifier COMMA identifier
+    : FORMAT COLON VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA VARIABLE_PATTERN
     ;
 
 token
@@ -178,21 +178,21 @@ token
     ;
 
 codeMatch
-    : variableName COMMA variableName COMMA callPatterns
+    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA callPatterns
     ;
 
 tokenSection
     : specificTokenCodeWithAmount
     | specificTokenCode
-    | variableName
+    | VARIABLE_PATTERN
     ;
 
 specificTokenCodeWithAmount
-    : variableName COMMA variableName COMMA callPattern
+    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA callPattern
     ;
 
 specificTokenCode
-    : variableName COMMA callPattern
+    : VARIABLE_PATTERN COMMA callPattern
     ;
 
 callPatterns
@@ -216,7 +216,7 @@ variable
     : declaration
     | assignment
     | concatenation
-    | DELETE COLON variableName
+    | DELETE COLON VARIABLE_PATTERN
     ;
 
 concatenation
@@ -224,11 +224,11 @@ concatenation
     ;
 
 declaration
-    : DECLARE COLON LOCAL_VARIABLE_PATTERN PIPE type
+    : DECLARE COLON VARIABLE_PATTERN PIPE type
     ;
 
 assignment
-    : ASSIGN COLON variableName COMMA value
+    : ASSIGN COLON VARIABLE_PATTERN COMMA value
     ;
 
 value
@@ -236,7 +236,7 @@ value
     | boolValue
     | stringValue
     | NIL
-    | variableName
+    | VARIABLE_PATTERN
     ;
 
 numericValue
@@ -298,15 +298,15 @@ logical
     ;
 
 transformOperation
-    : variableName COMMA identifier
+    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN
     ;
 
 standardOperation
-    : variableName COMMA identifier COMMA identifier
+    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA VARIABLE_PATTERN
     ;
 
 remainingOperation
-    : variableName COMMA variableName COMMA identifier COMMA identifier
+    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA VARIABLE_PATTERN
     ;
 
 print
@@ -314,7 +314,7 @@ print
     ;
 
 match
-    : MATCH COLON identifier matchPattern?
+    : MATCH COLON VARIABLE_PATTERN matchPattern?
     ;
 
 matchPattern
@@ -323,17 +323,17 @@ matchPattern
 
 jump
     : JUMP COLON PERCENT LABEL_PATTERN
-    | JUMP_IF COLON identifier COMMA PERCENT LABEL_PATTERN
+    | JUMP_IF COLON VARIABLE_PATTERN COMMA PERCENT LABEL_PATTERN
     ;
 
 exit
     : EXIT
-    | EXIT_IF COLON identifier
+    | EXIT_IF COLON VARIABLE_PATTERN
     ;
 
 call
     : CALL COLON NAME_PATTERN
-    | CALL_IF COLON identifier COMMA NAME_PATTERN
+    | CALL_IF COLON VARIABLE_PATTERN COMMA NAME_PATTERN
     ;
 
 stackFrame
@@ -342,20 +342,11 @@ stackFrame
     ;
 
 push
-    : PUSH COLON variableName
+    : PUSH COLON VARIABLE_PATTERN
     | PUSH
     ;
 
 pop
     : POP COLON transformOperation
     | POP
-    ;
-
-identifier
-    : variableName
-    | CONSTANT_PATTERN
-    ;
-
-variableName
-    : LOCAL_VARIABLE_PATTERN
     ;

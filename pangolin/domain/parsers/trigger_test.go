@@ -16,8 +16,8 @@ func Test_trigger_Success(t *testing.T) {
 	}
 
 	trigger := ins.(Trigger)
-	if trigger.Variable().String() != "myStackVariableName" {
-		t.Errorf("the variableName was expected to be %s, %s returned", "myStackVariableName", trigger.Variable().String())
+	if trigger.Variable() != "myStackVariableName" {
+		t.Errorf("the variableName was expected to be %s, %s returned", "myStackVariableName", trigger.Variable())
 		return
 	}
 

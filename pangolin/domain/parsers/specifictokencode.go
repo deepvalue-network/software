@@ -1,30 +1,30 @@
 package parsers
 
 type specificTokenCode struct {
-	variableName    VariableName
+	variableName    string
 	patternVariable string
-	amount          VariableName
+	amount          string
 }
 
 func createSpecificTokenCode(
-	variableName VariableName,
+	variableName string,
 	patternVariable string,
 ) SpecificTokenCode {
-	return createSpecificTokenCodeInternally(variableName, patternVariable, nil)
+	return createSpecificTokenCodeInternally(variableName, patternVariable, "")
 }
 
 func createSpecificTokenCodeWithAmount(
-	variableName VariableName,
+	variableName string,
 	patternVariable string,
-	amount VariableName,
+	amount string,
 ) SpecificTokenCode {
 	return createSpecificTokenCodeInternally(variableName, patternVariable, amount)
 }
 
 func createSpecificTokenCodeInternally(
-	variableName VariableName,
+	variableName string,
 	patternVariable string,
-	amount VariableName,
+	amount string,
 ) SpecificTokenCode {
 	out := specificTokenCode{
 		variableName:    variableName,
@@ -36,7 +36,7 @@ func createSpecificTokenCodeInternally(
 }
 
 // VariableName returns the variable name
-func (obj *specificTokenCode) VariableName() VariableName {
+func (obj *specificTokenCode) VariableName() string {
 	return obj.variableName
 }
 
@@ -47,10 +47,10 @@ func (obj *specificTokenCode) PatternVariable() string {
 
 // HasAmount returns true if there is an amount, false otherwise
 func (obj *specificTokenCode) HasAmount() bool {
-	return obj.amount != nil
+	return obj.amount != ""
 }
 
 // Amount returns the amount if any
-func (obj *specificTokenCode) Amount() VariableName {
+func (obj *specificTokenCode) Amount() string {
 	return obj.amount
 }

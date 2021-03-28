@@ -1,1 +1,1 @@
-less_than: myVariable, MY_CONSTANT, myOtherVariable
+less_than: myVariable, myFirst, myOtherVariable

@@ -1,14 +1,14 @@
 package parsers
 
 type codeMatch struct {
-	content          VariableName
-	section          VariableName
+	content          string
+	section          string
 	patternVariables []string
 }
 
 func createCodeMatch(
-	content VariableName,
-	section VariableName,
+	content string,
+	section string,
 	patternVariables []string,
 ) CodeMatch {
 	out := codeMatch{
@@ -21,12 +21,12 @@ func createCodeMatch(
 }
 
 // Content returns the content
-func (obj *codeMatch) Content() VariableName {
+func (obj *codeMatch) Content() string {
 	return obj.content
 }
 
 // Section returns the section
-func (obj *codeMatch) Section() VariableName {
+func (obj *codeMatch) Section() string {
 	return obj.section
 }
 

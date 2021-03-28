@@ -16,7 +16,7 @@ func Test_assignment_Success(t *testing.T) {
 	}
 
 	ass := ins.(Assignment)
-	if ass.Variable().Local() != "myVariable" {
+	if ass.Variable() != "myVariable" {
 		t.Errorf("the Assignment variable was expected to be %s, %s returned", "myVariable", ass.Variable())
 		return
 	}

@@ -1,11 +1,11 @@
 package parsers
 
 type transformOperation struct {
-	input  Identifier
-	result VariableName
+	input  string
+	result string
 }
 
-func createTransformOperation(input Identifier, result VariableName) TransformOperation {
+func createTransformOperation(input string, result string) TransformOperation {
 	out := transformOperation{
 		input:  input,
 		result: result,
@@ -15,11 +15,11 @@ func createTransformOperation(input Identifier, result VariableName) TransformOp
 }
 
 // Input returns the input identifier
-func (obj *transformOperation) Input() Identifier {
+func (obj *transformOperation) Input() string {
 	return obj.input
 }
 
 // Result returns the result variableName
-func (obj *transformOperation) Result() VariableName {
+func (obj *transformOperation) Result() string {
 	return obj.result
 }

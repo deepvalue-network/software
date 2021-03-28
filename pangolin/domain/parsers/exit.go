@@ -1,19 +1,19 @@
 package parsers
 
 type exit struct {
-	condition Identifier
+	condition string
 }
 
 func createExit() Exit {
-	return createExitInternally(nil)
+	return createExitInternally("")
 }
 
-func createExitWithCondition(condition Identifier) Exit {
+func createExitWithCondition(condition string) Exit {
 	return createExitInternally(condition)
 }
 
 func createExitInternally(
-	condition Identifier,
+	condition string,
 ) Exit {
 	out := exit{
 		condition: condition,
@@ -24,10 +24,10 @@ func createExitInternally(
 
 // HasCondition returns true if there is a condition, false otherwise
 func (obj *exit) HasCondition() bool {
-	return obj.condition != nil
+	return obj.condition != ""
 }
 
 // Condition returns the condition, if any
-func (obj *exit) Condition() Identifier {
+func (obj *exit) Condition() string {
 	return obj.condition
 }

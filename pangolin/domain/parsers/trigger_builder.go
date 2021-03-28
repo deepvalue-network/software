@@ -3,13 +3,13 @@ package parsers
 import "errors"
 
 type triggerBuilder struct {
-	variableName VariableName
+	variableName string
 	event        string
 }
 
 func createTriggerBuilder() TriggerBuilder {
 	out := triggerBuilder{
-		variableName: nil,
+		variableName: "",
 		event:        "",
 	}
 
@@ -22,7 +22,7 @@ func (app *triggerBuilder) Create() TriggerBuilder {
 }
 
 // WithVariableName adds a variable name to the builder
-func (app *triggerBuilder) WithVariableName(variableName VariableName) TriggerBuilder {
+func (app *triggerBuilder) WithVariableName(variableName string) TriggerBuilder {
 	app.variableName = variableName
 	return app
 }
@@ -35,8 +35,8 @@ func (app *triggerBuilder) WithEvent(event string) TriggerBuilder {
 
 // Now builds a new Trigger instance
 func (app *triggerBuilder) Now() (Trigger, error) {
-	if app.variableName == nil {
-		return nil, errors.New("the VariableName is mandatory in order to build a Trigger instance")
+	if app.variableName == "" {
+		return nil, errors.New("the variableName is mandatory in order to build a Trigger instance")
 	}
 
 	if app.event == "" {

@@ -22,7 +22,7 @@ func Test_print_Success(t *testing.T) {
 		return
 	}
 
-	variable := value.Variable().Local()
+	variable := value.Variable()
 	if variable != "myVariable" {
 		t.Errorf("the print's variable was expected to be %s, %s returned", "myVariable", variable)
 		return

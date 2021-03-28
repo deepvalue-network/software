@@ -4,13 +4,13 @@ import "errors"
 
 type callBuilder struct {
 	name      string
-	condition Identifier
+	condition string
 }
 
 func createCallBuilder() CallBuilder {
 	out := callBuilder{
 		name:      "",
-		condition: nil,
+		condition: "",
 	}
 
 	return &out
@@ -28,7 +28,7 @@ func (app *callBuilder) WithName(name string) CallBuilder {
 }
 
 // WithCondition adds a condition to the builder
-func (app *callBuilder) WithCondition(condition Identifier) CallBuilder {
+func (app *callBuilder) WithCondition(condition string) CallBuilder {
 	app.condition = condition
 	return app
 }
@@ -39,7 +39,7 @@ func (app *callBuilder) Now() (Call, error) {
 		return nil, errors.New("the name is mandatory in order to build a Call instance")
 	}
 
-	if app.condition != nil {
+	if app.condition != "" {
 		return createCallWithCondition(app.name, app.condition), nil
 	}
 

@@ -1,18 +1,18 @@
 package parsers
 
 type push struct {
-	stackFrame VariableName
+	stackFrame string
 }
 
 func createPush() Push {
-	return createPushInternally(nil)
+	return createPushInternally("")
 }
 
-func createPushWithStackframe(stackFrame VariableName) Push {
+func createPushWithStackframe(stackFrame string) Push {
 	return createPushInternally(stackFrame)
 }
 
-func createPushInternally(stackFrame VariableName) Push {
+func createPushInternally(stackFrame string) Push {
 	out := push{
 		stackFrame: stackFrame,
 	}
@@ -22,10 +22,10 @@ func createPushInternally(stackFrame VariableName) Push {
 
 // HasStackFrame returns true if there is a stackFrame, false otherwise
 func (obj *push) HasStackFrame() bool {
-	return obj.stackFrame != nil
+	return obj.stackFrame != ""
 }
 
 // StackFrame returns the stackframe, if any
-func (obj *push) StackFrame() VariableName {
+func (obj *push) StackFrame() string {
 	return obj.stackFrame
 }

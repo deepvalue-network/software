@@ -2,20 +2,20 @@ package parsers
 
 type call struct {
 	name      string
-	condition Identifier
+	condition string
 }
 
 func createCall(name string) Call {
-	return createCallInternally(name, nil)
+	return createCallInternally(name, "")
 }
 
-func createCallWithCondition(name string, condition Identifier) Call {
+func createCallWithCondition(name string, condition string) Call {
 	return createCallInternally(name, condition)
 }
 
 func createCallInternally(
 	name string,
-	condition Identifier,
+	condition string,
 ) Call {
 	out := call{
 		name:      name,
@@ -32,10 +32,10 @@ func (obj *call) Name() string {
 
 // HasCondition returns true if there is a condition, false otherwise
 func (obj *call) HasCondition() bool {
-	return obj.condition != nil
+	return obj.condition != ""
 }
 
 // Condition returns the condition, if any
-func (obj *call) Condition() Identifier {
+func (obj *call) Condition() string {
 	return obj.condition
 }

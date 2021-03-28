@@ -3,13 +3,13 @@ package parsers
 import "errors"
 
 type matchBuilder struct {
-	input   Identifier
+	input   string
 	pattern string
 }
 
 func createMatchBuilder() MatchBuilder {
 	out := matchBuilder{
-		input:   nil,
+		input:   "",
 		pattern: "",
 	}
 
@@ -22,7 +22,7 @@ func (app *matchBuilder) Create() MatchBuilder {
 }
 
 // WithInput adds an input to the builder
-func (app *matchBuilder) WithInput(input Identifier) MatchBuilder {
+func (app *matchBuilder) WithInput(input string) MatchBuilder {
 	app.input = input
 	return app
 }
@@ -35,8 +35,8 @@ func (app *matchBuilder) WithPattern(pattern string) MatchBuilder {
 
 // Now builds a new Match instance
 func (app *matchBuilder) Now() (Match, error) {
-	if app.input == nil {
-		return nil, errors.New("the input Identifier is mandatory in order to build a Match instance")
+	if app.input == "" {
+		return nil, errors.New("the input string is mandatory in order to build a Match instance")
 	}
 
 	if app.pattern != "" {

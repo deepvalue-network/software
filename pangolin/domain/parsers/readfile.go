@@ -1,12 +1,12 @@
 package parsers
 
 type readFile struct {
-	variable VariableName
+	variable string
 	path     RelativePath
 }
 
 func createReadFile(
-	variable VariableName,
+	variable string,
 	path RelativePath,
 ) ReadFile {
 	out := readFile{
@@ -18,7 +18,7 @@ func createReadFile(
 }
 
 // Variable returns the variable name
-func (obj *readFile) Variable() VariableName {
+func (obj *readFile) Variable() string {
 	return obj.variable
 }
 

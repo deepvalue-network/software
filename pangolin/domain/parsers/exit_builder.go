@@ -1,12 +1,12 @@
 package parsers
 
 type exitBuilder struct {
-	condition Identifier
+	condition string
 }
 
 func createExitBuilder() ExitBuilder {
 	out := exitBuilder{
-		condition: nil,
+		condition: "",
 	}
 
 	return &out
@@ -18,14 +18,14 @@ func (app *exitBuilder) Create() ExitBuilder {
 }
 
 // WithCondition adds a condition to the builder
-func (app *exitBuilder) WithCondition(cond Identifier) ExitBuilder {
+func (app *exitBuilder) WithCondition(cond string) ExitBuilder {
 	app.condition = cond
 	return app
 }
 
 // Now builds a new Exit instance
 func (app *exitBuilder) Now() (Exit, error) {
-	if app.condition != nil {
+	if app.condition != "" {
 		return createExitWithCondition(app.condition), nil
 	}
 

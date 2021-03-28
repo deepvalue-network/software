@@ -71,8 +71,6 @@ func NewParserBuilder() ParserBuilder {
 	stackFrameBuilder := createStackFrameBuilder()
 	pushBuilder := createPushBuilder()
 	popBuilder := createPopBuilder()
-	identifierBuilder := createIdentifierBuilder()
-	variableNameBuilder := createVariableNameBuilder()
 
 	return createParserBuilder(
 		application,
@@ -133,8 +131,6 @@ func NewParserBuilder() ParserBuilder {
 		stackFrameBuilder,
 		pushBuilder,
 		popBuilder,
-		identifierBuilder,
-		variableNameBuilder,
 	)
 }
 
@@ -494,27 +490,27 @@ type TestInstruction interface {
 // AssertBuilder represents an assert builder
 type AssertBuilder interface {
 	Create() AssertBuilder
-	WithCondition(condition Identifier) AssertBuilder
+	WithCondition(condition string) AssertBuilder
 	Now() (Assert, error)
 }
 
 // Assert represents an assert
 type Assert interface {
 	HasCondition() bool
-	Condition() Identifier
+	Condition() string
 }
 
 // ReadFileBuilder represents a readfile builder
 type ReadFileBuilder interface {
 	Create() ReadFileBuilder
-	WithVariable(variable VariableName) ReadFileBuilder
+	WithVariable(variable string) ReadFileBuilder
 	WithPath(path RelativePath) ReadFileBuilder
 	Now() (ReadFile, error)
 }
 
 // ReadFile represents a reafile instruction
 type ReadFile interface {
-	Variable() VariableName
+	Variable() string
 	Path() RelativePath
 }
 
@@ -665,32 +661,32 @@ type Instruction interface {
 // FormatBuilder represents a format builder
 type FormatBuilder interface {
 	Create() FormatBuilder
-	WithResults(results VariableName) FormatBuilder
-	WithPattern(pattern Identifier) FormatBuilder
-	WithFirst(first Identifier) FormatBuilder
-	WithSecond(second Identifier) FormatBuilder
+	WithResults(results string) FormatBuilder
+	WithPattern(pattern string) FormatBuilder
+	WithFirst(first string) FormatBuilder
+	WithSecond(second string) FormatBuilder
 	Now() (Format, error)
 }
 
 // Format represents a format
 type Format interface {
-	Results() VariableName
-	Pattern() Identifier
-	First() Identifier
-	Second() Identifier
+	Results() string
+	Pattern() string
+	First() string
+	Second() string
 }
 
 // TriggerBuilder represents a trigger builder
 type TriggerBuilder interface {
 	Create() TriggerBuilder
-	WithVariableName(variableName VariableName) TriggerBuilder
+	WithVariableName(variableName string) TriggerBuilder
 	WithEvent(event string) TriggerBuilder
 	Now() (Trigger, error)
 }
 
 // Trigger represents a trigger
 type Trigger interface {
-	Variable() VariableName
+	Variable() string
 	Event() string
 }
 
@@ -713,23 +709,23 @@ type Token interface {
 // CodeMatchBuilder represents a codeMatch builder
 type CodeMatchBuilder interface {
 	Create() CodeMatchBuilder
-	WithContent(content VariableName) CodeMatchBuilder
-	WithSection(section VariableName) CodeMatchBuilder
+	WithContent(content string) CodeMatchBuilder
+	WithSection(section string) CodeMatchBuilder
 	WithPatternVariables(patterns []string) CodeMatchBuilder
 	Now() (CodeMatch, error)
 }
 
 // CodeMatch represents code match
 type CodeMatch interface {
-	Content() VariableName
-	Section() VariableName
+	Content() string
+	Section() string
 	PatternVariables() []string
 }
 
 // TokenSectionBuilder represents a tokenSection builder
 type TokenSectionBuilder interface {
 	Create() TokenSectionBuilder
-	WithVariableName(variableName VariableName) TokenSectionBuilder
+	WithVariableName(variableName string) TokenSectionBuilder
 	WithSpecific(specific SpecificTokenCode) TokenSectionBuilder
 	Now() (TokenSection, error)
 }
@@ -737,7 +733,7 @@ type TokenSectionBuilder interface {
 // TokenSection represents a token section
 type TokenSection interface {
 	IsVariableName() bool
-	VariableName() VariableName
+	VariableName() string
 	IsSpecific() bool
 	Specific() SpecificTokenCode
 }
@@ -745,31 +741,31 @@ type TokenSection interface {
 // SpecificTokenCodeBuilder represents a specificTokenCode builder
 type SpecificTokenCodeBuilder interface {
 	Create() SpecificTokenCodeBuilder
-	WithVariableName(variableName VariableName) SpecificTokenCodeBuilder
-	WithAmount(amount VariableName) SpecificTokenCodeBuilder
+	WithVariableName(variableName string) SpecificTokenCodeBuilder
+	WithAmount(amount string) SpecificTokenCodeBuilder
 	WithPatternVariable(pattern string) SpecificTokenCodeBuilder
 	Now() (SpecificTokenCode, error)
 }
 
 // SpecificTokenCode represents a specific token code
 type SpecificTokenCode interface {
-	VariableName() VariableName
+	VariableName() string
 	PatternVariable() string
 	HasAmount() bool
-	Amount() VariableName
+	Amount() string
 }
 
 // MatchBuilder represents a match builder
 type MatchBuilder interface {
 	Create() MatchBuilder
-	WithInput(input Identifier) MatchBuilder
+	WithInput(input string) MatchBuilder
 	WithPattern(pattern string) MatchBuilder
 	Now() (Match, error)
 }
 
 // Match represents a match
 type Match interface {
-	Input() Identifier
+	Input() string
 	HasPattern() bool
 	Pattern() string
 }
@@ -780,7 +776,7 @@ type VariableBuilder interface {
 	WithDeclaration(declaration Declaration) VariableBuilder
 	WithAssigment(assignment Assignment) VariableBuilder
 	WithConcatenation(concatenation Concatenation) VariableBuilder
-	WithDelete(delete VariableName) VariableBuilder
+	WithDelete(delete string) VariableBuilder
 	Now() (Variable, error)
 }
 
@@ -793,7 +789,7 @@ type Variable interface {
 	IsConcatenation() bool
 	Concatenation() Concatenation
 	IsDelete() bool
-	Delete() VariableName
+	Delete() string
 }
 
 // ConcatenationBuilder represents a concatenation builder
@@ -825,14 +821,14 @@ type Declaration interface {
 // AssignmentBuilder represents an assignment builder
 type AssignmentBuilder interface {
 	Create() AssignmentBuilder
-	WithVariable(variable VariableName) AssignmentBuilder
+	WithVariable(variable string) AssignmentBuilder
 	WithValue(value Value) AssignmentBuilder
 	Now() (Assignment, error)
 }
 
 // Assignment represents a variable assignment instruction
 type Assignment interface {
-	Variable() VariableName
+	Variable() string
 	Value() Value
 }
 
@@ -840,7 +836,7 @@ type Assignment interface {
 type ValueBuilder interface {
 	Create() ValueBuilder
 	IsNil() ValueBuilder
-	WithVariable(variable VariableName) ValueBuilder
+	WithVariable(variable string) ValueBuilder
 	WithNumeric(numeric NumericValue) ValueBuilder
 	WithBool(bl bool) ValueBuilder
 	WithString(str string) ValueBuilder
@@ -851,7 +847,7 @@ type ValueBuilder interface {
 type Value interface {
 	IsNil() bool
 	IsVariable() bool
-	Variable() VariableName
+	Variable() string
 	IsNumeric() bool
 	Numeric() NumericValue
 	IsBool() bool
@@ -994,49 +990,49 @@ type Logical interface {
 // TransformOperationBuilder represents a transform operation builder
 type TransformOperationBuilder interface {
 	Create() TransformOperationBuilder
-	WithInput(input Identifier) TransformOperationBuilder
-	WithResult(result VariableName) TransformOperationBuilder
+	WithInput(input string) TransformOperationBuilder
+	WithResult(result string) TransformOperationBuilder
 	Now() (TransformOperation, error)
 }
 
 // TransformOperation represents a transform operation
 type TransformOperation interface {
-	Input() Identifier
-	Result() VariableName
+	Input() string
+	Result() string
 }
 
 // StandardOperationBuilder represents a standard operation builder
 type StandardOperationBuilder interface {
 	Create() StandardOperationBuilder
-	WithFirst(first Identifier) StandardOperationBuilder
-	WithSecond(second Identifier) StandardOperationBuilder
-	WithResult(result VariableName) StandardOperationBuilder
+	WithFirst(first string) StandardOperationBuilder
+	WithSecond(second string) StandardOperationBuilder
+	WithResult(result string) StandardOperationBuilder
 	Now() (StandardOperation, error)
 }
 
 // StandardOperation represents a standard operation
 type StandardOperation interface {
-	First() Identifier
-	Second() Identifier
-	Result() VariableName
+	First() string
+	Second() string
+	Result() string
 }
 
 // RemainingOperationBuilder represents a remaining operation builder
 type RemainingOperationBuilder interface {
 	Create() RemainingOperationBuilder
-	WithFirst(first Identifier) RemainingOperationBuilder
-	WithSecond(second Identifier) RemainingOperationBuilder
-	WithResult(result VariableName) RemainingOperationBuilder
-	WithRemaining(remaining VariableName) RemainingOperationBuilder
+	WithFirst(first string) RemainingOperationBuilder
+	WithSecond(second string) RemainingOperationBuilder
+	WithResult(result string) RemainingOperationBuilder
+	WithRemaining(remaining string) RemainingOperationBuilder
 	Now() (RemainingOperation, error)
 }
 
 // RemainingOperation represents a an operation with a remaining value
 type RemainingOperation interface {
-	First() Identifier
-	Second() Identifier
-	Result() VariableName
-	Remaining() VariableName
+	First() string
+	Second() string
+	Result() string
+	Remaining() string
 }
 
 // PrintBuilder represents a print instruction builder
@@ -1055,7 +1051,7 @@ type Print interface {
 type JumpBuilder interface {
 	Create() JumpBuilder
 	WithLabel(label string) JumpBuilder
-	WithCondition(condition Identifier) JumpBuilder
+	WithCondition(condition string) JumpBuilder
 	Now() (Jump, error)
 }
 
@@ -1063,27 +1059,27 @@ type JumpBuilder interface {
 type Jump interface {
 	Label() string
 	HasCondition() bool
-	Condition() Identifier
+	Condition() string
 }
 
 // ExitBuilder represents an exit builder
 type ExitBuilder interface {
 	Create() ExitBuilder
-	WithCondition(cond Identifier) ExitBuilder
+	WithCondition(cond string) ExitBuilder
 	Now() (Exit, error)
 }
 
 // Exit represents an exit instruction
 type Exit interface {
 	HasCondition() bool
-	Condition() Identifier
+	Condition() string
 }
 
 // CallBuilder represents a call builder
 type CallBuilder interface {
 	Create() CallBuilder
 	WithName(name string) CallBuilder
-	WithCondition(condition Identifier) CallBuilder
+	WithCondition(condition string) CallBuilder
 	Now() (Call, error)
 }
 
@@ -1091,7 +1087,7 @@ type CallBuilder interface {
 type Call interface {
 	Name() string
 	HasCondition() bool
-	Condition() Identifier
+	Condition() string
 }
 
 // StackFrameBuilder represents a stackFrame builder
@@ -1113,14 +1109,14 @@ type StackFrame interface {
 // PushBuilder represents a push builder
 type PushBuilder interface {
 	Create() PushBuilder
-	WithStackframe(stackframe VariableName) PushBuilder
+	WithStackframe(stackframe string) PushBuilder
 	Now() (Push, error)
 }
 
 // Push represents the push instruction
 type Push interface {
 	HasStackFrame() bool
-	StackFrame() VariableName
+	StackFrame() string
 }
 
 // PopBuilder represents a pop builder
@@ -1134,35 +1130,4 @@ type PopBuilder interface {
 type Pop interface {
 	HasStackFrame() bool
 	StackFrame() TransformOperation
-}
-
-// IdentifierBuilder represents an identifier builder
-type IdentifierBuilder interface {
-	Create() IdentifierBuilder
-	WithVariable(variable VariableName) IdentifierBuilder
-	WithConstant(constant string) IdentifierBuilder
-	Now() (Identifier, error)
-}
-
-// Identifier represents an identifier
-type Identifier interface {
-	IsVariable() bool
-	Variable() VariableName
-	IsConstant() bool
-	Constant() string
-	String() string
-}
-
-// VariableNameBuilder represents a variable name builder
-type VariableNameBuilder interface {
-	Create() VariableNameBuilder
-	WithLocal(local string) VariableNameBuilder
-	Now() (VariableName, error)
-}
-
-// VariableName represents a variable name
-type VariableName interface {
-	IsLocal() bool
-	Local() string
-	String() string
 }

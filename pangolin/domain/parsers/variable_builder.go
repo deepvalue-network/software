@@ -6,7 +6,7 @@ type variableBuilder struct {
 	declaration Declaration
 	assignment  Assignment
 	concat      Concatenation
-	delete      VariableName
+	delete      string
 }
 
 func createVariableBuilder() VariableBuilder {
@@ -14,7 +14,7 @@ func createVariableBuilder() VariableBuilder {
 		declaration: nil,
 		assignment:  nil,
 		concat:      nil,
-		delete:      nil,
+		delete:      "",
 	}
 
 	return &out
@@ -44,7 +44,7 @@ func (app *variableBuilder) WithConcatenation(concatenation Concatenation) Varia
 }
 
 // WithDelete adds a delete to the builder
-func (app *variableBuilder) WithDelete(delete VariableName) VariableBuilder {
+func (app *variableBuilder) WithDelete(delete string) VariableBuilder {
 	app.delete = delete
 	return app
 }
@@ -63,7 +63,7 @@ func (app *variableBuilder) Now() (Variable, error) {
 		return createVariableWithConcatenation(app.concat), nil
 	}
 
-	if app.delete != nil {
+	if app.delete != "" {
 		return createVariableWithDelete(app.delete), nil
 	}
 

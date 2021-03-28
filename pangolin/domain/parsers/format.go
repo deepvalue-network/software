@@ -1,17 +1,17 @@
 package parsers
 
 type format struct {
-	results VariableName
-	pattern Identifier
-	first   Identifier
-	second  Identifier
+	results string
+	pattern string
+	first   string
+	second  string
 }
 
 func createFormat(
-	results VariableName,
-	pattern Identifier,
-	first Identifier,
-	second Identifier,
+	results string,
+	pattern string,
+	first string,
+	second string,
 ) Format {
 	out := format{
 		results: results,
@@ -24,21 +24,21 @@ func createFormat(
 }
 
 // Results returns the results variableName
-func (obj *format) Results() VariableName {
+func (obj *format) Results() string {
 	return obj.results
 }
 
 // Pattern returns the results identifier
-func (obj *format) Pattern() Identifier {
+func (obj *format) Pattern() string {
 	return obj.pattern
 }
 
 // First returns the first identifier
-func (obj *format) First() Identifier {
+func (obj *format) First() string {
 	return obj.first
 }
 
 // Second returns the second identifier
-func (obj *format) Second() Identifier {
+func (obj *format) Second() string {
 	return obj.second
 }

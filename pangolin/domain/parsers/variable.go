@@ -4,22 +4,22 @@ type variable struct {
 	declaration Declaration
 	assignment  Assignment
 	concat      Concatenation
-	delete      VariableName
+	delete      string
 }
 
 func createVariableWithDeclaration(declaration Declaration) Variable {
-	return createVariableInternally(declaration, nil, nil, nil)
+	return createVariableInternally(declaration, nil, nil, "")
 }
 
 func createVariableWithAssignment(assignment Assignment) Variable {
-	return createVariableInternally(nil, assignment, nil, nil)
+	return createVariableInternally(nil, assignment, nil, "")
 }
 
 func createVariableWithConcatenation(concat Concatenation) Variable {
-	return createVariableInternally(nil, nil, concat, nil)
+	return createVariableInternally(nil, nil, concat, "")
 }
 
-func createVariableWithDelete(delete VariableName) Variable {
+func createVariableWithDelete(delete string) Variable {
 	return createVariableInternally(nil, nil, nil, delete)
 }
 
@@ -27,7 +27,7 @@ func createVariableInternally(
 	declaration Declaration,
 	assignment Assignment,
 	concat Concatenation,
-	delete VariableName,
+	delete string,
 ) Variable {
 	out := variable{
 		declaration: declaration,
@@ -71,10 +71,10 @@ func (obj *variable) Concatenation() Concatenation {
 
 // IsDelete returns true if there is a delete, false otherwise
 func (obj *variable) IsDelete() bool {
-	return obj.delete != nil
+	return obj.delete != ""
 }
 
 // Delete returns the delete, if any
-func (obj *variable) Delete() VariableName {
+func (obj *variable) Delete() string {
 	return obj.delete
 }
