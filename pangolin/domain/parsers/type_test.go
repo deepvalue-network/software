@@ -273,21 +273,3 @@ func Test_type_stackFrame_Success(t *testing.T) {
 		return
 	}
 }
-
-func Test_type_token_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("type", grammarFile)
-
-	file := "./tests/codes/type/token.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	typ := ins.(Type)
-	if !typ.IsToken() {
-		t.Errorf("the type was expected to be a token")
-		return
-	}
-}

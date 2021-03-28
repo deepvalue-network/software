@@ -70,10 +70,6 @@ func (app *factory) Create(typ parsers.Type) (Value, error) {
 		builder.WithFloat64(float64(defaultFloat))
 	}
 
-	if typ.IsToken() {
-		builder.IsToken()
-	}
-
 	if typ.IsStackFrame() {
 		builder.IsStackFrame()
 	}

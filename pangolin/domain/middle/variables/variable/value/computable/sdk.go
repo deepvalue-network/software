@@ -1,9 +1,5 @@
 package computable
 
-import (
-	"github.com/deepvalue-network/software/pangolin/domain/lexers"
-)
-
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
@@ -24,8 +20,6 @@ type Builder interface {
 	WithUint64(uintSixtyFour uint64) Builder
 	WithFloat32(floatThirtyTwo float32) Builder
 	WithFloat64(floatSixtyFour float64) Builder
-	IsToken() Builder
-	WithToken(tok lexers.NodeTree) Builder
 	IsStackFrame() Builder
 	IsFrame() Builder
 	Now() (Value, error)
@@ -58,8 +52,6 @@ type Value interface {
 	FloatThirtyTwo() *float32
 	IsFloatSixtyFour() bool
 	FloatSixtyFour() *float64
-	IsToken() bool
-	Token() lexers.NodeTree
 	IsStackFrame() bool
 	IsFrame() bool
 	StringRepresentation() string

@@ -307,7 +307,6 @@ type
     | STRING
     | STACKFRAME
     | FRAME
-    | TOKEN
     ;
 
 operation

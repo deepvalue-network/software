@@ -4,7 +4,7 @@ head:
 .
 
 variables:
-    CurrentToken|token.
+    MyString|string.
 .
 
 labels:

@@ -128,7 +128,6 @@ UINT_SIXTY_FOUR: 'uint64';
 STRING: 'string';
 STACKFRAME: 'stackframe';
 FRAME: 'frame';
-TOKEN: 'token';
 
 // symbols:
 PERCENT: '%';

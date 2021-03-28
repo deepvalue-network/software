@@ -1018,7 +1018,6 @@ type TypeBuilder interface {
 	IsString() TypeBuilder
 	IsStackFrame() TypeBuilder
 	IsFrame() TypeBuilder
-	IsToken() TypeBuilder
 	Now() (Type, error)
 }
 
@@ -1039,7 +1038,6 @@ type Type interface {
 	IsString() bool
 	IsStackFrame() bool
 	IsFrame() bool
-	IsToken() bool
 	String() string
 }
 
