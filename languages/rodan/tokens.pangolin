@@ -84,7 +84,13 @@ funcCallAssignment
     ;
 
 funcCall
-    : VAL_VARIABLE_PATTERN OPEN_PARENTHESIS funcCallParameter CLOSE_PARENTHESIS
+    : funcCallName OPEN_PARENTHESIS funcCallParameter CLOSE_PARENTHESIS
+    ;
+
+funcCallName
+    : MODULE_NAME_PATTERN DOT VAL_VARIABLE_PATTERN
+    | IMPORT_NAME_PATTERN DOT VAL_VARIABLE_PATTERN
+    | VAL_VARIABLE_PATTERN
     ;
 
 funcCallParameter

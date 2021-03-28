@@ -26,8 +26,11 @@ variables:
     ModuleName|string.
     IsFuncCallAssignment|bool.
     IsFuncCall|bool.
+    IsFuncCallName|bool.
+    FuncCallModule|string.
+    FuncCallImport|string.
+    FuncCallName|string.
     IsFuncCallParameter|bool.
-    FuncCallParameterVariableName|bool.
     IsFuncCallAssignee|bool.
     IsExceptionAssignee|bool.
     IsRaiseException|bool.
@@ -195,10 +198,16 @@ labels:
         assign: IsFuncCall, true.
         push.
     .
-    exitFuncCallParameter:
-        code: FuncCallParameterVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+    exitFuncCallName:
+        code: FuncCallModule, CurrentToken, @MODULE_NAME_PATTERN.
+        code: FuncCallImport, CurrentToken, @IMPORT_NAME_PATTERN.
+        code: FuncCallName, CurrentToken, @VAL_VARIABLE_PATTERN.
         push.
 
+        assign: IsFuncCallName, true.
+        push.
+    .
+    exitFuncCallParameter:
         assign: IsFuncCallParameter, true.
         push.
     .
@@ -1140,6 +1149,105 @@ tests:
 
         del: isTrue.
     .
+    funcCallName:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCallName/input.simple.pangolin".
+        match: myInput, $funcCallName.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCallName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedFuncName|string.
+        read: expectedFuncName, "./test_files/funcCallName/expected.name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FuncCallName, expectedFuncName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    funcCallNameWithImport:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCallName/input.with_import.pangolin".
+        match: myInput, $funcCallName.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCallName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedImportName|string.
+        read: expectedImportName, "./test_files/funcCallName/expected.import.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FuncCallImport, expectedImportName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+
+        decl: expectedFuncName|string.
+        read: expectedFuncName, "./test_files/funcCallName/expected.name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FuncCallName, expectedFuncName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
+    funcCallNameWithModule:
+        decl: myInput|string.
+        read: myInput, "./test_files/funcCallName/input.with_module.pangolin".
+        match: myInput, $funcCallName.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsFuncCallName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedModuleName|string.
+        read: expectedModuleName, "./test_files/funcCallName/expected.module.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FuncCallModule, expectedModuleName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+
+        decl: expectedFuncName|string.
+        read: expectedFuncName, "./test_files/funcCallName/expected.name.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, FuncCallName, expectedFuncName.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+    .
     funcCallParameterWithVariable:
         decl: myInput|string.
         read: myInput, "./test_files/funcCallParameter/input.variable.pangolin".
@@ -1156,15 +1264,6 @@ tests:
         del: isNotEqual.
 
         del: isTrue.
-
-        pop.
-
-        decl: expectedVariableName|string.
-        read: expectedVariableName, "./test_files/funcCallParameter/expected.variable.pangolin".
-
-        decl: isNotEqual|bool.
-        not_equal: isNotEqual, FuncCallParameterVariableName, expectedVariableName.
-        assert_if: isNotEqual.
     .
     funcCallParameterWithMapDefinition:
         decl: myInput|string.
@@ -1182,14 +1281,6 @@ tests:
         del: isNotEqual.
 
         del: isTrue.
-
-        pop.
-
-        decl: expectedVariableName|string.
-
-        decl: isNotEqual|bool.
-        not_equal: isNotEqual, FuncCallParameterVariableName, expectedVariableName.
-        assert_if: isNotEqual.
     .
     funcCallAssignee:
         decl: myInput|string.

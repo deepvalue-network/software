@@ -59,6 +59,7 @@ language:
         exceptionAssignee: CurrentToken, |exitExceptionAssignee.
         funcCallAssignee: CurrentToken, |exitFuncCallAssignee.
         funcCallParameter: CurrentToken, |exitFuncCallParameter.
+        funcCallName: CurrentToken, |exitFuncCallName.
         funcCall: CurrentToken, |exitFuncCall.
         funcCallAssignment: CurrentToken, |exitFuncCallAssignment.
         moduleNameWithComma: CurrentToken, |exitModuleNameWithComma.
