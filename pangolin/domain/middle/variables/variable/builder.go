@@ -7,22 +7,18 @@ import (
 )
 
 type builder struct {
-	isGlobal    bool
-	isMandatory bool
-	isIncoming  bool
-	isOutgoing  bool
-	name        string
-	value       var_value.Value
+	isIncoming bool
+	isOutgoing bool
+	name       string
+	value      var_value.Value
 }
 
 func createBuilder() Builder {
 	out := builder{
-		isGlobal:    false,
-		isMandatory: false,
-		isIncoming:  false,
-		isOutgoing:  false,
-		name:        "",
-		value:       nil,
+		isIncoming: false,
+		isOutgoing: false,
+		name:       "",
+		value:      nil,
 	}
 
 	return &out
@@ -31,12 +27,6 @@ func createBuilder() Builder {
 // Create initializes the builder
 func (app *builder) Create() Builder {
 	return createBuilder()
-}
-
-// IsGlobal sets the builder as global
-func (app *builder) IsGlobal() Builder {
-	app.isGlobal = true
-	return app
 }
 
 // WithName adds a name to the builder
@@ -63,12 +53,6 @@ func (app *builder) IsOutgoing() Builder {
 	return app
 }
 
-// IsMandatory flags the builder as  to the builder
-func (app *builder) IsMandatory() Builder {
-	app.isMandatory = true
-	return app
-}
-
 // Now builds a new Variable instance
 func (app *builder) Now() (Variable, error) {
 	if app.name == "" {
@@ -80,8 +64,6 @@ func (app *builder) Now() (Variable, error) {
 	}
 
 	return createVariable(
-		app.isGlobal,
-		app.isMandatory,
 		app.isIncoming,
 		app.isOutgoing,
 		app.name,

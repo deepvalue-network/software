@@ -3,8 +3,8 @@ language:
     tokens: "./tokens.pangolin".
     rules: "./rules.pangolin".
     logic: "./logic.pangolin".
-    in: Input.
-    out: Output.
+    in: input.
+    out: output.
     matches:
         program: |exitProgram.
         printCommand: |exitPrintCommand.

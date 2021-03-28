@@ -25,8 +25,8 @@ languageValue
     | LANG_CHANNELS COLON relativePath DOT
     | LANG_RULES COLON relativePath DOT
     | LANG_LOGIC COLON relativePath DOT
-    | IN COLON GLOBAL_VARIABLE_PATTERN DOT
-    | OUT COLON GLOBAL_VARIABLE_PATTERN DOT
+    | IN COLON LOCAL_VARIABLE_PATTERN DOT
+    | OUT COLON LOCAL_VARIABLE_PATTERN DOT
     | EXTENDS COLON singleExtend+ DOT
     | LANG_PATTERN_MATCHES COLON patternMatch+ DOT
     | LANG_TARGETS COLON target+ DOT
@@ -91,7 +91,7 @@ folderName
     ;
 
 application
-    : headSection definitionSection? labelSection? mainSection testSection?
+    : headSection labelSection? mainSection testSection?
     ;
 
 testSection
@@ -131,40 +131,6 @@ headValue
 
 importSingle
     : NAME_PATTERN COLON relativePath DOT
-    ;
-
-definitionSection
-    : constantSection variableSection
-    | variableSection
-    | constantSection
-    ;
-
-constantSection
-    : CONSTANTS COLON constantDeclaration+ DOT
-    ;
-
-constantDeclaration
-    : ASSIGN COLON CONSTANT_PATTERN PIPE type COMMA value DOT
-    ;
-
-variableSection
-    : VARIABLES COLON variableDeclaration+ DOT
-    ;
-
-variableDeclaration
-    : variableDirection? GLOBAL_VARIABLE_PATTERN PIPE type DOT
-    ;
-
-variableDirection
-    : variableIncoming
-    | OUT
-    | variableIncoming AND_SIGN OUT
-    | OUT AND_SIGN variableIncoming
-    ;
-
-variableIncoming
-    : IN QUESTION_MARK value
-    | IN
     ;
 
 labelSection
@@ -398,6 +364,5 @@ identifier
     ;
 
 variableName
-    : GLOBAL_VARIABLE_PATTERN
-    | LOCAL_VARIABLE_PATTERN
+    : LOCAL_VARIABLE_PATTERN
     ;

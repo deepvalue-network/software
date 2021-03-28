@@ -31,8 +31,8 @@ func Test_remainingOperation_Success(t *testing.T) {
 		return
 	}
 
-	if operation.Remaining().Global() != "MyGlobalVariable" {
-		t.Errorf("the remaining variable was expected to be %s, %s returned", "MyGlobalVariable", operation.Remaining().Global())
+	if operation.Remaining().Local() != "myGlobalVariable" {
+		t.Errorf("the remaining variable was expected to be %s, %s returned", "myGlobalVariable", operation.Remaining().Local())
 		return
 	}
 }

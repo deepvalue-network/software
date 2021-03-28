@@ -180,10 +180,6 @@ func (app *machineBuilder) variables(variables variables.Variables) error {
 
 func (app *machineBuilder) variable(variable variable.Variable) error {
 	name := variable.Name()
-	if !variable.IsGlobal() {
-		str := fmt.Sprintf("the application's variable (%s) was expected to be global", name)
-		return errors.New(str)
-	}
 
 	// if the variable has an incoming:
 	if variable.IsIncoming() {

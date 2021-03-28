@@ -5,42 +5,26 @@ import (
 )
 
 type variable struct {
-	isGlobal    bool
-	isMandatory bool
-	isIncoming  bool
-	isOutgoing  bool
-	name        string
-	value       var_value.Value
+	isIncoming bool
+	isOutgoing bool
+	name       string
+	value      var_value.Value
 }
 
 func createVariable(
-	isGlobal bool,
-	isMandatory bool,
 	isIncoming bool,
 	isOutgoing bool,
 	name string,
 	value var_value.Value,
 ) Variable {
 	out := variable{
-		isGlobal:    isGlobal,
-		isMandatory: isMandatory,
-		isIncoming:  isIncoming,
-		isOutgoing:  isOutgoing,
-		name:        name,
-		value:       value,
+		isIncoming: isIncoming,
+		isOutgoing: isOutgoing,
+		name:       name,
+		value:      value,
 	}
 
 	return &out
-}
-
-// IsGlobal returns true if the variable is global, false otherwise
-func (obj *variable) IsGlobal() bool {
-	return obj.isGlobal
-}
-
-// IsMandatory returns true if the variable is mandatory, false otherwise
-func (obj *variable) IsMandatory() bool {
-	return obj.isMandatory
 }
 
 // IsIncoming returns true if the variable is incoming, false otherwise

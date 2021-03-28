@@ -31,13 +31,13 @@ func Test_language_Success(t *testing.T) {
 		return
 	}
 
-	if lang.Input() != "MyInputVar" {
-		t.Errorf("the input variable was expected to be %s, %s returned", "MyInputVar", lang.Input())
+	if lang.Input() != "myInputVar" {
+		t.Errorf("the input variable was expected to be %s, %s returned", "myInputVar", lang.Input())
 		return
 	}
 
-	if lang.Output() != "MyOutputVar" {
-		t.Errorf("the input variable was expected to be %s, %s returned", "MyOutputVar", lang.Output())
+	if lang.Output() != "myOutputVar" {
+		t.Errorf("the input variable was expected to be %s, %s returned", "myOutputVar", lang.Output())
 		return
 	}
 
@@ -79,13 +79,13 @@ func Test_language_withExtends_Success(t *testing.T) {
 		return
 	}
 
-	if lang.Input() != "MyInputVar" {
-		t.Errorf("the input variable was expected to be %s, %s returned", "MyInputVar", lang.Input())
+	if lang.Input() != "myInputVar" {
+		t.Errorf("the input variable was expected to be %s, %s returned", "myInputVar", lang.Input())
 		return
 	}
 
-	if lang.Output() != "MyOutputVar" {
-		t.Errorf("the input variable was expected to be %s, %s returned", "MyOutputVar", lang.Output())
+	if lang.Output() != "myOutputVar" {
+		t.Errorf("the input variable was expected to be %s, %s returned", "myOutputVar", lang.Output())
 		return
 	}
 
@@ -133,13 +133,13 @@ func Test_language_withChannels_Success(t *testing.T) {
 		return
 	}
 
-	if lang.Input() != "MyInputVar" {
-		t.Errorf("the input variable was expected to be %s, %s returned", "MyInputVar", lang.Input())
+	if lang.Input() != "myInputVar" {
+		t.Errorf("the input variable was expected to be %s, %s returned", "myInputVar", lang.Input())
 		return
 	}
 
-	if lang.Output() != "MyOutputVar" {
-		t.Errorf("the input variable was expected to be %s, %s returned", "MyOutputVar", lang.Output())
+	if lang.Output() != "myOutputVar" {
+		t.Errorf("the input variable was expected to be %s, %s returned", "myOutputVar", lang.Output())
 		return
 	}
 
@@ -186,13 +186,13 @@ func Test_language_withChannels_withExtends_Success(t *testing.T) {
 		return
 	}
 
-	if lang.Input() != "MyInputVar" {
-		t.Errorf("the input variable was expected to be %s, %s returned", "MyInputVar", lang.Input())
+	if lang.Input() != "myInputVar" {
+		t.Errorf("the input variable was expected to be %s, %s returned", "myInputVar", lang.Input())
 		return
 	}
 
-	if lang.Output() != "MyOutputVar" {
-		t.Errorf("the input variable was expected to be %s, %s returned", "MyOutputVar", lang.Output())
+	if lang.Output() != "myOutputVar" {
+		t.Errorf("the input variable was expected to be %s, %s returned", "myOutputVar", lang.Output())
 		return
 	}
 

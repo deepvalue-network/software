@@ -38,11 +38,6 @@ func NewParserBuilder() ParserBuilder {
 	headSectionBuilder := createHeadSectionBuilder()
 	headValueBuilder := createHeadValueBuilder()
 	importSingleBuilder := createImportSingleBuilder()
-	variableSectionBuilder := createVariableSectionBuilder()
-	variableDeclarationBuilder := createVariableDeclarationBuilder()
-	variableDirectionBuilder := createVariableDirectionBuilder()
-	variableIncomingBuilder := createVariableIncomingBuilder()
-	definitionSectionBuilder := createDefinitionSectionBuilder()
 	labelSectionBuilder := createLabelSectionBuilder()
 	labelDeclarationBuilder := createLabelDeclarationBuilder()
 	labelInstructionBuilder := createLabelInstructionBuilder()
@@ -106,11 +101,6 @@ func NewParserBuilder() ParserBuilder {
 		headSectionBuilder,
 		headValueBuilder,
 		importSingleBuilder,
-		variableSectionBuilder,
-		variableDeclarationBuilder,
-		variableDirectionBuilder,
-		variableIncomingBuilder,
-		definitionSectionBuilder,
 		labelSectionBuilder,
 		labelDeclarationBuilder,
 		labelInstructionBuilder,
@@ -445,7 +435,6 @@ type ApplicationBuilder interface {
 	WithLabel(label LabelSection) ApplicationBuilder
 	WithMain(main MainSection) ApplicationBuilder
 	WithTest(test TestSection) ApplicationBuilder
-	WithDefinition(def DefinitionSection) ApplicationBuilder
 	Now() (Application, error)
 }
 
@@ -455,8 +444,6 @@ type Application interface {
 	Main() MainSection
 	HasLabel() bool
 	Label() LabelSection
-	HasDefinition() bool
-	Definition() DefinitionSection
 	HasTest() bool
 	Test() TestSection
 }
@@ -565,78 +552,6 @@ type HeadValue interface {
 	Version() string
 	IsImport() bool
 	Import() []ImportSingle
-}
-
-// DefinitionSectionBuilder represents a definition section builder
-type DefinitionSectionBuilder interface {
-	Create() DefinitionSectionBuilder
-	WithVariables(variables VariableSection) DefinitionSectionBuilder
-	Now() (DefinitionSection, error)
-}
-
-// DefinitionSection represents a definition section
-type DefinitionSection interface {
-	HasVariables() bool
-	Variables() VariableSection
-}
-
-// VariableSectionBuilder represents the variableSection builder
-type VariableSectionBuilder interface {
-	Create() VariableSectionBuilder
-	WithDeclarations(declarations []VariableDeclaration) VariableSectionBuilder
-	Now() (VariableSection, error)
-}
-
-// VariableSection represents the variable section
-type VariableSection interface {
-	Declarations() []VariableDeclaration
-}
-
-// VariableDeclarationBuilder represents the variable declaration builder
-type VariableDeclarationBuilder interface {
-	Create() VariableDeclarationBuilder
-	WithType(typ Type) VariableDeclarationBuilder
-	WithVariable(variable string) VariableDeclarationBuilder
-	WithDirection(dir VariableDirection) VariableDeclarationBuilder
-	Now() (VariableDeclaration, error)
-}
-
-// VariableDeclaration represents the variable declaration
-type VariableDeclaration interface {
-	Type() Type
-	Variable() string
-	HasDirection() bool
-	Direction() VariableDirection
-}
-
-// VariableDirectionBuilder represents the variable direction builder
-type VariableDirectionBuilder interface {
-	Create() VariableDirectionBuilder
-	WithIncoming(incoming VariableIncoming) VariableDirectionBuilder
-	IsOutgoing() VariableDirectionBuilder
-	Now() (VariableDirection, error)
-}
-
-// VariableDirection represents the variable direction
-type VariableDirection interface {
-	IsIncoming() bool
-	Incoming() VariableIncoming
-	IsOutgoing() bool
-}
-
-// VariableIncomingBuilder represents a variable incoming builder
-type VariableIncomingBuilder interface {
-	Create() VariableIncomingBuilder
-	IsMandatory() VariableIncomingBuilder
-	WithOptionalDefaultValue(def Value) VariableIncomingBuilder
-	Now() (VariableIncoming, error)
-}
-
-// VariableIncoming represents a variable incoming
-type VariableIncoming interface {
-	IsMandatory() bool
-	IsOptional() bool
-	OptionalDefaultValue() Value
 }
 
 // LabelSectionBuilder represents the labelSection builder
@@ -1262,15 +1177,12 @@ type Identifier interface {
 // VariableNameBuilder represents a variable name builder
 type VariableNameBuilder interface {
 	Create() VariableNameBuilder
-	WithGlobal(global string) VariableNameBuilder
 	WithLocal(local string) VariableNameBuilder
 	Now() (VariableName, error)
 }
 
 // VariableName represents a variable name
 type VariableName interface {
-	IsGlobal() bool
-	Global() string
 	IsLocal() bool
 	Local() string
 	String() string

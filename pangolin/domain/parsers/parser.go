@@ -11,149 +11,139 @@ import (
 )
 
 type parser struct {
-	lexerAdapter               lexers.Adapter
-	lexerApplication           lparser.Application
-	lexerBuilder               lexers.Builder
-	parserBuilder              lparser.Builder
-	programBuilder             ProgramBuilder
-	languageBuilder            LanguageBuilder
-	languageValueBuilder       LanguageValueBuilder
-	targetBuilder              TargetBuilder
-	targetSingleBuilder        TargetSingleBuilder
-	eventBuiilder              EventBuilder
-	scriptBuilder              ScriptBuilder
-	scriptValueBuilder         ScriptValueBuilder
-	patternMatchBuilder        PatternMatchBuilder
-	patternLabelsBuilder       PatternLabelsBuilder
-	relativePathBuilder        RelativePathBuilder
-	folderSectionBuilder       FolderSectionBuilder
-	folderNameBuilder          FolderNameBuilder
-	applicationBuilder         ApplicationBuilder
-	testSectionBuilder         TestSectionBuilder
-	testDeclarationBuilder     TestDeclarationBuilder
-	testInstructionBuilder     TestInstructionBuilder
-	assertBuilder              AssertBuilder
-	readFileBuilder            ReadFileBuilder
-	headSectionBuilder         HeadSectionBuilder
-	headValueBuilder           HeadValueBuilder
-	importSingleBuilder        ImportSingleBuilder
-	variableSectionBuilder     VariableSectionBuilder
-	variableDeclarationBuilder VariableDeclarationBuilder
-	variableDirectionBuilder   VariableDirectionBuilder
-	variableIncomingBuilder    VariableIncomingBuilder
-	definitionSectionBuilder   DefinitionSectionBuilder
-	labelSectionBuilder        LabelSectionBuilder
-	labelDeclarationBuilder    LabelDeclarationBuilder
-	labelInstructionBuilder    LabelInstructionBuilder
-	mainSectionBuilder         MainSectionBuilder
-	instructionBuilder         InstructionBuilder
-	triggerBuilder             TriggerBuilder
-	formatBuilder              FormatBuilder
-	specificTokenCodeBuilder   SpecificTokenCodeBuilder
-	tokenSectionBuilder        TokenSectionBuilder
-	codeMatchBuilder           CodeMatchBuilder
-	tokenBuilder               TokenBuilder
-	variableBuilder            VariableBuilder
-	concatenationBuilder       ConcatenationBuilder
-	declarationBuilder         DeclarationBuilder
-	assignmentBuilder          AssignmentBuilder
-	valueBuilder               ValueBuilder
-	numericValueBuilder        NumericValueBuilder
-	typeBuilder                TypeBuilder
-	operationBuilder           OperationBuilder
-	arythmeticBuilder          ArythmeticBuilder
-	relationalBuilder          RelationalBuilder
-	logicalBuilder             LogicalBuilder
-	transformOperationBuilder  TransformOperationBuilder
-	standardOperationBuilder   StandardOperationBuilder
-	remainingOperationBuilder  RemainingOperationBuilder
-	printBuilder               PrintBuilder
-	jumpBuilder                JumpBuilder
-	matchBuilder               MatchBuilder
-	exitBuilder                ExitBuilder
-	callBuilder                CallBuilder
-	stackFrameBuilder          StackFrameBuilder
-	pushBuilder                PushBuilder
-	popBuilder                 PopBuilder
-	frameAssignmentBuilder     FrameAssignmentBuiler
-	identifierBuilder          IdentifierBuilder
-	variableNameBuilder        VariableNameBuilder
-	program                    map[string]Program
-	language                   map[string]Language
-	languageValue              map[string]LanguageValue
-	target                     map[string]Target
-	targetSingle               map[string]TargetSingle
-	targetEvents               map[string][]Event
-	targetPath                 map[string]RelativePath
-	event                      map[string]Event
-	script                     map[string]Script
-	scriptValue                map[string]ScriptValue
-	patternMatch               map[string]PatternMatch
-	patternLabels              map[string]PatternLabels
-	patternLabelEnter          map[string]string
-	patternLabelExit           map[string]string
-	relativePath               map[string]RelativePath
-	folderSection              map[string]FolderSection
-	folderName                 map[string]FolderName
-	application                map[string]Application
-	testSection                map[string]TestSection
-	testDeclaration            map[string]TestDeclaration
-	testInstruction            map[string]TestInstruction
-	assert                     map[string]Assert
-	readFile                   map[string]ReadFile
-	headSection                map[string]HeadSection
-	headValue                  map[string]HeadValue
-	importSingle               map[string]ImportSingle
-	variableSection            map[string]VariableSection
-	variableDeclaration        map[string]VariableDeclaration
-	variableDirection          map[string]VariableDirection
-	variableIncoming           map[string]VariableIncoming
-	definitionSection          map[string]DefinitionSection
-	labelSection               map[string]LabelSection
-	labelDeclaration           map[string]LabelDeclaration
-	labelInstruction           map[string]LabelInstruction
-	mainSection                map[string]MainSection
-	instruction                map[string]Instruction
-	trigger                    map[string]Trigger
-	format                     map[string]Format
-	specificTokenCode          map[string]SpecificTokenCode
-	tokenSection               map[string]TokenSection
-	codeMatch                  map[string]CodeMatch
-	token                      map[string]Token
-	callPattern                map[string]string
-	callPatterns               map[string][]string
-	patternOrRule              map[string]string
-	importNames                map[string]string
-	extendNames                map[string]string
-	variable                   map[string]Variable
-	concatenation              map[string]Concatenation
-	declaration                map[string]Declaration
-	assignment                 map[string]Assignment
-	value                      map[string]Value
-	numericValue               map[string]NumericValue
-	boolValue                  map[string]bool
-	floatValue                 map[string]float64
-	stringValue                map[string]string
-	typ                        map[string]Type
-	operation                  map[string]Operation
-	arythmetic                 map[string]Arythmetic
-	relational                 map[string]Relational
-	logical                    map[string]Logical
-	transformOperation         map[string]TransformOperation
-	standardOperation          map[string]StandardOperation
-	remainingOperation         map[string]RemainingOperation
-	print                      map[string]Print
-	jump                       map[string]Jump
-	match                      map[string]Match
-	matchPattern               map[string]string
-	exit                       map[string]Exit
-	call                       map[string]Call
-	stackFrame                 map[string]StackFrame
-	push                       map[string]Push
-	pop                        map[string]Pop
-	frameAssignment            map[string]FrameAssignment
-	identifier                 map[string]Identifier
-	variableName               map[string]VariableName
+	lexerAdapter              lexers.Adapter
+	lexerApplication          lparser.Application
+	lexerBuilder              lexers.Builder
+	parserBuilder             lparser.Builder
+	programBuilder            ProgramBuilder
+	languageBuilder           LanguageBuilder
+	languageValueBuilder      LanguageValueBuilder
+	targetBuilder             TargetBuilder
+	targetSingleBuilder       TargetSingleBuilder
+	eventBuiilder             EventBuilder
+	scriptBuilder             ScriptBuilder
+	scriptValueBuilder        ScriptValueBuilder
+	patternMatchBuilder       PatternMatchBuilder
+	patternLabelsBuilder      PatternLabelsBuilder
+	relativePathBuilder       RelativePathBuilder
+	folderSectionBuilder      FolderSectionBuilder
+	folderNameBuilder         FolderNameBuilder
+	applicationBuilder        ApplicationBuilder
+	testSectionBuilder        TestSectionBuilder
+	testDeclarationBuilder    TestDeclarationBuilder
+	testInstructionBuilder    TestInstructionBuilder
+	assertBuilder             AssertBuilder
+	readFileBuilder           ReadFileBuilder
+	headSectionBuilder        HeadSectionBuilder
+	headValueBuilder          HeadValueBuilder
+	importSingleBuilder       ImportSingleBuilder
+	labelSectionBuilder       LabelSectionBuilder
+	labelDeclarationBuilder   LabelDeclarationBuilder
+	labelInstructionBuilder   LabelInstructionBuilder
+	mainSectionBuilder        MainSectionBuilder
+	instructionBuilder        InstructionBuilder
+	triggerBuilder            TriggerBuilder
+	formatBuilder             FormatBuilder
+	specificTokenCodeBuilder  SpecificTokenCodeBuilder
+	tokenSectionBuilder       TokenSectionBuilder
+	codeMatchBuilder          CodeMatchBuilder
+	tokenBuilder              TokenBuilder
+	variableBuilder           VariableBuilder
+	concatenationBuilder      ConcatenationBuilder
+	declarationBuilder        DeclarationBuilder
+	assignmentBuilder         AssignmentBuilder
+	valueBuilder              ValueBuilder
+	numericValueBuilder       NumericValueBuilder
+	typeBuilder               TypeBuilder
+	operationBuilder          OperationBuilder
+	arythmeticBuilder         ArythmeticBuilder
+	relationalBuilder         RelationalBuilder
+	logicalBuilder            LogicalBuilder
+	transformOperationBuilder TransformOperationBuilder
+	standardOperationBuilder  StandardOperationBuilder
+	remainingOperationBuilder RemainingOperationBuilder
+	printBuilder              PrintBuilder
+	jumpBuilder               JumpBuilder
+	matchBuilder              MatchBuilder
+	exitBuilder               ExitBuilder
+	callBuilder               CallBuilder
+	stackFrameBuilder         StackFrameBuilder
+	pushBuilder               PushBuilder
+	popBuilder                PopBuilder
+	frameAssignmentBuilder    FrameAssignmentBuiler
+	identifierBuilder         IdentifierBuilder
+	variableNameBuilder       VariableNameBuilder
+	program                   map[string]Program
+	language                  map[string]Language
+	languageValue             map[string]LanguageValue
+	target                    map[string]Target
+	targetSingle              map[string]TargetSingle
+	targetEvents              map[string][]Event
+	targetPath                map[string]RelativePath
+	event                     map[string]Event
+	script                    map[string]Script
+	scriptValue               map[string]ScriptValue
+	patternMatch              map[string]PatternMatch
+	patternLabels             map[string]PatternLabels
+	patternLabelEnter         map[string]string
+	patternLabelExit          map[string]string
+	relativePath              map[string]RelativePath
+	folderSection             map[string]FolderSection
+	folderName                map[string]FolderName
+	application               map[string]Application
+	testSection               map[string]TestSection
+	testDeclaration           map[string]TestDeclaration
+	testInstruction           map[string]TestInstruction
+	assert                    map[string]Assert
+	readFile                  map[string]ReadFile
+	headSection               map[string]HeadSection
+	headValue                 map[string]HeadValue
+	importSingle              map[string]ImportSingle
+	labelSection              map[string]LabelSection
+	labelDeclaration          map[string]LabelDeclaration
+	labelInstruction          map[string]LabelInstruction
+	mainSection               map[string]MainSection
+	instruction               map[string]Instruction
+	trigger                   map[string]Trigger
+	format                    map[string]Format
+	specificTokenCode         map[string]SpecificTokenCode
+	tokenSection              map[string]TokenSection
+	codeMatch                 map[string]CodeMatch
+	token                     map[string]Token
+	callPattern               map[string]string
+	callPatterns              map[string][]string
+	patternOrRule             map[string]string
+	importNames               map[string]string
+	extendNames               map[string]string
+	variable                  map[string]Variable
+	concatenation             map[string]Concatenation
+	declaration               map[string]Declaration
+	assignment                map[string]Assignment
+	value                     map[string]Value
+	numericValue              map[string]NumericValue
+	boolValue                 map[string]bool
+	floatValue                map[string]float64
+	stringValue               map[string]string
+	typ                       map[string]Type
+	operation                 map[string]Operation
+	arythmetic                map[string]Arythmetic
+	relational                map[string]Relational
+	logical                   map[string]Logical
+	transformOperation        map[string]TransformOperation
+	standardOperation         map[string]StandardOperation
+	remainingOperation        map[string]RemainingOperation
+	print                     map[string]Print
+	jump                      map[string]Jump
+	match                     map[string]Match
+	matchPattern              map[string]string
+	exit                      map[string]Exit
+	call                      map[string]Call
+	stackFrame                map[string]StackFrame
+	push                      map[string]Push
+	pop                       map[string]Pop
+	frameAssignment           map[string]FrameAssignment
+	identifier                map[string]Identifier
+	variableName              map[string]VariableName
 }
 
 func createParser(
@@ -183,11 +173,6 @@ func createParser(
 	headSectionBuilder HeadSectionBuilder,
 	headValueBuilder HeadValueBuilder,
 	importSingleBuilder ImportSingleBuilder,
-	variableSectionBuilder VariableSectionBuilder,
-	variableDeclarationBuilder VariableDeclarationBuilder,
-	variableDirectionBuilder VariableDirectionBuilder,
-	variableIncomingBuilder VariableIncomingBuilder,
-	definitionSectionBuilder DefinitionSectionBuilder,
 	labelSectionBuilder LabelSectionBuilder,
 	labelDeclarationBuilder LabelDeclarationBuilder,
 	labelInstructionBuilder LabelInstructionBuilder,
@@ -226,73 +211,68 @@ func createParser(
 	variableNameBuilder VariableNameBuilder,
 ) (*parser, error) {
 	out := &parser{
-		lexerApplication:           lexerApplication,
-		parserBuilder:              parserBuilder,
-		lexerBuilder:               lexerBuilder,
-		lexerAdapter:               lexerAdapter,
-		programBuilder:             programBuilder,
-		languageBuilder:            languageBuilder,
-		languageValueBuilder:       languageValueBuilder,
-		targetBuilder:              targetBuilder,
-		targetSingleBuilder:        targetSingleBuilder,
-		eventBuiilder:              eventBuiilder,
-		scriptBuilder:              scriptBuilder,
-		scriptValueBuilder:         scriptValueBuilder,
-		patternMatchBuilder:        patternMatchBuilder,
-		patternLabelsBuilder:       patternLabelsBuilder,
-		relativePathBuilder:        relativePathBuilder,
-		folderSectionBuilder:       folderSectionBuilder,
-		folderNameBuilder:          folderNameBuilder,
-		applicationBuilder:         applicationBuilder,
-		testSectionBuilder:         testSectionBuilder,
-		testDeclarationBuilder:     testDeclarationBuilder,
-		testInstructionBuilder:     testInstructionBuilder,
-		assertBuilder:              assertBuilder,
-		readFileBuilder:            readFileBuilder,
-		headSectionBuilder:         headSectionBuilder,
-		headValueBuilder:           headValueBuilder,
-		importSingleBuilder:        importSingleBuilder,
-		variableSectionBuilder:     variableSectionBuilder,
-		variableDeclarationBuilder: variableDeclarationBuilder,
-		variableDirectionBuilder:   variableDirectionBuilder,
-		variableIncomingBuilder:    variableIncomingBuilder,
-		definitionSectionBuilder:   definitionSectionBuilder,
-		labelSectionBuilder:        labelSectionBuilder,
-		labelDeclarationBuilder:    labelDeclarationBuilder,
-		labelInstructionBuilder:    labelInstructionBuilder,
-		mainSectionBuilder:         mainSectionBuilder,
-		instructionBuilder:         instructionBuilder,
-		triggerBuilder:             triggerBuilder,
-		formatBuilder:              formatBuilder,
-		specificTokenCodeBuilder:   specificTokenCodeBuilder,
-		tokenSectionBuilder:        tokenSectionBuilder,
-		codeMatchBuilder:           codeMatchBuilder,
-		tokenBuilder:               tokenBuilder,
-		variableBuilder:            variableBuilder,
-		concatenationBuilder:       concatenationBuilder,
-		declarationBuilder:         declarationBuilder,
-		assignmentBuilder:          assignmentBuilder,
-		valueBuilder:               valueBuilder,
-		numericValueBuilder:        numericValueBuilder,
-		typeBuilder:                typeBuilder,
-		operationBuilder:           operationBuilder,
-		arythmeticBuilder:          arythmeticBuilder,
-		relationalBuilder:          relationalBuilder,
-		logicalBuilder:             logicalBuilder,
-		transformOperationBuilder:  transformOperationBuilder,
-		standardOperationBuilder:   standardOperationBuilder,
-		remainingOperationBuilder:  remainingOperationBuilder,
-		printBuilder:               printBuilder,
-		jumpBuilder:                jumpBuilder,
-		matchBuilder:               matchBuilder,
-		exitBuilder:                exitBuilder,
-		callBuilder:                callBuilder,
-		stackFrameBuilder:          stackFrameBuilder,
-		pushBuilder:                pushBuilder,
-		popBuilder:                 popBuilder,
-		frameAssignmentBuilder:     frameAssignmentBuilder,
-		identifierBuilder:          identifierBuilder,
-		variableNameBuilder:        variableNameBuilder,
+		lexerApplication:          lexerApplication,
+		parserBuilder:             parserBuilder,
+		lexerBuilder:              lexerBuilder,
+		lexerAdapter:              lexerAdapter,
+		programBuilder:            programBuilder,
+		languageBuilder:           languageBuilder,
+		languageValueBuilder:      languageValueBuilder,
+		targetBuilder:             targetBuilder,
+		targetSingleBuilder:       targetSingleBuilder,
+		eventBuiilder:             eventBuiilder,
+		scriptBuilder:             scriptBuilder,
+		scriptValueBuilder:        scriptValueBuilder,
+		patternMatchBuilder:       patternMatchBuilder,
+		patternLabelsBuilder:      patternLabelsBuilder,
+		relativePathBuilder:       relativePathBuilder,
+		folderSectionBuilder:      folderSectionBuilder,
+		folderNameBuilder:         folderNameBuilder,
+		applicationBuilder:        applicationBuilder,
+		testSectionBuilder:        testSectionBuilder,
+		testDeclarationBuilder:    testDeclarationBuilder,
+		testInstructionBuilder:    testInstructionBuilder,
+		assertBuilder:             assertBuilder,
+		readFileBuilder:           readFileBuilder,
+		headSectionBuilder:        headSectionBuilder,
+		headValueBuilder:          headValueBuilder,
+		importSingleBuilder:       importSingleBuilder,
+		labelSectionBuilder:       labelSectionBuilder,
+		labelDeclarationBuilder:   labelDeclarationBuilder,
+		labelInstructionBuilder:   labelInstructionBuilder,
+		mainSectionBuilder:        mainSectionBuilder,
+		instructionBuilder:        instructionBuilder,
+		triggerBuilder:            triggerBuilder,
+		formatBuilder:             formatBuilder,
+		specificTokenCodeBuilder:  specificTokenCodeBuilder,
+		tokenSectionBuilder:       tokenSectionBuilder,
+		codeMatchBuilder:          codeMatchBuilder,
+		tokenBuilder:              tokenBuilder,
+		variableBuilder:           variableBuilder,
+		concatenationBuilder:      concatenationBuilder,
+		declarationBuilder:        declarationBuilder,
+		assignmentBuilder:         assignmentBuilder,
+		valueBuilder:              valueBuilder,
+		numericValueBuilder:       numericValueBuilder,
+		typeBuilder:               typeBuilder,
+		operationBuilder:          operationBuilder,
+		arythmeticBuilder:         arythmeticBuilder,
+		relationalBuilder:         relationalBuilder,
+		logicalBuilder:            logicalBuilder,
+		transformOperationBuilder: transformOperationBuilder,
+		standardOperationBuilder:  standardOperationBuilder,
+		remainingOperationBuilder: remainingOperationBuilder,
+		printBuilder:              printBuilder,
+		jumpBuilder:               jumpBuilder,
+		matchBuilder:              matchBuilder,
+		exitBuilder:               exitBuilder,
+		callBuilder:               callBuilder,
+		stackFrameBuilder:         stackFrameBuilder,
+		pushBuilder:               pushBuilder,
+		popBuilder:                popBuilder,
+		frameAssignmentBuilder:    frameAssignmentBuilder,
+		identifierBuilder:         identifierBuilder,
+		variableNameBuilder:       variableNameBuilder,
 	}
 
 	out.init()
@@ -409,26 +389,6 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 		lparser.ToEventsParams{
 			Token:  "importSingle",
 			OnExit: app.exitImportSingle,
-		},
-		lparser.ToEventsParams{
-			Token:  "variableSection",
-			OnExit: app.exitVariableSection,
-		},
-		lparser.ToEventsParams{
-			Token:  "variableDeclaration",
-			OnExit: app.exitVariableDeclaration,
-		},
-		lparser.ToEventsParams{
-			Token:  "variableDirection",
-			OnExit: app.exitVariableDirection,
-		},
-		lparser.ToEventsParams{
-			Token:  "variableIncoming",
-			OnExit: app.exitVariableIncoming,
-		},
-		lparser.ToEventsParams{
-			Token:  "definitionSection",
-			OnExit: app.exitDefinitionSection,
 		},
 		lparser.ToEventsParams{
 			Token:  "labelSection",
@@ -671,11 +631,6 @@ func (app *parser) init() {
 	app.headSection = map[string]HeadSection{}
 	app.headValue = map[string]HeadValue{}
 	app.importSingle = map[string]ImportSingle{}
-	app.variableSection = map[string]VariableSection{}
-	app.variableDeclaration = map[string]VariableDeclaration{}
-	app.variableDirection = map[string]VariableDirection{}
-	app.variableIncoming = map[string]VariableIncoming{}
-	app.definitionSection = map[string]DefinitionSection{}
 	app.labelSection = map[string]LabelSection{}
 	app.labelDeclaration = map[string]LabelDeclaration{}
 	app.labelInstruction = map[string]LabelInstruction{}
@@ -782,7 +737,7 @@ func (app *parser) exitLanguageValue(tree lexers.NodeTree) (interface{}, error) 
 		"LANG_ROOT",
 		"singleExtend",
 		"relativePath",
-		"GLOBAL_VARIABLE_PATTERN",
+		"LOCAL_VARIABLE_PATTERN",
 		"LANG_PATTERN_MATCHES",
 		"LANG_TARGETS",
 	})
@@ -830,7 +785,7 @@ func (app *parser) exitLanguageValue(tree lexers.NodeTree) (interface{}, error) 
 			}
 		}
 
-	case "GLOBAL_VARIABLE_PATTERN":
+	case "LOCAL_VARIABLE_PATTERN":
 		if tree.CodeFromName("IN") != "" {
 			builder.WithInputVariable(code)
 			break
@@ -1202,13 +1157,6 @@ func (app *parser) exitApplication(tree lexers.NodeTree) (interface{}, error) {
 		}
 	}
 
-	definitionSectionCode := tree.CodeFromName("definitionSection")
-	if definitionSectionCode != "" {
-		if defSection, ok := app.definitionSection[definitionSectionCode]; ok {
-			builder.WithDefinition(defSection)
-		}
-	}
-
 	labelSectionCode := tree.CodeFromName("labelSection")
 	if labelSectionCode != "" {
 		if labelSection, ok := app.labelSection[labelSectionCode]; ok {
@@ -1439,112 +1387,6 @@ func (app *parser) exitImportSingle(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.importSingle[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitVariableSection(tree lexers.NodeTree) (interface{}, error) {
-	lst := []VariableDeclaration{}
-	codes := tree.CodesFromName("variableDeclaration")
-	for _, oneCode := range codes {
-		if ins, ok := app.variableDeclaration[oneCode]; ok {
-			lst = append(lst, ins)
-		}
-	}
-
-	ins, err := app.variableSectionBuilder.Create().WithDeclarations(lst).Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.variableSection[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitVariableDeclaration(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.variableDeclarationBuilder.Create()
-	typeCode := tree.CodeFromName("type")
-	if typ, ok := app.typ[typeCode]; ok {
-		builder.WithType(typ)
-	}
-
-	directionCode := tree.CodeFromName("variableDirection")
-	if directionCode != "" {
-		if dirIns, ok := app.variableDirection[directionCode]; ok {
-			builder.WithDirection(dirIns)
-		}
-	}
-
-	variable := tree.CodeFromName("GLOBAL_VARIABLE_PATTERN")
-	ins, err := builder.WithVariable(variable).Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.variableDeclaration[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitVariableDirection(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.variableDirectionBuilder.Create()
-	incomingCode := tree.CodeFromName("variableIncoming")
-	if incomingCode != "" {
-		if incoming, ok := app.variableIncoming[incomingCode]; ok {
-			builder.WithIncoming(incoming)
-		}
-	}
-
-	outCode := tree.CodeFromName("OUT")
-	if outCode != "" {
-		builder.IsOutgoing()
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.variableDirection[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitVariableIncoming(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.variableIncomingBuilder.Create()
-	questionMarkCode := tree.CodeFromName("QUESTION_MARK")
-	if questionMarkCode == "" {
-		builder.IsMandatory()
-	}
-
-	valueCode := tree.CodeFromName("value")
-	if valueCode != "" {
-		if val, ok := app.value[valueCode]; ok {
-			builder.WithOptionalDefaultValue(val)
-		}
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.variableIncoming[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitDefinitionSection(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.definitionSectionBuilder.Create()
-	variableSectionCode := tree.CodeFromName("variableSection")
-	if variableSectionCode != "" {
-		if vr, ok := app.variableSection[variableSectionCode]; ok {
-			builder.WithVariables(vr)
-		}
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.definitionSection[tree.Code()] = ins
 	return ins, nil
 }
 
@@ -2775,14 +2617,10 @@ func (app *parser) exitIdentifier(tree lexers.NodeTree) (interface{}, error) {
 func (app *parser) exitVariableName(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.variableNameBuilder.Create()
 	section, code := tree.BestMatchFromNames([]string{
-		"GLOBAL_VARIABLE_PATTERN",
 		"LOCAL_VARIABLE_PATTERN",
 	})
 
 	switch section {
-	case "GLOBAL_VARIABLE_PATTERN":
-		builder.WithGlobal(code)
-		break
 	case "LOCAL_VARIABLE_PATTERN":
 		builder.WithLocal(code)
 		break

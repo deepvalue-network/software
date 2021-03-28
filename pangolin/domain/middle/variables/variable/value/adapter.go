@@ -192,11 +192,6 @@ func (app *adapter) toValue(parsed parsers.Value) (*float64, *int, *bool, *strin
 	}
 
 	vr := parsed.Variable()
-	if vr.IsGlobal() {
-		global := vr.Global()
-		return nil, nil, nil, nil, global, "", nil
-	}
-
 	local := vr.Local()
 	return nil, nil, nil, nil, "", local, nil
 }

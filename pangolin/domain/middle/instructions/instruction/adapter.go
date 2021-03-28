@@ -121,11 +121,6 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 
 			parsedVariableName := ass.Variable()
 			variableBuilder := app.varVariableBuilder.Create().WithValue(val)
-			if parsedVariableName.IsGlobal() {
-				global := parsedVariableName.Global()
-				variableBuilder.WithName(global).IsGlobal()
-			}
-
 			if parsedVariableName.IsLocal() {
 				local := parsedVariableName.Local()
 				variableBuilder.WithName(local)
@@ -168,11 +163,6 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 
 		if vr.IsDelete() {
 			del := vr.Delete()
-			if del.IsGlobal() {
-				global := del.Global()
-				builder.WithDelete(global)
-			}
-
 			if del.IsLocal() {
 				local := del.Local()
 				builder.WithDelete(local)
@@ -589,11 +579,6 @@ func (app *adapter) standard(parsed parsers.StandardOperation) standard.Builder 
 }
 
 func (app *adapter) variableName(parsed parsers.VariableName) string {
-	if parsed.IsGlobal() {
-		global := parsed.Global()
-		return global
-	}
-
 	local := parsed.Local()
 	return local
 }
@@ -601,11 +586,6 @@ func (app *adapter) variableName(parsed parsers.VariableName) string {
 func (app *adapter) identifier(parsed parsers.Identifier) string {
 	if parsed.IsVariable() {
 		vr := parsed.Variable()
-		if vr.IsGlobal() {
-			global := vr.Global()
-			return global
-		}
-
 		local := vr.Local()
 		return local
 	}

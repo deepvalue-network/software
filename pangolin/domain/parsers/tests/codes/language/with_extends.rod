@@ -3,8 +3,8 @@ language:
     tokens: "./my/tokens.json".
     rules: "./my/rules.json".
     logic: "./my/logic.json".
-    in: MyInputVar.
-    out: MyOutputVar.
+    in: myInputVar.
+    out: myOutputVar.
     extends:
         "./my/first/path.json".
     .

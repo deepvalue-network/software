@@ -16,7 +16,6 @@ import (
 
 // NewAdapter creates a new adapter instance
 func NewAdapter(parser parsers.Parser) Adapter {
-	variablesAdapter := variables.NewAdapter()
 	instructionAdapter := instruction.NewAdapter()
 	instructionsAdapter := instructions.NewAdapter(instructionAdapter)
 	labelsAdapter := labels.NewAdapter()
@@ -35,7 +34,6 @@ func NewAdapter(parser parsers.Parser) Adapter {
 	targetEventBuilder := targets.NewEventBuilder()
 	return createAdapter(
 		parser,
-		variablesAdapter,
 		instructionsAdapter,
 		labelsAdapter,
 		testsAdapter,

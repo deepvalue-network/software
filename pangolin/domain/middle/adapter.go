@@ -5,13 +5,11 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/targets"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/tests"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type adapter struct {
 	parser              parsers.Parser
-	variablesAdapter    variables.Adapter
 	instructionsAdapter instructions.Adapter
 	labelsAdapter       labels.Adapter
 	testsAdapter        tests.Adapter
@@ -28,7 +26,6 @@ type adapter struct {
 
 func createAdapter(
 	parser parsers.Parser,
-	variablesAdapter variables.Adapter,
 	instructionsAdapter instructions.Adapter,
 	labelsAdapter labels.Adapter,
 	testsAdapter tests.Adapter,
@@ -44,7 +41,6 @@ func createAdapter(
 ) Adapter {
 	out := adapter{
 		parser:              parser,
-		variablesAdapter:    variablesAdapter,
 		instructionsAdapter: instructionsAdapter,
 		labelsAdapter:       labelsAdapter,
 		testsAdapter:        testsAdapter,
@@ -207,19 +203,6 @@ func (app *adapter) application(parsed parsers.Application) (Application, error)
 		}
 
 		applicationBuilder.WithTests(tests)
-	}
-
-	if parsed.HasDefinition() {
-		defSection := parsed.Definition()
-		if defSection.HasVariables() {
-			section := defSection.Variables()
-			variables, err := app.variablesAdapter.FromVariables(section)
-			if err != nil {
-				return nil, err
-			}
-
-			applicationBuilder.WithVariables(variables)
-		}
 	}
 
 	if parsed.HasLabel() {

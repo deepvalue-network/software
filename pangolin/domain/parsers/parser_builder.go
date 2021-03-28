@@ -8,73 +8,68 @@ import (
 )
 
 type parserBuilder struct {
-	lexerBuilder               lexers.Builder
-	lexerParserApplication     lexer_parser.Application
-	lexerParserBuilder         lexer_parser.Builder
-	programBuilder             ProgramBuilder
-	languageBuilder            LanguageBuilder
-	languageValueBuilder       LanguageValueBuilder
-	targetBuilder              TargetBuilder
-	targetSingleBuilder        TargetSingleBuilder
-	eventBuiilder              EventBuilder
-	scriptBuilder              ScriptBuilder
-	scriptValueBuilder         ScriptValueBuilder
-	patternMatchBuilder        PatternMatchBuilder
-	patternLabelsBuilder       PatternLabelsBuilder
-	relativePathBuilder        RelativePathBuilder
-	folderSectionBuilder       FolderSectionBuilder
-	folderNameBuilder          FolderNameBuilder
-	applicationBuilder         ApplicationBuilder
-	testSectionBuilder         TestSectionBuilder
-	testDeclarationBuilder     TestDeclarationBuilder
-	testInstructionBuilder     TestInstructionBuilder
-	assertBuilder              AssertBuilder
-	readFileBuilder            ReadFileBuilder
-	headSectionBuilder         HeadSectionBuilder
-	headValueBuilder           HeadValueBuilder
-	importSingleBuilder        ImportSingleBuilder
-	variableSectionBuilder     VariableSectionBuilder
-	variableDeclarationBuilder VariableDeclarationBuilder
-	variableDirectionBuilder   VariableDirectionBuilder
-	variableIncomingBuilder    VariableIncomingBuilder
-	definitionSectionBuilder   DefinitionSectionBuilder
-	labelSectionBuilder        LabelSectionBuilder
-	labelDeclarationBuilder    LabelDeclarationBuilder
-	labelInstructionBuilder    LabelInstructionBuilder
-	mainSectionBuilder         MainSectionBuilder
-	instructionBuilder         InstructionBuilder
-	triggerBuilder             TriggerBuilder
-	formatBuilder              FormatBuilder
-	specificTokenCodeBuilder   SpecificTokenCodeBuilder
-	tokenSectionBuilder        TokenSectionBuilder
-	codeMatchBuilder           CodeMatchBuilder
-	tokenBuilder               TokenBuilder
-	variableBuilder            VariableBuilder
-	concatenationBuilder       ConcatenationBuilder
-	declarationBuilder         DeclarationBuilder
-	assignmentBuilder          AssignmentBuilder
-	valueBuilder               ValueBuilder
-	numericValueBuilder        NumericValueBuilder
-	typeBuilder                TypeBuilder
-	operationBuilder           OperationBuilder
-	arythmeticBuilder          ArythmeticBuilder
-	relationalBuilder          RelationalBuilder
-	logicalBuilder             LogicalBuilder
-	transformOperationBuilder  TransformOperationBuilder
-	standardOperationBuilder   StandardOperationBuilder
-	remainingOperationBuilder  RemainingOperationBuilder
-	printBuilder               PrintBuilder
-	jumpBuilder                JumpBuilder
-	matchBuilder               MatchBuilder
-	exitBuilder                ExitBuilder
-	callBuilder                CallBuilder
-	stackFrameBuilder          StackFrameBuilder
-	pushBuilder                PushBuilder
-	popBuilder                 PopBuilder
-	frameAssignmentBuilder     FrameAssignmentBuiler
-	identifierBuilder          IdentifierBuilder
-	variableNameBuilder        VariableNameBuilder
-	lexerAdapter               lexers.Adapter
+	lexerBuilder              lexers.Builder
+	lexerParserApplication    lexer_parser.Application
+	lexerParserBuilder        lexer_parser.Builder
+	programBuilder            ProgramBuilder
+	languageBuilder           LanguageBuilder
+	languageValueBuilder      LanguageValueBuilder
+	targetBuilder             TargetBuilder
+	targetSingleBuilder       TargetSingleBuilder
+	eventBuiilder             EventBuilder
+	scriptBuilder             ScriptBuilder
+	scriptValueBuilder        ScriptValueBuilder
+	patternMatchBuilder       PatternMatchBuilder
+	patternLabelsBuilder      PatternLabelsBuilder
+	relativePathBuilder       RelativePathBuilder
+	folderSectionBuilder      FolderSectionBuilder
+	folderNameBuilder         FolderNameBuilder
+	applicationBuilder        ApplicationBuilder
+	testSectionBuilder        TestSectionBuilder
+	testDeclarationBuilder    TestDeclarationBuilder
+	testInstructionBuilder    TestInstructionBuilder
+	assertBuilder             AssertBuilder
+	readFileBuilder           ReadFileBuilder
+	headSectionBuilder        HeadSectionBuilder
+	headValueBuilder          HeadValueBuilder
+	importSingleBuilder       ImportSingleBuilder
+	labelSectionBuilder       LabelSectionBuilder
+	labelDeclarationBuilder   LabelDeclarationBuilder
+	labelInstructionBuilder   LabelInstructionBuilder
+	mainSectionBuilder        MainSectionBuilder
+	instructionBuilder        InstructionBuilder
+	triggerBuilder            TriggerBuilder
+	formatBuilder             FormatBuilder
+	specificTokenCodeBuilder  SpecificTokenCodeBuilder
+	tokenSectionBuilder       TokenSectionBuilder
+	codeMatchBuilder          CodeMatchBuilder
+	tokenBuilder              TokenBuilder
+	variableBuilder           VariableBuilder
+	concatenationBuilder      ConcatenationBuilder
+	declarationBuilder        DeclarationBuilder
+	assignmentBuilder         AssignmentBuilder
+	valueBuilder              ValueBuilder
+	numericValueBuilder       NumericValueBuilder
+	typeBuilder               TypeBuilder
+	operationBuilder          OperationBuilder
+	arythmeticBuilder         ArythmeticBuilder
+	relationalBuilder         RelationalBuilder
+	logicalBuilder            LogicalBuilder
+	transformOperationBuilder TransformOperationBuilder
+	standardOperationBuilder  StandardOperationBuilder
+	remainingOperationBuilder RemainingOperationBuilder
+	printBuilder              PrintBuilder
+	jumpBuilder               JumpBuilder
+	matchBuilder              MatchBuilder
+	exitBuilder               ExitBuilder
+	callBuilder               CallBuilder
+	stackFrameBuilder         StackFrameBuilder
+	pushBuilder               PushBuilder
+	popBuilder                PopBuilder
+	frameAssignmentBuilder    FrameAssignmentBuiler
+	identifierBuilder         IdentifierBuilder
+	variableNameBuilder       VariableNameBuilder
+	lexerAdapter              lexers.Adapter
 }
 
 func createParserBuilder(
@@ -103,11 +98,6 @@ func createParserBuilder(
 	headSectionBuilder HeadSectionBuilder,
 	headValueBuilder HeadValueBuilder,
 	importSingleBuilder ImportSingleBuilder,
-	variableSectionBuilder VariableSectionBuilder,
-	variableDeclarationBuilder VariableDeclarationBuilder,
-	variableDirectionBuilder VariableDirectionBuilder,
-	variableIncomingBuilder VariableIncomingBuilder,
-	definitionSectionBuilder DefinitionSectionBuilder,
 	labelSectionBuilder LabelSectionBuilder,
 	labelDeclarationBuilder LabelDeclarationBuilder,
 	labelInstructionBuilder LabelInstructionBuilder,
@@ -146,73 +136,68 @@ func createParserBuilder(
 	variableNameBuilder VariableNameBuilder,
 ) ParserBuilder {
 	out := parserBuilder{
-		lexerParserApplication:     lexerParserApplication,
-		lexerParserBuilder:         lexerParserBuilder,
-		lexerBuilder:               lexerBuilder,
-		programBuilder:             programBuilder,
-		languageBuilder:            languageBuilder,
-		languageValueBuilder:       languageValueBuilder,
-		targetBuilder:              targetBuilder,
-		targetSingleBuilder:        targetSingleBuilder,
-		eventBuiilder:              eventBuilder,
-		scriptBuilder:              scriptBuilder,
-		scriptValueBuilder:         scriptValueBuilder,
-		patternMatchBuilder:        patternMatchBuilder,
-		patternLabelsBuilder:       patternLabelsBuilder,
-		relativePathBuilder:        relativePathBuilder,
-		folderSectionBuilder:       folderSectionBuilder,
-		folderNameBuilder:          folderNameBuilder,
-		applicationBuilder:         applicationBuilder,
-		testSectionBuilder:         testSectionBuilder,
-		testDeclarationBuilder:     testDeclarationBuilder,
-		testInstructionBuilder:     testInstructionBuilder,
-		assertBuilder:              assertBuilder,
-		readFileBuilder:            readFileBuilder,
-		headSectionBuilder:         headSectionBuilder,
-		headValueBuilder:           headValueBuilder,
-		importSingleBuilder:        importSingleBuilder,
-		variableSectionBuilder:     variableSectionBuilder,
-		variableDeclarationBuilder: variableDeclarationBuilder,
-		variableDirectionBuilder:   variableDirectionBuilder,
-		variableIncomingBuilder:    variableIncomingBuilder,
-		definitionSectionBuilder:   definitionSectionBuilder,
-		labelSectionBuilder:        labelSectionBuilder,
-		labelDeclarationBuilder:    labelDeclarationBuilder,
-		labelInstructionBuilder:    labelInstructionBuilder,
-		mainSectionBuilder:         mainSectionBuilder,
-		instructionBuilder:         instructionBuilder,
-		triggerBuilder:             triggerBuilder,
-		formatBuilder:              formatBuilder,
-		specificTokenCodeBuilder:   specificTokenCodeBuilder,
-		tokenSectionBuilder:        tokenSectionBuilder,
-		codeMatchBuilder:           codeMatchBuilder,
-		tokenBuilder:               tokenBuilder,
-		variableBuilder:            variableBuilder,
-		concatenationBuilder:       concatenationBuilder,
-		declarationBuilder:         declarationBuilder,
-		assignmentBuilder:          assignmentBuilder,
-		valueBuilder:               valueBuilder,
-		numericValueBuilder:        numericValueBuilder,
-		typeBuilder:                typeBuilder,
-		operationBuilder:           operationBuilder,
-		arythmeticBuilder:          arythmeticBuilder,
-		relationalBuilder:          relationalBuilder,
-		logicalBuilder:             logicalBuilder,
-		transformOperationBuilder:  transformOperationBuilder,
-		standardOperationBuilder:   standardOperationBuilder,
-		remainingOperationBuilder:  remainingOperationBuilder,
-		printBuilder:               printBuilder,
-		jumpBuilder:                jumpBuilder,
-		matchBuilder:               matchBuilder,
-		exitBuilder:                exitBuilder,
-		callBuilder:                callBuilder,
-		stackFrameBuilder:          stackFrameBuilder,
-		pushBuilder:                pushBuilder,
-		popBuilder:                 popBuilder,
-		frameAssignmentBuilder:     frameAssignmentBuilder,
-		identifierBuilder:          identifierBuilder,
-		variableNameBuilder:        variableNameBuilder,
-		lexerAdapter:               nil,
+		lexerParserApplication:    lexerParserApplication,
+		lexerParserBuilder:        lexerParserBuilder,
+		lexerBuilder:              lexerBuilder,
+		programBuilder:            programBuilder,
+		languageBuilder:           languageBuilder,
+		languageValueBuilder:      languageValueBuilder,
+		targetBuilder:             targetBuilder,
+		targetSingleBuilder:       targetSingleBuilder,
+		eventBuiilder:             eventBuilder,
+		scriptBuilder:             scriptBuilder,
+		scriptValueBuilder:        scriptValueBuilder,
+		patternMatchBuilder:       patternMatchBuilder,
+		patternLabelsBuilder:      patternLabelsBuilder,
+		relativePathBuilder:       relativePathBuilder,
+		folderSectionBuilder:      folderSectionBuilder,
+		folderNameBuilder:         folderNameBuilder,
+		applicationBuilder:        applicationBuilder,
+		testSectionBuilder:        testSectionBuilder,
+		testDeclarationBuilder:    testDeclarationBuilder,
+		testInstructionBuilder:    testInstructionBuilder,
+		assertBuilder:             assertBuilder,
+		readFileBuilder:           readFileBuilder,
+		headSectionBuilder:        headSectionBuilder,
+		headValueBuilder:          headValueBuilder,
+		importSingleBuilder:       importSingleBuilder,
+		labelSectionBuilder:       labelSectionBuilder,
+		labelDeclarationBuilder:   labelDeclarationBuilder,
+		labelInstructionBuilder:   labelInstructionBuilder,
+		mainSectionBuilder:        mainSectionBuilder,
+		instructionBuilder:        instructionBuilder,
+		triggerBuilder:            triggerBuilder,
+		formatBuilder:             formatBuilder,
+		specificTokenCodeBuilder:  specificTokenCodeBuilder,
+		tokenSectionBuilder:       tokenSectionBuilder,
+		codeMatchBuilder:          codeMatchBuilder,
+		tokenBuilder:              tokenBuilder,
+		variableBuilder:           variableBuilder,
+		concatenationBuilder:      concatenationBuilder,
+		declarationBuilder:        declarationBuilder,
+		assignmentBuilder:         assignmentBuilder,
+		valueBuilder:              valueBuilder,
+		numericValueBuilder:       numericValueBuilder,
+		typeBuilder:               typeBuilder,
+		operationBuilder:          operationBuilder,
+		arythmeticBuilder:         arythmeticBuilder,
+		relationalBuilder:         relationalBuilder,
+		logicalBuilder:            logicalBuilder,
+		transformOperationBuilder: transformOperationBuilder,
+		standardOperationBuilder:  standardOperationBuilder,
+		remainingOperationBuilder: remainingOperationBuilder,
+		printBuilder:              printBuilder,
+		jumpBuilder:               jumpBuilder,
+		matchBuilder:              matchBuilder,
+		exitBuilder:               exitBuilder,
+		callBuilder:               callBuilder,
+		stackFrameBuilder:         stackFrameBuilder,
+		pushBuilder:               pushBuilder,
+		popBuilder:                popBuilder,
+		frameAssignmentBuilder:    frameAssignmentBuilder,
+		identifierBuilder:         identifierBuilder,
+		variableNameBuilder:       variableNameBuilder,
+		lexerAdapter:              nil,
 	}
 
 	return &out
@@ -246,11 +231,6 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.headSectionBuilder,
 		app.headValueBuilder,
 		app.importSingleBuilder,
-		app.variableSectionBuilder,
-		app.variableDeclarationBuilder,
-		app.variableDirectionBuilder,
-		app.variableIncomingBuilder,
-		app.definitionSectionBuilder,
 		app.labelSectionBuilder,
 		app.labelDeclarationBuilder,
 		app.labelInstructionBuilder,
@@ -329,11 +309,6 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.headSectionBuilder,
 		app.headValueBuilder,
 		app.importSingleBuilder,
-		app.variableSectionBuilder,
-		app.variableDeclarationBuilder,
-		app.variableDirectionBuilder,
-		app.variableIncomingBuilder,
-		app.definitionSectionBuilder,
 		app.labelSectionBuilder,
 		app.labelDeclarationBuilder,
 		app.labelInstructionBuilder,

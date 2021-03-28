@@ -3,10 +3,6 @@ head:
     version: 2020.09.03.
 .
 
-variables:
-    MyString|string.
-.
-
 labels:
     exitProgram:
         print: "program".
@@ -643,8 +639,7 @@ labels:
 .
 
 main:
-    assign: Output, "output code".
-    match: Input.
+    print: "works".
 .
 
 tests:

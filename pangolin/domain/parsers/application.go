@@ -1,18 +1,17 @@
 package parsers
 
 type application struct {
-	head      HeadSection
-	label     LabelSection
-	main      MainSection
-	test      TestSection
-	def DefinitionSection
+	head  HeadSection
+	label LabelSection
+	main  MainSection
+	test  TestSection
 }
 
 func createApplication(
 	head HeadSection,
 	main MainSection,
 ) Application {
-	return createApplicationInternally(head, main, nil, nil, nil)
+	return createApplicationInternally(head, main, nil, nil)
 }
 
 func createApplicationWithTest(
@@ -20,15 +19,7 @@ func createApplicationWithTest(
 	main MainSection,
 	test TestSection,
 ) Application {
-	return createApplicationInternally(head, main, test, nil, nil)
-}
-
-func createApplicationWithDefinition(
-	head HeadSection,
-	main MainSection,
-	def DefinitionSection,
-) Application {
-	return createApplicationInternally(head, main, nil, def, nil)
+	return createApplicationInternally(head, main, test, nil)
 }
 
 func createApplicationWithLabel(
@@ -36,25 +27,7 @@ func createApplicationWithLabel(
 	main MainSection,
 	label LabelSection,
 ) Application {
-	return createApplicationInternally(head, main, nil, nil, label)
-}
-
-func createApplicationWithDefinitionAndLabel(
-	head HeadSection,
-	main MainSection,
-	def DefinitionSection,
-	label LabelSection,
-) Application {
-	return createApplicationInternally(head, main, nil, def, label)
-}
-
-func createApplicationWithDefinitionAndTest(
-	head HeadSection,
-	main MainSection,
-	def DefinitionSection,
-	test TestSection,
-) Application {
-	return createApplicationInternally(head, main, test, def, nil)
+	return createApplicationInternally(head, main, nil, label)
 }
 
 func createApplicationWithLabelAndTest(
@@ -63,32 +36,20 @@ func createApplicationWithLabelAndTest(
 	label LabelSection,
 	test TestSection,
 ) Application {
-	return createApplicationInternally(head, main, test, nil, label)
-}
-
-func createApplicationWithDefinitionAndLabelAndTest(
-	head HeadSection,
-	main MainSection,
-	def DefinitionSection,
-	label LabelSection,
-	test TestSection,
-) Application {
-	return createApplicationInternally(head, main, test, def, label)
+	return createApplicationInternally(head, main, test, label)
 }
 
 func createApplicationInternally(
 	head HeadSection,
 	main MainSection,
 	test TestSection,
-	def DefinitionSection,
 	label LabelSection,
 ) Application {
 	out := application{
-		head:      head,
-		main:      main,
-		test:      test,
-		def: def,
-		label:     label,
+		head:  head,
+		main:  main,
+		test:  test,
+		label: label,
 	}
 
 	return &out
@@ -113,17 +74,6 @@ func (obj *application) HasLabel() bool {
 func (obj *application) Label() LabelSection {
 	return obj.label
 }
-
-// HasDefinition returns true if there is definition, false otherwise
-func (obj *application) HasDefinition() bool {
-	return obj.def != nil
-}
-
-// Definition returns the definition, if any
-func (obj *application) Definition() DefinitionSection {
-	return obj.def
-}
-
 
 // HasTest returns true if there is tests, false otherwise
 func (obj *application) HasTest() bool {
