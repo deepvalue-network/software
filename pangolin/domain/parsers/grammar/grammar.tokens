@@ -212,25 +212,21 @@ token
     ;
 
 codeMatch
-    : variableName COMMA variableName COMMA GLOBAL_VARIABLE_PATTERN COMMA callPatterns
+    : variableName COMMA variableName COMMA callPatterns
     ;
 
 tokenSection
     : specificTokenCodeWithAmount
     | specificTokenCode
-    | tokenCode
+    | variableName
     ;
 
 specificTokenCodeWithAmount
-    : variableName COMMA variableName COMMA GLOBAL_VARIABLE_PATTERN COMMA callPattern
+    : variableName COMMA variableName COMMA callPattern
     ;
 
 specificTokenCode
-    : tokenCode COMMA callPattern
-    ;
-
-tokenCode
-    : variableName COMMA GLOBAL_VARIABLE_PATTERN
+    : variableName COMMA callPattern
     ;
 
 callPatterns

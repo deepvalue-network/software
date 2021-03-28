@@ -1,14 +1,14 @@
 package parsers
 
 type tokenSection struct {
-	code     TokenCode
-	specific SpecificTokenCode
+	variableName VariableName
+	specific     SpecificTokenCode
 }
 
-func createTokenSectionWithCode(
-	code TokenCode,
+func createTokenSectionWithVariableName(
+	variableName VariableName,
 ) TokenSection {
-	return createTokenSectionInternally(code, nil)
+	return createTokenSectionInternally(variableName, nil)
 }
 
 func createTokenSectionWithSpecific(
@@ -18,25 +18,25 @@ func createTokenSectionWithSpecific(
 }
 
 func createTokenSectionInternally(
-	code TokenCode,
+	variableName VariableName,
 	specific SpecificTokenCode,
 ) TokenSection {
 	out := tokenSection{
-		code:     code,
-		specific: specific,
+		variableName: variableName,
+		specific:     specific,
 	}
 
 	return &out
 }
 
-// IsCode returns true if there is code, false otherwise
-func (obj *tokenSection) IsCode() bool {
-	return obj.code != nil
+// IsVariableName returns true if there is a variableName, false otherwise
+func (obj *tokenSection) IsVariableName() bool {
+	return obj.variableName != nil
 }
 
-// Code returns the code, if any
-func (obj *tokenSection) Code() TokenCode {
-	return obj.code
+// VariableName returns the variableName, if any
+func (obj *tokenSection) VariableName() VariableName {
+	return obj.variableName
 }
 
 // IsSpecific returns true if there is specific code, false otherwise

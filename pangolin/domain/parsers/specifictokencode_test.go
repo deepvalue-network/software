@@ -16,13 +16,8 @@ func Test_specificTokenCode_Success(t *testing.T) {
 	}
 
 	code := ins.(SpecificTokenCode)
-	if code.Content().String() != "myReturnVariable" {
-		t.Errorf("the content variable was expected to be %s, %s returned", "myReturnVariable", code.Content().String())
-		return
-	}
-
-	if code.TokenVariable() != "MyTokenVariable" {
-		t.Errorf("the tokenVariable was expected to be %s, %s returned", "myToken", code.TokenVariable())
+	if code.VariableName().String() != "myReturnVariable" {
+		t.Errorf("the content variable was expected to be %s, %s returned", "myReturnVariable", code.VariableName().String())
 		return
 	}
 

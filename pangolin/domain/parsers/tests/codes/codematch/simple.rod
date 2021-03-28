@@ -1,1 +1,1 @@
-myReturn, mySection, MyTokenVariable, @myToken|@mySecondToken
+myReturn, mySection, @myToken|@mySecondToken

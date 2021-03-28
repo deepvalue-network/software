@@ -1,38 +1,33 @@
 package parsers
 
 type specificTokenCode struct {
-	content         VariableName
-	tokenVariable   string
+	variableName    VariableName
 	patternVariable string
 	amount          VariableName
 }
 
 func createSpecificTokenCode(
-	content VariableName,
-	tokenVariable string,
+	variableName VariableName,
 	patternVariable string,
 ) SpecificTokenCode {
-	return createSpecificTokenCodeInternally(content, tokenVariable, patternVariable, nil)
+	return createSpecificTokenCodeInternally(variableName, patternVariable, nil)
 }
 
 func createSpecificTokenCodeWithAmount(
-	content VariableName,
-	tokenVariable string,
+	variableName VariableName,
 	patternVariable string,
 	amount VariableName,
 ) SpecificTokenCode {
-	return createSpecificTokenCodeInternally(content, tokenVariable, patternVariable, amount)
+	return createSpecificTokenCodeInternally(variableName, patternVariable, amount)
 }
 
 func createSpecificTokenCodeInternally(
-	content VariableName,
-	tokenVariable string,
+	variableName VariableName,
 	patternVariable string,
 	amount VariableName,
 ) SpecificTokenCode {
 	out := specificTokenCode{
-		content:         content,
-		tokenVariable:   tokenVariable,
+		variableName:    variableName,
 		patternVariable: patternVariable,
 		amount:          amount,
 	}
@@ -40,14 +35,9 @@ func createSpecificTokenCodeInternally(
 	return &out
 }
 
-// Content returns the content
-func (obj *specificTokenCode) Content() VariableName {
-	return obj.content
-}
-
-// TokenVariable returns the tokenVariable
-func (obj *specificTokenCode) TokenVariable() string {
-	return obj.tokenVariable
+// VariableName returns the variable name
+func (obj *specificTokenCode) VariableName() VariableName {
+	return obj.variableName
 }
 
 // PatternVariable returns the pattern variable

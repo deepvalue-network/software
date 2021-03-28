@@ -480,39 +480,28 @@ func (app *adapter) tokenCodeMatch(parsed parsers.CodeMatch) (token.CodeMatch, e
 
 	parsedSection := parsed.Section()
 	section := app.variableName(parsedSection)
-
-	tokenVariable := parsed.TokenVariable()
 	patternVariables := parsed.PatternVariables()
 
-	return app.tokenCodeMatchBuilder.Create().WithReturn(ret).WithSectionName(section).WithToken(tokenVariable).WithPatterns(patternVariables).Now()
+	return app.tokenCodeMatchBuilder.Create().WithReturn(ret).WithSectionName(section).WithPatterns(patternVariables).Now()
 }
 
 func (app *adapter) tokenSection(parsed parsers.TokenSection) (token.Code, error) {
-	if parsed.IsCode() {
-		parsedCode := parsed.Code()
-		return app.tokenCode(parsedCode)
+	if parsed.IsVariableName() {
+		parsedVariableName := parsed.VariableName()
+		ret := app.variableName(parsedVariableName)
+		return app.tokenCodeBuilder.Create().WithReturn(ret).Now()
 	}
 
 	specific := parsed.Specific()
 	return app.tokenSpecificCode(specific)
 }
 
-func (app *adapter) tokenCode(parsed parsers.TokenCode) (token.Code, error) {
-	content := parsed.Content()
-	ret := app.variableName(content)
-
-	tokenVariable := parsed.TokenVariable()
-	return app.tokenCodeBuilder.Create().WithReturn(ret).WithToken(tokenVariable).Now()
-}
-
 func (app *adapter) tokenSpecificCode(parsed parsers.SpecificTokenCode) (token.Code, error) {
-	content := parsed.Content()
-	ret := app.variableName(content)
+	variableName := parsed.VariableName()
+	ret := app.variableName(variableName)
 
-	tokenVariable := parsed.TokenVariable()
 	patternVariable := parsed.PatternVariable()
-
-	builder := app.tokenCodeBuilder.Create().WithReturn(ret).WithToken(tokenVariable).WithPattern(patternVariable)
+	builder := app.tokenCodeBuilder.Create().WithReturn(ret).WithPattern(patternVariable)
 	if parsed.HasAmount() {
 		parsedAmount := parsed.Amount()
 		amount := app.variableName(parsedAmount)

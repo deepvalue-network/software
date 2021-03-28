@@ -36,7 +36,6 @@ type CodeMatchBuilder interface {
 	Create() CodeMatchBuilder
 	WithReturn(ret string) CodeMatchBuilder
 	WithSectionName(sectionName string) CodeMatchBuilder
-	WithToken(token string) CodeMatchBuilder
 	WithPatterns(patterns []string) CodeMatchBuilder
 	Now() (CodeMatch, error)
 }
@@ -45,7 +44,6 @@ type CodeMatchBuilder interface {
 type CodeMatch interface {
 	Return() string
 	SectionName() string
-	Token() string
 	Patterns() []string
 }
 
@@ -53,7 +51,6 @@ type CodeMatch interface {
 type CodeBuilder interface {
 	Create() CodeBuilder
 	WithReturn(ret string) CodeBuilder
-	WithToken(token string) CodeBuilder
 	WithPattern(pattern string) CodeBuilder
 	WithAmount(amount string) CodeBuilder
 	Now() (Code, error)
@@ -62,7 +59,6 @@ type CodeBuilder interface {
 // Code represents a token code
 type Code interface {
 	Return() string
-	Token() string
 	HasPattern() bool
 	Pattern() string
 	HasAmount() bool

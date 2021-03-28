@@ -51,7 +51,6 @@ type parser struct {
 	instructionBuilder         InstructionBuilder
 	triggerBuilder             TriggerBuilder
 	formatBuilder              FormatBuilder
-	tokenCodeBuilder           TokenCodeBuilder
 	specificTokenCodeBuilder   SpecificTokenCodeBuilder
 	tokenSectionBuilder        TokenSectionBuilder
 	codeMatchBuilder           CodeMatchBuilder
@@ -121,7 +120,6 @@ type parser struct {
 	instruction                map[string]Instruction
 	trigger                    map[string]Trigger
 	format                     map[string]Format
-	tokenCode                  map[string]TokenCode
 	specificTokenCode          map[string]SpecificTokenCode
 	tokenSection               map[string]TokenSection
 	codeMatch                  map[string]CodeMatch
@@ -203,7 +201,6 @@ func createParser(
 	instructionBuilder InstructionBuilder,
 	triggerBuilder TriggerBuilder,
 	formatBuilder FormatBuilder,
-	tokenCodeBuilder TokenCodeBuilder,
 	specificTokenCodeBuilder SpecificTokenCodeBuilder,
 	tokenSectionBuilder TokenSectionBuilder,
 	codeMatchBuilder CodeMatchBuilder,
@@ -275,7 +272,6 @@ func createParser(
 		instructionBuilder:         instructionBuilder,
 		triggerBuilder:             triggerBuilder,
 		formatBuilder:              formatBuilder,
-		tokenCodeBuilder:           tokenCodeBuilder,
 		specificTokenCodeBuilder:   specificTokenCodeBuilder,
 		tokenSectionBuilder:        tokenSectionBuilder,
 		codeMatchBuilder:           codeMatchBuilder,
@@ -495,10 +491,6 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			OnExit: app.exitPatternOrRule,
 		},
 		lparser.ToEventsParams{
-			Token:  "tokenCode",
-			OnExit: app.exitTokenCode,
-		},
-		lparser.ToEventsParams{
 			Token:  "specificTokenCode",
 			OnExit: app.exitSpecificTokenCode,
 		},
@@ -709,7 +701,6 @@ func (app *parser) init() {
 	app.instruction = map[string]Instruction{}
 	app.trigger = map[string]Trigger{}
 	app.format = map[string]Format{}
-	app.tokenCode = map[string]TokenCode{}
 	app.specificTokenCode = map[string]SpecificTokenCode{}
 	app.tokenSection = map[string]TokenSection{}
 	app.codeMatch = map[string]CodeMatch{}
@@ -1893,11 +1884,6 @@ func (app *parser) exitCodeMatch(tree lexers.NodeTree) (interface{}, error) {
 		builder.WithSection(section)
 	}
 
-	tokenVariable := tree.CodeFromName("GLOBAL_VARIABLE_PATTERN")
-	if tokenVariable != "" {
-		builder.WithTokenVariable(tokenVariable)
-	}
-
 	callPatternsCode := tree.CodeFromName("callPatterns")
 	if callPatternsCode != "" {
 		if callPatterns, ok := app.callPatterns[callPatternsCode]; ok {
@@ -1919,7 +1905,7 @@ func (app *parser) exitTokenSection(tree lexers.NodeTree) (interface{}, error) {
 	section, code := tree.BestMatchFromNames([]string{
 		"specificTokenCodeWithAmount",
 		"specificTokenCode",
-		"tokenCode",
+		"variableName",
 	})
 
 	switch section {
@@ -1933,9 +1919,9 @@ func (app *parser) exitTokenSection(tree lexers.NodeTree) (interface{}, error) {
 			builder.WithSpecific(specificTokenCode)
 		}
 		break
-	case "tokenCode":
-		if tokenCode, ok := app.tokenCode[code]; ok {
-			builder.WithCode(tokenCode)
+	case "variableName":
+		if variableName, ok := app.variableName[code]; ok {
+			builder.WithVariableName(variableName)
 		}
 		break
 	}
@@ -1958,16 +1944,11 @@ func (app *parser) exitSpecificTokenCodeWithAmount(tree lexers.NodeTree) (interf
 	}
 
 	if content, ok := app.variableName[variableNameCodes[0]]; ok {
-		builder.WithContent(content)
+		builder.WithVariableName(content)
 	}
 
 	if amount, ok := app.variableName[variableNameCodes[1]]; ok {
 		builder.WithAmount(amount)
-	}
-
-	tokenVariable := tree.CodeFromName("GLOBAL_VARIABLE_PATTERN")
-	if tokenVariable != "" {
-		builder.WithTokenVariable(tokenVariable)
 	}
 
 	callPatternCode := tree.CodeFromName("callPattern")
@@ -1988,12 +1969,10 @@ func (app *parser) exitSpecificTokenCodeWithAmount(tree lexers.NodeTree) (interf
 
 func (app *parser) exitSpecificTokenCode(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.specificTokenCodeBuilder.Create()
-	tokenCodeCode := tree.CodeFromName("tokenCode")
-	if tokenCodeCode != "" {
-		if tokenCode, ok := app.tokenCode[tokenCodeCode]; ok {
-			content := tokenCode.Content()
-			tokenVariable := tokenCode.TokenVariable()
-			builder.WithContent(content).WithTokenVariable(tokenVariable)
+	variableNameCode := tree.CodeFromName("variableName")
+	if variableNameCode != "" {
+		if variableName, ok := app.variableName[variableNameCode]; ok {
+			builder.WithVariableName(variableName)
 		}
 	}
 
@@ -2010,29 +1989,6 @@ func (app *parser) exitSpecificTokenCode(tree lexers.NodeTree) (interface{}, err
 	}
 
 	app.specificTokenCode[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitTokenCode(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.tokenCodeBuilder.Create()
-	variableNameCode := tree.CodeFromName("variableName")
-	if variableNameCode != "" {
-		if variableName, ok := app.variableName[variableNameCode]; ok {
-			builder.WithContent(variableName)
-		}
-	}
-
-	tokenVariable := tree.CodeFromName("GLOBAL_VARIABLE_PATTERN")
-	if tokenVariable != "" {
-		builder.WithTokenVariable(tokenVariable)
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.tokenCode[tree.Code()] = ins
 	return ins, nil
 }
 

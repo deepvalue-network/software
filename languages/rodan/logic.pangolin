@@ -16,7 +16,7 @@ labels:
     .
     exitAssignee:
         decl: variableName|bool.
-        code: variableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: variableName, @VAL_VARIABLE_PATTERN.
         push.
 
         decl: isAssignee|bool.
@@ -45,7 +45,7 @@ labels:
     .
     exitImportDefinitionSingle:
         decl: importName|bool.
-        code: importName, CurrentToken, @IMPORT_NAME_PATTERN.
+        code: importName, @IMPORT_NAME_PATTERN.
         push.
 
         decl: isImportDefinitionSingle|bool.
@@ -59,7 +59,7 @@ labels:
     .
     exitFolderSection:
         decl: fileName|string.
-        code: fileName, CurrentToken, @FILE_PATTERN.
+        code: fileName, @FILE_PATTERN.
         push.
 
         decl: isFolderSection|bool.
@@ -68,7 +68,7 @@ labels:
     .
     exitFolderSectionWithSlash:
         decl: fileName|string.
-        code: fileName, CurrentToken, @FILE_PATTERN.
+        code: fileName, @FILE_PATTERN.
         push.
 
         decl: isFolderSectionWithSlash|bool.
@@ -82,7 +82,7 @@ labels:
     .
     exitModuleNames:
         decl: moduleName|string.
-        code: moduleName, CurrentToken, @MODULE_NAME_PATTERN.
+        code: moduleName, @MODULE_NAME_PATTERN.
         push.
 
         decl: isModuleNames|bool.
@@ -91,7 +91,7 @@ labels:
     .
     exitModuleNameWithComma:
         decl: moduleName|string.
-        code: moduleName, CurrentToken, @MODULE_NAME_PATTERN.
+        code: moduleName, @MODULE_NAME_PATTERN.
         push.
 
         decl: isModuleNameWithComma|bool.
@@ -110,13 +110,13 @@ labels:
     .
     exitFuncCallName:
         decl: funcCallModule|string.
-        code: funcCallModule, CurrentToken, @MODULE_NAME_PATTERN.
+        code: funcCallModule, @MODULE_NAME_PATTERN.
 
         decl: funcCallImport|string.
-        code: funcCallImport, CurrentToken, @IMPORT_NAME_PATTERN.
+        code: funcCallImport, @IMPORT_NAME_PATTERN.
 
         decl: funcCallName|string.
-        code: funcCallName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: funcCallName, @VAL_VARIABLE_PATTERN.
         push.
 
         decl: isFuncCallName|bool.
@@ -169,13 +169,13 @@ labels:
         push.
     .
     exitIterableAssignee:
-        code: iterableAssigneeVariableName, iterableAssigneeVarAmount, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: iterableAssigneeVariableName, iterableAssigneeVarAmount, @VAL_VARIABLE_PATTERN.
         push.
 
         decl: emptyString|string.
 
         decl: underscore|string.
-        code: underscore, CurrentToken, @UNDERSCORE.
+        code: underscore, @UNDERSCORE.
 
         decl: isIterableAssigneeKeyname|bool.
         not_equal: isIterableAssigneeKeyname, underscore, emptyString.
@@ -190,7 +190,7 @@ labels:
     .
     exitIterable:
         decl: iterableVariableName|bool.
-        code: iterableVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: iterableVariableName, @VAL_VARIABLE_PATTERN.
         push.
 
         decl: isIterable|bool.
@@ -229,12 +229,12 @@ labels:
     .
     exitFuncParamEntry:
         decl: funcParamEntryVariableName|string.
-        code: funcParamEntryVariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: funcParamEntryVariableName, @VAL_VARIABLE_PATTERN.
 
         decl: emptyString|string.
 
         decl: str|string.
-        code: str, CurrentToken, @QUESTION_MARK.
+        code: str, @QUESTION_MARK.
 
         decl: isFuncParamEntryOptional|bool.
         not_equal: isFuncParamEntryOptional, str, emptyString.
@@ -256,14 +256,14 @@ labels:
         decl: emptyString|string.
 
         decl: str|string.
-        code: str, CurrentToken, @RETURN.
+        code: str, @RETURN.
 
         decl: isCodeReturn|bool.
         not_equal: isCodeReturn, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @CONTINUE.
+        code: str, @CONTINUE.
 
         decl: isCodeContinue|bool.
         not_equal: isCodeContinue, str, emptyString.
@@ -293,7 +293,7 @@ labels:
     .
     exitMapDefinitionContentEntry:
         decl: mapDefinitionContentEntryKeyname|string.
-        code: mapDefinitionContentEntryKeyname, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: mapDefinitionContentEntryKeyname, @VAL_VARIABLE_PATTERN.
 
         decl: isMapDefinitionContentEntry|bool.
         assign: isMapDefinitionContentEntry, true.
@@ -329,98 +329,98 @@ labels:
         assign: isListType, true.
 
         decl: listTypeDimension|string.
-        code: listTypeDimension, CurrentToken, @LIST_DIMENSION.
+        code: listTypeDimension, @LIST_DIMENSION.
         push.
     .
     exitPrimitiveType:
         decl: emptyString|string.
 
         decl: str|string.
-        code: str, CurrentToken, @BOOL.
+        code: str, @BOOL.
 
         decl: isPrimTypeBool|bool.
         not_equal: isPrimTypeBool, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @BYTE.
+        code: str, @BYTE.
 
         decl: isPrimTypeByte|bool.
         not_equal: isPrimTypeByte, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @INT_HEIGHT.
+        code: str, @INT_HEIGHT.
 
         decl: isPrimTypeIntHeight|bool.
         not_equal: isPrimTypeIntHeight, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @INT_SIXTEEN.
+        code: str, @INT_SIXTEEN.
 
         decl: isPrimTypeIntSixteen|bool.
         not_equal: isPrimTypeIntSixteen, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @INT_THIRTY_TWO.
+        code: str, @INT_THIRTY_TWO.
 
         decl: isPrimTypeIntThirtyTwo|bool.
         not_equal: isPrimTypeIntThirtyTwo, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @INT_SIXTY_FOUR.
+        code: str, @INT_SIXTY_FOUR.
 
         decl: isPrimTypeIntSixtyFour|bool.
         not_equal: isPrimTypeIntSixtyFour, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @UINT_HEIGHT.
+        code: str, @UINT_HEIGHT.
 
         decl: isPrimTypeUintHeight|bool.
         not_equal: isPrimTypeUintHeight, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @UINT_SIXTEEN.
+        code: str, @UINT_SIXTEEN.
 
         decl: isPrimTypeUintSixteen|bool.
         not_equal: isPrimTypeUintSixteen, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @UINT_THIRTY_TWO.
+        code: str, @UINT_THIRTY_TWO.
 
         decl: isPrimTypeUintThirtyTwo|bool.
         not_equal: isPrimTypeUintThirtyTwo, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @UINT_SIXTY_FOUR.
+        code: str, @UINT_SIXTY_FOUR.
 
         decl: isPrimTypeUintSixtyFour|bool.
         not_equal: isPrimTypeUintSixtyFour, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @FLOAT_THIRTY_TWO.
+        code: str, @FLOAT_THIRTY_TWO.
 
         decl: isPrimTypeFloatThirtyTwo|bool.
         not_equal: isPrimTypeFloatThirtyTwo, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @FLOAT_SIXTY_FOUR.
+        code: str, @FLOAT_SIXTY_FOUR.
 
         decl: isPrimTypeFloatSixtyFour|bool.
         not_equal: isPrimTypeFloatSixtyFour, str, emptyString.
         del: str.
 
         decl: str|string.
-        code: str, CurrentToken, @STRING.
+        code: str, @STRING.
 
         decl: isPrimTypeString|bool.
         not_equal: isPrimTypeString, str, emptyString.
@@ -483,35 +483,35 @@ labels:
         decl: emptyString|string.
 
         decl: addStr|string.
-        code: addStr, CurrentToken, @ARY_ADD.
+        code: addStr, @ARY_ADD.
 
         decl: isArySymbolAdd|bool.
         not_equal: isArySymbolAdd, addStr, emptyString.
         del: addStr.
 
         decl: divStr|string.
-        code: divStr, CurrentToken, @ARY_DIV.
+        code: divStr, @ARY_DIV.
 
         decl: isArySymbolDiv|bool.
         not_equal: isArySymbolDiv, divStr, emptyString.
         del: divStr.
 
         decl: modStr|string.
-        code: modStr, CurrentToken, @ARY_MOD.
+        code: modStr, @ARY_MOD.
 
         decl: isArySymbolMod|bool.
         not_equal: isArySymbolMod, modStr, emptyString.
         del: modStr.
 
         decl: mulStr|string.
-        code: mulStr, CurrentToken, @ARY_MUL.
+        code: mulStr, @ARY_MUL.
 
         decl: isArySymbolMul|bool.
         not_equal: isArySymbolMul, mulStr, emptyString.
         del: mulStr.
 
         decl: subStr|string.
-        code: subStr, CurrentToken, @ARY_SUB.
+        code: subStr, @ARY_SUB.
 
         decl: isArySymbolSub|bool.
         not_equal: isArySymbolSub, subStr, emptyString.
@@ -523,42 +523,42 @@ labels:
         decl: emptyString|string.
 
         decl: biggerThanOrEqual|string.
-        code: biggerThanOrEqual, CurrentToken, @REL_BIGGER_THAN_OR_EQUAL.
+        code: biggerThanOrEqual, @REL_BIGGER_THAN_OR_EQUAL.
 
         decl: isRelSymbolBiggerThanOrEqual|bool.
         not_equal: isRelSymbolBiggerThanOrEqual, biggerThanOrEqual, emptyString.
         del: biggerThanOrEqual.
 
         decl: biggerThan|string.
-        code: biggerThan, CurrentToken, @REL_BIGGER_THAN.
+        code: biggerThan, @REL_BIGGER_THAN.
 
         decl: isRelSymbolBiggerThan|bool.
         not_equal: isRelSymbolBiggerThan, biggerThan, emptyString.
         del: biggerThan.
 
         decl: lessThanOrEqual|string.
-        code: lessThanOrEqual, CurrentToken, @REL_LESS_THAN_OR_EQUAL.
+        code: lessThanOrEqual, @REL_LESS_THAN_OR_EQUAL.
 
         decl: isRelSymbolLessThanOrEqual|bool.
         not_equal: isRelSymbolLessThanOrEqual, lessThanOrEqual, emptyString.
         del: lessThanOrEqual.
 
         decl: lessThan|string.
-        code: lessThan, CurrentToken, @REL_LESS_THAN.
+        code: lessThan, @REL_LESS_THAN.
 
         decl: isRelSymbolLessThan|bool.
         not_equal: isRelSymbolLessThan, lessThan, emptyString.
         del: lessThan.
 
         decl: equal|string.
-        code: equal, CurrentToken, @REL_EQUAL.
+        code: equal, @REL_EQUAL.
 
         decl: isRelSymbolEqual|bool.
         not_equal: isRelSymbolEqual, equal, emptyString.
         del: equal.
 
         decl: notEqual|string.
-        code: notEqual, CurrentToken, @REL_NOT_EQUAL.
+        code: notEqual, @REL_NOT_EQUAL.
 
         decl: isRelSymbolNotEqual|bool.
         not_equal: isRelSymbolNotEqual, notEqual, emptyString.
@@ -570,14 +570,14 @@ labels:
         decl: emptyString|string.
 
         decl: isAnd|string.
-        code: isAnd, CurrentToken, @LOG_AND.
+        code: isAnd, @LOG_AND.
 
         decl: isLogicalSymbolAnd|bool.
         not_equal: isLogicalSymbolAnd, isAnd, emptyString.
         del: isAnd.
 
         decl: isOr|string.
-        code: isOr, CurrentToken, @LOG_OR.
+        code: isOr, @LOG_OR.
 
         decl: isLogicalSymbolOr|bool.
         not_equal: isLogicalSymbolOr, isOr, emptyString.
@@ -589,14 +589,14 @@ labels:
         decl: emptyString|string.
 
         decl: firstAssign|string.
-        code: firstAssign, CurrentToken, @FIRST_ASSIGN.
+        code: firstAssign, @FIRST_ASSIGN.
 
         decl: isFirstAssign|bool.
         not_equal: isFirstAssign, firstAssign, emptyString.
         del: firstAssign.
 
         decl: assign|string.
-        code: assign, CurrentToken, @ASSIGN.
+        code: assign, @ASSIGN.
 
         decl: isAssign|bool.
         not_equal: isAssign, assign, emptyString.
@@ -606,7 +606,7 @@ labels:
     .
     exitValueString:
         decl: variablePattern|string.
-        code: variablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: variablePattern, @VAL_VARIABLE_PATTERN.
         push.
 
         decl: isValueString|bool.
@@ -615,30 +615,30 @@ labels:
     .
     exitValueDecimal:
         decl: variablePattern|string.
-        code: variablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: variablePattern, @VAL_VARIABLE_PATTERN.
         push.
     .
     exitValueInt:
         decl: variablePattern|string.
-        code: variablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: variablePattern, @VAL_VARIABLE_PATTERN.
 
         decl: valueInt|string.
-        code: valueInt, CurrentToken, @VAL_INT.
+        code: valueInt, @VAL_INT.
         push.
     .
     exitValue:
         decl: variablePattern|string.
-        code: variablePattern, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: variablePattern, @VAL_VARIABLE_PATTERN.
 
         decl: valueInt|string.
-        code: valueInt, CurrentToken, @VAL_INT.
+        code: valueInt, @VAL_INT.
     .
     exitDecimalValue:
-        code: decimalValue, decimalValueAmount, CurrentToken, @VAL_INT.
+        code: decimalValue, decimalValueAmount, @VAL_INT.
     .
     exitStringValue:
         decl: stringValue|string.
-        code: stringValue, CurrentToken, @EVERYTHING_EXCEPT_QUOTATION.
+        code: stringValue, @EVERYTHING_EXCEPT_QUOTATION.
     .
 .
 

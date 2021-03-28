@@ -52,7 +52,6 @@ func NewParserBuilder() ParserBuilder {
 	instructionBuilder := createInstructionBuilder()
 	triggerBuilder := createTriggerBuilder()
 	formatBuilder := createFormatBuilder()
-	tokenCodeBuilder := createTokenCodeBuilder()
 	specificTokenCodeBuilder := createSpecificTokenCodeBuilder()
 	tokenSectionBuilder := createTokenSectionBuilder()
 	codeMatchBuilder := createCodeMatchBuilder()
@@ -123,7 +122,6 @@ func NewParserBuilder() ParserBuilder {
 		instructionBuilder,
 		triggerBuilder,
 		formatBuilder,
-		tokenCodeBuilder,
 		specificTokenCodeBuilder,
 		tokenSectionBuilder,
 		codeMatchBuilder,
@@ -841,7 +839,6 @@ type CodeMatchBuilder interface {
 	Create() CodeMatchBuilder
 	WithContent(content VariableName) CodeMatchBuilder
 	WithSection(section VariableName) CodeMatchBuilder
-	WithTokenVariable(tokenVariable string) CodeMatchBuilder
 	WithPatternVariables(patterns []string) CodeMatchBuilder
 	Now() (CodeMatch, error)
 }
@@ -850,22 +847,21 @@ type CodeMatchBuilder interface {
 type CodeMatch interface {
 	Content() VariableName
 	Section() VariableName
-	TokenVariable() string
 	PatternVariables() []string
 }
 
 // TokenSectionBuilder represents a tokenSection builder
 type TokenSectionBuilder interface {
 	Create() TokenSectionBuilder
-	WithCode(code TokenCode) TokenSectionBuilder
+	WithVariableName(variableName VariableName) TokenSectionBuilder
 	WithSpecific(specific SpecificTokenCode) TokenSectionBuilder
 	Now() (TokenSection, error)
 }
 
 // TokenSection represents a token section
 type TokenSection interface {
-	IsCode() bool
-	Code() TokenCode
+	IsVariableName() bool
+	VariableName() VariableName
 	IsSpecific() bool
 	Specific() SpecificTokenCode
 }
@@ -873,34 +869,18 @@ type TokenSection interface {
 // SpecificTokenCodeBuilder represents a specificTokenCode builder
 type SpecificTokenCodeBuilder interface {
 	Create() SpecificTokenCodeBuilder
-	WithContent(content VariableName) SpecificTokenCodeBuilder
+	WithVariableName(variableName VariableName) SpecificTokenCodeBuilder
 	WithAmount(amount VariableName) SpecificTokenCodeBuilder
-	WithTokenVariable(tokenVariable string) SpecificTokenCodeBuilder
 	WithPatternVariable(pattern string) SpecificTokenCodeBuilder
 	Now() (SpecificTokenCode, error)
 }
 
 // SpecificTokenCode represents a specific token code
 type SpecificTokenCode interface {
-	Content() VariableName
-	TokenVariable() string
+	VariableName() VariableName
 	PatternVariable() string
 	HasAmount() bool
 	Amount() VariableName
-}
-
-//TokenCodeBuilder represents a tokenCode builder
-type TokenCodeBuilder interface {
-	Create() TokenCodeBuilder
-	WithContent(content VariableName) TokenCodeBuilder
-	WithTokenVariable(tokenVariable string) TokenCodeBuilder
-	Now() (TokenCode, error)
-}
-
-// TokenCode represents a token code
-type TokenCode interface {
-	Content() VariableName
-	TokenVariable() string
 }
 
 // MatchBuilder represents a match builder

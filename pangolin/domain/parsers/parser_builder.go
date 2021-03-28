@@ -47,7 +47,6 @@ type parserBuilder struct {
 	instructionBuilder         InstructionBuilder
 	triggerBuilder             TriggerBuilder
 	formatBuilder              FormatBuilder
-	tokenCodeBuilder           TokenCodeBuilder
 	specificTokenCodeBuilder   SpecificTokenCodeBuilder
 	tokenSectionBuilder        TokenSectionBuilder
 	codeMatchBuilder           CodeMatchBuilder
@@ -120,7 +119,6 @@ func createParserBuilder(
 	instructionBuilder InstructionBuilder,
 	triggerBuilder TriggerBuilder,
 	formatBuilder FormatBuilder,
-	tokenCodeBuilder TokenCodeBuilder,
 	specificTokenCodeBuilder SpecificTokenCodeBuilder,
 	tokenSectionBuilder TokenSectionBuilder,
 	codeMatchBuilder CodeMatchBuilder,
@@ -191,7 +189,6 @@ func createParserBuilder(
 		instructionBuilder:         instructionBuilder,
 		triggerBuilder:             triggerBuilder,
 		formatBuilder:              formatBuilder,
-		tokenCodeBuilder:           tokenCodeBuilder,
 		specificTokenCodeBuilder:   specificTokenCodeBuilder,
 		tokenSectionBuilder:        tokenSectionBuilder,
 		codeMatchBuilder:           codeMatchBuilder,
@@ -269,7 +266,6 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.instructionBuilder,
 		app.triggerBuilder,
 		app.formatBuilder,
-		app.tokenCodeBuilder,
 		app.specificTokenCodeBuilder,
 		app.tokenSectionBuilder,
 		app.codeMatchBuilder,
@@ -355,7 +351,6 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.instructionBuilder,
 		app.triggerBuilder,
 		app.formatBuilder,
-		app.tokenCodeBuilder,
 		app.specificTokenCodeBuilder,
 		app.tokenSectionBuilder,
 		app.codeMatchBuilder,

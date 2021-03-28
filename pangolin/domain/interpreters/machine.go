@@ -325,10 +325,9 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			codeMatch := token.CodeMatch()
 			retName := codeMatch.Return()
 			sectionName := codeMatch.SectionName()
-			tokenName := codeMatch.Token()
 			patternNames := codeMatch.Patterns()
 
-			token, err := app.StackFrame().Current().Fetch(tokenName)
+			token, err := app.StackFrame().Current().Fetch(app.currentTokenVariableName)
 			if err != nil {
 				return err
 			}
@@ -338,7 +337,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			}
 
 			if !token.IsToken() {
-				str := fmt.Sprintf("the variable (name: %s) was expected to be of type Token", tokenName)
+				str := fmt.Sprintf("the variable (name: %s) was expected to be of type Token", app.currentTokenVariableName)
 				return errors.New(str)
 			}
 
@@ -373,8 +372,7 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 		if token.IsCode() {
 			code := token.Code()
 			retName := code.Return()
-			tokenName := code.Token()
-			token, err := app.StackFrame().Current().Fetch(tokenName)
+			token, err := app.StackFrame().Current().Fetch(app.currentTokenVariableName)
 			if err != nil {
 				return err
 			}
@@ -384,13 +382,13 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			}
 
 			if !token.IsToken() {
-				str := fmt.Sprintf("the variable (name: %s) was expected to be of type Token", tokenName)
+				str := fmt.Sprintf("the variable (name: %s) was expected to be of type Token", app.currentTokenVariableName)
 				return errors.New(str)
 			}
 
 			tok := token.Token()
 			if tok == nil {
-				str := fmt.Sprintf("the Token (variable name: %s) was not expected to be nil", tokenName)
+				str := fmt.Sprintf("the Token (variable name: %s) was not expected to be nil", app.currentTokenVariableName)
 				return errors.New(str)
 			}
 

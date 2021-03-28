@@ -26,11 +26,6 @@ func Test_codeMatch_Success(t *testing.T) {
 		return
 	}
 
-	if code.TokenVariable() != "MyTokenVariable" {
-		t.Errorf("the token variable was expected to be %s, %s returned", "MyTokenVariable", code.TokenVariable())
-		return
-	}
-
 	patternVariables := code.PatternVariables()
 	if len(patternVariables) != 2 {
 		t.Errorf("%d pattern variables were expected, %d returned", 2, len(patternVariables))
