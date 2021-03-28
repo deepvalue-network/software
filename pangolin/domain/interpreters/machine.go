@@ -11,11 +11,14 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
 	label_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/labels/label/instructions"
 	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/labels/label/instructions/instruction"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
 	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )
 
 type machine struct {
+	variableBuilder          var_variable.Builder
+	valueBuilder             var_value.Builder
 	computableValueBuilder   computable.Builder
 	lexerParserApplication   lexer_parser.Application
 	lexerParserBuilder       lexer_parser.Builder
@@ -27,16 +30,20 @@ type machine struct {
 }
 
 func createMachine(
+	variableBuilder var_variable.Builder,
+	valueBuilder var_value.Builder,
 	computableValueBuilder computable.Builder,
 	lexerParserApplication lexer_parser.Application,
 	lexerParserBuilder lexer_parser.Builder,
 	stkFrame StackFrame,
 	lbls map[string]label_instructions.Instructions,
 ) Machine {
-	return createMachineInternally(computableValueBuilder, lexerParserApplication, lexerParserBuilder, stkFrame, lbls, nil, nil)
+	return createMachineInternally(variableBuilder, valueBuilder, computableValueBuilder, lexerParserApplication, lexerParserBuilder, stkFrame, lbls, nil, nil)
 }
 
 func createMachineWithPatternMatches(
+	variableBuilder var_variable.Builder,
+	valueBuilder var_value.Builder,
 	computableValueBuilder computable.Builder,
 	lexerParserApplication lexer_parser.Application,
 	lexerParserBuilder lexer_parser.Builder,
@@ -45,10 +52,12 @@ func createMachineWithPatternMatches(
 	patternMatches map[string]middle.PatternMatch,
 	lexerAdapterBuilder lexers.AdapterBuilder,
 ) Machine {
-	return createMachineInternally(computableValueBuilder, lexerParserApplication, lexerParserBuilder, stkFrame, lbls, patternMatches, lexerAdapterBuilder)
+	return createMachineInternally(variableBuilder, valueBuilder, computableValueBuilder, lexerParserApplication, lexerParserBuilder, stkFrame, lbls, patternMatches, lexerAdapterBuilder)
 }
 
 func createMachineInternally(
+	variableBuilder var_variable.Builder,
+	valueBuilder var_value.Builder,
 	computableValueBuilder computable.Builder,
 	lexerParserApplication lexer_parser.Application,
 	lexerParserBuilder lexer_parser.Builder,
@@ -58,6 +67,8 @@ func createMachineInternally(
 	lexerAdapterBuilder lexers.AdapterBuilder,
 ) Machine {
 	out := machine{
+		variableBuilder:          variableBuilder,
+		valueBuilder:             valueBuilder,
 		computableValueBuilder:   computableValueBuilder,
 		lexerParserApplication:   lexerParserApplication,
 		lexerParserBuilder:       lexerParserBuilder,
@@ -425,8 +436,13 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			if hasPattern && hasAmount {
 				// fetch code from token's name:
 				pattern := code.Pattern()
-				amount := code.Amount()
 				codes := tok.CodesFromName(pattern)
+				amount := code.Amount()
+				if err != nil {
+					str := fmt.Sprintf("the variable (%s) was expected to be declared", amount)
+					return errors.New(str)
+				}
+
 				// add the codes:
 				for _, oneCode := range codes {
 					computableCode, err := app.computableValueBuilder.Create().WithString(oneCode).Now()
@@ -434,7 +450,17 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 						return err
 					}
 
-					err = app.StackFrame().Current().UpdateValue(retName, computableCode)
+					value, err := app.valueBuilder.WithComputable(computableCode).Now()
+					if err != nil {
+						return err
+					}
+
+					variable, err := app.variableBuilder.Create().WithName(retName).WithValue(value).Now()
+					if err != nil {
+						return err
+					}
+
+					err = app.StackFrame().Current().Insert(variable)
 					if err != nil {
 						return err
 					}
@@ -452,7 +478,17 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 					return err
 				}
 
-				err = app.StackFrame().Current().UpdateValue(amount, computableAmount)
+				value, err := app.valueBuilder.WithComputable(computableAmount).Now()
+				if err != nil {
+					return err
+				}
+
+				variable, err := app.variableBuilder.Create().WithName(amount).WithValue(value).Now()
+				if err != nil {
+					return err
+				}
+
+				err = app.StackFrame().Current().Insert(variable)
 				if err != nil {
 					return err
 				}

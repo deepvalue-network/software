@@ -10,6 +10,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
 	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )
 
@@ -24,12 +25,16 @@ func NewMachineBuilder(
 	lexerAdapterBuilder lexers.AdapterBuilder,
 	events []lexers.Event,
 ) MachineBuilder {
+	variableBuilder := var_variable.NewBuilder()
+	valueBuilder := var_value.NewBuilder()
 	computableValueBuilder := computable.NewBuilder()
 	lexerParserApplication := lexer_parser.NewApplication()
 	lexerParserBuilder := lexer_parser.NewBuilder()
 	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
 	stackFrameBuilder := NewStackFrameBuilder()
 	return createMachineBuilder(
+		variableBuilder,
+		valueBuilder,
 		computableValueBuilder,
 		lexerParserApplication,
 		lexerParserBuilder,

@@ -14,11 +14,14 @@ import (
 	label_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/labels/label/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
 	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )
 
 type machineBuilder struct {
+	variableBuilder                 var_variable.Builder
+	valueBuilder                    var_value.Builder
 	computableValueBuilder          computable.Builder
 	lexerParserApplication          lexer_parser.Application
 	lexerParserBuilder              lexer_parser.Builder
@@ -35,6 +38,8 @@ type machineBuilder struct {
 }
 
 func createMachineBuilder(
+	variableBuilder var_variable.Builder,
+	valueBuilder var_value.Builder,
 	computableValueBuilder computable.Builder,
 	lexerParserApplication lexer_parser.Application,
 	lexerParserBuilder lexer_parser.Builder,
@@ -44,6 +49,8 @@ func createMachineBuilder(
 	events []lexers.Event,
 ) MachineBuilder {
 	out := machineBuilder{
+		variableBuilder:                 variableBuilder,
+		valueBuilder:                    valueBuilder,
 		computableValueBuilder:          computableValueBuilder,
 		lexerParserApplication:          lexerParserApplication,
 		lexerParserBuilder:              lexerParserBuilder,
@@ -65,6 +72,8 @@ func createMachineBuilder(
 // Create initializes the builder
 func (app *machineBuilder) Create() MachineBuilder {
 	return createMachineBuilder(
+		app.variableBuilder,
+		app.valueBuilder,
 		app.computableValueBuilder,
 		app.lexerParserApplication,
 		app.lexerParserBuilder,
@@ -154,10 +163,10 @@ func (app *machineBuilder) Now() (Machine, error) {
 		}
 
 		lexerAdapterBuilder := app.lexerAdapterBuilder.Create().WithGrammarRetrieverCriteria(retrieverCriteria).WithEvents(app.events)
-		return createMachineWithPatternMatches(app.computableValueBuilder, app.lexerParserApplication, app.lexerParserBuilder, stackFrame, app.lbls, patternMatches, lexerAdapterBuilder), nil
+		return createMachineWithPatternMatches(app.variableBuilder, app.valueBuilder, app.computableValueBuilder, app.lexerParserApplication, app.lexerParserBuilder, stackFrame, app.lbls, patternMatches, lexerAdapterBuilder), nil
 	}
 
-	return createMachine(app.computableValueBuilder, app.lexerParserApplication, app.lexerParserBuilder, stackFrame, app.lbls), nil
+	return createMachine(app.variableBuilder, app.valueBuilder, app.computableValueBuilder, app.lexerParserApplication, app.lexerParserBuilder, stackFrame, app.lbls), nil
 }
 
 func (app *machineBuilder) variables(variables variables.Variables) error {

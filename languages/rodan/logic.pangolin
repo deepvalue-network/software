@@ -4,10 +4,6 @@ head:
 .
 
 variables:
-    IterableAssigneeVarAmount|int64.
-    IterableAssigneeVariableName|string.
-    DecimalValue|string.
-    DecimalValueAmount|int64.
     CurrentToken|token.
 .
 
@@ -173,7 +169,7 @@ labels:
         push.
     .
     exitIterableAssignee:
-        code: IterableAssigneeVariableName, IterableAssigneeVarAmount, CurrentToken, @VAL_VARIABLE_PATTERN.
+        code: iterableAssigneeVariableName, iterableAssigneeVarAmount, CurrentToken, @VAL_VARIABLE_PATTERN.
         push.
 
         decl: emptyString|string.
@@ -638,7 +634,7 @@ labels:
         code: valueInt, CurrentToken, @VAL_INT.
     .
     exitDecimalValue:
-        code: DecimalValue, DecimalValueAmount, CurrentToken, @VAL_INT.
+        code: decimalValue, decimalValueAmount, CurrentToken, @VAL_INT.
     .
     exitStringValue:
         decl: stringValue|string.
@@ -1550,7 +1546,7 @@ tests:
         assign: expectedAmount, 1.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, IterableAssigneeVarAmount, expectedAmount.
+        not_equal: isNotEqual, iterableAssigneeVarAmount, expectedAmount.
         assert_if: isNotEqual.
         pop.
 
@@ -1558,7 +1554,7 @@ tests:
         read: expectedValue, "./test_files/iterableAssignee/expected.variable_name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, IterableAssigneeVariableName, expectedValue.
+        not_equal: isNotEqual, iterableAssigneeVariableName, expectedValue.
         assert_if: isNotEqual.
     .
     iterableAssigneeWithKeyname:
@@ -1593,7 +1589,7 @@ tests:
         assign: expectedAmount, 1.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, IterableAssigneeVarAmount, expectedAmount.
+        not_equal: isNotEqual, iterableAssigneeVarAmount, expectedAmount.
         assert_if: isNotEqual.
         pop.
 
@@ -1601,7 +1597,7 @@ tests:
         read: expectedKeyname, "./test_files/iterableAssignee/expected.keyname.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, IterableAssigneeVariableName, expectedKeyname.
+        not_equal: isNotEqual, iterableAssigneeVariableName, expectedKeyname.
         assert_if: isNotEqual.
     .
     iterableAssigneeWithKeynameAndValue:
@@ -1636,7 +1632,7 @@ tests:
         assign: expectedAmount, 2.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, IterableAssigneeVarAmount, expectedAmount.
+        not_equal: isNotEqual, iterableAssigneeVarAmount, expectedAmount.
         assert_if: isNotEqual.
         pop.
 
@@ -1644,7 +1640,7 @@ tests:
         read: expectedVariableName, "./test_files/iterableAssignee/expected.variable_name.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, IterableAssigneeVariableName, expectedVariableName.
+        not_equal: isNotEqual, iterableAssigneeVariableName, expectedVariableName.
         assert_if: isNotEqual.
         pop.
 
@@ -1652,7 +1648,7 @@ tests:
         read: expectedKeyname, "./test_files/iterableAssignee/expected.keyname.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, IterableAssigneeVariableName, expectedKeyname.
+        not_equal: isNotEqual, iterableAssigneeVariableName, expectedKeyname.
         assert_if: isNotEqual.
     .
     iterableWithVariable:
@@ -3284,7 +3280,7 @@ tests:
         assign: expectedAmount, 2.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, DecimalValueAmount, expectedAmount.
+        not_equal: isNotEqual, decimalValueAmount, expectedAmount.
         assert_if: isNotEqual.
         pop.
 
@@ -3292,7 +3288,7 @@ tests:
         read: expectedSuffix, "./test_files/valueDecimal/decimal.suffix.expected.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, DecimalValue, expectedSuffix.
+        not_equal: isNotEqual, decimalValue, expectedSuffix.
         assert_if: isNotEqual.
         pop.
 
@@ -3300,7 +3296,7 @@ tests:
         read: expectedPrefix, "./test_files/valueDecimal/decimal.prefix.expected.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, DecimalValue, expectedPrefix.
+        not_equal: isNotEqual, decimalValue, expectedPrefix.
         assert_if: isNotEqual.
     .
     valueIntWithVariable:
@@ -3355,7 +3351,7 @@ tests:
         assign: expectedAmount, 2.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, DecimalValueAmount, expectedAmount.
+        not_equal: isNotEqual, decimalValueAmount, expectedAmount.
         assert_if: isNotEqual.
         pop.
 
@@ -3363,7 +3359,7 @@ tests:
         read: expectedSuffix, "./test_files/value/decimal.suffix.expected.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, DecimalValue, expectedSuffix.
+        not_equal: isNotEqual, decimalValue, expectedSuffix.
         assert_if: isNotEqual.
         pop.
 
@@ -3371,7 +3367,7 @@ tests:
         read: expectedPrefix, "./test_files/value/decimal.prefix.expected.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, DecimalValue, expectedPrefix.
+        not_equal: isNotEqual, decimalValue, expectedPrefix.
         assert_if: isNotEqual.
     .
     valueWithInt:
@@ -3392,7 +3388,7 @@ tests:
         assign: expectedAmount, 2.
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, DecimalValueAmount, expectedAmount.
+        not_equal: isNotEqual, decimalValueAmount, expectedAmount.
         assert_if: isNotEqual.
         pop.
 
@@ -3400,7 +3396,7 @@ tests:
         read: expectedSuffix, "./test_files/decimalValue/suffix.expected.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, DecimalValue, expectedSuffix.
+        not_equal: isNotEqual, decimalValue, expectedSuffix.
         assert_if: isNotEqual.
         pop.
 
@@ -3408,7 +3404,7 @@ tests:
         read: expectedPrefix, "./test_files/decimalValue/prefix.expected.pangolin".
 
         decl: isNotEqual|bool.
-        not_equal: isNotEqual, DecimalValue, expectedPrefix.
+        not_equal: isNotEqual, decimalValue, expectedPrefix.
         assert_if: isNotEqual.
     .
     stringValue:
