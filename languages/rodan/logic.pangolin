@@ -8,6 +8,11 @@ variables:
     out Output|string.
     Program|string.
     PrintCommand|string.
+    IsAssignee|bool.
+    VariableName|string.
+    IsListAssigneeIndex|bool.
+    IsMapAssignee|bool.
+    IsVariableWithDot|bool.
     IsImportDefinition|bool.
     IsImportDefinitionSingle|bool.
     ImportName|string.
@@ -115,6 +120,25 @@ labels:
     .
     exitPrintCommand:
         print: "printCommand".
+    .
+    exitAssignee:
+        code: VariableName, CurrentToken, @VAL_VARIABLE_PATTERN.
+        push.
+
+        assign: IsAssignee, true.
+        push.
+    .
+    exitListAssigneeIndex:
+        assign: IsListAssigneeIndex, true.
+        push.
+    .
+    exitMapAssignee:
+        assign: IsMapAssignee, true.
+        push.
+    .
+    exitVariableWithDot:
+        assign: IsVariableWithDot, true.
+        push.
     .
     exitImportDefinition:
         assign: IsImportDefinition, true.
@@ -579,6 +603,203 @@ main:
 .
 
 tests:
+    assigneeWithVariableWithMapWithIndexes:
+        decl: myInput|string.
+        read: myInput, "./test_files/assignee/input.map_with_indexes.pangolin".
+        match: myInput, $assignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    assigneeWithVariableWithMapWithIndex:
+        decl: myInput|string.
+        read: myInput, "./test_files/assignee/input.map_with_index.pangolin".
+        match: myInput, $assignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    assigneeWithVariableWithMap:
+        decl: myInput|string.
+        read: myInput, "./test_files/assignee/input.map.pangolin".
+        match: myInput, $assignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    assigneeWithVariableWithIndexes:
+        decl: myInput|string.
+        read: myInput, "./test_files/assignee/input.variable_with_indexes.pangolin".
+        match: myInput, $assignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedVariableName|string.
+        read: expectedVariableName, "./test_files/assignee/expected.variable.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, VariableName, expectedVariableName.
+        assert_if: isNotEqual.
+    .
+    assigneeWithVariableWithIndex:
+        decl: myInput|string.
+        read: myInput, "./test_files/assignee/input.variable_with_index.pangolin".
+        match: myInput, $assignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedVariableName|string.
+        read: expectedVariableName, "./test_files/assignee/expected.variable.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, VariableName, expectedVariableName.
+        assert_if: isNotEqual.
+    .
+    assigneeWithVariable:
+        decl: myInput|string.
+        read: myInput, "./test_files/assignee/input.variable.pangolin".
+        match: myInput, $assignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+
+        pop.
+
+        decl: expectedVariableName|string.
+        read: expectedVariableName, "./test_files/assignee/expected.variable.pangolin".
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, VariableName, expectedVariableName.
+        assert_if: isNotEqual.
+    .
+    listAssigneeIndex:
+        decl: myInput|string.
+        read: myInput, "./test_files/listAssigneeIndex/input.simple.pangolin".
+        match: myInput, $listAssigneeIndex.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsListAssigneeIndex.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    mapAssigneeWithMultiple:
+        decl: myInput|string.
+        read: myInput, "./test_files/mapAssignee/input.multiple.pangolin".
+        match: myInput, $mapAssignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsMapAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    mapAssigneeWithSingle:
+        decl: myInput|string.
+        read: myInput, "./test_files/mapAssignee/input.single.pangolin".
+        match: myInput, $mapAssignee.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsMapAssignee.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
+    variableWithDot:
+        decl: myInput|string.
+        read: myInput, "./test_files/variableWithDot/input.simple.pangolin".
+        match: myInput, $variableWithDot.
+
+        pop.
+
+        decl: isTrue|bool.
+        assign: isTrue, true.
+
+        decl: isNotEqual|bool.
+        not_equal: isNotEqual, isTrue, IsVariableWithDot.
+        assert_if: isNotEqual.
+        del: isNotEqual.
+
+        del: isTrue.
+    .
     importDefinitionWithMultiple:
         decl: myInput|string.
         read: myInput, "./test_files/importDefinition/input.multiple.pangolin".

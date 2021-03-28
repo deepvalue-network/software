@@ -44,6 +44,8 @@ DOT: '.';
 FIRST_ASSIGN: ':=';
 ASSIGN: '=';
 COMMA: ',';
+OPEN_BRACKET: '[';
+CLOSE_BRACKET: ']';
 OPEN_CURLED_BRACKET: '{';
 CLOSE_CURLED_BRACKET: '}';
 OPEN_PARENTHESIS: '(';
@@ -53,6 +55,7 @@ COLON: ':';
 QUESTION_MARK: '?';
 UNDERSCORE: '_';
 SLASH: '/';
+DOT: '.';
 
 // types:
 BOOL: 'bool';

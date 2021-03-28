@@ -69,6 +69,10 @@ language:
         relativePath: CurrentToken, |exitRelativePath.
         importDefinitionSingle: CurrentToken, |exitImportDefinitionSingle.
         importDefinition: CurrentToken, |exitImportDefinition.
+        variableWithDot: CurrentToken, |exitVariableWithDot.
+        mapAssignee: CurrentToken, |exitMapAssignee.
+        listAssigneeIndex: CurrentToken, |exitListAssigneeIndex.
+        assignee: CurrentToken, |exitAssignee.
     .
     targets:
         pangolin:

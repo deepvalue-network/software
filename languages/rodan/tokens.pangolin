@@ -8,12 +8,29 @@ printCommand
     ;
 
 assignment
-    : assignee assignSymbol assignable
+    : assigneeOrNil assignSymbol assignable
+    ;
+
+assigneeOrNil
+    : assignee
+    | UNDERSCORE
     ;
 
 assignee
-    : VAL_VARIABLE_PATTERN
-    | UNDERSCORE
+    : VAL_VARIABLE_PATTERN listAssigneeIndex*
+    | mapAssignee listAssigneeIndex*
+    ;
+
+listAssigneeIndex
+    : OPEN_BRACKET valueInt CLOSE_BRACKET
+    ;
+
+mapAssignee
+    : assignee variableWithDot*
+    ;
+
+variableWithDot
+    : DOT assignee
     ;
 
 assignable
