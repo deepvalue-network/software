@@ -69,8 +69,6 @@ func NewParserBuilder() ParserBuilder {
 	exitBuilder := createExitBuilder()
 	callBuilder := createCallBuilder()
 	stackFrameBuilder := createStackFrameBuilder()
-	pushBuilder := createPushBuilder()
-	popBuilder := createPopBuilder()
 
 	return createParserBuilder(
 		application,
@@ -129,8 +127,6 @@ func NewParserBuilder() ParserBuilder {
 		exitBuilder,
 		callBuilder,
 		stackFrameBuilder,
-		pushBuilder,
-		popBuilder,
 	)
 }
 
@@ -1093,41 +1089,13 @@ type Call interface {
 // StackFrameBuilder represents a stackFrame builder
 type StackFrameBuilder interface {
 	Create() StackFrameBuilder
-	WithPush(push Push) StackFrameBuilder
-	WithPop(pop Pop) StackFrameBuilder
+	IsPush() StackFrameBuilder
+	IsPop() StackFrameBuilder
 	Now() (StackFrame, error)
 }
 
 // StackFrame represents a stackFrame related instruction
 type StackFrame interface {
 	IsPush() bool
-	Push() Push
 	IsPop() bool
-	Pop() Pop
-}
-
-// PushBuilder represents a push builder
-type PushBuilder interface {
-	Create() PushBuilder
-	WithStackframe(stackframe string) PushBuilder
-	Now() (Push, error)
-}
-
-// Push represents the push instruction
-type Push interface {
-	HasStackFrame() bool
-	StackFrame() string
-}
-
-// PopBuilder represents a pop builder
-type PopBuilder interface {
-	Create() PopBuilder
-	WithStackframe(stackframe TransformOperation) PopBuilder
-	Now() (Pop, error)
-}
-
-// Pop represents the pop instruction
-type Pop interface {
-	HasStackFrame() bool
-	StackFrame() TransformOperation
 }

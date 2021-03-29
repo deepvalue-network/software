@@ -337,16 +337,6 @@ call
     ;
 
 stackFrame
-    : push
-    | pop
-    ;
-
-push
-    : PUSH COLON VARIABLE_PATTERN
-    | PUSH
-    ;
-
-pop
-    : POP COLON transformOperation
+    : PUSH
     | POP
     ;

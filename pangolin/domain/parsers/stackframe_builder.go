@@ -3,14 +3,14 @@ package parsers
 import "errors"
 
 type stackFrameBuilder struct {
-	push Push
-	pop  Pop
+	isPush bool
+	isPop  bool
 }
 
 func createStackFrameBuilder() StackFrameBuilder {
 	out := stackFrameBuilder{
-		push: nil,
-		pop:  nil,
+		isPush: false,
+		isPop:  false,
 	}
 
 	return &out
@@ -21,26 +21,26 @@ func (app *stackFrameBuilder) Create() StackFrameBuilder {
 	return createStackFrameBuilder()
 }
 
-// WithPush adds a push to the builder
-func (app *stackFrameBuilder) WithPush(push Push) StackFrameBuilder {
-	app.push = push
+// IsPush flags the builder as push
+func (app *stackFrameBuilder) IsPush() StackFrameBuilder {
+	app.isPush = true
 	return app
 }
 
-// WithPop adds a pop to the builder
-func (app *stackFrameBuilder) WithPop(pop Pop) StackFrameBuilder {
-	app.pop = pop
+// IsPop flags the builder as pop
+func (app *stackFrameBuilder) IsPop() StackFrameBuilder {
+	app.isPop = true
 	return app
 }
 
 // Now builds a new StackFrame instance
 func (app *stackFrameBuilder) Now() (StackFrame, error) {
-	if app.push != nil {
-		return createStackFrameWithPush(app.push), nil
+	if app.isPush {
+		return createStackFrameWithPush(), nil
 	}
 
-	if app.pop != nil {
-		return createStackFrameWithPop(app.pop), nil
+	if app.isPop {
+		return createStackFrameWithPop(), nil
 	}
 
 	return nil, errors.New("the StackFrame is invalid")

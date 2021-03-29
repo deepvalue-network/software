@@ -68,8 +68,6 @@ type parser struct {
 	exitBuilder               ExitBuilder
 	callBuilder               CallBuilder
 	stackFrameBuilder         StackFrameBuilder
-	pushBuilder               PushBuilder
-	popBuilder                PopBuilder
 	program                   map[string]Program
 	language                  map[string]Language
 	languageValue             map[string]LanguageValue
@@ -136,8 +134,6 @@ type parser struct {
 	exit                      map[string]Exit
 	call                      map[string]Call
 	stackFrame                map[string]StackFrame
-	push                      map[string]Push
-	pop                       map[string]Pop
 }
 
 func createParser(
@@ -198,8 +194,6 @@ func createParser(
 	exitBuilder ExitBuilder,
 	callBuilder CallBuilder,
 	stackFrameBuilder StackFrameBuilder,
-	pushBuilder PushBuilder,
-	popBuilder PopBuilder,
 ) (*parser, error) {
 	out := &parser{
 		lexerApplication:          lexerApplication,
@@ -259,8 +253,6 @@ func createParser(
 		exitBuilder:               exitBuilder,
 		callBuilder:               callBuilder,
 		stackFrameBuilder:         stackFrameBuilder,
-		pushBuilder:               pushBuilder,
-		popBuilder:                popBuilder,
 	}
 
 	out.init()
@@ -538,14 +530,6 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			Token:  "stackFrame",
 			OnExit: app.exitStackFrame,
 		},
-		lparser.ToEventsParams{
-			Token:  "push",
-			OnExit: app.exitPush,
-		},
-		lparser.ToEventsParams{
-			Token:  "pop",
-			OnExit: app.exitPop,
-		},
 	}
 
 	ins, err := app.parserBuilder.Create().WithEventParams(params).WithLexer(lexer).Now()
@@ -647,8 +631,6 @@ func (app *parser) init() {
 	app.exit = map[string]Exit{}
 	app.call = map[string]Call{}
 	app.stackFrame = map[string]StackFrame{}
-	app.push = map[string]Push{}
-	app.pop = map[string]Pop{}
 }
 
 func (app *parser) exitProgram(tree lexers.NodeTree) (interface{}, error) {
@@ -2360,23 +2342,17 @@ func (app *parser) exitCall(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitStackFrame(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.stackFrameBuilder.Create()
-	section, code := tree.BestMatchFromNames([]string{
-		"push",
-		"pop",
+	section, _ := tree.BestMatchFromNames([]string{
+		"PUSH",
+		"POP",
 	})
 
 	switch section {
-	case "push":
-		if push, ok := app.push[code]; ok {
-			builder.WithPush(push)
-		}
-
+	case "PUSH":
+		builder.IsPush()
 		break
-	case "pop":
-		if pop, ok := app.pop[code]; ok {
-			builder.WithPop(pop)
-		}
-
+	case "POP":
+		builder.IsPop()
 		break
 	}
 
@@ -2386,39 +2362,5 @@ func (app *parser) exitStackFrame(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.stackFrame[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitPush(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.pushBuilder.Create()
-	variableName := tree.CodeFromName("VARIABLE_PATTERN")
-	if variableName != "" {
-		builder.WithStackframe(variableName)
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.push[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitPop(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.popBuilder.Create()
-	transformOperationCode := tree.CodeFromName("transformOperation")
-	if transformOperationCode != "" {
-		if op, ok := app.transformOperation[transformOperationCode]; ok {
-			builder.WithStackframe(op)
-		}
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.pop[tree.Code()] = ins
 	return ins, nil
 }

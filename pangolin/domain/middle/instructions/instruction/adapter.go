@@ -266,47 +266,21 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 	if parsed.IsStackFrame() {
 		stackFrame := parsed.StackFrame()
 		if stackFrame.IsPush() {
-			push := stackFrame.Push()
-			if push.HasStackFrame() {
-				variableName := push.StackFrame()
-				vrName, err := app.variableNameBuilder.Create().WithVariableName(variableName).IsPush().Now()
-				if err != nil {
-					return nil, err
-				}
-
-				builder.WithVariableName(vrName)
+			stackframe, err := app.stackFrameBuilder.Create().IsPush().Now()
+			if err != nil {
+				return nil, err
 			}
 
-			if !push.HasStackFrame() {
-				stackframe, err := app.stackFrameBuilder.Create().IsPush().Now()
-				if err != nil {
-					return nil, err
-				}
-
-				builder.WithStackframe(stackframe)
-			}
+			builder.WithStackframe(stackframe)
 		}
 
 		if stackFrame.IsPop() {
-			pop := stackFrame.Pop()
-			if pop.HasStackFrame() {
-				transformOperation := pop.StackFrame()
-				trsf, err := app.transform(transformOperation).IsPop().Now()
-				if err != nil {
-					return nil, err
-				}
-
-				builder.WithTransform(trsf)
+			stackframe, err := app.stackFrameBuilder.Create().IsPop().Now()
+			if err != nil {
+				return nil, err
 			}
 
-			if !pop.HasStackFrame() {
-				stackframe, err := app.stackFrameBuilder.Create().IsPop().Now()
-				if err != nil {
-					return nil, err
-				}
-
-				builder.WithStackframe(stackframe)
-			}
+			builder.WithStackframe(stackframe)
 		}
 	}
 
