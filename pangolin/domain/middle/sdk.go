@@ -5,7 +5,6 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/labels"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/targets"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/tests/test"
 	test_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions"
@@ -29,9 +28,6 @@ func NewAdapter(parser parsers.Parser) Adapter {
 	languageBuilder := NewLanguageBuilder()
 	patternMatchBuilder := NewPatternMatchBuilder()
 	scriptBuilder := NewScriptBuilder()
-	targetsBuilder := targets.NewBuilder()
-	targetBuilder := targets.NewTargetBuilder()
-	targetEventBuilder := targets.NewEventBuilder()
 	return createAdapter(
 		parser,
 		instructionsAdapter,
@@ -43,9 +39,6 @@ func NewAdapter(parser parsers.Parser) Adapter {
 		languageBuilder,
 		patternMatchBuilder,
 		scriptBuilder,
-		targetsBuilder,
-		targetBuilder,
-		targetEventBuilder,
 	)
 }
 
@@ -138,7 +131,6 @@ type LanguageBuilder interface {
 	WithInputVariable(input string) LanguageBuilder
 	WithOutputVariable(output string) LanguageBuilder
 	WithExtends(extends []string) LanguageBuilder
-	WithTargets(targets targets.Targets) LanguageBuilder
 	Now() (Language, error)
 }
 
@@ -151,7 +143,6 @@ type Language interface {
 	PatternMatches() []PatternMatch
 	InputVariable() string
 	OutputVariable() string
-	Targets() targets.Targets
 	HasChannelsPath() bool
 	ChannelsPath() string
 	HasExtends() bool

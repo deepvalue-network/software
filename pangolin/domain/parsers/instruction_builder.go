@@ -14,8 +14,6 @@ type instructionBuilder struct {
 	exit       Exit
 	call       Call
 	token      Token
-	trigger    Trigger
-	format     Format
 }
 
 func createInstructionBuilder() InstructionBuilder {
@@ -29,8 +27,6 @@ func createInstructionBuilder() InstructionBuilder {
 		exit:       nil,
 		call:       nil,
 		token:      nil,
-		trigger:    nil,
-		format:     nil,
 	}
 
 	return &out
@@ -95,18 +91,6 @@ func (app *instructionBuilder) WithToken(token Token) InstructionBuilder {
 	return app
 }
 
-// WithTrigger adds a trigger to the builder
-func (app *instructionBuilder) WithTrigger(trigger Trigger) InstructionBuilder {
-	app.trigger = trigger
-	return app
-}
-
-// WithFormat adds a format to the builder
-func (app *instructionBuilder) WithFormat(format Format) InstructionBuilder {
-	app.format = format
-	return app
-}
-
 // Now builds an instruction instance
 func (app *instructionBuilder) Now() (Instruction, error) {
 	if app.variable != nil {
@@ -143,14 +127,6 @@ func (app *instructionBuilder) Now() (Instruction, error) {
 
 	if app.token != nil {
 		return createInstructionWithToken(app.token), nil
-	}
-
-	if app.trigger != nil {
-		return createInstructionWithTrigger(app.trigger), nil
-	}
-
-	if app.format != nil {
-		return createInstructionWithFormat(app.format), nil
 	}
 
 	return nil, errors.New("the Instruction is invalid")

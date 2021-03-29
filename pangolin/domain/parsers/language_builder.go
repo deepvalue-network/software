@@ -40,7 +40,6 @@ func (app *languageBuilder) Now() (Language, error) {
 	output := ""
 	extends := []RelativePath{}
 	patternMatches := []PatternMatch{}
-	targets := []Target{}
 	for _, oneValue := range app.values {
 		if oneValue.IsRoot() {
 			root = oneValue.Root()
@@ -86,11 +85,6 @@ func (app *languageBuilder) Now() (Language, error) {
 			extends = oneValue.Extends()
 			continue
 		}
-
-		if oneValue.IsTargets() {
-			targets = oneValue.Targets()
-			continue
-		}
 	}
 
 	if root == "" {
@@ -117,25 +111,21 @@ func (app *languageBuilder) Now() (Language, error) {
 		return nil, errors.New("the output variable is mandatory in order to build a Language instance")
 	}
 
-	if len(targets) <= 0 {
-		return nil, errors.New("there must be at least 1 Target in order to build a Language instance")
-	}
-
 	if len(patternMatches) <= 0 {
 		return nil, errors.New("the patternMatches are mandatory in order to build a Language instance")
 	}
 
 	if channels != nil && len(extends) > 0 {
-		return createLanguageWithChannelsAndExtends(root, patternMatches, tokens, rules, logic, input, output, targets, channels, extends), nil
+		return createLanguageWithChannelsAndExtends(root, patternMatches, tokens, rules, logic, input, output, channels, extends), nil
 	}
 
 	if channels != nil {
-		return createLanguageWithChannels(root, patternMatches, tokens, rules, logic, input, output, targets, channels), nil
+		return createLanguageWithChannels(root, patternMatches, tokens, rules, logic, input, output, channels), nil
 	}
 
 	if len(extends) > 0 {
-		return createLanguageWithExtends(root, patternMatches, tokens, rules, logic, input, output, targets, extends), nil
+		return createLanguageWithExtends(root, patternMatches, tokens, rules, logic, input, output, extends), nil
 	}
 
-	return createLanguage(root, patternMatches, tokens, rules, logic, input, output, targets), nil
+	return createLanguage(root, patternMatches, tokens, rules, logic, input, output), nil
 }

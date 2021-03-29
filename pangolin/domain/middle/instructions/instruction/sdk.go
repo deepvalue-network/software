@@ -4,14 +4,12 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/format"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/token"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/trigger"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/variablename"
 	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
@@ -39,8 +37,6 @@ func NewAdapter() Adapter {
 	tokenBuilder := token.NewBuilder()
 	callBuilder := call.NewBuilder()
 	exitBuilder := exit.NewBuilder()
-	formatBuilder := format.NewBuilder()
-	triggerBuilder := trigger.NewBuilder()
 	builder := NewBuilder()
 	return createAdapter(
 		stackframeBuilder,
@@ -61,8 +57,6 @@ func NewAdapter() Adapter {
 		tokenBuilder,
 		callBuilder,
 		exitBuilder,
-		formatBuilder,
-		triggerBuilder,
 		builder,
 	)
 }
@@ -94,8 +88,6 @@ type Builder interface {
 	WithToken(token token.Token) Builder
 	WithCall(call call.Call) Builder
 	WithExit(exit exit.Exit) Builder
-	WithTrigger(triggger trigger.Trigger) Builder
-	WithFormat(format format.Format) Builder
 	Now() (Instruction, error)
 }
 
@@ -129,8 +121,4 @@ type Instruction interface {
 	Call() call.Call
 	IsExit() bool
 	Exit() exit.Exit
-	IsTrigger() bool
-	Trigger() trigger.Trigger
-	IsFormat() bool
-	Format() format.Format
 }

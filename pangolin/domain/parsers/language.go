@@ -8,7 +8,6 @@ type language struct {
 	logic          RelativePath
 	input          string
 	output         string
-	targets        []Target
 	channels       RelativePath
 	extends        []RelativePath
 }
@@ -21,9 +20,8 @@ func createLanguage(
 	logic RelativePath,
 	input string,
 	output string,
-	targets []Target,
 ) Language {
-	return createLanguageinternally(root, patternMatches, tokens, rules, logic, input, output, targets, nil, nil)
+	return createLanguageinternally(root, patternMatches, tokens, rules, logic, input, output, nil, nil)
 }
 
 func createLanguageWithExtends(
@@ -34,10 +32,9 @@ func createLanguageWithExtends(
 	logic RelativePath,
 	input string,
 	output string,
-	targets []Target,
 	extends []RelativePath,
 ) Language {
-	return createLanguageinternally(root, patternMatches, tokens, rules, logic, input, output, targets, nil, extends)
+	return createLanguageinternally(root, patternMatches, tokens, rules, logic, input, output, nil, extends)
 }
 
 func createLanguageWithChannels(
@@ -48,10 +45,9 @@ func createLanguageWithChannels(
 	logic RelativePath,
 	input string,
 	output string,
-	targets []Target,
 	channels RelativePath,
 ) Language {
-	return createLanguageinternally(root, patternMatches, tokens, rules, logic, input, output, targets, channels, nil)
+	return createLanguageinternally(root, patternMatches, tokens, rules, logic, input, output, channels, nil)
 }
 
 func createLanguageWithChannelsAndExtends(
@@ -62,11 +58,10 @@ func createLanguageWithChannelsAndExtends(
 	logic RelativePath,
 	input string,
 	output string,
-	targets []Target,
 	channels RelativePath,
 	extends []RelativePath,
 ) Language {
-	return createLanguageinternally(root, patternMatches, tokens, rules, logic, input, output, targets, channels, extends)
+	return createLanguageinternally(root, patternMatches, tokens, rules, logic, input, output, channels, extends)
 }
 
 func createLanguageinternally(
@@ -77,7 +72,6 @@ func createLanguageinternally(
 	logic RelativePath,
 	input string,
 	output string,
-	targets []Target,
 	channels RelativePath,
 	extends []RelativePath,
 ) Language {
@@ -89,7 +83,6 @@ func createLanguageinternally(
 		logic:          logic,
 		input:          input,
 		output:         output,
-		targets:        targets,
 		channels:       channels,
 		extends:        extends,
 	}
@@ -125,11 +118,6 @@ func (obj *language) Input() string {
 // Output returns the output variable
 func (obj *language) Output() string {
 	return obj.output
-}
-
-// Targets returns the targets
-func (obj *language) Targets() []Target {
-	return obj.targets
 }
 
 // HasChannels returns true if there is channels, false otherwise

@@ -1,6 +1,0 @@
-targets:
-    my_target:
-        first_event: FirstLabel.
-        second_event: SecondLabel.
-    .
-.

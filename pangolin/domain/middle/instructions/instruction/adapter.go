@@ -4,14 +4,12 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/format"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/token"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/trigger"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/variablename"
 	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
@@ -38,8 +36,6 @@ type adapter struct {
 	tokenBuilder          token.Builder
 	callBuilder           call.Builder
 	exitBuilder           exit.Builder
-	formatBuilder         format.Builder
-	triggerBuilder        trigger.Builder
 	builder               Builder
 }
 
@@ -62,8 +58,6 @@ func createAdapter(
 	tokenBuilder token.Builder,
 	callBuilder call.Builder,
 	exitBuilder exit.Builder,
-	formatBuilder format.Builder,
-	triggerBuilder trigger.Builder,
 	builder Builder,
 ) Adapter {
 	out := adapter{
@@ -85,8 +79,6 @@ func createAdapter(
 		tokenBuilder:          tokenBuilder,
 		callBuilder:           callBuilder,
 		exitBuilder:           exitBuilder,
-		formatBuilder:         formatBuilder,
-		triggerBuilder:        triggerBuilder,
 		builder:               builder,
 	}
 
@@ -374,41 +366,7 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 		builder.WithCall(call)
 	}
 
-	if parsed.IsTrigger() {
-		parsedTrigger := parsed.Trigger()
-		trigger, err := app.trigger(parsedTrigger)
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithTrigger(trigger)
-	}
-
-	if parsed.IsFormat() {
-		parsedFormat := parsed.Format()
-		format, err := app.format(parsedFormat)
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithFormat(format)
-	}
-
 	return builder.Now()
-}
-
-func (app *adapter) trigger(parsed parsers.Trigger) (trigger.Trigger, error) {
-	variable := parsed.Variable()
-	event := parsed.Event()
-	return app.triggerBuilder.Create().WithVariable(variable).WithEvent(event).Now()
-}
-
-func (app *adapter) format(parsed parsers.Format) (format.Format, error) {
-	results := parsed.Results()
-	pattern := parsed.Pattern()
-	first := parsed.First()
-	second := parsed.Second()
-	return app.formatBuilder.Create().WithResults(results).WithPattern(pattern).WithFirst(first).WithSecond(second).Now()
 }
 
 func (app *adapter) call(parsed parsers.Call) (call.Call, error) {

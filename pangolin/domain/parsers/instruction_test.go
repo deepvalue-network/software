@@ -165,39 +165,3 @@ func Test_instruction_token_Success(t *testing.T) {
 		return
 	}
 }
-
-func Test_instruction_trigger_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("instruction", grammarFile)
-
-	file := "./tests/codes/instruction/trigger.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	instruction := ins.(Instruction)
-	if !instruction.IsTrigger() {
-		t.Errorf("the Instruction was expected to contain a trigger")
-		return
-	}
-}
-
-func Test_instruction_format_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("instruction", grammarFile)
-
-	file := "./tests/codes/instruction/format.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	instruction := ins.(Instruction)
-	if !instruction.IsFormat() {
-		t.Errorf("the Instruction was expected to contain a format")
-		return
-	}
-}

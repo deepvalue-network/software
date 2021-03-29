@@ -11,13 +11,4 @@ language:
         mySecond: myEnter|myExit.
         myThird: myEnter.
     .
-    targets:
-        my_target:
-            path: "./my/mytarget.json".
-            events:
-                first_event: FirstLabel.
-                second_event: SecondLabel.
-            .
-        .
-    .
 .

@@ -484,14 +484,6 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 
 	}
 
-	if ins.IsTrigger() {
-		return errors.New("\ntrigger!!\n")
-	}
-
-	if ins.IsFormat() {
-		return errors.New("\nformat!!\n")
-	}
-
 	return errors.New("the instruction is invalid")
 }
 

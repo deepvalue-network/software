@@ -6,14 +6,12 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/format"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/token"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/trigger"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/variablename"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
@@ -34,8 +32,6 @@ type builder struct {
 	token        token.Token
 	call         call.Call
 	exit         exit.Exit
-	trigger      trigger.Trigger
-	format       format.Format
 }
 
 func createBuilder() Builder {
@@ -54,8 +50,6 @@ func createBuilder() Builder {
 		token:        nil,
 		call:         nil,
 		exit:         nil,
-		trigger:      nil,
-		format:       nil,
 	}
 
 	return &out
@@ -150,18 +144,6 @@ func (app *builder) WithExit(exit exit.Exit) Builder {
 	return app
 }
 
-// WithTrigger adds a trigger to the builder
-func (app *builder) WithTrigger(trigger trigger.Trigger) Builder {
-	app.trigger = trigger
-	return app
-}
-
-// WithFormat adds a format to the builder
-func (app *builder) WithFormat(format format.Format) Builder {
-	app.format = format
-	return app
-}
-
 // Now builds a new Instruction instance
 func (app *builder) Now() (Instruction, error) {
 	if app.stackframe != nil {
@@ -218,14 +200,6 @@ func (app *builder) Now() (Instruction, error) {
 
 	if app.exit != nil {
 		return createInstructionWithExit(app.exit), nil
-	}
-
-	if app.trigger != nil {
-		return createInstructionWithTrigger(app.trigger), nil
-	}
-
-	if app.format != nil {
-		return createInstructionWithFormat(app.format), nil
 	}
 
 	return nil, errors.New("the Instruction is invalid")

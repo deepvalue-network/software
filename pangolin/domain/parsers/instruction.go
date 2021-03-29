@@ -10,52 +10,42 @@ type instruction struct {
 	exit       Exit
 	call       Call
 	token      Token
-	trigger    Trigger
-	format     Format
 }
 
 func createInstructionWithVariable(variable Variable) Instruction {
-	return createInstructionInternally(variable, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(variable, nil, nil, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithOperation(operation Operation) Instruction {
-	return createInstructionInternally(nil, operation, nil, nil, nil, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, operation, nil, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithPrint(print Print) Instruction {
-	return createInstructionInternally(nil, nil, print, nil, nil, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, print, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithStackFrame(stackFrame StackFrame) Instruction {
-	return createInstructionInternally(nil, nil, nil, stackFrame, nil, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, stackFrame, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithJump(jmp Jump) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, jmp, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, jmp, nil, nil, nil, nil)
 }
 
 func createInstructionWithMatch(match Match) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, match, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, match, nil, nil, nil)
 }
 
 func createInstructionWithExit(exit Exit) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, exit, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, exit, nil, nil)
 }
 
 func createInstructionWithCall(call Call) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, call, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, call, nil)
 }
 
 func createInstructionWithToken(token Token) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, token, nil, nil)
-}
-
-func createInstructionWithTrigger(trigger Trigger) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, trigger, nil)
-}
-
-func createInstructionWithFormat(format Format) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, format)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, token)
 }
 
 func createInstructionInternally(
@@ -68,8 +58,6 @@ func createInstructionInternally(
 	exit Exit,
 	call Call,
 	token Token,
-	trigger Trigger,
-	format Format,
 ) Instruction {
 	out := instruction{
 		variable:   variable,
@@ -81,8 +69,6 @@ func createInstructionInternally(
 		exit:       exit,
 		call:       call,
 		token:      token,
-		trigger:    trigger,
-		format:     format,
 	}
 
 	return &out
@@ -176,24 +162,4 @@ func (obj *instruction) IsToken() bool {
 // Token returns the token, if any
 func (obj *instruction) Token() Token {
 	return obj.token
-}
-
-// IsTrigger returns true if there is a trigger, false otherwise
-func (obj *instruction) IsTrigger() bool {
-	return obj.trigger != nil
-}
-
-// Trigger returns the trigger, if any
-func (obj *instruction) Trigger() Trigger {
-	return obj.trigger
-}
-
-// IsFormat returns true if there is a format, false otherwise
-func (obj *instruction) IsFormat() bool {
-	return obj.format != nil
-}
-
-// Format returns the format, if any
-func (obj *instruction) Format() Format {
-	return obj.format
 }

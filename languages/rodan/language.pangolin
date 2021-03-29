@@ -75,12 +75,4 @@ language:
         listAssigneeIndex: |exitListAssigneeIndex.
         assignee: |exitAssignee.
     .
-    targets:
-        pangolin:
-            path: "./targets/pangolin.pangolin".
-            events:
-                arythmetic_operation_int: eventArythmeticOperationInt.
-            .
-        .
-    .
 .
