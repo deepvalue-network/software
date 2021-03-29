@@ -87,8 +87,8 @@ testInstruction
     ;
 
 assert
-    : ASSERT
-    | ASSERT_IF COLON VARIABLE_PATTERN
+    : ASSERT COLON INT
+    | ASSERT_IF COLON VARIABLE_PATTERN COMMA INT
     ;
 
 readFile

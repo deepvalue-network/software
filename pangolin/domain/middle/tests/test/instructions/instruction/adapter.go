@@ -55,7 +55,8 @@ func (app *adapter) ToInstruction(testInstruction parsers.TestInstruction) (Inst
 
 	if testInstruction.IsAssert() {
 		parsedAssert := testInstruction.Assert()
-		assertBuilder := app.assertBuilder.Create()
+		index := parsedAssert.Index()
+		assertBuilder := app.assertBuilder.Create().WithIndex(index)
 		if parsedAssert.HasCondition() {
 			condition := parsedAssert.Condition()
 			assertBuilder.WithCondition(condition)

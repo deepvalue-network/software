@@ -24,11 +24,11 @@ main:
 tests:
     firstTest:
         match: myInput, $myPattern.
-        assert.
+        assert: 0.
     .
 
     secondTest:
         match: myInput, $myPattern.
-        assert.
+        assert: 0.
     .
 .

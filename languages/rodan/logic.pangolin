@@ -655,7 +655,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -672,7 +672,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -689,7 +689,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -706,7 +706,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -718,7 +718,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, variableName, expectedVariableName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
 
         del: isNotEqual.
         del: expectedVariableName.
@@ -735,7 +735,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -747,7 +747,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, variableName, expectedVariableName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
 
         del: isNotEqual.
         del: expectedVariableName.
@@ -764,7 +764,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -776,7 +776,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, variableName, expectedVariableName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
 
         del: isNotEqual.
         del: expectedVariableName.
@@ -793,7 +793,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isListAssigneeIndex.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -810,7 +810,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isMapAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -827,7 +827,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isMapAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -844,7 +844,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isVariableWithDot.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -861,7 +861,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isImportDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -878,7 +878,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isImportDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -895,7 +895,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isImportDefinitionSingle.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -907,7 +907,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, importName, expectedName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relativePath:
         decl: myInput|string.
@@ -921,7 +921,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelativePath.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -938,7 +938,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFolderSection.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -950,7 +950,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, fileName, expectedFileName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
     .
     folderSectionWithFile:
         decl: myInput|string.
@@ -964,7 +964,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFolderSection.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -976,7 +976,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, fileName, expectedFileName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
     .
     folderSectionWithSlash:
         decl: myInput|string.
@@ -990,7 +990,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFolderSectionWithSlash.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1002,7 +1002,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, fileName, expectedFileName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
     .
     loadModuleDefinition:
         decl: myInput|string.
@@ -1016,7 +1016,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLoadModuleDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1033,7 +1033,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isModuleNames.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1045,7 +1045,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, moduleName, expectedModuleName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
 
         pop.
         pop.
@@ -1055,7 +1055,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, moduleName, expectedModuleName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
 
         pop.
         pop.
@@ -1065,7 +1065,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, moduleName, expectedModuleName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 3.
     .
     moduleNamesWithTwoModules:
         decl: myInput|string.
@@ -1079,7 +1079,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isModuleNames.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1091,7 +1091,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, moduleName, expectedModuleName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
 
         pop.
         pop.
@@ -1101,7 +1101,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, moduleName, expectedModuleName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
     .
     moduleNamesWithSingle:
         decl: myInput|string.
@@ -1115,7 +1115,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isModuleNames.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1127,7 +1127,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, moduleName, expectedModuleName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
     .
     moduleNameWithComma:
         decl: myInput|string.
@@ -1141,7 +1141,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isModuleNameWithComma.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1153,7 +1153,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, moduleName, expectedModuleName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
     .
     funcCallAssignment:
         decl: myInput|string.
@@ -1167,7 +1167,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncCallAssignment.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1184,7 +1184,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncCall.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1201,7 +1201,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncCallName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1213,7 +1213,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, funcCallName, expectedFuncName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         del: isNotEqual.
     .
     funcCallNameWithImport:
@@ -1228,7 +1228,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncCallName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1240,7 +1240,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, funcCallImport, expectedImportName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         del: isNotEqual.
 
 
@@ -1249,7 +1249,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, funcCallName, expectedFuncName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
         del: isNotEqual.
     .
     funcCallNameWithModule:
@@ -1264,7 +1264,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncCallName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1276,7 +1276,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, funcCallModule, expectedModuleName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         del: isNotEqual.
 
 
@@ -1285,7 +1285,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, funcCallName, expectedFuncName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
         del: isNotEqual.
     .
     funcCallParameterWithVariable:
@@ -1300,7 +1300,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncCallParameter.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1317,7 +1317,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncCallParameter.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1334,7 +1334,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncCallAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1351,7 +1351,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isExceptionAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1368,7 +1368,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isExceptionAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1385,7 +1385,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRaiseException.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1402,7 +1402,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRaiseException.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1419,7 +1419,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isExceptionDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1436,7 +1436,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLoop.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1453,7 +1453,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLoop.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1470,7 +1470,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelationalLoop.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1487,7 +1487,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIterableLoop.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1504,7 +1504,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIterableAssignment.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1521,7 +1521,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIterableAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         pop.
@@ -1531,7 +1531,7 @@ tests:
 
         decl: isEqual|bool.
         equal: isEqual, isTrue, isIterableAssigneeKeyname.
-        assert_if: isEqual.
+        assert_if: isEqual, 1.
         del: isEqual.
 
         del: isTrue.
@@ -1542,7 +1542,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, iterableAssigneeVarAmount, expectedAmount.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
         pop.
 
         decl: expectedValue|string.
@@ -1550,7 +1550,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, iterableAssigneeVariableName, expectedValue.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 3.
     .
     iterableAssigneeWithKeyname:
         decl: myInput|string.
@@ -1564,7 +1564,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIterableAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         pop.
@@ -1574,7 +1574,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIterableAssigneeKeyname.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         del: isNotEqual.
 
         del: isTrue.
@@ -1585,7 +1585,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, iterableAssigneeVarAmount, expectedAmount.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
         pop.
 
         decl: expectedKeyname|string.
@@ -1593,7 +1593,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, iterableAssigneeVariableName, expectedKeyname.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 3.
     .
     iterableAssigneeWithKeynameAndValue:
         decl: myInput|string.
@@ -1607,7 +1607,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIterableAssignee.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         pop.
@@ -1617,7 +1617,7 @@ tests:
 
         decl: isEqual|bool.
         equal: isEqual, isTrue, isIterableAssigneeKeyname.
-        assert_if: isEqual.
+        assert_if: isEqual, 1.
         del: isEqual.
 
         del: isTrue.
@@ -1628,7 +1628,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, iterableAssigneeVarAmount, expectedAmount.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
         pop.
 
         decl: expectedVariableName|string.
@@ -1636,7 +1636,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, iterableAssigneeVariableName, expectedVariableName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 3.
         pop.
 
         decl: expectedKeyname|string.
@@ -1644,7 +1644,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, iterableAssigneeVariableName, expectedKeyname.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 4.
     .
     iterableWithVariable:
         decl: myInput|string.
@@ -1658,7 +1658,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIterable.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1670,7 +1670,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, expectedVariableName, iterableVariableName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         del: isNotEqual.
     .
     iterableWithListDefinition:
@@ -1685,7 +1685,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIterable.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1702,7 +1702,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIterable.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1719,7 +1719,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isIfDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1736,7 +1736,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1753,7 +1753,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncSignature.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1770,7 +1770,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncSignature.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1787,7 +1787,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncParams.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1804,7 +1804,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncParams.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1821,7 +1821,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncParamContent.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1838,7 +1838,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncParamContent.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1855,7 +1855,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncParamElement.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1871,7 +1871,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncParamEntry.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1883,7 +1883,7 @@ tests:
 
         decl: isEqual|bool.
         equal: isEqual, isTrue, isFuncParamEntryOptional.
-        assert_if: isEqual.
+        assert_if: isEqual, 1.
         del: isEqual.
 
         decl: expectedVariableName|string.
@@ -1891,7 +1891,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, expectedVariableName, funcParamEntryVariableName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
         del: isNotEqual.
 
         del: isTrue.
@@ -1907,7 +1907,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncParamEntry.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1919,7 +1919,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFuncParamEntryOptional.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         del: isNotEqual.
 
         decl: expectedVariableName|string.
@@ -1927,7 +1927,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, expectedVariableName, funcParamEntryVariableName.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
         del: isNotEqual.
 
         del: isTrue.
@@ -1943,7 +1943,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isBracketCode.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1959,7 +1959,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isBracketCode.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1975,7 +1975,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isBracketCode.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -1991,7 +1991,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isCode.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -2008,7 +2008,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isCode.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -2020,7 +2020,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isCodeReturn.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -2037,7 +2037,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isCode.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -2049,7 +2049,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isCodeContinue.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         del: isTrue.
@@ -2067,7 +2067,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isDef, isMapDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
     .
     mapDefinitionWithSingleEntry:
@@ -2082,7 +2082,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isDef, isMapDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
     .
     mapDefinitionWithoutEntry:
@@ -2097,7 +2097,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isDef, isMapDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
     .
     mapDefinitionContentWithMultipleEntries:
@@ -2112,7 +2112,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isContent, isMapDefinitionContent.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
     .
     mapDefinitionContentWithSingleEntry:
@@ -2127,7 +2127,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isContent, isMapDefinitionContent.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
     .
     mapDefinitionContentElement:
@@ -2142,7 +2142,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isElement, isMapDefinitionContentElement.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
     .
     mapDefinitionContentEntry:
@@ -2157,7 +2157,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, expectedKeyname, mapDefinitionContentEntryKeyname.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         decl: isEntry|bool.
@@ -2165,7 +2165,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isEntry, isMapDefinitionContentEntry.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         del: isNotEqual.
     .
     listDefinition:
@@ -2180,7 +2180,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isListDefinition.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     listDefinitionInternalWithElements:
         decl: myInput|string.
@@ -2194,7 +2194,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isListDefInternal.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     listDefinitionInternalWithEmpty:
         decl: myInput|string.
@@ -2208,7 +2208,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isListDefInternal.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     listDefinitionContentWithMultipleElements:
         decl: myInput|string.
@@ -2222,7 +2222,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isListDefCon.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     listDefinitionContentWithOneElement:
         decl: myInput|string.
@@ -2236,7 +2236,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isListDefCon.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     listDefinitionContentElementWithSimple:
         decl: myInput|string.
@@ -2250,7 +2250,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isListDefConEl.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     complexTypeWithPrimitiveType:
         decl: myInput|string.
@@ -2264,7 +2264,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isComplexType.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     complexTypeWithListType:
         decl: myInput|string.
@@ -2278,7 +2278,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isComplexType.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     complexTypeWithMapType:
         decl: myInput|string.
@@ -2292,7 +2292,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isComplexType.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     complexTypeWithExceptionType:
         decl: myInput|string.
@@ -2306,7 +2306,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isComplexType.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     listType:
         decl: myInput|string.
@@ -2320,7 +2320,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, expectedDimension, listTypeDimension.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         del: isNotEqual.
 
         decl: isTrue|bool.
@@ -2328,7 +2328,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isListType.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         del: isNotEqual.
     .
     primitiveTypeWithString:
@@ -2343,7 +2343,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeString.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithUintSixtyFour:
         decl: myInput|string.
@@ -2357,7 +2357,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeUintSixtyFour.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithUintThirtyTwo:
         decl: myInput|string.
@@ -2371,7 +2371,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeUintThirtyTwo.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithUintSixteen:
         decl: myInput|string.
@@ -2385,7 +2385,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeUintSixteen.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithUintHeight:
         decl: myInput|string.
@@ -2399,7 +2399,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeUintHeight.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithIntSixtyFour:
         decl: myInput|string.
@@ -2413,7 +2413,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeIntSixtyFour.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithIntThirtyTwo:
         decl: myInput|string.
@@ -2427,7 +2427,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeIntThirtyTwo.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithIntSixteen:
         decl: myInput|string.
@@ -2441,7 +2441,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeIntSixteen.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithIntHeight:
         decl: myInput|string.
@@ -2455,7 +2455,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeIntHeight.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithFloatSixtyFour:
         decl: myInput|string.
@@ -2469,7 +2469,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeFloatSixtyFour.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithFloatThirtyTwo:
         decl: myInput|string.
@@ -2483,7 +2483,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeFloatThirtyTwo.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithByte:
         decl: myInput|string.
@@ -2497,7 +2497,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeByte.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     primitiveTypeWithBool:
         decl: myInput|string.
@@ -2511,7 +2511,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isPrimTypeBool.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalOperationWithComplexWithParenthesis:
         decl: myInput|string.
@@ -2525,7 +2525,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalOperationWithComplex:
         decl: myInput|string.
@@ -2539,7 +2539,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalOperationWithSimpleWithParenthesis:
         decl: myInput|string.
@@ -2553,7 +2553,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalOperationWithSimple:
         decl: myInput|string.
@@ -2567,7 +2567,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalOperationOperandWithLogicalOperationWithParenthesis:
         decl: myInput|string.
@@ -2581,7 +2581,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogOpOperand.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalOperationOperandWithLogicalOperation:
         decl: myInput|string.
@@ -2595,7 +2595,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogOpOperand.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalOperationOperandWithRelationalOperationWithParenthesis:
         decl: myInput|string.
@@ -2609,7 +2609,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogOpOperand.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalOperationOperandWithRelationalOperation:
         decl: myInput|string.
@@ -2623,7 +2623,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogOpOperand.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationWithDecWithParenthesis:
         decl: myInput|string.
@@ -2637,7 +2637,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationWithDec:
         decl: myInput|string.
@@ -2651,7 +2651,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationnWithIntWithParenthesis:
         decl: myInput|string.
@@ -2665,7 +2665,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationWithInt:
         decl: myInput|string.
@@ -2679,7 +2679,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationDecimalWithVariableThenVariable:
         decl: myInput|string.
@@ -2693,7 +2693,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOpDec.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationDecimalWithVariableThenInt:
         decl: myInput|string.
@@ -2707,7 +2707,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOpDec.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationDecimalWithIntThenVariable:
         decl: myInput|string.
@@ -2721,7 +2721,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOpDec.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationDecimalWithIntThenInt:
         decl: myInput|string.
@@ -2735,7 +2735,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOpDec.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationIntWithVariableThenVariable:
         decl: myInput|string.
@@ -2749,7 +2749,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOpInt.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationIntWithVariableThenInt:
         decl: myInput|string.
@@ -2763,7 +2763,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOpInt.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationIntWithIntThenVariable:
         decl: myInput|string.
@@ -2777,7 +2777,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOpInt.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalOperationIntWithIntThenInt:
         decl: myInput|string.
@@ -2791,7 +2791,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelOpInt.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationWithDecWithParenthesis:
         decl: myInput|string.
@@ -2805,7 +2805,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationWithDec:
         decl: myInput|string.
@@ -2819,7 +2819,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueDecimalComplexWithArythmeticOperationComplex:
         decl: myInput|string.
@@ -2833,7 +2833,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isValueDecimalComplex.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueDecimalComplexWithArythmeticOperation:
         decl: myInput|string.
@@ -2847,7 +2847,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isValueDecimalComplex.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueDecimalComplexWithInt:
         decl: myInput|string.
@@ -2861,7 +2861,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isValueDecimalComplex.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationWithIntWithParenthesis:
         decl: myInput|string.
@@ -2875,7 +2875,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationWithInt:
         decl: myInput|string.
@@ -2889,7 +2889,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOp.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueIntComplexWithArythmeticOperationComplex:
         decl: myInput|string.
@@ -2903,7 +2903,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isValueIntComplex.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueIntComplexWithArythmeticOperation:
         decl: myInput|string.
@@ -2917,7 +2917,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isValueIntComplex.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueIntComplexWithInt:
         decl: myInput|string.
@@ -2931,7 +2931,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isValueIntComplex.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationDecVariableThenVariable:
         decl: myInput|string.
@@ -2945,7 +2945,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOpDec.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationDecVariableThenDec:
         decl: myInput|string.
@@ -2959,7 +2959,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOpDec.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationDecDecThenVariable:
         decl: myInput|string.
@@ -2973,7 +2973,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOpDec.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationDecDecThenDec:
         decl: myInput|string.
@@ -2987,7 +2987,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOpDec.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationIntVariableThenVariable:
         decl: myInput|string.
@@ -3001,7 +3001,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOpInt.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationIntVariableThenInt:
         decl: myInput|string.
@@ -3015,7 +3015,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOpInt.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationIntIntThenVariable:
         decl: myInput|string.
@@ -3029,7 +3029,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOpInt.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticOperationIntIntThenInt:
         decl: myInput|string.
@@ -3043,7 +3043,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAryOpInt.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticSymbolSub:
         decl: myInput|string.
@@ -3055,7 +3055,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isArySymbolSub.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticSymbolMul:
         decl: myInput|string.
@@ -3067,7 +3067,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isArySymbolMul.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticSymbolMod:
         decl: myInput|string.
@@ -3079,7 +3079,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isArySymbolMod.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticSymbolDiv:
         decl: myInput|string.
@@ -3091,7 +3091,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isArySymbolDiv.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     arythmeticSymbolAdd:
         decl: myInput|string.
@@ -3103,7 +3103,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isArySymbolAdd.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalSymbolNotEqual:
         decl: myInput|string.
@@ -3115,7 +3115,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelSymbolNotEqual.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalSymbolEqual:
         decl: myInput|string.
@@ -3127,7 +3127,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelSymbolEqual.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalSymbolLessThan:
         decl: myInput|string.
@@ -3139,7 +3139,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelSymbolLessThan.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalSymbolLessThanOrEqual:
         decl: myInput|string.
@@ -3151,7 +3151,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelSymbolLessThanOrEqual.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalSymbolBiggerThan:
         decl: myInput|string.
@@ -3163,7 +3163,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelSymbolBiggerThan.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     relationalSymbolBiggerThanOrEqual:
         decl: myInput|string.
@@ -3175,7 +3175,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isRelSymbolBiggerThanOrEqual.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalSymbolOr:
         decl: myInput|string.
@@ -3187,7 +3187,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogicalSymbolOr.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     logicalSymbolAnd:
         decl: myInput|string.
@@ -3199,7 +3199,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isLogicalSymbolAnd.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     assignSymbolWithAssign:
         decl: myInput|string.
@@ -3211,7 +3211,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isAssign.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     assignSymbolWithFirstAssign:
         decl: myInput|string.
@@ -3223,7 +3223,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isFirstAssign.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueStringWithString:
         decl: myInput|string.
@@ -3237,7 +3237,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isValueString.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueStringWithVariable:
         decl: myInput|string.
@@ -3251,7 +3251,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, isTrue, isValueString.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueDecimalWithVariable:
         decl: myInput|string.
@@ -3262,7 +3262,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, variablePattern, myInput.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueDecimalWithDecimal:
         decl: myInput|string.
@@ -3276,7 +3276,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, decimalValueAmount, expectedAmount.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         pop.
 
         decl: expectedSuffix|string.
@@ -3284,7 +3284,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, decimalValue, expectedSuffix.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         pop.
 
         decl: expectedPrefix|string.
@@ -3292,7 +3292,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, decimalValue, expectedPrefix.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
     .
     valueIntWithVariable:
         decl: myInput|string.
@@ -3303,7 +3303,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, variablePattern, myInput.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueIntWithInt:
         decl: myInput|string.
@@ -3314,7 +3314,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, valueInt, myInput.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueWithString:
         decl: myInput|string.
@@ -3326,7 +3326,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, stringValue, expectedOutput.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueWithVariable:
         decl: myInput|string.
@@ -3335,7 +3335,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, variablePattern, myInput.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     valueWithDecimal:
         decl: myInput|string.
@@ -3347,7 +3347,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, decimalValueAmount, expectedAmount.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         pop.
 
         decl: expectedSuffix|string.
@@ -3355,7 +3355,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, decimalValue, expectedSuffix.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         pop.
 
         decl: expectedPrefix|string.
@@ -3363,7 +3363,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, decimalValue, expectedPrefix.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
     .
     valueWithInt:
         decl: myInput|string.
@@ -3372,7 +3372,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, valueInt, myInput.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
     decimalValue:
         decl: myInput|string.
@@ -3384,7 +3384,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, decimalValueAmount, expectedAmount.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
         pop.
 
         decl: expectedSuffix|string.
@@ -3392,7 +3392,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, decimalValue, expectedSuffix.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 1.
         pop.
 
         decl: expectedPrefix|string.
@@ -3400,7 +3400,7 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, decimalValue, expectedPrefix.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 2.
     .
     stringValue:
         decl: myInput|string.
@@ -3412,6 +3412,6 @@ tests:
 
         decl: isNotEqual|bool.
         not_equal: isNotEqual, stringValue, expectedOutput.
-        assert_if: isNotEqual.
+        assert_if: isNotEqual, 0.
     .
 .

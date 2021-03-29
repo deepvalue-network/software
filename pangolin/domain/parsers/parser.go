@@ -1083,6 +1083,16 @@ func (app *parser) exitTestInstruction(tree lexers.NodeTree) (interface{}, error
 
 func (app *parser) exitAssert(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.assertBuilder.Create()
+	intCode := tree.CodeFromName("INT")
+	if intCode != "" {
+		intValue, err := strconv.Atoi(intCode)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithIndex(intValue)
+	}
+
 	condition := tree.CodeFromName("VARIABLE_PATTERN")
 	if condition != "" {
 		builder.WithCondition(condition)

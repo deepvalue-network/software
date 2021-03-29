@@ -1,6 +1,6 @@
 tests:
     firstTest:
         match: myInput, $myPattern.
-        assert.
+        assert: 0.
     .
 .

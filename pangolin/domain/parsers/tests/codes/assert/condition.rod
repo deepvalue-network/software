@@ -1,1 +1,1 @@
-assert_if: myCondition
+assert_if: myCondition, 1

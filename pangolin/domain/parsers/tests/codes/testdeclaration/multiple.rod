@@ -1,4 +1,4 @@
 myTest:
     match: myInput, $myPattern.
-    assert.
+    assert: 0.
 .

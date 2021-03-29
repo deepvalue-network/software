@@ -71,12 +71,14 @@ type ReadFile interface {
 // AssertBuilder represents an assert builder
 type AssertBuilder interface {
 	Create() AssertBuilder
+	WithIndex(index int) AssertBuilder
 	WithCondition(condition string) AssertBuilder
 	Now() (Assert, error)
 }
 
 // Assert represents an assert
 type Assert interface {
+	Index() int
 	HasCondition() bool
 	Condition() string
 }

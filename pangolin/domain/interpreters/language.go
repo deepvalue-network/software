@@ -68,6 +68,7 @@ func (app *language) Tests(names []string) error {
 
 			if oneTestInstruction.IsAssert() {
 				assert := oneTestInstruction.Assert()
+				assertIndex := assert.Index()
 				if assert.HasCondition() {
 					condition := assert.Condition()
 					condVal, err := machine.StackFrame().Current().Fetch(condition)
@@ -82,14 +83,14 @@ func (app *language) Tests(names []string) error {
 
 					val := condVal.Bool()
 					if *val {
-						fmt.Printf("-> Assert !!\n")
+						fmt.Printf("-> Assert, index: %d\n", assertIndex)
 						break
 					}
 
 					continue
 				}
 
-				fmt.Printf("-> Assert !!\n")
+				fmt.Printf("-> Assert, index: %d\n", assertIndex)
 				break
 			}
 
