@@ -69,6 +69,9 @@ func NewParserBuilder() ParserBuilder {
 	exitBuilder := createExitBuilder()
 	callBuilder := createCallBuilder()
 	stackFrameBuilder := createStackFrameBuilder()
+	indexBuilder := createIndexBuilder()
+	skipBuilder := createSkipBuilder()
+	intPointerBuilder := createIntPointerBuilder()
 
 	return createParserBuilder(
 		application,
@@ -127,6 +130,9 @@ func NewParserBuilder() ParserBuilder {
 		exitBuilder,
 		callBuilder,
 		stackFrameBuilder,
+		indexBuilder,
+		skipBuilder,
+		intPointerBuilder,
 	)
 }
 
@@ -1091,6 +1097,8 @@ type StackFrameBuilder interface {
 	Create() StackFrameBuilder
 	IsPush() StackFrameBuilder
 	IsPop() StackFrameBuilder
+	WithIndex(index Index) StackFrameBuilder
+	WithSkip(skip Skip) StackFrameBuilder
 	Now() (StackFrame, error)
 }
 
@@ -1098,4 +1106,48 @@ type StackFrameBuilder interface {
 type StackFrame interface {
 	IsPush() bool
 	IsPop() bool
+	IsIndex() bool
+	Index() Index
+	IsSkip() bool
+	Skip() Skip
+}
+
+// IndexBuilder represents an index builder
+type IndexBuilder interface {
+	Create() IndexBuilder
+	WithVariable(variable string) IndexBuilder
+	Now() (Index, error)
+}
+
+// Index represents an index
+type Index interface {
+	Variable() string
+}
+
+// SkipBuilder represents a skip builder
+type SkipBuilder interface {
+	Create() SkipBuilder
+	WithPointer(pointer IntPointer) SkipBuilder
+	Now() (Skip, error)
+}
+
+// Skip represents a skip
+type Skip interface {
+	Pointer() IntPointer
+}
+
+// IntPointerBuilder represents an int pointer builder
+type IntPointerBuilder interface {
+	Create() IntPointerBuilder
+	WithInt(intVal int64) IntPointerBuilder
+	WithVariable(variable string) IntPointerBuilder
+	Now() (IntPointer, error)
+}
+
+// IntPointer represents an int pointer
+type IntPointer interface {
+	IsInt() bool
+	Int() int64
+	IsVariable() bool
+	Variable() string
 }

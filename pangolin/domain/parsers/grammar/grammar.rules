@@ -74,6 +74,8 @@ JUMP: 'jump';
 JUMP_IF: 'jump_if';
 PUSH: 'push';
 POP: 'pop';
+SKIP: 'skip';
+INDEX: 'index';
 ASSIGN: 'assign';
 FRAME_ASSIGN: 'frame_assign';
 DECLARE: 'decl';

@@ -64,6 +64,9 @@ type parserBuilder struct {
 	exitBuilder               ExitBuilder
 	callBuilder               CallBuilder
 	stackFrameBuilder         StackFrameBuilder
+	indexBuilder              IndexBuilder
+	skipBuilder               SkipBuilder
+	intPointerBuilder         IntPointerBuilder
 	lexerAdapter              lexers.Adapter
 }
 
@@ -124,6 +127,9 @@ func createParserBuilder(
 	exitBuilder ExitBuilder,
 	callBuilder CallBuilder,
 	stackFrameBuilder StackFrameBuilder,
+	indexBuilder IndexBuilder,
+	skipBuilder SkipBuilder,
+	intPointerBuilder IntPointerBuilder,
 ) ParserBuilder {
 	out := parserBuilder{
 		lexerParserApplication:    lexerParserApplication,
@@ -182,6 +188,9 @@ func createParserBuilder(
 		exitBuilder:               exitBuilder,
 		callBuilder:               callBuilder,
 		stackFrameBuilder:         stackFrameBuilder,
+		indexBuilder:              indexBuilder,
+		skipBuilder:               skipBuilder,
+		intPointerBuilder:         intPointerBuilder,
 		lexerAdapter:              nil,
 	}
 
@@ -247,6 +256,9 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.exitBuilder,
 		app.callBuilder,
 		app.stackFrameBuilder,
+		app.indexBuilder,
+		app.skipBuilder,
+		app.intPointerBuilder,
 	)
 }
 
@@ -320,5 +332,8 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.exitBuilder,
 		app.callBuilder,
 		app.stackFrameBuilder,
+		app.indexBuilder,
+		app.skipBuilder,
+		app.intPointerBuilder,
 	)
 }

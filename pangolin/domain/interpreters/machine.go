@@ -96,7 +96,39 @@ func (app *machine) Receive(ins instruction.Instruction) error {
 			return nil
 		}
 
-		return app.stkFrame.Pop()
+		if stkFrame.IsPop() {
+			return app.stkFrame.Pop()
+		}
+
+		if stkFrame.IsIndex() {
+			indexVariable := stkFrame.Index()
+			stkFrameIndex := app.stkFrame.Index()
+			value, err := app.computableValueBuilder.Create().WithInt64(int64(stkFrameIndex)).Now()
+			if err != nil {
+				return err
+			}
+
+			return app.stkFrame.Current().UpdateValue(indexVariable, value)
+		}
+
+		if stkFrame.IsSkip() {
+			skip := stkFrame.Skip()
+			if skip.IsVariable() {
+				variable := skip.Variable()
+				indexVariable, err := app.stkFrame.Current().Fetch(variable)
+				if err != nil {
+					return err
+				}
+
+				if !indexVariable.IsIntSixtyFour() {
+					str := fmt.Sprintf("the skip variable (%s) was expected to contain an int64 value", variable)
+					return errors.New(str)
+				}
+
+				ptrIndexVal := indexVariable.IntSixtyFour()
+				return app.stkFrame.Skip(int(*ptrIndexVal))
+			}
+		}
 	}
 
 	if ins.IsTransform() {

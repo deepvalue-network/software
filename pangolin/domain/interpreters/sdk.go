@@ -117,6 +117,8 @@ type StackFrameBuilder interface {
 type StackFrame interface {
 	Push()
 	Pop() error
+	Index() int
+	Skip(index int) error
 	Current() Frame
 }
 

@@ -68,6 +68,9 @@ type parser struct {
 	exitBuilder               ExitBuilder
 	callBuilder               CallBuilder
 	stackFrameBuilder         StackFrameBuilder
+	indexBuilder              IndexBuilder
+	skipBuilder               SkipBuilder
+	intPointerBuilder         IntPointerBuilder
 	program                   map[string]Program
 	language                  map[string]Language
 	languageValue             map[string]LanguageValue
@@ -134,6 +137,9 @@ type parser struct {
 	exit                      map[string]Exit
 	call                      map[string]Call
 	stackFrame                map[string]StackFrame
+	index                     map[string]Index
+	skip                      map[string]Skip
+	intPointer                map[string]IntPointer
 }
 
 func createParser(
@@ -194,6 +200,9 @@ func createParser(
 	exitBuilder ExitBuilder,
 	callBuilder CallBuilder,
 	stackFrameBuilder StackFrameBuilder,
+	indexBuilder IndexBuilder,
+	skipBuilder SkipBuilder,
+	intPointerBuilder IntPointerBuilder,
 ) (*parser, error) {
 	out := &parser{
 		lexerApplication:          lexerApplication,
@@ -253,6 +262,9 @@ func createParser(
 		exitBuilder:               exitBuilder,
 		callBuilder:               callBuilder,
 		stackFrameBuilder:         stackFrameBuilder,
+		indexBuilder:              indexBuilder,
+		skipBuilder:               skipBuilder,
+		intPointerBuilder:         intPointerBuilder,
 	}
 
 	out.init()
@@ -530,6 +542,18 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			Token:  "stackFrame",
 			OnExit: app.exitStackFrame,
 		},
+		lparser.ToEventsParams{
+			Token:  "index",
+			OnExit: app.exitIndex,
+		},
+		lparser.ToEventsParams{
+			Token:  "skip",
+			OnExit: app.exitSkip,
+		},
+		lparser.ToEventsParams{
+			Token:  "intPointer",
+			OnExit: app.exitIntPointer,
+		},
 	}
 
 	ins, err := app.parserBuilder.Create().WithEventParams(params).WithLexer(lexer).Now()
@@ -631,6 +655,9 @@ func (app *parser) init() {
 	app.exit = map[string]Exit{}
 	app.call = map[string]Call{}
 	app.stackFrame = map[string]StackFrame{}
+	app.index = map[string]Index{}
+	app.skip = map[string]Skip{}
+	app.intPointer = map[string]IntPointer{}
 }
 
 func (app *parser) exitProgram(tree lexers.NodeTree) (interface{}, error) {
@@ -2342,9 +2369,11 @@ func (app *parser) exitCall(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitStackFrame(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.stackFrameBuilder.Create()
-	section, _ := tree.BestMatchFromNames([]string{
+	section, code := tree.BestMatchFromNames([]string{
 		"PUSH",
 		"POP",
+		"skip",
+		"index",
 	})
 
 	switch section {
@@ -2354,6 +2383,16 @@ func (app *parser) exitStackFrame(tree lexers.NodeTree) (interface{}, error) {
 	case "POP":
 		builder.IsPop()
 		break
+	case "skip":
+		if skip, ok := app.skip[code]; ok {
+			builder.WithSkip(skip)
+		}
+		break
+	case "index":
+		if index, ok := app.index[code]; ok {
+			builder.WithIndex(index)
+		}
+		break
 	}
 
 	ins, err := builder.Now()
@@ -2362,5 +2401,69 @@ func (app *parser) exitStackFrame(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.stackFrame[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitIndex(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.indexBuilder.Create()
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.index[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitSkip(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.skipBuilder.Create()
+	pointerCode := tree.CodeFromName("intPointer")
+	if pointerCode != "" {
+		if intPointer, ok := app.intPointer[pointerCode]; ok {
+			builder.WithPointer(intPointer)
+		}
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.skip[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitIntPointer(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.intPointerBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"INT",
+		"VARIABLE_PATTERN",
+	})
+
+	switch section {
+	case "INT":
+		val, err := strconv.Atoi(code)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithInt(int64(val))
+		break
+	case "VARIABLE_PATTERN":
+		builder.WithVariable(code)
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.intPointer[tree.Code()] = ins
 	return ins, nil
 }

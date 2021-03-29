@@ -21,6 +21,7 @@ import (
 
 type adapter struct {
 	stackFrameBuilder     stackframe.Builder
+	skipBuilder           stackframe.SkipBuilder
 	transformBuilder      transform.Builder
 	variableNameBuilder   variablename.Builder
 	conditionBuilder      condition.Builder
@@ -44,6 +45,7 @@ type adapter struct {
 
 func createAdapter(
 	stackFrameBuilder stackframe.Builder,
+	skipBuilder stackframe.SkipBuilder,
 	transformBuilder transform.Builder,
 	variableNameBuilder variablename.Builder,
 	conditionBuilder condition.Builder,
@@ -66,6 +68,7 @@ func createAdapter(
 ) Adapter {
 	out := adapter{
 		stackFrameBuilder:     stackFrameBuilder,
+		skipBuilder:           skipBuilder,
 		transformBuilder:      transformBuilder,
 		variableNameBuilder:   variableNameBuilder,
 		conditionBuilder:      conditionBuilder,
@@ -276,6 +279,42 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 
 		if stackFrame.IsPop() {
 			stackframe, err := app.stackFrameBuilder.Create().IsPop().Now()
+			if err != nil {
+				return nil, err
+			}
+
+			builder.WithStackframe(stackframe)
+		}
+
+		if stackFrame.IsSkip() {
+			skipBuilder := app.skipBuilder.Create()
+			ptr := stackFrame.Skip().Pointer()
+			if ptr.IsInt() {
+				intVal := ptr.Int()
+				skipBuilder.WithInt(intVal)
+			}
+
+			if ptr.IsVariable() {
+				variable := ptr.Variable()
+				skipBuilder.WithVariable(variable)
+			}
+
+			skip, err := skipBuilder.Now()
+			if err != nil {
+				return nil, err
+			}
+
+			stackframe, err := app.stackFrameBuilder.Create().WithSkip(skip).Now()
+			if err != nil {
+				return nil, err
+			}
+
+			builder.WithStackframe(stackframe)
+		}
+
+		if stackFrame.IsIndex() {
+			variable := stackFrame.Index().Variable()
+			stackframe, err := app.stackFrameBuilder.Create().WithIndex(variable).Now()
 			if err != nil {
 				return nil, err
 			}

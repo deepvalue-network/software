@@ -22,6 +22,7 @@ import (
 // NewAdapter creates a new adapter instance
 func NewAdapter() Adapter {
 	stackframeBuilder := stackframe.NewBuilder()
+	skipBuilder := stackframe.NewSkipBuilder()
 	transformBuilder := transform.NewBuilder()
 	variableNameBuilder := variablename.NewBuilder()
 	conditionBuilder := condition.NewBuilder()
@@ -43,6 +44,7 @@ func NewAdapter() Adapter {
 	builder := NewBuilder()
 	return createAdapter(
 		stackframeBuilder,
+		skipBuilder,
 		transformBuilder,
 		variableNameBuilder,
 		conditionBuilder,
