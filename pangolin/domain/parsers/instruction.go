@@ -6,46 +6,36 @@ type instruction struct {
 	print      Print
 	stackFrame StackFrame
 	jmp        Jump
-	match      Match
 	exit       Exit
 	call       Call
-	token      Token
 }
 
 func createInstructionWithVariable(variable Variable) Instruction {
-	return createInstructionInternally(variable, nil, nil, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(variable, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithOperation(operation Operation) Instruction {
-	return createInstructionInternally(nil, operation, nil, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, operation, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithPrint(print Print) Instruction {
-	return createInstructionInternally(nil, nil, print, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, print, nil, nil, nil, nil)
 }
 
 func createInstructionWithStackFrame(stackFrame StackFrame) Instruction {
-	return createInstructionInternally(nil, nil, nil, stackFrame, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, stackFrame, nil, nil, nil)
 }
 
 func createInstructionWithJump(jmp Jump) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, jmp, nil, nil, nil, nil)
-}
-
-func createInstructionWithMatch(match Match) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, match, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, jmp, nil, nil)
 }
 
 func createInstructionWithExit(exit Exit) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, exit, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, exit, nil)
 }
 
 func createInstructionWithCall(call Call) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, call, nil)
-}
-
-func createInstructionWithToken(token Token) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, token)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, call)
 }
 
 func createInstructionInternally(
@@ -54,10 +44,8 @@ func createInstructionInternally(
 	print Print,
 	stackFrame StackFrame,
 	jmp Jump,
-	match Match,
 	exit Exit,
 	call Call,
-	token Token,
 ) Instruction {
 	out := instruction{
 		variable:   variable,
@@ -65,10 +53,8 @@ func createInstructionInternally(
 		print:      print,
 		stackFrame: stackFrame,
 		jmp:        jmp,
-		match:      match,
 		exit:       exit,
 		call:       call,
-		token:      token,
 	}
 
 	return &out
@@ -124,16 +110,6 @@ func (obj *instruction) Jump() Jump {
 	return obj.jmp
 }
 
-// IsMatch retruns true if the instruction is a match, false otherwise
-func (obj *instruction) IsMatch() bool {
-	return obj.match != nil
-}
-
-// Match returns the match, if any
-func (obj *instruction) Match() Match {
-	return obj.match
-}
-
 // IsExit retruns true if the instruction is an exit, false otherwise
 func (obj *instruction) IsExit() bool {
 	return obj.exit != nil
@@ -152,14 +128,4 @@ func (obj *instruction) IsCall() bool {
 // Call returns the call, if any
 func (obj *instruction) Call() Call {
 	return obj.call
-}
-
-// IsToken returns true if there is a token, false otherwise
-func (obj *instruction) IsToken() bool {
-	return obj.token != nil
-}
-
-// Token returns the token, if any
-func (obj *instruction) Token() Token {
-	return obj.token
 }

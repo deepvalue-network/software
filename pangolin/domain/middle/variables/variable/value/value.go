@@ -3,28 +3,22 @@ package value
 import "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 
 type value struct {
-	comp           computable.Value
-	globalVariable string
-	localVariable  string
+	comp     computable.Value
+	variable string
 }
 
 func createValueWithComputable(comp computable.Value) Value {
-	return createValueInternally(comp, "", "")
+	return createValueInternally(comp, "")
 }
 
-func createValueWithGlobalVariabe(globalVariable string) Value {
-	return createValueInternally(nil, globalVariable, "")
+func createValueWithVariabe(variable string) Value {
+	return createValueInternally(nil, variable)
 }
 
-func createValueWithLocalVariabe(localVariable string) Value {
-	return createValueInternally(nil, "", localVariable)
-}
-
-func createValueInternally(comp computable.Value, globalVariable string, localVariable string) Value {
+func createValueInternally(comp computable.Value, variable string) Value {
 	out := value{
-		comp:           comp,
-		globalVariable: globalVariable,
-		localVariable:  localVariable,
+		comp:     comp,
+		variable: variable,
 	}
 
 	return &out
@@ -40,22 +34,12 @@ func (obj *value) Computable() computable.Value {
 	return obj.comp
 }
 
-// IsGlobalVariable returns true if the value is globalVariable, false otherwise
-func (obj *value) IsGlobalVariable() bool {
-	return obj.globalVariable != ""
+// IsVariable returns true if the value is variable, false otherwise
+func (obj *value) IsVariable() bool {
+	return obj.variable != ""
 }
 
-// GlobalVariable returns the globalVariable, if any
-func (obj *value) GlobalVariable() string {
-	return obj.globalVariable
-}
-
-// IsLocalVariable returns true if the value is localVariable, false otherwise
-func (obj *value) IsLocalVariable() bool {
-	return obj.localVariable != ""
-}
-
-// LocalVariable returns the localVariable, if any
-func (obj *value) LocalVariable() string {
-	return obj.localVariable
+// Variable returns the variable, if any
+func (obj *value) Variable() string {
+	return obj.variable
 }

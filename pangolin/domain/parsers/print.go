@@ -1,10 +1,10 @@
 package parsers
 
 type print struct {
-	value Value
+	value ValueRepresentation
 }
 
-func createPrint(value Value) Print {
+func createPrint(value ValueRepresentation) Print {
 	out := print{
 		value: value,
 	}
@@ -13,6 +13,6 @@ func createPrint(value Value) Print {
 }
 
 // Value returns the value
-func (obj *print) Value() Value {
+func (obj *print) Value() ValueRepresentation {
 	return obj.value
 }

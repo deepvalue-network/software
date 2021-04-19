@@ -6,11 +6,9 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/token"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/variablename"
@@ -28,8 +26,6 @@ type builder struct {
 	insert       variable.Variable
 	save         variable.Variable
 	del          string
-	match        match.Match
-	token        token.Token
 	call         call.Call
 	exit         exit.Exit
 }
@@ -46,8 +42,6 @@ func createBuilder() Builder {
 		insert:       nil,
 		save:         nil,
 		del:          "",
-		match:        nil,
-		token:        nil,
 		call:         nil,
 		exit:         nil,
 	}
@@ -120,18 +114,6 @@ func (app *builder) WithDelete(del string) Builder {
 	return app
 }
 
-// WithMatch adds a match to the builder
-func (app *builder) WithMatch(match match.Match) Builder {
-	app.match = match
-	return app
-}
-
-// WithToken adds a token to the builder
-func (app *builder) WithToken(token token.Token) Builder {
-	app.token = token
-	return app
-}
-
 // WithCall adds a call to the builder
 func (app *builder) WithCall(call call.Call) Builder {
 	app.call = call
@@ -184,14 +166,6 @@ func (app *builder) Now() (Instruction, error) {
 
 	if app.del != "" {
 		return createInstructionWithDelete(app.del), nil
-	}
-
-	if app.match != nil {
-		return createInstructionWithMatch(app.match), nil
-	}
-
-	if app.token != nil {
-		return createInstructionWithToken(app.token), nil
 	}
 
 	if app.call != nil {

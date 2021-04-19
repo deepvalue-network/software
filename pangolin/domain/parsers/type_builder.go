@@ -3,7 +3,6 @@ package parsers
 import "errors"
 
 type typeBuilder struct {
-	isNil     bool
 	isBool    bool
 	isInt8    bool
 	isInt16   bool
@@ -20,7 +19,6 @@ type typeBuilder struct {
 
 func createTypeBuilder() TypeBuilder {
 	out := typeBuilder{
-		isNil:     false,
 		isBool:    false,
 		isInt8:    false,
 		isInt16:   false,
@@ -41,12 +39,6 @@ func createTypeBuilder() TypeBuilder {
 // Create initializes the builder
 func (app *typeBuilder) Create() TypeBuilder {
 	return createTypeBuilder()
-}
-
-// IsNil flags the type as nil
-func (app *typeBuilder) IsNil() TypeBuilder {
-	app.isNil = true
-	return app
 }
 
 // IsBool flags the type as bool
@@ -123,10 +115,6 @@ func (app *typeBuilder) IsString() TypeBuilder {
 
 // Now builds a new Type instance
 func (app *typeBuilder) Now() (Type, error) {
-	if app.isNil {
-		return createTypeWithNil(), nil
-	}
-
 	if app.isBool {
 		return createTypeWithBool(), nil
 	}

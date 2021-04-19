@@ -1,0 +1,4 @@
+myLabel:
+    match: myInput.
+    ret.
+.

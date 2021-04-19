@@ -1,0 +1,6 @@
+head myVariable:
+    imports:
+        first: "./this/is/my/first.json".
+    .
+    name: my_name.
+.

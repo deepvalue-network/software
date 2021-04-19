@@ -21,8 +21,8 @@ func Test_assignment_Success(t *testing.T) {
 		return
 	}
 
-	if !ass.Value().Numeric().IsInt() {
-		t.Errorf("the Assignment value was expected to be an int")
+	if !ass.Value().IsValue() {
+		t.Errorf("the Assignment value was expected to be a valueRepresentation")
 		return
 	}
 }

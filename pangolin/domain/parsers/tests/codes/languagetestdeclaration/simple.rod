@@ -1,0 +1,4 @@
+myTestFunc:
+    match: myInput.
+    read: myVariable, "./this/is/my/path.json".
+.

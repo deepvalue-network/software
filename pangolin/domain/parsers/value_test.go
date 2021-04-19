@@ -105,21 +105,3 @@ func Test_value_stringValue_Success(t *testing.T) {
 		return
 	}
 }
-
-func Test_value_variable_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("value", grammarFile)
-
-	file := "./tests/codes/value/variable.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	val := ins.(Value)
-	if !val.IsVariable() {
-		t.Errorf("the value was expected to be a variable value")
-		return
-	}
-}

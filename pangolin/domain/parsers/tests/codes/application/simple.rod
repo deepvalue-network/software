@@ -12,6 +12,6 @@ main:
     print: myVariable.
     push.
     assign: myVariable, 43.
-    match: myInput.
+    assign: first, sec.
     assign: myVariable, 43.
 .

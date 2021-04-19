@@ -18,11 +18,34 @@ func NewParserBuilder() ParserBuilder {
 	lexerBuilder := lexers.NewBuilder()
 	programBuilder := createProgramBuilder()
 	languageBuilder := createLanguageBuilder()
+	scopesBuilder := createScopesBuilder()
+	scopeBuilder := createScopeBuilder()
+	commandBuilder := createCommandBuilder()
+	languageCommandBuilder := createLanguageCommandBuilder()
+	scriptCommandBuilder := createScriptCommandBuilder()
+	headCommandBuilder := createHeadCommandBuilder()
+	mainCommandBuilder := createMainCommandBuilder()
+	mainCommandInstructionBuilder := createMainCommandInstructionBuilder()
+	testCommandBuilder := createTestCommandBuilder()
+	testCommandInstructionBuilder := createTestCommandInstructionBuilder()
+	labelCommandBuilder := createLabelCommandBuilder()
+	labelCommandInstructionBuilder := createLabelCommandInstructionBuilder()
+	languageApplicationBuilder := createLanguageApplicationBuilder()
+	languageMainSectionBuilder := createLanguageMainSectionBuilder()
+	languageTestSectionBuilder := createLanguageTestSectionBuilder()
+	languageTestDeclarationBuilder := createLanguageTestDeclarationBuilder()
+	languageTestInstructionBuilder := createLanguageTestInstructionBuilder()
+	languageLabelSectionBuilder := createLanguageLabelSectionBuilder()
+	languageLabelDeclarationBuilder := createLanguageLabelDeclarationBuilder()
+	languageLabelInstructionBuilder := createLanguageLabelInstructionBuilder()
+	languageInstructionBuilder := createLanguageInstructionBuilder()
+	languageDefinitionBuilder := createLanguageDefinitionBuilder()
 	languageValueBuilder := createLanguageValueBuilder()
 	scriptBuilder := createScriptBuilder()
 	scriptValueBuilder := createScriptValueBuilder()
 	patternMatchBuilder := createPatternMatchBuilder()
 	patternLabelsBuilder := createPatternLabelsBuilder()
+	relativePathsBuilder := createRelativePathsBuilder()
 	relativePathBuilder := createRelativePathBuilder()
 	folderSectionBuilder := createFolderSectionBuilder()
 	folderNameBuilder := createFolderNameBuilder()
@@ -48,6 +71,7 @@ func NewParserBuilder() ParserBuilder {
 	concatenationBuilder := createConcatenationBuilder()
 	declarationBuilder := createDeclarationBuilder()
 	assignmentBuilder := createAssignmentBuilder()
+	valueRepresentationBuilder := createValueRepresentationBuilder()
 	valueBuilder := createValueBuilder()
 	numericValueBuilder := createNumericValueBuilder()
 	typeBuilder := createTypeBuilder()
@@ -74,11 +98,34 @@ func NewParserBuilder() ParserBuilder {
 		lexerBuilder,
 		programBuilder,
 		languageBuilder,
+		scopesBuilder,
+		scopeBuilder,
+		commandBuilder,
+		languageCommandBuilder,
+		scriptCommandBuilder,
+		headCommandBuilder,
+		mainCommandBuilder,
+		mainCommandInstructionBuilder,
+		testCommandBuilder,
+		testCommandInstructionBuilder,
+		labelCommandBuilder,
+		labelCommandInstructionBuilder,
+		languageApplicationBuilder,
+		languageMainSectionBuilder,
+		languageTestSectionBuilder,
+		languageTestDeclarationBuilder,
+		languageTestInstructionBuilder,
+		languageLabelSectionBuilder,
+		languageLabelDeclarationBuilder,
+		languageLabelInstructionBuilder,
+		languageInstructionBuilder,
+		languageDefinitionBuilder,
 		languageValueBuilder,
 		scriptBuilder,
 		scriptValueBuilder,
 		patternMatchBuilder,
 		patternLabelsBuilder,
+		relativePathsBuilder,
 		relativePathBuilder,
 		folderSectionBuilder,
 		folderNameBuilder,
@@ -104,6 +151,7 @@ func NewParserBuilder() ParserBuilder {
 		concatenationBuilder,
 		declarationBuilder,
 		assignmentBuilder,
+		valueRepresentationBuilder,
 		valueBuilder,
 		numericValueBuilder,
 		typeBuilder,
@@ -189,6 +237,22 @@ type Program interface {
 	Script() Script
 }
 
+// LanguageBuilder represents a language builder
+type LanguageBuilder interface {
+	Create() LanguageBuilder
+	WithApplication(application LanguageApplication) LanguageBuilder
+	WithDefinition(definition LanguageDefinition) LanguageBuilder
+	Now() (Language, error)
+}
+
+// Language represents a language
+type Language interface {
+	IsApplication() bool
+	Application() LanguageApplication
+	IsDefinition() bool
+	Definition() LanguageDefinition
+}
+
 // ScriptBuilder represents a script builder
 type ScriptBuilder interface {
 	Create() ScriptBuilder
@@ -226,21 +290,344 @@ type ScriptValue interface {
 	Language() RelativePath
 }
 
-// LanguageBuilder represents the language builder
-type LanguageBuilder interface {
-	Create() LanguageBuilder
-	WithValues(values []LanguageValue) LanguageBuilder
-	Now() (Language, error)
+// LanguageApplicationBuilder represents a language application builder
+type LanguageApplicationBuilder interface {
+	Create() LanguageApplicationBuilder
+	WithHead(head HeadSection) LanguageApplicationBuilder
+	WithLabels(labels LanguageLabelSection) LanguageApplicationBuilder
+	WithMain(main LanguageMainSection) LanguageApplicationBuilder
+	WithTests(tests LanguageTestSection) LanguageApplicationBuilder
+	Now() (LanguageApplication, error)
 }
 
-// Language represents a language
-type Language interface {
+// LanguageApplication represents a language application
+type LanguageApplication interface {
+	Head() HeadSection
+	Labels() LanguageLabelSection
+	Main() LanguageMainSection
+	HasTests() bool
+	Tests() LanguageTestSection
+}
+
+// LanguageMainSectionBuilder represents a language main section builder
+type LanguageMainSectionBuilder interface {
+	Create() LanguageMainSectionBuilder
+	WithInstructions(instructions []LanguageInstruction) LanguageMainSectionBuilder
+	Now() (LanguageMainSection, error)
+}
+
+// LanguageMainSection represents a language main section
+type LanguageMainSection interface {
+	Instructions() []LanguageInstruction
+}
+
+// LanguageTestSectionBuilder represents a language test section builder
+type LanguageTestSectionBuilder interface {
+	Create() LanguageTestSectionBuilder
+	WithDeclarations(declarations []LanguageTestDeclaration) LanguageTestSectionBuilder
+	Now() (LanguageTestSection, error)
+}
+
+// LanguageTestSection represents a language test section
+type LanguageTestSection interface {
+	Declarations() []LanguageTestDeclaration
+}
+
+// LanguageTestDeclarationBuilder represents a language test declaration builder
+type LanguageTestDeclarationBuilder interface {
+	Create() LanguageTestDeclarationBuilder
+	WithName(name string) LanguageTestDeclarationBuilder
+	WithInstructions(instructions []LanguageTestInstruction) LanguageTestDeclarationBuilder
+	Now() (LanguageTestDeclaration, error)
+}
+
+// LanguageTestDeclaration represents a language test declaration
+type LanguageTestDeclaration interface {
+	Name() string
+	Instructions() []LanguageTestInstruction
+}
+
+// LanguageTestInstructionBuilder represents a language test instruction builder
+type LanguageTestInstructionBuilder interface {
+	Create() LanguageTestInstructionBuilder
+	WithLanguageInstruction(languageIns LanguageInstruction) LanguageTestInstructionBuilder
+	WithTestInstruction(testIns TestInstruction) LanguageTestInstructionBuilder
+	Now() (LanguageTestInstruction, error)
+}
+
+// LanguageTestInstruction represents a language test instruction
+type LanguageTestInstruction interface {
+	IsLanguageInstruction() bool
+	LanguageInstruction() LanguageInstruction
+	IsTestInstruction() bool
+	TestInstruction() TestInstruction
+}
+
+// LanguageLabelSectionBuilder represents a language label section builder
+type LanguageLabelSectionBuilder interface {
+	Create() LanguageLabelSectionBuilder
+	WithDeclarations(declarations []LanguageLabelDeclaration) LanguageLabelSectionBuilder
+	Now() (LanguageLabelSection, error)
+}
+
+// LanguageLabelSection represents a language label section
+type LanguageLabelSection interface {
+	Declarations() []LanguageLabelDeclaration
+}
+
+// LanguageLabelDeclarationBuilder represents a language label declaration builder
+type LanguageLabelDeclarationBuilder interface {
+	Create() LanguageLabelDeclarationBuilder
+	WithName(name string) LanguageLabelDeclarationBuilder
+	WithInstructions(instructions []LanguageLabelInstruction) LanguageLabelDeclarationBuilder
+	Now() (LanguageLabelDeclaration, error)
+}
+
+// LanguageLabelDeclaration represents a language label declaration
+type LanguageLabelDeclaration interface {
+	Name() string
+	Instructions() []LanguageLabelInstruction
+}
+
+// LanguageLabelInstructionBuilder represents a language label instruction builder
+type LanguageLabelInstructionBuilder interface {
+	Create() LanguageLabelInstructionBuilder
+	WithLanguageInstruction(languageInstruction LanguageInstruction) LanguageLabelInstructionBuilder
+	WithLabelInstruction(labelInstruction LabelInstruction) LanguageLabelInstructionBuilder
+	WithToken(token Token) LanguageLabelInstructionBuilder
+	Now() (LanguageLabelInstruction, error)
+}
+
+// LanguageLabelInstruction represents a language label instruction
+type LanguageLabelInstruction interface {
+	IsLanguageInstruction() bool
+	LanguageInstruction() LanguageInstruction
+	IsLabelInstruction() bool
+	LabelInstruction() LabelInstruction
+	IsToken() bool
+	Token() Token
+}
+
+// LanguageInstructionBuilder represents a language instruction builder
+type LanguageInstructionBuilder interface {
+	Create() LanguageInstructionBuilder
+	WithInstruction(ins Instruction) LanguageInstructionBuilder
+	WithMatch(match Match) LanguageInstructionBuilder
+	WithCommand(command Command) LanguageInstructionBuilder
+	Now() (LanguageInstruction, error)
+}
+
+// LanguageInstruction represents a language instruction
+type LanguageInstruction interface {
+	IsInstruction() bool
+	Instruction() Instruction
+	IsMatch() bool
+	Match() Match
+	IsCommand() bool
+	Command() Command
+}
+
+// CommandBuilder represents a command builder
+type CommandBuilder interface {
+	Create() CommandBuilder
+	WithLanguage(language LanguageCommand) CommandBuilder
+	WithScript(script ScriptCommand) CommandBuilder
+	WithHead(head HeadCommand) CommandBuilder
+	WithMain(main MainCommand) CommandBuilder
+	WithLabel(label LabelCommand) CommandBuilder
+	WithTest(test TestCommand) CommandBuilder
+	Now() (Command, error)
+}
+
+// Command represents a command
+type Command interface {
+	IsLanguage() bool
+	Language() LanguageCommand
+	IsScript() bool
+	Script() ScriptCommand
+	IsHead() bool
+	Head() HeadCommand
+	IsMain() bool
+	Main() MainCommand
+	IsLabel() bool
+	Label() LabelCommand
+	IsTest() bool
+	Test() TestCommand
+}
+
+// LanguageCommandBuilder represents a language command builder
+type LanguageCommandBuilder interface {
+	Create() LanguageCommandBuilder
+	WithVariable(variable string) LanguageCommandBuilder
+	WithValues(values []LanguageValue) LanguageCommandBuilder
+	Now() (LanguageCommand, error)
+}
+
+// LanguageCommand represents a language command
+type LanguageCommand interface {
+	Variable() string
+	Values() []LanguageValue
+}
+
+// ScriptCommandBuilder represents a script command builder
+type ScriptCommandBuilder interface {
+	Create() ScriptCommandBuilder
+	WithVariable(variable string) ScriptCommandBuilder
+	WithValues(values []ScriptValue) ScriptCommandBuilder
+	Now() (ScriptCommand, error)
+}
+
+// ScriptCommand represents a script command
+type ScriptCommand interface {
+	Variable() string
+	Values() []ScriptValue
+}
+
+// HeadCommandBuilder represents an head command builder
+type HeadCommandBuilder interface {
+	Create() HeadCommandBuilder
+	WithVariable(variable string) HeadCommandBuilder
+	WithValues(values []HeadValue) HeadCommandBuilder
+	Now() (HeadCommand, error)
+}
+
+// HeadCommand represents a head command
+type HeadCommand interface {
+	Variable() string
+	Values() []HeadValue
+}
+
+// MainCommandBuilder represents a main command builder
+type MainCommandBuilder interface {
+	Create() MainCommandBuilder
+	WithVariable(variable string) MainCommandBuilder
+	WithInstructions(ins []MainCommandInstruction) MainCommandBuilder
+	Now() (MainCommand, error)
+}
+
+// MainCommand represents a main command
+type MainCommand interface {
+	Variable() string
+	Instructions() []MainCommandInstruction
+}
+
+// MainCommandInstructionBuilder represents a main command instruction builder
+type MainCommandInstructionBuilder interface {
+	Create() MainCommandInstructionBuilder
+	WithInstruction(ins LanguageInstruction) MainCommandInstructionBuilder
+	WithScopes(scopes Scopes) MainCommandInstructionBuilder
+	Now() (MainCommandInstruction, error)
+}
+
+// MainCommandInstruction represents a main command instruction
+type MainCommandInstruction interface {
+	Instruction() LanguageInstruction
+	HasScopes() bool
+	Scopes() Scopes
+}
+
+// TestCommandBuilder represents a test command builder
+type TestCommandBuilder interface {
+	Create() TestCommandBuilder
+	WithVariable(variable string) TestCommandBuilder
+	WithName(name string) TestCommandBuilder
+	WithInstructions(ins []TestCommandInstruction) TestCommandBuilder
+	Now() (TestCommand, error)
+}
+
+// TestCommand represents a test command
+type TestCommand interface {
+	Variable() string
+	Name() string
+	Instructions() []TestCommandInstruction
+}
+
+// TestCommandInstructionBuilder represents a test command instruction builder
+type TestCommandInstructionBuilder interface {
+	Create() TestCommandInstructionBuilder
+	WithInstruction(ins LanguageTestInstruction) TestCommandInstructionBuilder
+	WithScopes(scopes Scopes) TestCommandInstructionBuilder
+	Now() (TestCommandInstruction, error)
+}
+
+// TestCommandInstruction represents a test command instruction
+type TestCommandInstruction interface {
+	Instruction() LanguageTestInstruction
+	HasScopes() bool
+	Scopes() Scopes
+}
+
+// LabelCommandBuilder represents a label command builder
+type LabelCommandBuilder interface {
+	Create() LabelCommandBuilder
+	WithVariable(variable string) LabelCommandBuilder
+	WithName(name string) LabelCommandBuilder
+	WithInstructions(ins []LabelCommandInstruction) LabelCommandBuilder
+	Now() (LabelCommand, error)
+}
+
+// LabelCommand represents a label command
+type LabelCommand interface {
+	Variable() string
+	Name() string
+	Instructions() []LabelCommandInstruction
+}
+
+// LabelCommandInstructionBuilder represents a label command instruction builder
+type LabelCommandInstructionBuilder interface {
+	Create() LabelCommandInstructionBuilder
+	WithInstruction(ins LanguageLabelInstruction) LabelCommandInstructionBuilder
+	WithScopes(scopes Scopes) LabelCommandInstructionBuilder
+	Now() (LabelCommandInstruction, error)
+}
+
+// LabelCommandInstruction represents a label command instruction
+type LabelCommandInstruction interface {
+	Instruction() LanguageLabelInstruction
+	HasScopes() bool
+	Scopes() Scopes
+}
+
+// ScopesBuilder represents a scopes builder
+type ScopesBuilder interface {
+	Create() ScopesBuilder
+	WithScopes(scopes []Scope) ScopesBuilder
+	Now() (Scopes, error)
+}
+
+// Scopes represents scopes
+type Scopes interface {
+	All() []Scope
+}
+
+// ScopeBuilder represents a scope builder
+type ScopeBuilder interface {
+	Create() ScopeBuilder
+	IsInternal() ScopeBuilder
+	IsExternal() ScopeBuilder
+	Now() (Scope, error)
+}
+
+// Scope represents a scope
+type Scope interface {
+	IsInternal() bool
+	IsExternal() bool
+}
+
+// LanguageDefinitionBuilder represents the language definition builder
+type LanguageDefinitionBuilder interface {
+	Create() LanguageDefinitionBuilder
+	WithValues(values []LanguageValue) LanguageDefinitionBuilder
+	Now() (LanguageDefinition, error)
+}
+
+// LanguageDefinition represents a language definition
+type LanguageDefinition interface {
 	Root() string
 	Tokens() RelativePath
 	Rules() RelativePath
 	Logic() RelativePath
 	Input() string
-	Output() string
 	HasChannels() bool
 	Channels() RelativePath
 	HasExtends() bool
@@ -258,7 +645,6 @@ type LanguageValueBuilder interface {
 	WithRules(rules RelativePath) LanguageValueBuilder
 	WithLogic(logic RelativePath) LanguageValueBuilder
 	WithInputVariable(inputVar string) LanguageValueBuilder
-	WithOutputVariable(outputVar string) LanguageValueBuilder
 	WithExtends(extends []RelativePath) LanguageValueBuilder
 	WithPatternMatches(matches []PatternMatch) LanguageValueBuilder
 	Now() (LanguageValue, error)
@@ -278,8 +664,6 @@ type LanguageValue interface {
 	Logic() RelativePath
 	IsInputVariable() bool
 	InputVariable() string
-	IsOutputVariable() bool
-	OutputVariable() string
 	IsExtends() bool
 	Extends() []RelativePath
 	IsPatternMatches() bool
@@ -314,6 +698,18 @@ type PatternLabels interface {
 	EnterLabel() string
 	HasExitLabel() bool
 	ExitLabel() string
+}
+
+// RelativePathsBuilder represents a relative paths builder
+type RelativePathsBuilder interface {
+	Create() RelativePathsBuilder
+	WithRelativePaths(relPaths []RelativePath) RelativePathsBuilder
+	Now() (RelativePaths, error)
+}
+
+// RelativePaths represents relative paths
+type RelativePaths interface {
+	All() []RelativePath
 }
 
 // RelativePathBuilder represents the relativePath builder
@@ -568,10 +964,8 @@ type InstructionBuilder interface {
 	WithPrint(print Print) InstructionBuilder
 	WithStackFrame(stackFrame StackFrame) InstructionBuilder
 	WithJump(jmp Jump) InstructionBuilder
-	WithMatch(match Match) InstructionBuilder
 	WithExit(exit Exit) InstructionBuilder
 	WithCall(call Call) InstructionBuilder
-	WithToken(token Token) InstructionBuilder
 	Now() (Instruction, error)
 }
 
@@ -587,14 +981,10 @@ type Instruction interface {
 	StackFrame() StackFrame
 	IsJump() bool
 	Jump() Jump
-	IsMatch() bool
-	Match() Match
 	IsExit() bool
 	Exit() Exit
 	IsCall() bool
 	Call() Call
-	IsToken() bool
-	Token() Token
 }
 
 // TokenBuilder represents a token builder
@@ -729,21 +1119,36 @@ type Declaration interface {
 type AssignmentBuilder interface {
 	Create() AssignmentBuilder
 	WithVariable(variable string) AssignmentBuilder
-	WithValue(value Value) AssignmentBuilder
+	WithValue(value ValueRepresentation) AssignmentBuilder
 	Now() (Assignment, error)
 }
 
 // Assignment represents a variable assignment instruction
 type Assignment interface {
 	Variable() string
+	Value() ValueRepresentation
+}
+
+// ValueRepresentationBuilder represents a value representation builder
+type ValueRepresentationBuilder interface {
+	Create() ValueRepresentationBuilder
+	WithValue(value Value) ValueRepresentationBuilder
+	WithVariable(variable string) ValueRepresentationBuilder
+	Now() (ValueRepresentation, error)
+}
+
+// ValueRepresentation represents a value representation
+type ValueRepresentation interface {
+	IsValue() bool
 	Value() Value
+	IsVariable() bool
+	Variable() string
 }
 
 // ValueBuilder represents a value
 type ValueBuilder interface {
 	Create() ValueBuilder
 	IsNil() ValueBuilder
-	WithVariable(variable string) ValueBuilder
 	WithNumeric(numeric NumericValue) ValueBuilder
 	WithBool(bl bool) ValueBuilder
 	WithString(str string) ValueBuilder
@@ -753,8 +1158,6 @@ type ValueBuilder interface {
 // Value represents a value
 type Value interface {
 	IsNil() bool
-	IsVariable() bool
-	Variable() string
 	IsNumeric() bool
 	Numeric() NumericValue
 	IsBool() bool
@@ -784,7 +1187,6 @@ type NumericValue interface {
 // TypeBuilder represents a type builder
 type TypeBuilder interface {
 	Create() TypeBuilder
-	IsNil() TypeBuilder
 	IsBool() TypeBuilder
 	IsInt8() TypeBuilder
 	IsInt16() TypeBuilder
@@ -802,7 +1204,6 @@ type TypeBuilder interface {
 
 // Type represents a variable type
 type Type interface {
-	IsNil() bool
 	IsBool() bool
 	IsInt8() bool
 	IsInt16() bool
@@ -945,13 +1346,13 @@ type RemainingOperation interface {
 // PrintBuilder represents a print instruction builder
 type PrintBuilder interface {
 	Create() PrintBuilder
-	WithValue(value Value) PrintBuilder
+	WithValue(value ValueRepresentation) PrintBuilder
 	Now() (Print, error)
 }
 
 // Print represents a print instruction
 type Print interface {
-	Value() Value
+	Value() ValueRepresentation
 }
 
 // JumpBuilder represents a jump builder

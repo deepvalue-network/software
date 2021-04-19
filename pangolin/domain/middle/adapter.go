@@ -92,7 +92,7 @@ func (app *adapter) script(parsed parsers.Script) (Script, error) {
 	return app.scriptBuilder.Create().WithName(name).WithVersion(version).WithLanguagePath(languagePath).WithScriptPath(scriptPath).Now()
 }
 
-func (app *adapter) language(parsed parsers.Language) (Language, error) {
+func (app *adapter) languageDefinition(parsed parsers.LanguageDefinition) (Language, error) {
 	patternMatches := []PatternMatch{}
 	matches := parsed.PatternMatches()
 	for _, onePatternMatch := range matches {
@@ -122,14 +122,12 @@ func (app *adapter) language(parsed parsers.Language) (Language, error) {
 	rules := parsed.Rules().String()
 	logic := parsed.Logic().String()
 	input := parsed.Input()
-	output := parsed.Output()
 	builder := app.languageBuilder.Create().
 		WithRoot(root).
 		WithTokensPath(tokens).
 		WithRulesPath(rules).
 		WithLogicsPath(logic).
 		WithInputVariable(input).
-		WithOutputVariable(output).
 		WithPatternMatches(patternMatches)
 
 	if parsed.HasChannels() {

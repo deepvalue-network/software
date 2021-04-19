@@ -5,7 +5,6 @@ language:
     rules: "./my/rules.json".
     logic: "./my/logic.json".
     in: myInputVar.
-    out: myOutputVar.
     matches:
         myFirst: |myExit.
         mySecond: myEnter|myExit.

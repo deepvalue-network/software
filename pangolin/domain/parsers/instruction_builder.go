@@ -10,10 +10,8 @@ type instructionBuilder struct {
 	print      Print
 	stackFrame StackFrame
 	jmp        Jump
-	match      Match
 	exit       Exit
 	call       Call
-	token      Token
 }
 
 func createInstructionBuilder() InstructionBuilder {
@@ -23,10 +21,8 @@ func createInstructionBuilder() InstructionBuilder {
 		print:      nil,
 		stackFrame: nil,
 		jmp:        nil,
-		match:      nil,
 		exit:       nil,
 		call:       nil,
-		token:      nil,
 	}
 
 	return &out
@@ -67,12 +63,6 @@ func (app *instructionBuilder) WithJump(jmp Jump) InstructionBuilder {
 	return app
 }
 
-// WithMatch adds a match to the builder
-func (app *instructionBuilder) WithMatch(match Match) InstructionBuilder {
-	app.match = match
-	return app
-}
-
 // WithExit adds an exit to the builder
 func (app *instructionBuilder) WithExit(exit Exit) InstructionBuilder {
 	app.exit = exit
@@ -82,12 +72,6 @@ func (app *instructionBuilder) WithExit(exit Exit) InstructionBuilder {
 // WithCall adds a call to the builder
 func (app *instructionBuilder) WithCall(call Call) InstructionBuilder {
 	app.call = call
-	return app
-}
-
-// WithToken adds a token to the builder
-func (app *instructionBuilder) WithToken(token Token) InstructionBuilder {
-	app.token = token
 	return app
 }
 
@@ -113,20 +97,12 @@ func (app *instructionBuilder) Now() (Instruction, error) {
 		return createInstructionWithJump(app.jmp), nil
 	}
 
-	if app.match != nil {
-		return createInstructionWithMatch(app.match), nil
-	}
-
 	if app.exit != nil {
 		return createInstructionWithExit(app.exit), nil
 	}
 
 	if app.call != nil {
 		return createInstructionWithCall(app.call), nil
-	}
-
-	if app.token != nil {
-		return createInstructionWithToken(app.token), nil
 	}
 
 	return nil, errors.New("the Instruction is invalid")

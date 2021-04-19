@@ -1,0 +1,4 @@
+script myVariable:
+    version: 2019.03.11.
+    name: my_name.
+.

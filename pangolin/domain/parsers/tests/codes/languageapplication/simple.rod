@@ -1,0 +1,18 @@
+head:
+    name: my_name.
+    version: 2020.03.04.
+.
+labels:
+    firstLabel:
+        match: myInput.
+        ret.
+    .
+    secondLabel:
+        match: myInput.
+        ret.
+    .
+.
+main:
+    match: myInput.
+    assign: myVariable, 43.
+.

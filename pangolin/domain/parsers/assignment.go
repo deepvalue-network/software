@@ -2,10 +2,10 @@ package parsers
 
 type assignment struct {
 	variable string
-	value    Value
+	value    ValueRepresentation
 }
 
-func createAssignment(variable string, value Value) Assignment {
+func createAssignment(variable string, value ValueRepresentation) Assignment {
 	out := assignment{
 		variable: variable,
 		value:    value,
@@ -20,6 +20,6 @@ func (obj *assignment) Variable() string {
 }
 
 // Value returns the value
-func (obj *assignment) Value() Value {
+func (obj *assignment) Value() ValueRepresentation {
 	return obj.value
 }

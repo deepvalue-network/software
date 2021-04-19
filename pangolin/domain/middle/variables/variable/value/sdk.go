@@ -1,8 +1,8 @@
 package value
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 const (
@@ -34,8 +34,8 @@ func NewBuilder() Builder {
 
 // Adapter represents the value adapter
 type Adapter interface {
-	ToValue(parsed parsers.Value) (Value, error)
-	ToValueWithType(typ parsers.Type, parsed parsers.Value) (Value, error)
+	ToValue(parsed parsers.ValueRepresentation) (Value, error)
+	ToValueWithType(typ parsers.Type, parsed parsers.ValueRepresentation) (Value, error)
 }
 
 // Factory represents a value factory
@@ -47,8 +47,7 @@ type Factory interface {
 type Builder interface {
 	Create() Builder
 	WithComputable(computable computable.Value) Builder
-	WithGlobalVariable(globalVariable string) Builder
-	WithLocalVariable(localVariable string) Builder
+	WithVariable(variable string) Builder
 	Now() (Value, error)
 }
 
@@ -56,8 +55,6 @@ type Builder interface {
 type Value interface {
 	IsComputable() bool
 	Computable() computable.Value
-	IsGlobalVariable() bool
-	GlobalVariable() string
-	IsLocalVariable() bool
-	LocalVariable() string
+	IsVariable() bool
+	Variable() string
 }

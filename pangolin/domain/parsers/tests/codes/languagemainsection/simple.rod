@@ -1,0 +1,4 @@
+main:
+    match: myInput.
+    assign: myVariable, 43.
+.

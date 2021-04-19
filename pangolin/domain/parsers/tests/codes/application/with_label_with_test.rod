@@ -23,12 +23,12 @@ main:
 
 tests:
     firstTest:
-        match: myInput, $myPattern.
+        assign: first, sec.
         assert: 0.
     .
 
     secondTest:
-        match: myInput, $myPattern.
+        assign: first, sec.
         assert: 0.
     .
 .

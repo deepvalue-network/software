@@ -4,7 +4,6 @@ import "errors"
 
 type valueBuilder struct {
 	isNil    bool
-	variable string
 	numeric  NumericValue
 	bl       *bool
 	strValue string
@@ -13,7 +12,6 @@ type valueBuilder struct {
 func createValueBuilder() ValueBuilder {
 	out := valueBuilder{
 		isNil:    false,
-		variable: "",
 		numeric:  nil,
 		bl:       nil,
 		strValue: "",
@@ -30,12 +28,6 @@ func (app *valueBuilder) Create() ValueBuilder {
 // IsNil flags the builder as nil
 func (app *valueBuilder) IsNil() ValueBuilder {
 	app.isNil = true
-	return app
-}
-
-// WithVariable adds a variable to the builder
-func (app *valueBuilder) WithVariable(variable string) ValueBuilder {
-	app.variable = variable
 	return app
 }
 
@@ -61,10 +53,6 @@ func (app *valueBuilder) WithString(str string) ValueBuilder {
 func (app *valueBuilder) Now() (Value, error) {
 	if app.isNil {
 		return createValueWithNil(), nil
-	}
-
-	if app.variable != "" {
-		return createValueWithVariable(app.variable), nil
 	}
 
 	if app.numeric != nil {

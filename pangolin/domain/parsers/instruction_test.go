@@ -94,24 +94,6 @@ func Test_instruction_jump_Success(t *testing.T) {
 	}
 }
 
-func Test_instruction_match_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("instruction", grammarFile)
-
-	file := "./tests/codes/instruction/match.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	instruction := ins.(Instruction)
-	if !instruction.IsMatch() {
-		t.Errorf("the Instruction was expected to contain a Match")
-		return
-	}
-}
-
 func Test_instruction_exit_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("instruction", grammarFile)
@@ -144,24 +126,6 @@ func Test_instruction_call_Success(t *testing.T) {
 	instruction := ins.(Instruction)
 	if !instruction.IsCall() {
 		t.Errorf("the Instruction was expected to contain a call")
-		return
-	}
-}
-
-func Test_instruction_token_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("instruction", grammarFile)
-
-	file := "./tests/codes/instruction/token.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	instruction := ins.(Instruction)
-	if !instruction.IsToken() {
-		t.Errorf("the Instruction was expected to contain a token")
 		return
 	}
 }

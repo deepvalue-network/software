@@ -1,0 +1,7 @@
+language myVariable:
+    extends:
+        "./my/first/path.json".
+        "my/second/path.json".
+    .
+    root: myPattern.
+.

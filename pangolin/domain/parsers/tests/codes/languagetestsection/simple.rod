@@ -1,0 +1,10 @@
+tests:
+    firstFunc:
+        match: myInput.
+        read: myVariable, "./this/is/my/path.json".
+    .
+    secondFunc:
+        match: myInput.
+        read: myVariable, "./this/is/my/path.json".
+    .
+.

@@ -1,0 +1,10 @@
+labels:
+    firstLabel:
+        match: myInput.
+        ret.
+    .
+    secondLabel:
+        match: myInput.
+        ret.
+    .
+.

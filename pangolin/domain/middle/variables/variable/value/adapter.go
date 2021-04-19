@@ -23,14 +23,11 @@ func createAdapter(computableBuilder computable.Builder, builder Builder) Adapte
 }
 
 // ToValue converts a parsed value to an optimized value
-func (app *adapter) ToValue(parsed parsers.Value) (Value, error) {
-	fl, in, bl, str, global, local, err := app.toValue(parsed)
-	if err != nil {
-		return nil, err
-	}
-
+func (app *adapter) ToValue(parsed parsers.ValueRepresentation) (Value, error) {
 	builder := app.builder.Create()
-	if fl != nil || in != nil || bl != nil || str != nil {
+	if parsed.IsValue() {
+		parsedValue := parsed.Value()
+		fl, in, bl, str := app.toValue(parsedValue)
 		computableBuilder := app.computableBuilder.Create()
 		if fl != nil {
 			computableBuilder.WithFloat64(*fl)
@@ -56,26 +53,20 @@ func (app *adapter) ToValue(parsed parsers.Value) (Value, error) {
 		builder.WithComputable(computable)
 	}
 
-	if global != "" {
-		builder.WithGlobalVariable(global)
-	}
-
-	if local != "" {
-		builder.WithLocalVariable(local)
+	if parsed.IsVariable() {
+		parsedVariable := parsed.Variable()
+		builder.WithVariable(parsedVariable)
 	}
 
 	return builder.Now()
 }
 
 // ToValueWithType converts a parsed value to an optimized value and optimize using the type
-func (app *adapter) ToValueWithType(typ parsers.Type, parsed parsers.Value) (Value, error) {
-	fl, in, bl, str, global, local, err := app.toValue(parsed)
-	if err != nil {
-		return nil, err
-	}
-
+func (app *adapter) ToValueWithType(typ parsers.Type, parsed parsers.ValueRepresentation) (Value, error) {
 	builder := app.builder.Create()
-	if fl != nil || in != nil || bl != nil || str != nil {
+	if parsed.IsValue() {
+		parsedValue := parsed.Value()
+		fl, in, bl, str := app.toValue(parsedValue)
 		computableBuilder := app.computableBuilder.Create()
 		if fl != nil {
 			val := *fl
@@ -147,18 +138,15 @@ func (app *adapter) ToValueWithType(typ parsers.Type, parsed parsers.Value) (Val
 		builder.WithComputable(computable)
 	}
 
-	if global != "" {
-		builder.WithGlobalVariable(global)
-	}
-
-	if local != "" {
-		builder.WithLocalVariable(local)
+	if parsed.IsVariable() {
+		parsedVariable := parsed.Variable()
+		builder.WithVariable(parsedVariable)
 	}
 
 	return builder.Now()
 }
 
-func (app *adapter) toValue(parsed parsers.Value) (*float64, *int, *bool, *string, string, string, error) {
+func (app *adapter) toValue(parsed parsers.Value) (*float64, *int, *bool, *string) {
 	if parsed.IsNumeric() {
 		numeric := parsed.Numeric()
 		isNegative := numeric.IsNegative()
@@ -169,7 +157,7 @@ func (app *adapter) toValue(parsed parsers.Value) (*float64, *int, *bool, *strin
 				val *= -1.0
 			}
 
-			return &val, nil, nil, nil, "", "", nil
+			return &val, nil, nil, nil
 		}
 
 		in := numeric.Int()
@@ -178,19 +166,18 @@ func (app *adapter) toValue(parsed parsers.Value) (*float64, *int, *bool, *strin
 			val *= -1
 		}
 
-		return nil, &val, nil, nil, "", "", nil
+		return nil, &val, nil, nil
 	}
 
 	if parsed.IsBool() {
 		bl := parsed.Bool()
-		return nil, nil, bl, nil, "", "", nil
+		return nil, nil, bl, nil
 	}
 
 	if parsed.IsString() {
 		str := parsed.String()
-		return nil, nil, nil, &str, "", "", nil
+		return nil, nil, nil, &str
 	}
 
-	vr := parsed.Variable()
-	return nil, nil, nil, nil, "", vr, nil
+	return nil, nil, nil, nil
 }

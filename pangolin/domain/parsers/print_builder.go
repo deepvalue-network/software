@@ -3,7 +3,7 @@ package parsers
 import "errors"
 
 type printBuilder struct {
-	value Value
+	value ValueRepresentation
 }
 
 func createPrintBuilder() PrintBuilder {
@@ -20,7 +20,7 @@ func (app *printBuilder) Create() PrintBuilder {
 }
 
 // WithValue adds value to the builder
-func (app *printBuilder) WithValue(value Value) PrintBuilder {
+func (app *printBuilder) WithValue(value ValueRepresentation) PrintBuilder {
 	app.value = value
 	return app
 }
@@ -28,7 +28,7 @@ func (app *printBuilder) WithValue(value Value) PrintBuilder {
 // Now builds a new Print instance
 func (app *printBuilder) Now() (Print, error) {
 	if app.value == nil {
-		return nil, errors.New("the value is mandatory in order to build a Print instance")
+		return nil, errors.New("the valueRepresentation is mandatory in order to build a Print instance")
 	}
 
 	return createPrint(app.value), nil

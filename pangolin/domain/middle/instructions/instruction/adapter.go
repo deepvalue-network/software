@@ -4,11 +4,9 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/token"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/variablename"
@@ -18,25 +16,21 @@ import (
 )
 
 type adapter struct {
-	stackFrameBuilder     stackframe.Builder
-	skipBuilder           stackframe.SkipBuilder
-	transformBuilder      transform.Builder
-	variableNameBuilder   variablename.Builder
-	conditionBuilder      condition.Builder
-	propositionBuilder    condition.PropositionBuilder
-	remainingBuilder      remaining.Builder
-	standardBuilder       standard.Builder
-	matchBuilder          match.Builder
-	valueBuilder          value.Builder
-	varValueAdapter       var_value.Adapter
-	varValueFactory       var_value.Factory
-	varVariableBuilder    var_variable.Builder
-	tokenCodeBuilder      token.CodeBuilder
-	tokenCodeMatchBuilder token.CodeMatchBuilder
-	tokenBuilder          token.Builder
-	callBuilder           call.Builder
-	exitBuilder           exit.Builder
-	builder               Builder
+	stackFrameBuilder   stackframe.Builder
+	skipBuilder         stackframe.SkipBuilder
+	transformBuilder    transform.Builder
+	variableNameBuilder variablename.Builder
+	conditionBuilder    condition.Builder
+	propositionBuilder  condition.PropositionBuilder
+	remainingBuilder    remaining.Builder
+	standardBuilder     standard.Builder
+	valueBuilder        value.Builder
+	varValueAdapter     var_value.Adapter
+	varValueFactory     var_value.Factory
+	varVariableBuilder  var_variable.Builder
+	callBuilder         call.Builder
+	exitBuilder         exit.Builder
+	builder             Builder
 }
 
 func createAdapter(
@@ -48,38 +42,30 @@ func createAdapter(
 	propositionBuilder condition.PropositionBuilder,
 	remainingBuilder remaining.Builder,
 	standardBuilder standard.Builder,
-	matchBuilder match.Builder,
 	valueBuilder value.Builder,
 	varValueAdapter var_value.Adapter,
 	varValueFactory var_value.Factory,
 	varVariableBuilder var_variable.Builder,
-	tokenCodeBuilder token.CodeBuilder,
-	tokenCodeMatchBuilder token.CodeMatchBuilder,
-	tokenBuilder token.Builder,
 	callBuilder call.Builder,
 	exitBuilder exit.Builder,
 	builder Builder,
 ) Adapter {
 	out := adapter{
-		stackFrameBuilder:     stackFrameBuilder,
-		skipBuilder:           skipBuilder,
-		transformBuilder:      transformBuilder,
-		variableNameBuilder:   variableNameBuilder,
-		conditionBuilder:      conditionBuilder,
-		propositionBuilder:    propositionBuilder,
-		remainingBuilder:      remainingBuilder,
-		standardBuilder:       standardBuilder,
-		matchBuilder:          matchBuilder,
-		valueBuilder:          valueBuilder,
-		varValueAdapter:       varValueAdapter,
-		varValueFactory:       varValueFactory,
-		varVariableBuilder:    varVariableBuilder,
-		tokenCodeBuilder:      tokenCodeBuilder,
-		tokenCodeMatchBuilder: tokenCodeMatchBuilder,
-		tokenBuilder:          tokenBuilder,
-		callBuilder:           callBuilder,
-		exitBuilder:           exitBuilder,
-		builder:               builder,
+		stackFrameBuilder:   stackFrameBuilder,
+		skipBuilder:         skipBuilder,
+		transformBuilder:    transformBuilder,
+		variableNameBuilder: variableNameBuilder,
+		conditionBuilder:    conditionBuilder,
+		propositionBuilder:  propositionBuilder,
+		remainingBuilder:    remainingBuilder,
+		standardBuilder:     standardBuilder,
+		valueBuilder:        valueBuilder,
+		varValueAdapter:     varValueAdapter,
+		varValueFactory:     varValueFactory,
+		varVariableBuilder:  varVariableBuilder,
+		callBuilder:         callBuilder,
+		exitBuilder:         exitBuilder,
+		builder:             builder,
 	}
 
 	return &out
@@ -325,27 +311,6 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 		builder.WithCondition(condition)
 	}
 
-	if parsed.IsMatch() {
-		parsedMatch := parsed.Match()
-		match, err := app.match(parsedMatch).Now()
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithMatch(match)
-
-	}
-
-	if parsed.IsToken() {
-		parsedToken := parsed.Token()
-		tok, err := app.token(parsedToken)
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithToken(tok)
-	}
-
 	if parsed.IsExit() {
 		parsedExit := parsed.Exit()
 		exit, err := app.exit(parsedExit)
@@ -390,62 +355,6 @@ func (app *adapter) exit(parsed parsers.Exit) (exit.Exit, error) {
 	return builder.Now()
 }
 
-func (app *adapter) token(parsed parsers.Token) (token.Token, error) {
-	builder := app.tokenBuilder.Create()
-	if parsed.IsCodeMatch() {
-		parsedCodeMatch := parsed.CodeMatch()
-		codeMatch, err := app.tokenCodeMatch(parsedCodeMatch)
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithCodeMatch(codeMatch)
-	}
-
-	if parsed.IsTokenSection() {
-		parsedTokenSection := parsed.TokenSection()
-		code, err := app.tokenSection(parsedTokenSection)
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithCode(code)
-	}
-
-	return builder.Now()
-}
-
-func (app *adapter) tokenCodeMatch(parsed parsers.CodeMatch) (token.CodeMatch, error) {
-	ret := parsed.Content()
-
-	section := parsed.Section()
-	patternVariables := parsed.PatternVariables()
-
-	return app.tokenCodeMatchBuilder.Create().WithReturn(ret).WithSectionName(section).WithPatterns(patternVariables).Now()
-}
-
-func (app *adapter) tokenSection(parsed parsers.TokenSection) (token.Code, error) {
-	if parsed.IsVariableName() {
-		ret := parsed.VariableName()
-		return app.tokenCodeBuilder.Create().WithReturn(ret).Now()
-	}
-
-	specific := parsed.Specific()
-	return app.tokenSpecificCode(specific)
-}
-
-func (app *adapter) tokenSpecificCode(parsed parsers.SpecificTokenCode) (token.Code, error) {
-	ret := parsed.VariableName()
-	patternVariable := parsed.PatternVariable()
-	builder := app.tokenCodeBuilder.Create().WithReturn(ret).WithPattern(patternVariable)
-	if parsed.HasAmount() {
-		amount := parsed.Amount()
-		builder.WithAmount(amount)
-	}
-
-	return builder.Now()
-}
-
 func (app *adapter) transform(parsed parsers.TransformOperation) transform.Builder {
 	builder := app.transformBuilder.Create()
 	input := parsed.Input()
@@ -469,17 +378,6 @@ func (app *adapter) conditionFromJump(parsed parsers.Jump) (condition.Condition,
 	}
 
 	return app.conditionBuilder.Create().IsJump().WithProposition(proposition).Now()
-}
-
-func (app *adapter) match(parsed parsers.Match) match.Builder {
-	input := parsed.Input()
-	builder := app.matchBuilder.Create().WithInput(input)
-	if parsed.HasPattern() {
-		pattern := parsed.Pattern()
-		builder.WithPattern(pattern)
-	}
-
-	return builder
 }
 
 func (app *adapter) remaining(parsed parsers.RemainingOperation) remaining.Builder {

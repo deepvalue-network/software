@@ -1,0 +1,4 @@
+test myVariable, myTest:
+    match: myInput.
+    +* -> match: myInput.
+.

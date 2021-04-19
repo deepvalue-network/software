@@ -4,7 +4,7 @@ import "errors"
 
 type assignmentBuilder struct {
 	variable string
-	value    Value
+	value    ValueRepresentation
 }
 
 func createAssignmentBuilder() AssignmentBuilder {
@@ -28,7 +28,7 @@ func (app *assignmentBuilder) WithVariable(variable string) AssignmentBuilder {
 }
 
 // WithValue adds a value to the builder
-func (app *assignmentBuilder) WithValue(value Value) AssignmentBuilder {
+func (app *assignmentBuilder) WithValue(value ValueRepresentation) AssignmentBuilder {
 	app.value = value
 	return app
 }
@@ -40,7 +40,7 @@ func (app *assignmentBuilder) Now() (Assignment, error) {
 	}
 
 	if app.value == nil {
-		return nil, errors.New("the value is mandatory in order to build an Assignment")
+		return nil, errors.New("the valueRepresentation is mandatory in order to build an Assignment")
 	}
 
 	return createAssignment(app.variable, app.value), nil

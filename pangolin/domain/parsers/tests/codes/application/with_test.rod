@@ -8,18 +8,18 @@ main:
     print: myVariable.
     push.
     assign: myVariable, 43.
-    match: myInput, $myPattern.
+    assign: first, sec.
     assign: myVariable, 43.
 .
 
 tests:
     firstTest:
-        match: myInput, $myPattern.
+        assign: first, sec.
         assert: 0.
     .
 
     secondTest:
-        match: myInput, $myPattern.
+        assign: first, sec.
         assert: 0.
     .
 .

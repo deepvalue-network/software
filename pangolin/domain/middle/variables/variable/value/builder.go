@@ -7,16 +7,14 @@ import (
 )
 
 type builder struct {
-	comp           computable.Value
-	globalVariable string
-	localVariable  string
+	comp     computable.Value
+	variable string
 }
 
 func createBuilder() Builder {
 	out := builder{
-		comp:           nil,
-		globalVariable: "",
-		localVariable:  "",
+		comp:     nil,
+		variable: "",
 	}
 
 	return &out
@@ -33,15 +31,9 @@ func (app *builder) WithComputable(computable computable.Value) Builder {
 	return app
 }
 
-// WithGlobalVariable adds a globalVariable to the builder
-func (app *builder) WithGlobalVariable(globalVariable string) Builder {
-	app.globalVariable = globalVariable
-	return app
-}
-
-// WithGlobalVariable adds a globalVariable to the builder
-func (app *builder) WithLocalVariable(localVariable string) Builder {
-	app.localVariable = localVariable
+// WithVariable adds a variable to the builder
+func (app *builder) WithVariable(variable string) Builder {
+	app.variable = variable
 	return app
 }
 
@@ -51,12 +43,8 @@ func (app *builder) Now() (Value, error) {
 		return createValueWithComputable(app.comp), nil
 	}
 
-	if app.globalVariable != "" {
-		return createValueWithGlobalVariabe(app.globalVariable), nil
-	}
-
-	if app.localVariable != "" {
-		return createValueWithLocalVariabe(app.localVariable), nil
+	if app.variable != "" {
+		return createValueWithVariabe(app.variable), nil
 	}
 
 	return nil, errors.New("the Value is invalid")

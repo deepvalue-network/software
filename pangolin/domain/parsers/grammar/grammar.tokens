@@ -4,9 +4,15 @@ program
     | script
     ;
 
+language
+    : languageDefinition
+    | languageApplication
+    ;
+
 script
     : SCRIPT COLON scriptValue+ DOT
     ;
+
 
 scriptValue
     : SCRIPT_NAME COLON NAME_PATTERN DOT
@@ -15,7 +21,154 @@ scriptValue
     | SCRIPT_LANGUAGE COLON relativePath DOT
     ;
 
-language
+command
+    : languageCommand
+    | scriptCommand
+    | headCommand
+    | mainCommand
+    | testCommand
+    | labelCommand
+    ;
+
+languageCommand
+    : LANGUAGE VARIABLE_PATTERN COLON languageValue+ DOT
+    ;
+
+scriptCommand
+    : SCRIPT VARIABLE_PATTERN COLON scriptValue+ DOT
+    ;
+
+headCommand
+    : HEAD VARIABLE_PATTERN COLON headValue+ DOT
+    ;
+
+mainCommand
+    : MAIN VARIABLE_PATTERN COLON mainCommandInstruction+ DOT
+    ;
+
+mainCommandInstruction
+    : scopesWithArrow? languageInstruction
+    ;
+
+testCommand
+    : TEST VARIABLE_PATTERN COMMA TEST_NAME_PATTERN COLON testCommandInstruction+ DOT
+    ;
+
+testCommandInstruction
+    : scopesWithArrow? languageTestInstruction
+    ;
+
+labelCommand
+    : LABEL VARIABLE_PATTERN COMMA LABEL_PATTERN COLON labelCommandInstruction+ DOT
+    ;
+
+labelCommandInstruction
+    : scopesWithArrow? languageLabelInstruction
+    ;
+
+scopesWithArrow
+    : scopes ARROW
+    ;
+
+scopes
+    : scope+
+    ;
+
+scope
+    : STAR
+    | PLUS
+    ;
+
+languageApplication
+    : headSection languageLabelSection languageMainSection languageTestSection?
+    ;
+
+languageMainSection
+    : MAIN COLON languageInstruction+ DOT
+    ;
+
+languageTestSection
+    : TESTS COLON languageTestDeclaration+ DOT
+    ;
+
+languageTestDeclaration
+    : TEST_NAME_PATTERN COLON languageTestInstruction+ DOT
+    ;
+
+languageTestInstruction
+    : languageInstruction
+    | testInstruction
+    ;
+
+languageLabelSection
+    : LABELS COLON languageLabelDeclaration+ DOT
+    ;
+
+languageLabelDeclaration
+    : LABEL_PATTERN COLON languageLabelInstruction+ DOT
+    ;
+
+languageLabelInstruction
+    : labelInstruction
+    | languageInstruction
+    | token DOT
+    ;
+
+languageInstruction
+    : instruction
+    | command
+    | match DOT
+    ;
+
+token
+    : CODE_MATCH COLON codeMatch
+    | CODE COLON tokenSection
+    ;
+
+codeMatch
+    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA callPatterns
+    ;
+
+tokenSection
+    : specificTokenCodeWithAmount
+    | specificTokenCode
+    | VARIABLE_PATTERN
+    ;
+
+specificTokenCodeWithAmount
+    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA callPattern
+    ;
+
+specificTokenCode
+    : VARIABLE_PATTERN COMMA callPattern
+    ;
+
+callPatterns
+    : callPattern pipeCallPattern*
+    ;
+
+pipeCallPattern
+    : PIPE callPattern
+    ;
+
+callPattern
+    : COMMERCIAL_A patternOrRule
+    ;
+
+patternOrRule
+    : RULE_PATTERN
+    | PATTERN_PATTERN
+    ;
+
+match
+    : MATCH COLON VARIABLE_PATTERN matchPattern?
+    ;
+
+matchPattern
+    : COMMA DOLLAR_SIGN PATTERN_PATTERN
+    ;
+
+languageDefinition
     : LANGUAGE COLON languageValue+ DOT
     ;
 
@@ -26,7 +179,6 @@ languageValue
     | LANG_RULES COLON relativePath DOT
     | LANG_LOGIC COLON relativePath DOT
     | IN COLON VARIABLE_PATTERN DOT
-    | OUT COLON VARIABLE_PATTERN DOT
     | EXTENDS COLON singleExtend+ DOT
     | LANG_PATTERN_MATCHES COLON patternMatch+ DOT
     ;
@@ -51,6 +203,14 @@ patternLabelEnter
 
 patternLabelExit
     : PIPE LABEL_PATTERN
+    ;
+
+relativePaths
+    : relativePath relativePathWithComma*
+    ;
+
+relativePathWithComma
+    : COMMA relativePath
     ;
 
 relativePath
@@ -132,50 +292,8 @@ instruction
     | print DOT
     | stackFrame DOT
     | jump DOT
-    | match DOT
     | exit DOT
     | call DOT
-    | token DOT
-    ;
-
-token
-    : CODE_MATCH COLON codeMatch
-    | CODE COLON tokenSection
-    ;
-
-codeMatch
-    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA callPatterns
-    ;
-
-tokenSection
-    : specificTokenCodeWithAmount
-    | specificTokenCode
-    | VARIABLE_PATTERN
-    ;
-
-specificTokenCodeWithAmount
-    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA callPattern
-    ;
-
-specificTokenCode
-    : VARIABLE_PATTERN COMMA callPattern
-    ;
-
-callPatterns
-    : callPattern pipeCallPattern*
-    ;
-
-pipeCallPattern
-    : PIPE callPattern
-    ;
-
-callPattern
-    : COMMERCIAL_A patternOrRule
-    ;
-
-patternOrRule
-    : RULE_PATTERN
-    | PATTERN_PATTERN
     ;
 
 variable
@@ -194,7 +312,12 @@ declaration
     ;
 
 assignment
-    : ASSIGN COLON VARIABLE_PATTERN COMMA value
+    : ASSIGN COLON VARIABLE_PATTERN COMMA valueRepresentation
+    ;
+
+valueRepresentation
+    : value
+    | VARIABLE_PATTERN
     ;
 
 value
@@ -202,7 +325,6 @@ value
     | boolValue
     | stringValue
     | NIL
-    | VARIABLE_PATTERN
     ;
 
 numericValue
@@ -224,8 +346,7 @@ stringValue
     ;
 
 type
-    : NIL
-    | BOOL
+    : BOOL
     | INT_HEIGHT
     | INT_SIXTEEN
     | INT_THIRTY_TWO
@@ -276,15 +397,7 @@ remainingOperation
     ;
 
 print
-    : PRINT COLON value
-    ;
-
-match
-    : MATCH COLON VARIABLE_PATTERN matchPattern?
-    ;
-
-matchPattern
-    : COMMA DOLLAR_SIGN PATTERN_PATTERN
+    : PRINT COLON valueRepresentation
     ;
 
 jump

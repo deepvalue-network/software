@@ -129,7 +129,6 @@ type LanguageBuilder interface {
 	WithLogicsPath(logics string) LanguageBuilder
 	WithPatternMatches(patternMatches []PatternMatch) LanguageBuilder
 	WithInputVariable(input string) LanguageBuilder
-	WithOutputVariable(output string) LanguageBuilder
 	WithExtends(extends []string) LanguageBuilder
 	Now() (Language, error)
 }
@@ -142,7 +141,6 @@ type Language interface {
 	LogicsPath() string
 	PatternMatches() []PatternMatch
 	InputVariable() string
-	OutputVariable() string
 	HasChannelsPath() bool
 	ChannelsPath() string
 	HasExtends() bool

@@ -1,7 +1,6 @@
 package parsers
 
 type typ struct {
-	isNil     bool
 	isBool    bool
 	isInt8    bool
 	isInt16   bool
@@ -16,60 +15,55 @@ type typ struct {
 	isString  bool
 }
 
-func createTypeWithNil() Type {
-	return createTypeInternally(true, false, false, false, false, false, false, false, false, false, false, false, false)
-}
-
 func createTypeWithBool() Type {
-	return createTypeInternally(false, true, false, false, false, false, false, false, false, false, false, false, false)
+	return createTypeInternally(true, false, false, false, false, false, false, false, false, false, false, false)
 }
 
 func createTypeWithInt8() Type {
-	return createTypeInternally(false, false, true, false, false, false, false, false, false, false, false, false, false)
+	return createTypeInternally(false, true, false, false, false, false, false, false, false, false, false, false)
 }
 
 func createTypeWithInt16() Type {
-	return createTypeInternally(false, false, false, true, false, false, false, false, false, false, false, false, false)
+	return createTypeInternally(false, false, true, false, false, false, false, false, false, false, false, false)
 }
 
 func createTypeWithInt32() Type {
-	return createTypeInternally(false, false, false, false, true, false, false, false, false, false, false, false, false)
+	return createTypeInternally(false, false, false, true, false, false, false, false, false, false, false, false)
 }
 
 func createTypeWithInt64() Type {
-	return createTypeInternally(false, false, false, false, false, true, false, false, false, false, false, false, false)
+	return createTypeInternally(false, false, false, false, true, false, false, false, false, false, false, false)
 }
 
 func createTypeWithFloat32() Type {
-	return createTypeInternally(false, false, false, false, false, false, true, false, false, false, false, false, false)
+	return createTypeInternally(false, false, false, false, false, true, false, false, false, false, false, false)
 }
 
 func createTypeWithFloat64() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, true, false, false, false, false, false)
+	return createTypeInternally(false, false, false, false, false, false, true, false, false, false, false, false)
 }
 
 func createTypeWithUint8() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, false, true, false, false, false, false)
+	return createTypeInternally(false, false, false, false, false, false, false, true, false, false, false, false)
 }
 
 func createTypeWithUint16() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, false, false, true, false, false, false)
+	return createTypeInternally(false, false, false, false, false, false, false, false, true, false, false, false)
 }
 
 func createTypeWithUint32() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, true, false, false)
+	return createTypeInternally(false, false, false, false, false, false, false, false, false, true, false, false)
 }
 
 func createTypeWithUint64() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, false, true, false)
+	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, true, false)
 }
 
 func createTypeWithString() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, false, false, true)
+	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, false, true)
 }
 
 func createTypeInternally(
-	isNil bool,
 	isBool bool,
 	isInt8 bool,
 	isInt16 bool,
@@ -84,7 +78,6 @@ func createTypeInternally(
 	isString bool,
 ) Type {
 	out := typ{
-		isNil:     isNil,
 		isBool:    isBool,
 		isInt8:    isInt8,
 		isInt16:   isInt16,
@@ -100,11 +93,6 @@ func createTypeInternally(
 	}
 
 	return &out
-}
-
-// IsNil returns true if the type is nil
-func (obj *typ) IsNil() bool {
-	return obj.isNil
 }
 
 // IsBool returns true if the type is bool
@@ -169,10 +157,6 @@ func (obj *typ) IsString() bool {
 
 // String returns the type as string
 func (obj *typ) String() string {
-	if obj.IsNil() {
-		return "nil"
-	}
-
 	if obj.IsBool() {
 		return "bool"
 	}

@@ -9,7 +9,6 @@ type languageValueBuilder struct {
 	rules          RelativePath
 	logic          RelativePath
 	input          string
-	output         string
 	extends        []RelativePath
 	patternMatches []PatternMatch
 }
@@ -22,7 +21,6 @@ func createLanguageValueBuilder() LanguageValueBuilder {
 		rules:          nil,
 		logic:          nil,
 		input:          "",
-		output:         "",
 		extends:        nil,
 		patternMatches: nil,
 	}
@@ -71,12 +69,6 @@ func (app *languageValueBuilder) WithInputVariable(inputVar string) LanguageValu
 	return app
 }
 
-// WithOutputVariable adds an output variable to the builder
-func (app *languageValueBuilder) WithOutputVariable(outputVar string) LanguageValueBuilder {
-	app.output = outputVar
-	return app
-}
-
 // WithExtends add extends variable to the builder
 func (app *languageValueBuilder) WithExtends(extends []RelativePath) LanguageValueBuilder {
 	app.extends = extends
@@ -113,10 +105,6 @@ func (app *languageValueBuilder) Now() (LanguageValue, error) {
 
 	if app.input != "" {
 		return createLanguageValueWithInput(app.input), nil
-	}
-
-	if app.output != "" {
-		return createLanguageValueWithOutput(app.output), nil
 	}
 
 	if app.extends != nil {

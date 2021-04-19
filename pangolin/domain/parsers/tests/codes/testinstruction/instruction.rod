@@ -1,1 +1,1 @@
-match: myInput, $myPattern.
+assign: first, sec.

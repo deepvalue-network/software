@@ -4,11 +4,9 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/exit"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/token"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/variablename"
@@ -27,14 +25,10 @@ func NewAdapter() Adapter {
 	propositionBuilder := condition.NewPropositionBuilder()
 	remainingBuilder := remaining.NewBuilder()
 	standardBuilder := standard.NewBuilder()
-	matchBuilder := match.NewBuilder()
 	valueBuilder := value.NewBuilder()
 	varValueAdapter := var_value.NewAdapter()
 	varValueFactory := var_value.NewFactory()
 	varVariableBuilder := var_variable.NewBuilder()
-	tokenCodeBuilder := token.NewCodeBuilder()
-	tokenCodeMatchBuilder := token.NewCodeMatchBuilder()
-	tokenBuilder := token.NewBuilder()
 	callBuilder := call.NewBuilder()
 	exitBuilder := exit.NewBuilder()
 	builder := NewBuilder()
@@ -47,14 +41,10 @@ func NewAdapter() Adapter {
 		propositionBuilder,
 		remainingBuilder,
 		standardBuilder,
-		matchBuilder,
 		valueBuilder,
 		varValueAdapter,
 		varValueFactory,
 		varVariableBuilder,
-		tokenCodeBuilder,
-		tokenCodeMatchBuilder,
-		tokenBuilder,
 		callBuilder,
 		exitBuilder,
 		builder,
@@ -84,8 +74,6 @@ type Builder interface {
 	WithInsert(insert var_variable.Variable) Builder
 	WithSave(save var_variable.Variable) Builder
 	WithDelete(del string) Builder
-	WithMatch(match match.Match) Builder
-	WithToken(token token.Token) Builder
 	WithCall(call call.Call) Builder
 	WithExit(exit exit.Exit) Builder
 	Now() (Instruction, error)
@@ -113,10 +101,6 @@ type Instruction interface {
 	Save() var_variable.Variable
 	IsDelete() bool
 	Delete() string
-	IsMatch() bool
-	Match() match.Match
-	IsToken() bool
-	Token() token.Token
 	IsCall() bool
 	Call() call.Call
 	IsExit() bool

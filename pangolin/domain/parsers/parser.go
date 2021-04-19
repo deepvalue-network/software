@@ -11,124 +11,172 @@ import (
 )
 
 type parser struct {
-	lexerAdapter              lexers.Adapter
-	lexerApplication          lparser.Application
-	lexerBuilder              lexers.Builder
-	parserBuilder             lparser.Builder
-	programBuilder            ProgramBuilder
-	languageBuilder           LanguageBuilder
-	languageValueBuilder      LanguageValueBuilder
-	scriptBuilder             ScriptBuilder
-	scriptValueBuilder        ScriptValueBuilder
-	patternMatchBuilder       PatternMatchBuilder
-	patternLabelsBuilder      PatternLabelsBuilder
-	relativePathBuilder       RelativePathBuilder
-	folderSectionBuilder      FolderSectionBuilder
-	folderNameBuilder         FolderNameBuilder
-	applicationBuilder        ApplicationBuilder
-	testSectionBuilder        TestSectionBuilder
-	testDeclarationBuilder    TestDeclarationBuilder
-	testInstructionBuilder    TestInstructionBuilder
-	assertBuilder             AssertBuilder
-	readFileBuilder           ReadFileBuilder
-	headSectionBuilder        HeadSectionBuilder
-	headValueBuilder          HeadValueBuilder
-	importSingleBuilder       ImportSingleBuilder
-	labelSectionBuilder       LabelSectionBuilder
-	labelDeclarationBuilder   LabelDeclarationBuilder
-	labelInstructionBuilder   LabelInstructionBuilder
-	mainSectionBuilder        MainSectionBuilder
-	instructionBuilder        InstructionBuilder
-	specificTokenCodeBuilder  SpecificTokenCodeBuilder
-	tokenSectionBuilder       TokenSectionBuilder
-	codeMatchBuilder          CodeMatchBuilder
-	tokenBuilder              TokenBuilder
-	variableBuilder           VariableBuilder
-	concatenationBuilder      ConcatenationBuilder
-	declarationBuilder        DeclarationBuilder
-	assignmentBuilder         AssignmentBuilder
-	valueBuilder              ValueBuilder
-	numericValueBuilder       NumericValueBuilder
-	typeBuilder               TypeBuilder
-	operationBuilder          OperationBuilder
-	arythmeticBuilder         ArythmeticBuilder
-	relationalBuilder         RelationalBuilder
-	logicalBuilder            LogicalBuilder
-	transformOperationBuilder TransformOperationBuilder
-	standardOperationBuilder  StandardOperationBuilder
-	remainingOperationBuilder RemainingOperationBuilder
-	printBuilder              PrintBuilder
-	jumpBuilder               JumpBuilder
-	matchBuilder              MatchBuilder
-	exitBuilder               ExitBuilder
-	callBuilder               CallBuilder
-	stackFrameBuilder         StackFrameBuilder
-	indexBuilder              IndexBuilder
-	skipBuilder               SkipBuilder
-	intPointerBuilder         IntPointerBuilder
-	program                   map[string]Program
-	language                  map[string]Language
-	languageValue             map[string]LanguageValue
-	targetPath                map[string]RelativePath
-	script                    map[string]Script
-	scriptValue               map[string]ScriptValue
-	patternMatch              map[string]PatternMatch
-	patternLabels             map[string]PatternLabels
-	patternLabelEnter         map[string]string
-	patternLabelExit          map[string]string
-	relativePath              map[string]RelativePath
-	folderSection             map[string]FolderSection
-	folderName                map[string]FolderName
-	application               map[string]Application
-	testSection               map[string]TestSection
-	testDeclaration           map[string]TestDeclaration
-	testInstruction           map[string]TestInstruction
-	assert                    map[string]Assert
-	readFile                  map[string]ReadFile
-	headSection               map[string]HeadSection
-	headValue                 map[string]HeadValue
-	importSingle              map[string]ImportSingle
-	labelSection              map[string]LabelSection
-	labelDeclaration          map[string]LabelDeclaration
-	labelInstruction          map[string]LabelInstruction
-	mainSection               map[string]MainSection
-	instruction               map[string]Instruction
-	specificTokenCode         map[string]SpecificTokenCode
-	tokenSection              map[string]TokenSection
-	codeMatch                 map[string]CodeMatch
-	token                     map[string]Token
-	callPattern               map[string]string
-	callPatterns              map[string][]string
-	patternOrRule             map[string]string
-	importNames               map[string]string
-	extendNames               map[string]string
-	variable                  map[string]Variable
-	concatenation             map[string]Concatenation
-	declaration               map[string]Declaration
-	assignment                map[string]Assignment
-	value                     map[string]Value
-	numericValue              map[string]NumericValue
-	boolValue                 map[string]bool
-	floatValue                map[string]float64
-	stringValue               map[string]string
-	typ                       map[string]Type
-	operation                 map[string]Operation
-	arythmetic                map[string]Arythmetic
-	relational                map[string]Relational
-	logical                   map[string]Logical
-	transformOperation        map[string]TransformOperation
-	standardOperation         map[string]StandardOperation
-	remainingOperation        map[string]RemainingOperation
-	print                     map[string]Print
-	jump                      map[string]Jump
-	match                     map[string]Match
-	matchPattern              map[string]string
-	exit                      map[string]Exit
-	call                      map[string]Call
-	stackFrame                map[string]StackFrame
-	index                     map[string]Index
-	skip                      map[string]Skip
-	intPointer                map[string]IntPointer
+	lexerAdapter                    lexers.Adapter
+	lexerApplication                lparser.Application
+	lexerBuilder                    lexers.Builder
+	parserBuilder                   lparser.Builder
+	programBuilder                  ProgramBuilder
+	languageBuilder                 LanguageBuilder
+	scopesBuilder                   ScopesBuilder
+	scopeBuilder                    ScopeBuilder
+	commandBuilder                  CommandBuilder
+	languageCommandBuilder          LanguageCommandBuilder
+	scriptCommandBuilder            ScriptCommandBuilder
+	headCommandBuilder              HeadCommandBuilder
+	mainCommandBuilder              MainCommandBuilder
+	mainCommandInstructionBuilder   MainCommandInstructionBuilder
+	testCommandBuilder              TestCommandBuilder
+	testCommandInstructionBuilder   TestCommandInstructionBuilder
+	labelCommandBuilder             LabelCommandBuilder
+	labelCommandInstructionBuilder  LabelCommandInstructionBuilder
+	languageApplicationBuilder      LanguageApplicationBuilder
+	languageMainSectionBuilder      LanguageMainSectionBuilder
+	languageTestSectionBuilder      LanguageTestSectionBuilder
+	languageTestDeclarationBuilder  LanguageTestDeclarationBuilder
+	languageTestInstructionBuilder  LanguageTestInstructionBuilder
+	languageLabelSectionBuilder     LanguageLabelSectionBuilder
+	languageLabelDeclarationBuilder LanguageLabelDeclarationBuilder
+	languageLabelInstructionBuilder LanguageLabelInstructionBuilder
+	languageInstructionBuilder      LanguageInstructionBuilder
+	languageDefinitionBuilder       LanguageDefinitionBuilder
+	languageValueBuilder            LanguageValueBuilder
+	scriptBuilder                   ScriptBuilder
+	scriptValueBuilder              ScriptValueBuilder
+	patternMatchBuilder             PatternMatchBuilder
+	patternLabelsBuilder            PatternLabelsBuilder
+	relativePathsBuilder            RelativePathsBuilder
+	relativePathBuilder             RelativePathBuilder
+	folderSectionBuilder            FolderSectionBuilder
+	folderNameBuilder               FolderNameBuilder
+	applicationBuilder              ApplicationBuilder
+	testSectionBuilder              TestSectionBuilder
+	testDeclarationBuilder          TestDeclarationBuilder
+	testInstructionBuilder          TestInstructionBuilder
+	assertBuilder                   AssertBuilder
+	readFileBuilder                 ReadFileBuilder
+	headSectionBuilder              HeadSectionBuilder
+	headValueBuilder                HeadValueBuilder
+	importSingleBuilder             ImportSingleBuilder
+	labelSectionBuilder             LabelSectionBuilder
+	labelDeclarationBuilder         LabelDeclarationBuilder
+	labelInstructionBuilder         LabelInstructionBuilder
+	mainSectionBuilder              MainSectionBuilder
+	instructionBuilder              InstructionBuilder
+	specificTokenCodeBuilder        SpecificTokenCodeBuilder
+	tokenSectionBuilder             TokenSectionBuilder
+	codeMatchBuilder                CodeMatchBuilder
+	tokenBuilder                    TokenBuilder
+	variableBuilder                 VariableBuilder
+	concatenationBuilder            ConcatenationBuilder
+	declarationBuilder              DeclarationBuilder
+	assignmentBuilder               AssignmentBuilder
+	valueRepresentationBuilder      ValueRepresentationBuilder
+	valueBuilder                    ValueBuilder
+	numericValueBuilder             NumericValueBuilder
+	typeBuilder                     TypeBuilder
+	operationBuilder                OperationBuilder
+	arythmeticBuilder               ArythmeticBuilder
+	relationalBuilder               RelationalBuilder
+	logicalBuilder                  LogicalBuilder
+	transformOperationBuilder       TransformOperationBuilder
+	standardOperationBuilder        StandardOperationBuilder
+	remainingOperationBuilder       RemainingOperationBuilder
+	printBuilder                    PrintBuilder
+	jumpBuilder                     JumpBuilder
+	matchBuilder                    MatchBuilder
+	exitBuilder                     ExitBuilder
+	callBuilder                     CallBuilder
+	stackFrameBuilder               StackFrameBuilder
+	indexBuilder                    IndexBuilder
+	skipBuilder                     SkipBuilder
+	intPointerBuilder               IntPointerBuilder
+	program                         map[string]Program
+	language                        map[string]Language
+	scopes                          map[string]Scopes
+	scope                           map[string]Scope
+	command                         map[string]Command
+	languageCommand                 map[string]LanguageCommand
+	scriptCommand                   map[string]ScriptCommand
+	headCommand                     map[string]HeadCommand
+	mainCommand                     map[string]MainCommand
+	mainCommandInstruction          map[string]MainCommandInstruction
+	testCommand                     map[string]TestCommand
+	testCommandInstruction          map[string]TestCommandInstruction
+	labelCommand                    map[string]LabelCommand
+	labelCommandInstruction         map[string]LabelCommandInstruction
+	languageApplication             map[string]LanguageApplication
+	languageMainSection             map[string]LanguageMainSection
+	languageTestSection             map[string]LanguageTestSection
+	languageTestDeclaration         map[string]LanguageTestDeclaration
+	languageTestInstruction         map[string]LanguageTestInstruction
+	languageLabelSection            map[string]LanguageLabelSection
+	languageLabelDeclaration        map[string]LanguageLabelDeclaration
+	languageLabelInstruction        map[string]LanguageLabelInstruction
+	languageInstruction             map[string]LanguageInstruction
+	languageDefinition              map[string]LanguageDefinition
+	languageValue                   map[string]LanguageValue
+	targetPath                      map[string]RelativePath
+	script                          map[string]Script
+	scriptValue                     map[string]ScriptValue
+	patternMatch                    map[string]PatternMatch
+	patternLabels                   map[string]PatternLabels
+	patternLabelEnter               map[string]string
+	patternLabelExit                map[string]string
+	relativePaths                   map[string]RelativePaths
+	relativePath                    map[string]RelativePath
+	folderSection                   map[string]FolderSection
+	folderName                      map[string]FolderName
+	application                     map[string]Application
+	testSection                     map[string]TestSection
+	testDeclaration                 map[string]TestDeclaration
+	testInstruction                 map[string]TestInstruction
+	assert                          map[string]Assert
+	readFile                        map[string]ReadFile
+	headSection                     map[string]HeadSection
+	headValue                       map[string]HeadValue
+	importSingle                    map[string]ImportSingle
+	labelSection                    map[string]LabelSection
+	labelDeclaration                map[string]LabelDeclaration
+	labelInstruction                map[string]LabelInstruction
+	mainSection                     map[string]MainSection
+	instruction                     map[string]Instruction
+	specificTokenCode               map[string]SpecificTokenCode
+	tokenSection                    map[string]TokenSection
+	codeMatch                       map[string]CodeMatch
+	token                           map[string]Token
+	callPattern                     map[string]string
+	callPatterns                    map[string][]string
+	patternOrRule                   map[string]string
+	importNames                     map[string]string
+	extendNames                     map[string]string
+	variable                        map[string]Variable
+	concatenation                   map[string]Concatenation
+	declaration                     map[string]Declaration
+	assignment                      map[string]Assignment
+	valueRepresentation             map[string]ValueRepresentation
+	value                           map[string]Value
+	numericValue                    map[string]NumericValue
+	boolValue                       map[string]bool
+	floatValue                      map[string]float64
+	stringValue                     map[string]string
+	typ                             map[string]Type
+	operation                       map[string]Operation
+	arythmetic                      map[string]Arythmetic
+	relational                      map[string]Relational
+	logical                         map[string]Logical
+	transformOperation              map[string]TransformOperation
+	standardOperation               map[string]StandardOperation
+	remainingOperation              map[string]RemainingOperation
+	print                           map[string]Print
+	jump                            map[string]Jump
+	match                           map[string]Match
+	matchPattern                    map[string]string
+	exit                            map[string]Exit
+	call                            map[string]Call
+	stackFrame                      map[string]StackFrame
+	index                           map[string]Index
+	skip                            map[string]Skip
+	intPointer                      map[string]IntPointer
 }
 
 func createParser(
@@ -138,11 +186,34 @@ func createParser(
 	lexerBuilder lexers.Builder,
 	programBuilder ProgramBuilder,
 	languageBuilder LanguageBuilder,
+	scopesBuilder ScopesBuilder,
+	scopeBuilder ScopeBuilder,
+	commandBuilder CommandBuilder,
+	languageCommandBuilder LanguageCommandBuilder,
+	scriptCommandBuilder ScriptCommandBuilder,
+	headCommandBuilder HeadCommandBuilder,
+	mainCommandBuilder MainCommandBuilder,
+	mainCommandInstructionBuilder MainCommandInstructionBuilder,
+	testCommandBuilder TestCommandBuilder,
+	testCommandInstructionBuilder TestCommandInstructionBuilder,
+	labelCommandBuilder LabelCommandBuilder,
+	labelCommandInstructionBuilder LabelCommandInstructionBuilder,
+	languageApplicationBuilder LanguageApplicationBuilder,
+	languageMainSectionBuilder LanguageMainSectionBuilder,
+	languageTestSectionBuilder LanguageTestSectionBuilder,
+	languageTestDeclarationBuilder LanguageTestDeclarationBuilder,
+	languageTestInstructionBuilder LanguageTestInstructionBuilder,
+	languageLabelSectionBuilder LanguageLabelSectionBuilder,
+	languageLabelDeclarationBuilder LanguageLabelDeclarationBuilder,
+	languageLabelInstructionBuilder LanguageLabelInstructionBuilder,
+	languageInstructionBuilder LanguageInstructionBuilder,
+	languageDefinitionBuilder LanguageDefinitionBuilder,
 	languageValueBuilder LanguageValueBuilder,
 	scriptBuilder ScriptBuilder,
 	scriptValueBuilder ScriptValueBuilder,
 	patternMatchBuilder PatternMatchBuilder,
 	patternLabelsBuilder PatternLabelsBuilder,
+	relativePathsBuilder RelativePathsBuilder,
 	relativePathBuilder RelativePathBuilder,
 	folderSectionBuilder FolderSectionBuilder,
 	folderNameBuilder FolderNameBuilder,
@@ -168,6 +239,7 @@ func createParser(
 	concatenationBuilder ConcatenationBuilder,
 	declarationBuilder DeclarationBuilder,
 	assignmentBuilder AssignmentBuilder,
+	valueRepresentationBuilder ValueRepresentationBuilder,
 	valueBuilder ValueBuilder,
 	numericValueBuilder NumericValueBuilder,
 	typeBuilder TypeBuilder,
@@ -189,61 +261,85 @@ func createParser(
 	intPointerBuilder IntPointerBuilder,
 ) (*parser, error) {
 	out := &parser{
-		lexerApplication:          lexerApplication,
-		parserBuilder:             parserBuilder,
-		lexerBuilder:              lexerBuilder,
-		lexerAdapter:              lexerAdapter,
-		programBuilder:            programBuilder,
-		languageBuilder:           languageBuilder,
-		languageValueBuilder:      languageValueBuilder,
-		scriptBuilder:             scriptBuilder,
-		scriptValueBuilder:        scriptValueBuilder,
-		patternMatchBuilder:       patternMatchBuilder,
-		patternLabelsBuilder:      patternLabelsBuilder,
-		relativePathBuilder:       relativePathBuilder,
-		folderSectionBuilder:      folderSectionBuilder,
-		folderNameBuilder:         folderNameBuilder,
-		applicationBuilder:        applicationBuilder,
-		testSectionBuilder:        testSectionBuilder,
-		testDeclarationBuilder:    testDeclarationBuilder,
-		testInstructionBuilder:    testInstructionBuilder,
-		assertBuilder:             assertBuilder,
-		readFileBuilder:           readFileBuilder,
-		headSectionBuilder:        headSectionBuilder,
-		headValueBuilder:          headValueBuilder,
-		importSingleBuilder:       importSingleBuilder,
-		labelSectionBuilder:       labelSectionBuilder,
-		labelDeclarationBuilder:   labelDeclarationBuilder,
-		labelInstructionBuilder:   labelInstructionBuilder,
-		mainSectionBuilder:        mainSectionBuilder,
-		instructionBuilder:        instructionBuilder,
-		specificTokenCodeBuilder:  specificTokenCodeBuilder,
-		tokenSectionBuilder:       tokenSectionBuilder,
-		codeMatchBuilder:          codeMatchBuilder,
-		tokenBuilder:              tokenBuilder,
-		variableBuilder:           variableBuilder,
-		concatenationBuilder:      concatenationBuilder,
-		declarationBuilder:        declarationBuilder,
-		assignmentBuilder:         assignmentBuilder,
-		valueBuilder:              valueBuilder,
-		numericValueBuilder:       numericValueBuilder,
-		typeBuilder:               typeBuilder,
-		operationBuilder:          operationBuilder,
-		arythmeticBuilder:         arythmeticBuilder,
-		relationalBuilder:         relationalBuilder,
-		logicalBuilder:            logicalBuilder,
-		transformOperationBuilder: transformOperationBuilder,
-		standardOperationBuilder:  standardOperationBuilder,
-		remainingOperationBuilder: remainingOperationBuilder,
-		printBuilder:              printBuilder,
-		jumpBuilder:               jumpBuilder,
-		matchBuilder:              matchBuilder,
-		exitBuilder:               exitBuilder,
-		callBuilder:               callBuilder,
-		stackFrameBuilder:         stackFrameBuilder,
-		indexBuilder:              indexBuilder,
-		skipBuilder:               skipBuilder,
-		intPointerBuilder:         intPointerBuilder,
+		lexerApplication:                lexerApplication,
+		parserBuilder:                   parserBuilder,
+		lexerBuilder:                    lexerBuilder,
+		lexerAdapter:                    lexerAdapter,
+		programBuilder:                  programBuilder,
+		languageBuilder:                 languageBuilder,
+		scopesBuilder:                   scopesBuilder,
+		scopeBuilder:                    scopeBuilder,
+		commandBuilder:                  commandBuilder,
+		languageCommandBuilder:          languageCommandBuilder,
+		scriptCommandBuilder:            scriptCommandBuilder,
+		headCommandBuilder:              headCommandBuilder,
+		mainCommandBuilder:              mainCommandBuilder,
+		mainCommandInstructionBuilder:   mainCommandInstructionBuilder,
+		testCommandBuilder:              testCommandBuilder,
+		testCommandInstructionBuilder:   testCommandInstructionBuilder,
+		labelCommandBuilder:             labelCommandBuilder,
+		labelCommandInstructionBuilder:  labelCommandInstructionBuilder,
+		languageApplicationBuilder:      languageApplicationBuilder,
+		languageMainSectionBuilder:      languageMainSectionBuilder,
+		languageTestSectionBuilder:      languageTestSectionBuilder,
+		languageTestDeclarationBuilder:  languageTestDeclarationBuilder,
+		languageTestInstructionBuilder:  languageTestInstructionBuilder,
+		languageLabelSectionBuilder:     languageLabelSectionBuilder,
+		languageLabelDeclarationBuilder: languageLabelDeclarationBuilder,
+		languageLabelInstructionBuilder: languageLabelInstructionBuilder,
+		languageInstructionBuilder:      languageInstructionBuilder,
+		languageDefinitionBuilder:       languageDefinitionBuilder,
+		languageValueBuilder:            languageValueBuilder,
+		scriptBuilder:                   scriptBuilder,
+		scriptValueBuilder:              scriptValueBuilder,
+		patternMatchBuilder:             patternMatchBuilder,
+		patternLabelsBuilder:            patternLabelsBuilder,
+		relativePathsBuilder:            relativePathsBuilder,
+		relativePathBuilder:             relativePathBuilder,
+		folderSectionBuilder:            folderSectionBuilder,
+		folderNameBuilder:               folderNameBuilder,
+		applicationBuilder:              applicationBuilder,
+		testSectionBuilder:              testSectionBuilder,
+		testDeclarationBuilder:          testDeclarationBuilder,
+		testInstructionBuilder:          testInstructionBuilder,
+		assertBuilder:                   assertBuilder,
+		readFileBuilder:                 readFileBuilder,
+		headSectionBuilder:              headSectionBuilder,
+		headValueBuilder:                headValueBuilder,
+		importSingleBuilder:             importSingleBuilder,
+		labelSectionBuilder:             labelSectionBuilder,
+		labelDeclarationBuilder:         labelDeclarationBuilder,
+		labelInstructionBuilder:         labelInstructionBuilder,
+		mainSectionBuilder:              mainSectionBuilder,
+		instructionBuilder:              instructionBuilder,
+		specificTokenCodeBuilder:        specificTokenCodeBuilder,
+		tokenSectionBuilder:             tokenSectionBuilder,
+		codeMatchBuilder:                codeMatchBuilder,
+		tokenBuilder:                    tokenBuilder,
+		variableBuilder:                 variableBuilder,
+		concatenationBuilder:            concatenationBuilder,
+		declarationBuilder:              declarationBuilder,
+		assignmentBuilder:               assignmentBuilder,
+		valueRepresentationBuilder:      valueRepresentationBuilder,
+		valueBuilder:                    valueBuilder,
+		numericValueBuilder:             numericValueBuilder,
+		typeBuilder:                     typeBuilder,
+		operationBuilder:                operationBuilder,
+		arythmeticBuilder:               arythmeticBuilder,
+		relationalBuilder:               relationalBuilder,
+		logicalBuilder:                  logicalBuilder,
+		transformOperationBuilder:       transformOperationBuilder,
+		standardOperationBuilder:        standardOperationBuilder,
+		remainingOperationBuilder:       remainingOperationBuilder,
+		printBuilder:                    printBuilder,
+		jumpBuilder:                     jumpBuilder,
+		matchBuilder:                    matchBuilder,
+		exitBuilder:                     exitBuilder,
+		callBuilder:                     callBuilder,
+		stackFrameBuilder:               stackFrameBuilder,
+		indexBuilder:                    indexBuilder,
+		skipBuilder:                     skipBuilder,
+		intPointerBuilder:               intPointerBuilder,
 	}
 
 	out.init()
@@ -260,6 +356,98 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 		lparser.ToEventsParams{
 			Token:  "language",
 			OnExit: app.exitLanguage,
+		},
+		lparser.ToEventsParams{
+			Token:  "scopesWithArrow",
+			OnExit: app.exitScopesWithArrow,
+		},
+		lparser.ToEventsParams{
+			Token:  "scopes",
+			OnExit: app.exitScopes,
+		},
+		lparser.ToEventsParams{
+			Token:  "scope",
+			OnExit: app.exitScope,
+		},
+		lparser.ToEventsParams{
+			Token:  "command",
+			OnExit: app.exitCommand,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageCommand",
+			OnExit: app.exitLanguageCommand,
+		},
+		lparser.ToEventsParams{
+			Token:  "scriptCommand",
+			OnExit: app.exitScriptCommand,
+		},
+		lparser.ToEventsParams{
+			Token:  "headCommand",
+			OnExit: app.exitHeadCommand,
+		},
+		lparser.ToEventsParams{
+			Token:  "mainCommand",
+			OnExit: app.exitMainCommand,
+		},
+		lparser.ToEventsParams{
+			Token:  "mainCommandInstruction",
+			OnExit: app.exitMainCommandInstruction,
+		},
+		lparser.ToEventsParams{
+			Token:  "testCommand",
+			OnExit: app.exitTestCommand,
+		},
+		lparser.ToEventsParams{
+			Token:  "testCommandInstruction",
+			OnExit: app.exitTestCommandInstruction,
+		},
+		lparser.ToEventsParams{
+			Token:  "labelCommand",
+			OnExit: app.exitLabelCommand,
+		},
+		lparser.ToEventsParams{
+			Token:  "labelCommandInstruction",
+			OnExit: app.exitLabelCommandInstruction,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageApplication",
+			OnExit: app.exitLanguageApplication,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageMainSection",
+			OnExit: app.exitLanguageMainSection,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageTestSection",
+			OnExit: app.exitLanguageTestSection,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageTestDeclaration",
+			OnExit: app.exitLanguageTestDeclaration,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageTestInstruction",
+			OnExit: app.exitLanguageTestInstruction,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageLabelSection",
+			OnExit: app.exitLanguageLabelSection,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageLabelDeclaration",
+			OnExit: app.exitLanguageLabelDeclaration,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageLabelInstruction",
+			OnExit: app.exitLanguageLabelInstruction,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageInstruction",
+			OnExit: app.exitLanguageInstruction,
+		},
+		lparser.ToEventsParams{
+			Token:  "languageDefinition",
+			OnExit: app.exitLanguageDefinition,
 		},
 		lparser.ToEventsParams{
 			Token:  "languageValue",
@@ -292,6 +480,14 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 		lparser.ToEventsParams{
 			Token:  "singleExtend",
 			OnExit: app.exitSingleExtend,
+		},
+		lparser.ToEventsParams{
+			Token:  "relativePaths",
+			OnExit: app.exitRelativePaths,
+		},
+		lparser.ToEventsParams{
+			Token:  "relativePathWithComma",
+			OnExit: app.exitRelativePathWithComma,
 		},
 		lparser.ToEventsParams{
 			Token:  "relativePath",
@@ -418,6 +614,10 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			OnExit: app.exitValue,
 		},
 		lparser.ToEventsParams{
+			Token:  "valueRepresentation",
+			OnExit: app.exitValueRepresentation,
+		},
+		lparser.ToEventsParams{
 			Token:  "numericValue",
 			OnExit: app.exitNumericValue,
 		},
@@ -542,6 +742,28 @@ func (app *parser) ExecuteScript(script string) (interface{}, error) {
 func (app *parser) init() {
 	app.program = map[string]Program{}
 	app.language = map[string]Language{}
+	app.scopes = map[string]Scopes{}
+	app.scope = map[string]Scope{}
+	app.command = map[string]Command{}
+	app.languageCommand = map[string]LanguageCommand{}
+	app.scriptCommand = map[string]ScriptCommand{}
+	app.headCommand = map[string]HeadCommand{}
+	app.mainCommand = map[string]MainCommand{}
+	app.mainCommandInstruction = map[string]MainCommandInstruction{}
+	app.testCommand = map[string]TestCommand{}
+	app.testCommandInstruction = map[string]TestCommandInstruction{}
+	app.labelCommand = map[string]LabelCommand{}
+	app.labelCommandInstruction = map[string]LabelCommandInstruction{}
+	app.languageApplication = map[string]LanguageApplication{}
+	app.languageMainSection = map[string]LanguageMainSection{}
+	app.languageTestSection = map[string]LanguageTestSection{}
+	app.languageTestDeclaration = map[string]LanguageTestDeclaration{}
+	app.languageTestInstruction = map[string]LanguageTestInstruction{}
+	app.languageLabelSection = map[string]LanguageLabelSection{}
+	app.languageLabelDeclaration = map[string]LanguageLabelDeclaration{}
+	app.languageLabelInstruction = map[string]LanguageLabelInstruction{}
+	app.languageInstruction = map[string]LanguageInstruction{}
+	app.languageDefinition = map[string]LanguageDefinition{}
 	app.languageValue = map[string]LanguageValue{}
 	app.targetPath = map[string]RelativePath{}
 	app.script = map[string]Script{}
@@ -550,6 +772,7 @@ func (app *parser) init() {
 	app.patternLabels = map[string]PatternLabels{}
 	app.patternLabelEnter = map[string]string{}
 	app.patternLabelExit = map[string]string{}
+	app.relativePaths = map[string]RelativePaths{}
 	app.relativePath = map[string]RelativePath{}
 	app.folderSection = map[string]FolderSection{}
 	app.folderName = map[string]FolderName{}
@@ -580,6 +803,7 @@ func (app *parser) init() {
 	app.concatenation = map[string]Concatenation{}
 	app.declaration = map[string]Declaration{}
 	app.assignment = map[string]Assignment{}
+	app.valueRepresentation = map[string]ValueRepresentation{}
 	app.value = map[string]Value{}
 	app.numericValue = map[string]NumericValue{}
 	app.boolValue = map[string]bool{}
@@ -641,6 +865,670 @@ func (app *parser) exitProgram(tree lexers.NodeTree) (interface{}, error) {
 }
 
 func (app *parser) exitLanguage(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"languageDefinition",
+		"languageApplication",
+	})
+
+	switch section {
+	case "languageDefinition":
+		if def, ok := app.languageDefinition[code]; ok {
+			builder.WithDefinition(def)
+		}
+		break
+	case "languageApplication":
+		if app, ok := app.languageApplication[code]; ok {
+			builder.WithApplication(app)
+		}
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.language[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitScopesWithArrow(tree lexers.NodeTree) (interface{}, error) {
+	scopesCode := tree.CodeFromName("scopes")
+	if scopesCode != "" {
+		if scopes, ok := app.scopes[scopesCode]; ok {
+			app.scopes[tree.Code()] = scopes
+			return scopes, nil
+		}
+	}
+
+	return nil, errors.New("the scopes was expected in the scopesWithArrow token")
+}
+
+func (app *parser) exitScopes(tree lexers.NodeTree) (interface{}, error) {
+	scopes := []Scope{}
+	codes := tree.CodesFromName("scope")
+	for _, oneCode := range codes {
+		if val, ok := app.scope[oneCode]; ok {
+			scopes = append(scopes, val)
+		}
+	}
+
+	ins, err := app.scopesBuilder.Create().WithScopes(scopes).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.scopes[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitScope(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.scopeBuilder.Create()
+	section, _ := tree.BestMatchFromNames([]string{
+		"STAR",
+		"PLUS",
+	})
+
+	switch section {
+	case "STAR":
+		builder.IsExternal()
+	case "PLUS":
+		builder.IsInternal()
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.scope[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitCommand(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.commandBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"languageCommand",
+		"scriptCommand",
+		"headCommand",
+		"mainCommand",
+		"testCommand",
+		"labelCommand",
+	})
+
+	switch section {
+	case "languageCommand":
+		if ins, ok := app.languageCommand[code]; ok {
+			builder.WithLanguage(ins)
+		}
+
+		break
+	case "scriptCommand":
+		if ins, ok := app.scriptCommand[code]; ok {
+			builder.WithScript(ins)
+		}
+
+		break
+	case "headCommand":
+		if ins, ok := app.headCommand[code]; ok {
+			builder.WithHead(ins)
+		}
+
+		break
+	case "mainCommand":
+		if ins, ok := app.mainCommand[code]; ok {
+			builder.WithMain(ins)
+		}
+
+		break
+	case "testCommand":
+		if ins, ok := app.testCommand[code]; ok {
+			builder.WithTest(ins)
+		}
+
+		break
+	case "labelCommand":
+		if ins, ok := app.labelCommand[code]; ok {
+			builder.WithLabel(ins)
+		}
+
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.command[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageCommand(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageCommandBuilder.Create()
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
+	}
+
+	values := []LanguageValue{}
+	langValueCodes := tree.CodesFromName("languageValue")
+	for _, oneValCode := range langValueCodes {
+		if val, ok := app.languageValue[oneValCode]; ok {
+			values = append(values, val)
+		}
+	}
+
+	if len(values) > 0 {
+		builder.WithValues(values)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageCommand[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitScriptCommand(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.scriptCommandBuilder.Create()
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
+	}
+
+	values := []ScriptValue{}
+	scriptValueCodes := tree.CodesFromName("scriptValue")
+	for _, oneValCode := range scriptValueCodes {
+		if val, ok := app.scriptValue[oneValCode]; ok {
+			values = append(values, val)
+		}
+	}
+
+	if len(values) > 0 {
+		builder.WithValues(values)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.scriptCommand[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitHeadCommand(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.headCommandBuilder.Create()
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
+	}
+
+	values := []HeadValue{}
+	headValueCodes := tree.CodesFromName("headValue")
+	for _, oneValCode := range headValueCodes {
+		if val, ok := app.headValue[oneValCode]; ok {
+			values = append(values, val)
+		}
+	}
+
+	if len(values) > 0 {
+		builder.WithValues(values)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.headCommand[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitMainCommand(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.mainCommandBuilder.Create()
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
+	}
+
+	instructions := []MainCommandInstruction{}
+	instructionCodes := tree.CodesFromName("mainCommandInstruction")
+	for _, oneInsCode := range instructionCodes {
+		if ins, ok := app.mainCommandInstruction[oneInsCode]; ok {
+			instructions = append(instructions, ins)
+		}
+	}
+
+	if len(instructions) > 0 {
+		builder.WithInstructions(instructions)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.mainCommand[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitMainCommandInstruction(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.mainCommandInstructionBuilder.Create()
+	scopesCode := tree.CodeFromName("scopesWithArrow")
+	if scopesCode != "" {
+		if ins, ok := app.scopes[scopesCode]; ok {
+			builder.WithScopes(ins)
+		}
+	}
+
+	instructionCode := tree.CodeFromName("languageInstruction")
+	if instructionCode != "" {
+		if ins, ok := app.languageInstruction[instructionCode]; ok {
+			builder.WithInstruction(ins)
+		}
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.mainCommandInstruction[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitTestCommand(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.testCommandBuilder.Create()
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
+	}
+
+	patternName := tree.CodeFromName("TEST_NAME_PATTERN")
+	if patternName != "" {
+		builder.WithName(patternName)
+	}
+
+	instructions := []TestCommandInstruction{}
+	instructionCodes := tree.CodesFromName("testCommandInstruction")
+	for _, oneInsCode := range instructionCodes {
+		if ins, ok := app.testCommandInstruction[oneInsCode]; ok {
+			instructions = append(instructions, ins)
+		}
+	}
+
+	if len(instructions) > 0 {
+		builder.WithInstructions(instructions)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.testCommand[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitTestCommandInstruction(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.testCommandInstructionBuilder.Create()
+	scopesCode := tree.CodeFromName("scopesWithArrow")
+	if scopesCode != "" {
+		if ins, ok := app.scopes[scopesCode]; ok {
+			builder.WithScopes(ins)
+		}
+	}
+
+	instructionCode := tree.CodeFromName("languageTestInstruction")
+	if instructionCode != "" {
+		if ins, ok := app.languageTestInstruction[instructionCode]; ok {
+			builder.WithInstruction(ins)
+		}
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.testCommandInstruction[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLabelCommand(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.labelCommandBuilder.Create()
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
+	}
+
+	labelName := tree.CodeFromName("LABEL_PATTERN")
+	if labelName != "" {
+		builder.WithName(labelName)
+	}
+
+	instructions := []LabelCommandInstruction{}
+	instructionCodes := tree.CodesFromName("labelCommandInstruction")
+	for _, oneInsCode := range instructionCodes {
+		if ins, ok := app.labelCommandInstruction[oneInsCode]; ok {
+			instructions = append(instructions, ins)
+		}
+	}
+
+	if len(instructions) > 0 {
+		builder.WithInstructions(instructions)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.labelCommand[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLabelCommandInstruction(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.labelCommandInstructionBuilder.Create()
+	scopesCode := tree.CodeFromName("scopesWithArrow")
+	if scopesCode != "" {
+		if ins, ok := app.scopes[scopesCode]; ok {
+			builder.WithScopes(ins)
+		}
+	}
+
+	instructionCode := tree.CodeFromName("languageLabelInstruction")
+	if instructionCode != "" {
+		if ins, ok := app.languageLabelInstruction[instructionCode]; ok {
+			builder.WithInstruction(ins)
+		}
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.labelCommandInstruction[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageApplication(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageApplicationBuilder.Create()
+	headSectionCode := tree.CodeFromName("headSection")
+	if headSectionCode != "" {
+		if ins, ok := app.headSection[headSectionCode]; ok {
+			builder.WithHead(ins)
+		}
+	}
+
+	labelSectionCode := tree.CodeFromName("languageLabelSection")
+	if labelSectionCode != "" {
+		if ins, ok := app.languageLabelSection[labelSectionCode]; ok {
+			builder.WithLabels(ins)
+		}
+	}
+
+	mainSectionCode := tree.CodeFromName("languageMainSection")
+	if mainSectionCode != "" {
+		if ins, ok := app.languageMainSection[mainSectionCode]; ok {
+			builder.WithMain(ins)
+		}
+	}
+
+	testSectionCode := tree.CodeFromName("languageTestSection")
+	if testSectionCode != "" {
+		if ins, ok := app.languageTestSection[testSectionCode]; ok {
+			builder.WithTests(ins)
+		}
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageApplication[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageMainSection(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageMainSectionBuilder.Create()
+	list := []LanguageInstruction{}
+	codes := tree.CodesFromName("languageInstruction")
+	for _, oneCode := range codes {
+		if ins, ok := app.languageInstruction[oneCode]; ok {
+			list = append(list, ins)
+		}
+	}
+
+	if len(list) > 0 {
+		builder.WithInstructions(list)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageMainSection[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageTestSection(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageTestSectionBuilder.Create()
+	list := []LanguageTestDeclaration{}
+	codes := tree.CodesFromName("languageTestDeclaration")
+	for _, oneCode := range codes {
+		if ins, ok := app.languageTestDeclaration[oneCode]; ok {
+			list = append(list, ins)
+		}
+	}
+
+	if len(list) > 0 {
+		builder.WithDeclarations(list)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageTestSection[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageTestDeclaration(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageTestDeclarationBuilder.Create()
+	name := tree.CodeFromName("TEST_NAME_PATTERN")
+	if name != "" {
+		builder.WithName(name)
+	}
+
+	list := []LanguageTestInstruction{}
+	codes := tree.CodesFromName("languageTestInstruction")
+	for _, oneCode := range codes {
+		if ins, ok := app.languageTestInstruction[oneCode]; ok {
+			list = append(list, ins)
+		}
+	}
+
+	if len(list) > 0 {
+		builder.WithInstructions(list)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageTestDeclaration[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageTestInstruction(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageTestInstructionBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"languageInstruction",
+		"testInstruction",
+	})
+
+	switch section {
+	case "languageInstruction":
+		if ins, ok := app.languageInstruction[code]; ok {
+			builder.WithLanguageInstruction(ins)
+		}
+
+		break
+	case "testInstruction":
+		if ins, ok := app.testInstruction[code]; ok {
+			builder.WithTestInstruction(ins)
+		}
+
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageTestInstruction[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageLabelSection(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageLabelSectionBuilder.Create()
+	list := []LanguageLabelDeclaration{}
+	codes := tree.CodesFromName("languageLabelDeclaration")
+	for _, oneCode := range codes {
+		if ins, ok := app.languageLabelDeclaration[oneCode]; ok {
+			list = append(list, ins)
+		}
+	}
+
+	if len(list) > 0 {
+		builder.WithDeclarations(list)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageLabelSection[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageLabelDeclaration(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageLabelDeclarationBuilder.Create()
+	labelName := tree.CodeFromName("LABEL_PATTERN")
+	if labelName != "" {
+		builder.WithName(labelName)
+	}
+
+	list := []LanguageLabelInstruction{}
+	codes := tree.CodesFromName("languageLabelInstruction")
+	for _, oneCode := range codes {
+		if ins, ok := app.languageLabelInstruction[oneCode]; ok {
+			list = append(list, ins)
+		}
+	}
+
+	if len(list) > 0 {
+		builder.WithInstructions(list)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageLabelDeclaration[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageLabelInstruction(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageLabelInstructionBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"labelInstruction",
+		"languageInstruction",
+		"token",
+	})
+
+	switch section {
+	case "labelInstruction":
+		if ins, ok := app.labelInstruction[code]; ok {
+			builder.WithLabelInstruction(ins)
+		}
+
+		break
+	case "languageInstruction":
+		if ins, ok := app.languageInstruction[code]; ok {
+			builder.WithLanguageInstruction(ins)
+		}
+
+		break
+	case "token":
+		if ins, ok := app.token[code]; ok {
+			builder.WithToken(ins)
+		}
+
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageLabelInstruction[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageInstruction(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.languageInstructionBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"instruction",
+		"command",
+		"match",
+	})
+
+	switch section {
+	case "instruction":
+		if ins, ok := app.instruction[code]; ok {
+			builder.WithInstruction(ins)
+		}
+
+		break
+	case "command":
+		if ins, ok := app.command[code]; ok {
+			builder.WithCommand(ins)
+		}
+
+		break
+	case "match":
+		if ins, ok := app.match[code]; ok {
+			builder.WithMatch(ins)
+		}
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.languageInstruction[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLanguageDefinition(tree lexers.NodeTree) (interface{}, error) {
 	values := []LanguageValue{}
 	codes := tree.CodesFromName("languageValue")
 	for _, oneCode := range codes {
@@ -649,12 +1537,12 @@ func (app *parser) exitLanguage(tree lexers.NodeTree) (interface{}, error) {
 		}
 	}
 
-	ins, err := app.languageBuilder.Create().WithValues(values).Now()
+	ins, err := app.languageDefinitionBuilder.Create().WithValues(values).Now()
 	if err != nil {
 		return nil, err
 	}
 
-	app.language[tree.Code()] = ins
+	app.languageDefinition[tree.Code()] = ins
 	return ins, nil
 }
 
@@ -716,11 +1604,7 @@ func (app *parser) exitLanguageValue(tree lexers.NodeTree) (interface{}, error) 
 			builder.WithInputVariable(code)
 			break
 		}
-
-		if tree.CodeFromName("OUT") != "" {
-			builder.WithOutputVariable(code)
-			break
-		}
+		break
 	case "LANG_PATTERN_MATCHES":
 		patternMatches := []PatternMatch{}
 		patternMatchCodes := tree.CodesFromName("patternMatch")
@@ -878,6 +1762,43 @@ func (app *parser) exitSingleExtend(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	return nil, errors.New("the singleExtend is invalid")
+}
+
+func (app *parser) exitRelativePaths(tree lexers.NodeTree) (interface{}, error) {
+	relativePaths := []RelativePath{}
+	code := tree.CodeFromName("relativePath")
+	if code != "" {
+		if rel, ok := app.relativePath[code]; ok {
+			relativePaths = append(relativePaths, rel)
+		}
+	}
+
+	codes := tree.CodesFromName("relativePathWithComma")
+	for _, oneCode := range codes {
+		if rel, ok := app.relativePath[oneCode]; ok {
+			relativePaths = append(relativePaths, rel)
+		}
+	}
+
+	ins, err := app.relativePathsBuilder.Create().WithRelativePaths(relativePaths).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.relativePaths[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitRelativePathWithComma(tree lexers.NodeTree) (interface{}, error) {
+	code := tree.CodeFromName("relativePath")
+	if code != "" {
+		if rel, ok := app.relativePath[code]; ok {
+			app.relativePath[tree.Code()] = rel
+			return rel, nil
+		}
+	}
+
+	return nil, errors.New("the relativePath could not be found")
 }
 
 func (app *parser) exitRelativePath(tree lexers.NodeTree) (interface{}, error) {
@@ -1294,10 +2215,8 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 		"print",
 		"stackFrame",
 		"jump",
-		"match",
 		"exit",
 		"call",
-		"token",
 	})
 
 	switch section {
@@ -1325,22 +2244,17 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 		if jmp, ok := app.jump[code]; ok {
 			builder.WithJump(jmp)
 		}
-	case "match":
-		if mtch, ok := app.match[code]; ok {
-			builder.WithMatch(mtch)
-		}
+
+		break
 	case "exit":
 		if exit, ok := app.exit[code]; ok {
 			builder.WithExit(exit)
 		}
+
+		break
 	case "call":
 		if call, ok := app.call[code]; ok {
 			builder.WithCall(call)
-		}
-		break
-	case "token":
-		if token, ok := app.token[code]; ok {
-			builder.WithToken(token)
 		}
 		break
 	}
@@ -1632,9 +2546,9 @@ func (app *parser) exitAssignment(tree lexers.NodeTree) (interface{}, error) {
 		builder.WithVariable(variableName)
 	}
 
-	valueCode := tree.CodeFromName("value")
+	valueCode := tree.CodeFromName("valueRepresentation")
 	if valueCode != "" {
-		if val, ok := app.value[valueCode]; ok {
+		if val, ok := app.valueRepresentation[valueCode]; ok {
 			builder.WithValue(val)
 		}
 	}
@@ -1648,10 +2562,36 @@ func (app *parser) exitAssignment(tree lexers.NodeTree) (interface{}, error) {
 	return ins, nil
 }
 
+func (app *parser) exitValueRepresentation(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.valueRepresentationBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"VARIABLE_PATTERN",
+		"value",
+	})
+
+	switch section {
+	case "VARIABLE_PATTERN":
+		builder.WithVariable(code)
+		break
+	case "value":
+		if val, ok := app.value[code]; ok {
+			builder.WithValue(val)
+		}
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.valueRepresentation[tree.Code()] = ins
+	return ins, nil
+}
+
 func (app *parser) exitValue(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.valueBuilder.Create()
 	section, code := tree.BestMatchFromNames([]string{
-		"VARIABLE_PATTERN",
 		"numericValue",
 		"boolValue",
 		"stringValue",
@@ -1660,9 +2600,6 @@ func (app *parser) exitValue(tree lexers.NodeTree) (interface{}, error) {
 	})
 
 	switch section {
-	case "VARIABLE_PATTERN":
-		builder.WithVariable(code)
-		break
 	case "numericValue":
 		if val, ok := app.numericValue[code]; ok {
 			builder.WithNumeric(val)
@@ -1775,7 +2712,6 @@ func (app *parser) exitStringValue(tree lexers.NodeTree) (interface{}, error) {
 func (app *parser) exitType(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.typeBuilder.Create()
 	section, _ := tree.BestMatchFromNames([]string{
-		"NIL",
 		"BOOL",
 		"INT_HEIGHT",
 		"INT_SIXTEEN",
@@ -1791,9 +2727,6 @@ func (app *parser) exitType(tree lexers.NodeTree) (interface{}, error) {
 	})
 
 	switch section {
-	case "NIL":
-		builder.IsNil()
-		break
 	case "BOOL":
 		builder.IsBool()
 		break
@@ -2048,9 +2981,9 @@ func (app *parser) exitRemainingOperation(tree lexers.NodeTree) (interface{}, er
 
 func (app *parser) exitPrint(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.printBuilder.Create()
-	valueCode := tree.CodeFromName("value")
+	valueCode := tree.CodeFromName("valueRepresentation")
 	if valueCode != "" {
-		if val, ok := app.value[valueCode]; ok {
+		if val, ok := app.valueRepresentation[valueCode]; ok {
 			builder.WithValue(val)
 		}
 	}

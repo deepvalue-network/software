@@ -4,24 +4,6 @@ import (
 	"testing"
 )
 
-func Test_type_nil_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("type", grammarFile)
-
-	file := "./tests/codes/type/nil.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	typ := ins.(Type)
-	if !typ.IsNil() {
-		t.Errorf("the type was expected to be nil")
-		return
-	}
-}
-
 func Test_type_bool_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("type", grammarFile)

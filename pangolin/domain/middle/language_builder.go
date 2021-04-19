@@ -11,7 +11,6 @@ type languageBuilder struct {
 	logics         string
 	patternMatches []PatternMatch
 	input          string
-	output         string
 	channels       string
 	extends        []string
 }
@@ -24,7 +23,6 @@ func createLanguageBuilder() LanguageBuilder {
 		logics:         "",
 		patternMatches: nil,
 		input:          "",
-		output:         "",
 		channels:       "",
 		extends:        nil,
 	}
@@ -79,12 +77,6 @@ func (app *languageBuilder) WithInputVariable(input string) LanguageBuilder {
 	return app
 }
 
-// WithOutputVariable adds an output variable to the builder
-func (app *languageBuilder) WithOutputVariable(output string) LanguageBuilder {
-	app.output = output
-	return app
-}
-
 // WithExtends add extends bucketPaths to the builder
 func (app *languageBuilder) WithExtends(extends []string) LanguageBuilder {
 	app.extends = extends
@@ -121,21 +113,17 @@ func (app *languageBuilder) Now() (Language, error) {
 		return nil, errors.New("the input variable is mandatory in order to build a Language instance")
 	}
 
-	if app.output == "" {
-		return nil, errors.New("the output variable is mandatory in order to build a Language instance")
-	}
-
 	if app.channels != "" && app.extends != nil {
-		return createLanguageWithChannelsAndExtends(app.root, app.tokens, app.rules, app.logics, app.patternMatches, app.input, app.output, app.channels, app.extends), nil
+		return createLanguageWithChannelsAndExtends(app.root, app.tokens, app.rules, app.logics, app.patternMatches, app.input, app.channels, app.extends), nil
 	}
 
 	if app.channels != "" {
-		return createLanguageWithChannels(app.root, app.tokens, app.rules, app.logics, app.patternMatches, app.input, app.output, app.channels), nil
+		return createLanguageWithChannels(app.root, app.tokens, app.rules, app.logics, app.patternMatches, app.input, app.channels), nil
 	}
 
 	if app.extends != nil {
-		return createLanguageWithExtends(app.root, app.tokens, app.rules, app.logics, app.patternMatches, app.input, app.output, app.extends), nil
+		return createLanguageWithExtends(app.root, app.tokens, app.rules, app.logics, app.patternMatches, app.input, app.extends), nil
 	}
 
-	return createLanguage(app.root, app.tokens, app.rules, app.logics, app.patternMatches, app.input, app.output), nil
+	return createLanguage(app.root, app.tokens, app.rules, app.logics, app.patternMatches, app.input), nil
 }

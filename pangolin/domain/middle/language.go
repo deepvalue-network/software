@@ -7,7 +7,6 @@ type language struct {
 	logics         string
 	patternMatches []PatternMatch
 	input          string
-	output         string
 	channels       string
 	extends        []string
 }
@@ -19,9 +18,8 @@ func createLanguage(
 	logics string,
 	patternMatches []PatternMatch,
 	input string,
-	output string,
 ) Language {
-	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, "", nil)
+	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, "", nil)
 }
 
 func createLanguageWithExtends(
@@ -31,10 +29,9 @@ func createLanguageWithExtends(
 	logics string,
 	patternMatches []PatternMatch,
 	input string,
-	output string,
 	extends []string,
 ) Language {
-	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, "", extends)
+	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, "", extends)
 }
 
 func createLanguageWithChannels(
@@ -44,10 +41,9 @@ func createLanguageWithChannels(
 	logics string,
 	patternMatches []PatternMatch,
 	input string,
-	output string,
 	channels string,
 ) Language {
-	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, channels, nil)
+	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, channels, nil)
 }
 
 func createLanguageWithChannelsAndExtends(
@@ -57,11 +53,10 @@ func createLanguageWithChannelsAndExtends(
 	logics string,
 	patternMatches []PatternMatch,
 	input string,
-	output string,
 	channels string,
 	extends []string,
 ) Language {
-	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, output, channels, extends)
+	return createLanguageInternally(root, tokens, rules, logics, patternMatches, input, channels, extends)
 }
 
 func createLanguageInternally(
@@ -71,7 +66,6 @@ func createLanguageInternally(
 	logics string,
 	patternMatches []PatternMatch,
 	input string,
-	output string,
 	channels string,
 	extends []string,
 ) Language {
@@ -82,7 +76,6 @@ func createLanguageInternally(
 		logics:         logics,
 		patternMatches: patternMatches,
 		input:          input,
-		output:         output,
 		channels:       channels,
 		extends:        extends,
 	}
@@ -118,11 +111,6 @@ func (obj *language) PatternMatches() []PatternMatch {
 // InputVariable returns the input variable
 func (obj *language) InputVariable() string {
 	return obj.input
-}
-
-// OutputVariable returns the output variable
-func (obj *language) OutputVariable() string {
-	return obj.output
 }
 
 // HasChannelsPath returns true if there is a channels path, false otherwise

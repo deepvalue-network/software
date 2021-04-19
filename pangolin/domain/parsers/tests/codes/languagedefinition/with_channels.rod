@@ -1,0 +1,12 @@
+language:
+    root: myPattern.
+    tokens: "./my/tokens.json".
+    channels: "./my/channels.json".
+    rules: "./my/rules.json".
+    logic: "./my/logic.json".
+    in: myInputVar.
+    matches:
+        mySecond: myEnter|myExit.
+        myThird: myEnter.
+    .
+.

@@ -30,7 +30,6 @@ LANG_EXT: [a-z0-9]+;
 
 // variable direction:
 IN: 'in';
-OUT: 'out';
 
 // section:
 HEAD: 'head';
@@ -38,6 +37,7 @@ REUSE: 'reuse';
 VERSION: 'version';
 LANGUAGE: 'language';
 SCRIPT: 'script';
+CASCADE: 'cascade';
 USER: 'user';
 NAME: 'name';
 CONSTANTS: 'constants';
@@ -113,6 +113,12 @@ SCRIPT_VERSION: 'version';
 SCRIPT_SCRIPT: 'script';
 SCRIPT_LANGUAGE: 'language';
 
+// cascade
+CASCADE_NAME: 'name';
+CASCADE_VERSION: 'version';
+CASCADE_LANGUAGES: 'languages';
+CASCADE_LOGIC: 'logic';
+
 // types:
 NIL: 'nil';
 BOOL: 'bool';
@@ -147,6 +153,7 @@ QUESTION_MARK: '?';
 SLASH: '/';
 LOWER_THAN: '<';
 SEMICOLON: ';';
+ARROW: '->';
 
 // words:
 TRUE: 'true';

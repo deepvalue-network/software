@@ -52,11 +52,6 @@ func Test_languageValue_root_Success(t *testing.T) {
 		return
 	}
 
-	if val.IsOutputVariable() {
-		t.Errorf("the Language was NOT expected to be an inputVariable")
-		return
-	}
-
 	if val.IsExtends() {
 		t.Errorf("the Language was NOT expected to be an extends")
 		return
@@ -101,11 +96,6 @@ func Test_languageValue_tokens_Success(t *testing.T) {
 	}
 
 	if val.IsInputVariable() {
-		t.Errorf("the Language was NOT expected to be an inputVariable")
-		return
-	}
-
-	if val.IsOutputVariable() {
 		t.Errorf("the Language was NOT expected to be an inputVariable")
 		return
 	}
@@ -158,11 +148,6 @@ func Test_languageValue_channels_Success(t *testing.T) {
 		return
 	}
 
-	if val.IsOutputVariable() {
-		t.Errorf("the Language was NOT expected to be an inputVariable")
-		return
-	}
-
 	if val.IsExtends() {
 		t.Errorf("the Language was NOT expected to be an extends")
 		return
@@ -207,11 +192,6 @@ func Test_languageValue_rules_Success(t *testing.T) {
 	}
 
 	if val.IsInputVariable() {
-		t.Errorf("the Language was NOT expected to be an inputVariable")
-		return
-	}
-
-	if val.IsOutputVariable() {
 		t.Errorf("the Language was NOT expected to be an inputVariable")
 		return
 	}
@@ -264,11 +244,6 @@ func Test_languageValue_logic_Success(t *testing.T) {
 		return
 	}
 
-	if val.IsOutputVariable() {
-		t.Errorf("the Language was NOT expected to be an inputVariable")
-		return
-	}
-
 	if val.IsExtends() {
 		t.Errorf("the Language was NOT expected to be an extends")
 		return
@@ -317,64 +292,6 @@ func Test_languageValue_inputVariable_Success(t *testing.T) {
 		return
 	}
 
-	if val.IsOutputVariable() {
-		t.Errorf("the Language was NOT expected to be an inputVariable")
-		return
-	}
-
-	if val.IsExtends() {
-		t.Errorf("the Language was NOT expected to be an extends")
-		return
-	}
-}
-
-func Test_languageValue_outputVariable_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("languageValue", grammarFile)
-
-	file := "./tests/codes/languagevalue/output.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	val := ins.(LanguageValue)
-	if val.IsRoot() {
-		t.Errorf("the Language was NOT expected to be a root")
-		return
-	}
-
-	if val.IsTokens() {
-		t.Errorf("the Language was NOT expected to be a tokens")
-		return
-	}
-
-	if val.IsChannels() {
-		t.Errorf("the Language was NOT expected to be a channels")
-		return
-	}
-
-	if val.IsRules() {
-		t.Errorf("the Language was NOT expected to be a rules")
-		return
-	}
-
-	if val.IsLogic() {
-		t.Errorf("the Language was NOT expected to be a logic")
-		return
-	}
-
-	if val.IsInputVariable() {
-		t.Errorf("the Language was NOT expected to be an inputVariable")
-		return
-	}
-
-	if !val.IsOutputVariable() {
-		t.Errorf("the Language was expected to be an inputVariable")
-		return
-	}
-
 	if val.IsExtends() {
 		t.Errorf("the Language was NOT expected to be an extends")
 		return
@@ -419,11 +336,6 @@ func Test_languageValue_extends_Success(t *testing.T) {
 	}
 
 	if val.IsInputVariable() {
-		t.Errorf("the Language was NOT expected to be an inputVariable")
-		return
-	}
-
-	if val.IsOutputVariable() {
 		t.Errorf("the Language was NOT expected to be an inputVariable")
 		return
 	}
@@ -478,11 +390,6 @@ func Test_languageValue_matches_Success(t *testing.T) {
 	}
 
 	if val.IsInputVariable() {
-		t.Errorf("the Language was NOT expected to be an inputVariable")
-		return
-	}
-
-	if val.IsOutputVariable() {
 		t.Errorf("the Language was NOT expected to be an inputVariable")
 		return
 	}
