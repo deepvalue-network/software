@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/heads"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/mains"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/tests"
@@ -13,7 +13,7 @@ type Builder interface {
 	Create() Builder
 	WithLanguage(lang Language) Builder
 	WithScript(script Script) Builder
-	WithHead(head Head) Builder
+	WithHead(head heads.Head) Builder
 	WithMain(main mains.Main) Builder
 	WithTest(test tests.Test) Builder
 	WithLabel(label labels.Label) Builder
@@ -27,7 +27,7 @@ type Command interface {
 	IsScript() bool
 	Script() Script
 	IsHead() bool
-	Head() Head
+	Head() heads.Head
 	IsMain() bool
 	Main() mains.Main
 	IsTest() bool
@@ -118,37 +118,4 @@ type ScriptValue interface {
 	LanguagePath() string
 	IsScriptPath() bool
 	ScriptPath() string
-}
-
-// HeadBuilder represents an head builder
-type HeadBuilder interface {
-	Create() HeadBuilder
-	WithVariable(variable string) HeadBuilder
-	WithValues(values []HeadValue) HeadBuilder
-	Now() (Head, error)
-}
-
-// Head represents a head command
-type Head interface {
-	Variable() string
-	Values() []HeadValue
-}
-
-// HeadValueBuilder represents an headValue builder
-type HeadValueBuilder interface {
-	Create() HeadValueBuilder
-	WithName(name string) HeadValueBuilder
-	WithVersion(version string) HeadValueBuilder
-	WithImports(imports []string) HeadValueBuilder
-	Now() (HeadValue, error)
-}
-
-// HeadValue represents an head value
-type HeadValue interface {
-	IsName() bool
-	Name() string
-	IsVersion() bool
-	Version() string
-	IsImports() bool
-	Imports() []heads.External
 }
