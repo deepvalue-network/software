@@ -10,14 +10,14 @@ import (
 
 // Builder represents a command builder
 type Builder interface {
-    Create() Builder
-    WithLanguage(lang Language) Builder
-    WithScript(script Script) Builder
-    WithHead(head Head) Builder
-    WithMain(main Main) Builder
-    WithTest(test Test) Builder
-    WithLabel(label Label) Builder
-    Now() (Command, error)
+	Create() Builder
+	WithLanguage(lang Language) Builder
+	WithScript(script Script) Builder
+	WithHead(head Head) Builder
+	WithMain(main Main) Builder
+	WithTest(test Test) Builder
+	WithLabel(label Label) Builder
+	Now() (Command, error)
 }
 
 // Command represents a command
@@ -38,10 +38,10 @@ type Command interface {
 
 // LanguageBuilder represents a language builder
 type LanguageBuilder interface {
-    Create() LanguageBuilder
-    WithVariable(variable string) LanguageBuilder
-    WithValues(values []LanguageValue) LanguageBuilder
-    Now() (Language, error)
+	Create() LanguageBuilder
+	WithVariable(variable string) LanguageBuilder
+	WithValues(values []LanguageValue) LanguageBuilder
+	Now() (Language, error)
 }
 
 // Language represents a language command
@@ -52,16 +52,16 @@ type Language interface {
 
 // LanguageValueBuilder represents a language value builder
 type LanguageValueBuilder interface {
-    Create() LanguageValueBuilder
-    WithRoot(root string) LanguageValueBuilder
-    WithTokensPath(tokensPath string) LanguageValueBuilder
-    WithRulesPath(rulesPath string) LanguageValueBuilder
-    WithLogicsPath(logicsPath string) LanguageValueBuilder
-    WithPatternMatches(patternMatches []definitions.PatternMatch) LanguageValueBuilder
-    WithInputVariable(inputVariable string) LanguageValueBuilder
-    WithChannelsPath(channelsPath string) LanguageValueBuilder
-    WithExtends(extends []string) LanguageValueBuilder
-    Now() (LanguageValue, error)
+	Create() LanguageValueBuilder
+	WithRoot(root string) LanguageValueBuilder
+	WithTokensPath(tokensPath string) LanguageValueBuilder
+	WithRulesPath(rulesPath string) LanguageValueBuilder
+	WithLogicsPath(logicsPath string) LanguageValueBuilder
+	WithPatternMatches(patternMatches []definitions.PatternMatch) LanguageValueBuilder
+	WithInputVariable(inputVariable string) LanguageValueBuilder
+	WithChannelsPath(channelsPath string) LanguageValueBuilder
+	WithExtends(extends []string) LanguageValueBuilder
+	Now() (LanguageValue, error)
 }
 
 // LanguageValue represents a language value
@@ -86,10 +86,10 @@ type LanguageValue interface {
 
 // ScriptBuilder represents a script builder
 type ScriptBuilder interface {
-    Create() ScriptBuilder
-    WithVariable(variable string) ScriptBuilder
-    WithValues(values []ScriptValue) ScriptBuilder
-    Now() (Script, error)
+	Create() ScriptBuilder
+	WithVariable(variable string) ScriptBuilder
+	WithValues(values []ScriptValue) ScriptBuilder
+	Now() (Script, error)
 }
 
 // Script represents a script command
@@ -100,12 +100,12 @@ type Script interface {
 
 // ScriptValueBuilder represents a script value builder
 type ScriptValueBuilder interface {
-    Create() ScriptValueBuilder
-    WithName(name string) ScriptValueBuilder
-    WithVersion(version string) ScriptValueBuilder
-    WithLanguagePath(langPath string) ScriptValueBuilder
-    WithScriptPath(scriptPath string) ScriptValueBuilder
-    Now() (ScriptValue, error)
+	Create() ScriptValueBuilder
+	WithName(name string) ScriptValueBuilder
+	WithVersion(version string) ScriptValueBuilder
+	WithLanguagePath(langPath string) ScriptValueBuilder
+	WithScriptPath(scriptPath string) ScriptValueBuilder
+	Now() (ScriptValue, error)
 }
 
 // ScriptValue represents a script value
@@ -122,10 +122,10 @@ type ScriptValue interface {
 
 // HeadBuilder represents an head builder
 type HeadBuilder interface {
-    Create() HeadBuilder
-    WithVariable(variable string) HeadBuilder
-    WithValues(values[]HeadValue) HeadBuilder
-    Now() (Head, error)
+	Create() HeadBuilder
+	WithVariable(variable string) HeadBuilder
+	WithValues(values []HeadValue) HeadBuilder
+	Now() (Head, error)
 }
 
 // Head represents a head command
@@ -136,11 +136,11 @@ type Head interface {
 
 // HeadValueBuilder represents an headValue builder
 type HeadValueBuilder interface {
-    Create() HeadValueBuilder
-    WithName(name string) HeadValueBuilder
-    WithVersion(version string) HeadValueBuilder
-    WithImports(imports []string) HeadValueBuilder
-    Now() (HeadValue, error)
+	Create() HeadValueBuilder
+	WithName(name string) HeadValueBuilder
+	WithVersion(version string) HeadValueBuilder
+	WithImports(imports []string) HeadValueBuilder
+	Now() (HeadValue, error)
 }
 
 // HeadValue represents an head value
@@ -155,10 +155,10 @@ type HeadValue interface {
 
 // MainBuilder represents a main builder
 type MainBuilder interface {
-    Create() MainBuilder
-    WithVariable(variable string) MainBuilder
-    WithInstructions(ins []MainInstruction) MainBuilder
-    Now() (Main, error)
+	Create() MainBuilder
+	WithVariable(variable string) MainBuilder
+	WithInstructions(ins []MainInstruction) MainBuilder
+	Now() (Main, error)
 }
 
 // Main represents a main command
@@ -169,17 +169,17 @@ type Main interface {
 
 // MainInstructionBuilder represents a main instruction builder
 type MainInstructionBuilder interface {
-    Create() MainInstructionBuilder
-    WithInstruction(ins language_instruction.Instruction) MainInstructionBuilder
-    WithScopes(scopes Scopes) MainInstructionBuilder
-    Now() (MainInstruction, error)
+	Create() MainInstructionBuilder
+	WithInstruction(ins language_instruction.Instruction) MainInstructionBuilder
+	WithExternals(externals []bool) MainInstructionBuilder
+	Now() (MainInstruction, error)
 }
 
 // MainInstruction represents a main instruction
 type MainInstruction interface {
 	Instruction() language_instruction.Instruction
-	HasScopes() bool
-	Scopes() Scopes
+	HasExternals() bool
+	Externals() []bool
 }
 
 // TestBuilder represents a test builder
@@ -202,15 +202,15 @@ type Test interface {
 type TestInstructionBuilder interface {
 	Create() TestInstructionBuilder
 	WithInstruction(ins test_instruction.Instruction) TestInstructionBuilder
-	WithScopes(scopes Scopes) TestInstructionBuilder
+	WithExternals(externals []bool) TestInstructionBuilder
 	Now() (TestInstruction, error)
 }
 
 // TestInstruction represents a test instruction
 type TestInstruction interface {
 	Instruction() test_instruction.Instruction
-	HasScopes() bool
-	Scopes() Scopes
+	HasExternals() bool
+	Externals() []bool
 }
 
 // LabelBuilder represents a label builder
@@ -233,37 +233,13 @@ type Label interface {
 type LabelInstructionBuilder interface {
 	Create() LabelInstructionBuilder
 	WithInstruction(ins label_instruction.Instruction) LabelInstructionBuilder
-	WithScopes(scopes Scopes) LabelInstructionBuilder
+	WithExternals(externals []bool) LabelInstructionBuilder
 	Now() (LabelInstruction, error)
 }
 
 // LabelInstruction represents a label instruction
 type LabelInstruction interface {
 	Instruction() label_instruction.Instruction
-	HasScopes() bool
-	Scopes() Scopes
-}
-
-// ScopesBuilder represents scopes builder
-type ScopesBuilder interface {
-	Create() ScopesBuilder
-	WithScopes(scopes []Scope) ScopesBuilder
-	Now() (Scopes, error)
-}
-
-// Scopes represents scopes
-type Scopes interface {
-	All() []Scope
-}
-
-// ScopeBuilder represents a scope builder
-type ScopeBuilder interface {
-	Create() ScopeBuilder
-	IsExternal() ScopeBuilder
-	Now() (Scope, error)
-}
-
-// Scope represents a scope
-type Scope interface {
-	IsExternal() bool
+	HasExternals() bool
+	Externals() []bool
 }
