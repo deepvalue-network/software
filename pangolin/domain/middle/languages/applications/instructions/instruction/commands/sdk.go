@@ -3,7 +3,7 @@ package commands
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
 	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
-	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/labels"
 	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
 )
@@ -16,7 +16,7 @@ type Builder interface {
 	WithHead(head Head) Builder
 	WithMain(main Main) Builder
 	WithTest(test Test) Builder
-	WithLabel(label Label) Builder
+	WithLabel(label labels.Label) Builder
 	Now() (Command, error)
 }
 
@@ -33,7 +33,7 @@ type Command interface {
 	IsTest() bool
 	Test() Test
 	IsLabel() bool
-	Label() Label
+	Label() labels.Label
 }
 
 // LanguageBuilder represents a language builder
@@ -209,37 +209,6 @@ type TestInstructionBuilder interface {
 // TestInstruction represents a test instruction
 type TestInstruction interface {
 	Instruction() test_instruction.Instruction
-	HasExternals() bool
-	Externals() []bool
-}
-
-// LabelBuilder represents a label builder
-type LabelBuilder interface {
-	Create() LabelBuilder
-	WithName(name string) LabelBuilder
-	WithVariable(variable string) LabelBuilder
-	WithInstructions(ins []LabelInstruction) LabelBuilder
-	Now() (Label, error)
-}
-
-// Label represents a label command
-type Label interface {
-	Name() string
-	Variable() string
-	Instructions() []LabelInstruction
-}
-
-// LabelInstructionBuilder represents a label instruction builder
-type LabelInstructionBuilder interface {
-	Create() LabelInstructionBuilder
-	WithInstruction(ins label_instruction.Instruction) LabelInstructionBuilder
-	WithExternals(externals []bool) LabelInstructionBuilder
-	Now() (LabelInstruction, error)
-}
-
-// LabelInstruction represents a label instruction
-type LabelInstruction interface {
-	Instruction() label_instruction.Instruction
 	HasExternals() bool
 	Externals() []bool
 }
