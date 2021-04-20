@@ -2,8 +2,8 @@ package commands
 
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
-	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/mains"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
 )
@@ -14,7 +14,7 @@ type Builder interface {
 	WithLanguage(lang Language) Builder
 	WithScript(script Script) Builder
 	WithHead(head Head) Builder
-	WithMain(main Main) Builder
+	WithMain(main mains.Main) Builder
 	WithTest(test tests.Test) Builder
 	WithLabel(label labels.Label) Builder
 	Now() (Command, error)
@@ -29,7 +29,7 @@ type Command interface {
 	IsHead() bool
 	Head() Head
 	IsMain() bool
-	Main() Main
+	Main() mains.Main
 	IsTest() bool
 	Test() tests.Test
 	IsLabel() bool
@@ -151,33 +151,4 @@ type HeadValue interface {
 	Version() string
 	IsImports() bool
 	Imports() []heads.External
-}
-
-// MainBuilder represents a main builder
-type MainBuilder interface {
-	Create() MainBuilder
-	WithVariable(variable string) MainBuilder
-	WithInstructions(ins []MainInstruction) MainBuilder
-	Now() (Main, error)
-}
-
-// Main represents a main command
-type Main interface {
-	Variable() string
-	Instructions() []MainInstruction
-}
-
-// MainInstructionBuilder represents a main instruction builder
-type MainInstructionBuilder interface {
-	Create() MainInstructionBuilder
-	WithInstruction(ins language_instruction.Instruction) MainInstructionBuilder
-	WithExternals(externals []bool) MainInstructionBuilder
-	Now() (MainInstruction, error)
-}
-
-// MainInstruction represents a main instruction
-type MainInstruction interface {
-	Instruction() language_instruction.Instruction
-	HasExternals() bool
-	Externals() []bool
 }
