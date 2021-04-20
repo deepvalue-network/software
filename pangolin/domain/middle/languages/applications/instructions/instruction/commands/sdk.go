@@ -4,7 +4,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
 	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/labels"
-	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
 )
 
@@ -15,7 +15,7 @@ type Builder interface {
 	WithScript(script Script) Builder
 	WithHead(head Head) Builder
 	WithMain(main Main) Builder
-	WithTest(test Test) Builder
+	WithTest(test tests.Test) Builder
 	WithLabel(label labels.Label) Builder
 	Now() (Command, error)
 }
@@ -31,7 +31,7 @@ type Command interface {
 	IsMain() bool
 	Main() Main
 	IsTest() bool
-	Test() Test
+	Test() tests.Test
 	IsLabel() bool
 	Label() labels.Label
 }
@@ -178,37 +178,6 @@ type MainInstructionBuilder interface {
 // MainInstruction represents a main instruction
 type MainInstruction interface {
 	Instruction() language_instruction.Instruction
-	HasExternals() bool
-	Externals() []bool
-}
-
-// TestBuilder represents a test builder
-type TestBuilder interface {
-	Create() TestBuilder
-	WithName(name string) TestBuilder
-	WithVariable(variable string) TestBuilder
-	WithInstructions(ins []TestInstruction) TestBuilder
-	Now() (Test, error)
-}
-
-// Test represents a test command
-type Test interface {
-	Name() string
-	Variable() string
-	Instructions() []TestInstruction
-}
-
-// TestInstructionBuilder represents a test instruction builder
-type TestInstructionBuilder interface {
-	Create() TestInstructionBuilder
-	WithInstruction(ins test_instruction.Instruction) TestInstructionBuilder
-	WithExternals(externals []bool) TestInstructionBuilder
-	Now() (TestInstruction, error)
-}
-
-// TestInstruction represents a test instruction
-type TestInstruction interface {
-	Instruction() test_instruction.Instruction
 	HasExternals() bool
 	Externals() []bool
 }
