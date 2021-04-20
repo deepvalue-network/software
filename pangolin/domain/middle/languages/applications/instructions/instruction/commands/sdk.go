@@ -4,6 +4,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/heads"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/mains"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/scripts"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
 )
@@ -12,7 +13,7 @@ import (
 type Builder interface {
 	Create() Builder
 	WithLanguage(lang Language) Builder
-	WithScript(script Script) Builder
+	WithScript(script scripts.Script) Builder
 	WithHead(head heads.Head) Builder
 	WithMain(main mains.Main) Builder
 	WithTest(test tests.Test) Builder
@@ -25,7 +26,7 @@ type Command interface {
 	IsLanguage() bool
 	Language() Language
 	IsScript() bool
-	Script() Script
+	Script() scripts.Script
 	IsHead() bool
 	Head() heads.Head
 	IsMain() bool
@@ -82,40 +83,4 @@ type LanguageValue interface {
 	ChannelsPath() string
 	IsExtends() bool
 	Extends() []string
-}
-
-// ScriptBuilder represents a script builder
-type ScriptBuilder interface {
-	Create() ScriptBuilder
-	WithVariable(variable string) ScriptBuilder
-	WithValues(values []ScriptValue) ScriptBuilder
-	Now() (Script, error)
-}
-
-// Script represents a script command
-type Script interface {
-	Variable() string
-	Values() []ScriptValue
-}
-
-// ScriptValueBuilder represents a script value builder
-type ScriptValueBuilder interface {
-	Create() ScriptValueBuilder
-	WithName(name string) ScriptValueBuilder
-	WithVersion(version string) ScriptValueBuilder
-	WithLanguagePath(langPath string) ScriptValueBuilder
-	WithScriptPath(scriptPath string) ScriptValueBuilder
-	Now() (ScriptValue, error)
-}
-
-// ScriptValue represents a script value
-type ScriptValue interface {
-	IsName() bool
-	Name() string
-	IsVersion() bool
-	Version() string
-	IsLanguagePath() bool
-	LanguagePath() string
-	IsScriptPath() bool
-	ScriptPath() string
 }
