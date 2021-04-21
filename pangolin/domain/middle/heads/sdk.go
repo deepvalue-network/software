@@ -1,5 +1,19 @@
 package heads
 
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	return createBuilder()
+}
+
+// Builder represents the head builder
+type Builder interface {
+	Create() Builder
+	WithName(name string) Builder
+	WithVersion(version string) Builder
+	WithImports(imports []External) Builder
+	Now() (Head, error)
+}
+
 // Head represents an head
 type Head interface {
 	Name() string
