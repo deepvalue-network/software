@@ -1,5 +1,10 @@
 package definitions
 
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	return createBuilder()
+}
+
 // Builder represents a language definition builder
 type Builder interface {
 	Create() Builder
