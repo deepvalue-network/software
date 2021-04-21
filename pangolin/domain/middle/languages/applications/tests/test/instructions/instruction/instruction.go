@@ -1,0 +1,55 @@
+package instruction
+
+import (
+	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
+	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions/instruction"
+)
+
+type instruction struct {
+	lang standard_instruction.Instruction
+	test test_instruction.Instruction
+}
+
+func createInstructionWithLanguage(
+	lang standard_instruction.Instruction,
+) Instruction {
+	return createInstructionInternally(lang, nil)
+}
+
+func createInstructionWithTest(
+	test test_instruction.Instruction,
+) Instruction {
+	return createInstructionInternally(nil, test)
+}
+
+func createInstructionInternally(
+	lang standard_instruction.Instruction,
+	test test_instruction.Instruction,
+) Instruction {
+	out := instruction{
+		lang: lang,
+		test: test,
+	}
+
+	return &out
+}
+
+// IsLanguage returns true if there is a language, false otherwise
+func (obj *instruction) IsLanguage() bool {
+	return obj.lang != nil
+}
+
+// Language returns the language, if any
+func (obj *instruction) Language() standard_instruction.Instruction {
+	return obj.lang
+}
+
+// IsTest returns true if there is a test, false otherwise
+func (obj *instruction) IsTest() bool {
+	return obj.test != nil
+}
+
+// Test returns the test, if any
+func (obj *instruction) Test() test_instruction.Instruction {
+	return obj.test
+}
