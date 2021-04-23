@@ -1,7 +1,7 @@
 package instruction
 
 import (
-	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction"
+	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/match"
 )
 

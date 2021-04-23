@@ -2,7 +2,7 @@ package instruction
 
 import (
 	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
-	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/tests/test/instructions/instruction"
+	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
 )
 
 type instruction struct {

@@ -1,11 +1,17 @@
 package middle
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/scripts"
+)
 
 type builder struct {
-	app    Application
-	lang   Language
-	script Script
+	app    applications.Application
+	lang   languages.Language
+	script scripts.Script
 }
 
 func createBuilder() Builder {
@@ -24,19 +30,19 @@ func (app *builder) Create() Builder {
 }
 
 // WithApplication adds an application to the builder
-func (app *builder) WithApplication(appli Application) Builder {
+func (app *builder) WithApplication(appli applications.Application) Builder {
 	app.app = appli
 	return app
 }
 
 // WithLanguage adds a language to the builder
-func (app *builder) WithLanguage(lang Language) Builder {
+func (app *builder) WithLanguage(lang languages.Language) Builder {
 	app.lang = lang
 	return app
 }
 
 // WithScript adds a script to the builder
-func (app *builder) WithScript(script Script) Builder {
+func (app *builder) WithScript(script scripts.Script) Builder {
 	app.script = script
 	return app
 }

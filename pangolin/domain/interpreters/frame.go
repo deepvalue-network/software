@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/remaining"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/standard"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions/instruction/transform"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/transform"
 	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
 )

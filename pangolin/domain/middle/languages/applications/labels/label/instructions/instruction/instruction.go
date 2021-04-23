@@ -1,7 +1,7 @@
 package instruction
 
 import (
-	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/labels/label/instructions/instruction"
+	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
 	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label/instructions/instruction/token"
 )

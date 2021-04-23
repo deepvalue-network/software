@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/instructions"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/labels"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
 )
 

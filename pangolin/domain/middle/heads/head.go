@@ -1,9 +1,11 @@
 package heads
 
+import "github.com/deepvalue-network/software/pangolin/domain/middle/externals"
+
 type head struct {
 	name    string
 	version string
-	imports []External
+	imports []externals.External
 }
 
 func createHead(
@@ -16,7 +18,7 @@ func createHead(
 func createHeadWithImports(
 	name string,
 	version string,
-	imports []External,
+	imports []externals.External,
 ) Head {
 	return createHeadInternally(name, version, imports)
 }
@@ -24,7 +26,7 @@ func createHeadWithImports(
 func createHeadInternally(
 	name string,
 	version string,
-	imports []External,
+	imports []externals.External,
 ) Head {
 	out := head{
 		name:    name,
@@ -51,6 +53,6 @@ func (obj *head) HasImports() bool {
 }
 
 // Imports returns the imports, if any
-func (obj *head) Imports() []External {
+func (obj *head) Imports() []externals.External {
 	return obj.imports
 }

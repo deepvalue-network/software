@@ -1,11 +1,15 @@
 package heads
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
+)
 
 type builder struct {
 	name    string
 	version string
-	imports []External
+	imports []externals.External
 }
 
 func createBuilder() Builder {
@@ -36,7 +40,7 @@ func (app *builder) WithVersion(version string) Builder {
 }
 
 // WithImports add imports to the builder
-func (app *builder) WithImports(imports []External) Builder {
+func (app *builder) WithImports(imports []externals.External) Builder {
 	app.imports = imports
 	return app
 }

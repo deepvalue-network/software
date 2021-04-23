@@ -1,27 +1,33 @@
 package middle
 
+import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/scripts"
+)
+
 type program struct {
-	app    Application
-	lang   Language
-	script Script
+	app    applications.Application
+	lang   languages.Language
+	script scripts.Script
 }
 
-func createProgramWithApplication(app Application) Program {
+func createProgramWithApplication(app applications.Application) Program {
 	return createProgramInternally(app, nil, nil)
 }
 
-func createProgramWithLanguage(lang Language) Program {
+func createProgramWithLanguage(lang languages.Language) Program {
 	return createProgramInternally(nil, lang, nil)
 }
 
-func createProgramWithScript(script Script) Program {
+func createProgramWithScript(script scripts.Script) Program {
 	return createProgramInternally(nil, nil, script)
 }
 
 func createProgramInternally(
-	app Application,
-	lang Language,
-	script Script,
+	app applications.Application,
+	lang languages.Language,
+	script scripts.Script,
 ) Program {
 	out := program{
 		app:    app,
@@ -38,7 +44,7 @@ func (obj *program) IsApplication() bool {
 }
 
 // Application returns the application, if any
-func (obj *program) Application() Application {
+func (obj *program) Application() applications.Application {
 	return obj.app
 }
 
@@ -48,7 +54,7 @@ func (obj *program) IsLanguage() bool {
 }
 
 // Language returns the language, if any
-func (obj *program) Language() Language {
+func (obj *program) Language() languages.Language {
 	return obj.lang
 }
 
@@ -58,6 +64,6 @@ func (obj *program) IsScript() bool {
 }
 
 // Script returns the script, if any
-func (obj *program) Script() Script {
+func (obj *program) Script() scripts.Script {
 	return obj.script
 }
