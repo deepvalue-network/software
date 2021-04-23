@@ -9,6 +9,17 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
+// NewAdapter creates a new adapter instance
+func NewAdapter(
+	testsAdapter tests.Adapter,
+	labelsAdapter labels.Adapter,
+	instructionsAdapter instructions.Adapter,
+	headAdapter heads.Adapter,
+) Adapter {
+	builder := NewBuilder()
+	return createAdapter(testsAdapter, labelsAdapter, instructionsAdapter, headAdapter, builder)
+}
+
 // NewBuilder initializes the builder
 func NewBuilder() Builder {
 	return createBuilder()
