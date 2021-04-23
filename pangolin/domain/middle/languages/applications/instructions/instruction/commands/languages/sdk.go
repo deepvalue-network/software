@@ -2,11 +2,17 @@ package languages
 
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
+}
+
+// Adapter represents an adapter
+type Adapter interface {
+	ToLanguage(parsed parsers.LanguageCommand) (Language, error)
 }
 
 // Builder represents a language builder

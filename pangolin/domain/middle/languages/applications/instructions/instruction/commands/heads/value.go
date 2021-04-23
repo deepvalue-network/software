@@ -1,13 +1,13 @@
 package heads
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
 )
 
 type value struct {
 	name    string
 	version string
-	imports []heads.External
+	imports []externals.External
 }
 
 func createValueWithName(name string) Value {
@@ -18,14 +18,14 @@ func createValueWithVersion(version string) Value {
 	return createValueInternally("", version, nil)
 }
 
-func createValueWithImports(imports []heads.External) Value {
+func createValueWithImports(imports []externals.External) Value {
 	return createValueInternally("", "", imports)
 }
 
 func createValueInternally(
 	name string,
 	version string,
-	imports []heads.External,
+	imports []externals.External,
 ) Value {
 	out := value{
 		name:    name,
@@ -62,6 +62,6 @@ func (obj *value) IsImports() bool {
 }
 
 // Imports returns the imports, if any
-func (obj *value) Imports() []heads.External {
+func (obj *value) Imports() []externals.External {
 	return obj.imports
 }

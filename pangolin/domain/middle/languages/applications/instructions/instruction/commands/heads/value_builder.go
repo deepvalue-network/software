@@ -3,13 +3,13 @@ package heads
 import (
 	"errors"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
 )
 
 type valueBuilder struct {
 	name    string
 	version string
-	imports []heads.External
+	imports []externals.External
 }
 
 func createValueBuilder() ValueBuilder {
@@ -40,7 +40,7 @@ func (app *valueBuilder) WithVersion(version string) ValueBuilder {
 }
 
 // WithImports add imports to the builder
-func (app *valueBuilder) WithImports(imports []heads.External) ValueBuilder {
+func (app *valueBuilder) WithImports(imports []externals.External) ValueBuilder {
 	app.imports = imports
 	return app
 }

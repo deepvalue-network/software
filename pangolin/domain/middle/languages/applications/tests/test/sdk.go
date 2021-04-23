@@ -2,11 +2,17 @@ package test
 
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
+}
+
+// Adapter represents a test adapter
+type Adapter interface {
+	ToTest(parsed parsers.LanguageTestDeclaration) (Test, error)
 }
 
 // Builder represents a test builder

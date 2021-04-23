@@ -7,11 +7,17 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/mains"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/scripts"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
+}
+
+// Adapter represents command adapter
+type Adapter interface {
+	ToCommand(parsed parsers.Command) (Command, error)
 }
 
 // Builder represents a command builder

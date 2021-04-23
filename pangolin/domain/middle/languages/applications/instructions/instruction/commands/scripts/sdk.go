@@ -1,8 +1,15 @@
 package scripts
 
+import "github.com/deepvalue-network/software/pangolin/domain/parsers"
+
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
+}
+
+// Adapter represents an adapter
+type Adapter interface {
+	ToScript(parsed parsers.ScriptCommand) (Script, error)
 }
 
 // Builder represents a script builder

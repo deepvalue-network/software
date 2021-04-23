@@ -1,12 +1,18 @@
 package heads
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
+}
+
+// Adapter represents an adapter
+type Adapter interface {
+	ToHead(parsed parsers.HeadCommand) (Head, error)
 }
 
 // Builder represents an head builder
@@ -28,7 +34,7 @@ type ValueBuilder interface {
 	Create() ValueBuilder
 	WithName(name string) ValueBuilder
 	WithVersion(version string) ValueBuilder
-	WithImports(imports []heads.External) ValueBuilder
+	WithImports(imports []externals.External) ValueBuilder
 	Now() (Value, error)
 }
 
@@ -39,5 +45,5 @@ type Value interface {
 	IsVersion() bool
 	Version() string
 	IsImports() bool
-	Imports() []heads.External
+	Imports() []externals.External
 }

@@ -1,13 +1,19 @@
 package instruction
 
 import (
-	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
+	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
+}
+
+// Adapter represents an instruction adapter
+type Adapter interface {
+	ToInstruction(parsed parsers.LanguageTestInstruction) (Instruction, error)
 }
 
 // Builder represents an instruction builder

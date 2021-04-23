@@ -5,11 +5,17 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
+}
+
+// Adapter represents a language application adapter
+type Adapter interface {
+	ToApplication(parsed parsers.LanguageApplication) (Application, error)
 }
 
 // Builder represents an application builder

@@ -1,10 +1,18 @@
 package labels
 
-import "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label"
+import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
+)
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
+}
+
+// Adapter represents an adapter
+type Adapter interface {
+	ToLabels(parsed parsers.LanguageLabelSection) (Labels, error)
 }
 
 // Builder represents a labels builder

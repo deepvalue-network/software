@@ -2,7 +2,13 @@ package mains
 
 import (
 	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
+
+// Adapter represents an adapter
+type Adapter interface {
+	ToMain(parsed parsers.MainCommand) (Main, error)
+}
 
 // Builder represents a main builder
 type Builder interface {
