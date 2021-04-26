@@ -60,5 +60,8 @@ func (app *adapter) ToHead(parsed parsers.HeadCommand) (Head, error) {
 	}
 
 	variable := parsed.Variable()
-	return app.builder.Create().WithVariable(variable).WithValues(values).Now()
+	return app.builder.Create().
+		WithVariable(variable).
+		WithValues(values).
+		Now()
 }

@@ -5,9 +5,23 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
+// NewAdapter creates a new adapter instance
+func NewAdapter(
+	langLabelInsAdapter label_instruction.Adapter,
+) Adapter {
+	builder := NewBuilder()
+	instructionBuilder := NewInstructionBuilder()
+	return createAdapter(langLabelInsAdapter, builder, instructionBuilder)
+}
+
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
 	return createBuilder()
+}
+
+// NewInstructionBuilder creates a new instruction builder
+func NewInstructionBuilder() InstructionBuilder {
+	return createInstructionBuilder()
 }
 
 // Adapter represents an adapter
