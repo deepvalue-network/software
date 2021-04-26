@@ -24,6 +24,12 @@ type Adapter interface {
 	ToDefinition(parsed parsers.LanguageDefinition) (Definition, error)
 }
 
+// PatternMatchAdapter represents a pattern match adapter
+type PatternMatchAdapter interface {
+	ToPatternMatch(parsed parsers.PatternMatch) (PatternMatch, error)
+	ToPatternMatches(parsed []parsers.PatternMatch) ([]PatternMatch, error)
+}
+
 // Builder represents a language definition builder
 type Builder interface {
 	Create() Builder
