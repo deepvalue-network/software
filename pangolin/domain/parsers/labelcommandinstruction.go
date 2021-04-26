@@ -1,25 +1,25 @@
 package parsers
 
 type labelCommandInstruction struct {
-	ins    LanguageLabelInstruction
+	ins    LabelInstruction
 	scopes Scopes
 }
 
 func createLabelCommandInstruction(
-	ins LanguageLabelInstruction,
+	ins LabelInstruction,
 ) LabelCommandInstruction {
 	return createLabelCommandInstructionInternally(ins, nil)
 }
 
 func createLabelCommandInstructionWithScopes(
-	ins LanguageLabelInstruction,
-    scopes Scopes,
+	ins LabelInstruction,
+	scopes Scopes,
 ) LabelCommandInstruction {
 	return createLabelCommandInstructionInternally(ins, scopes)
 }
 
 func createLabelCommandInstructionInternally(
-	ins LanguageLabelInstruction,
+	ins LabelInstruction,
 	scopes Scopes,
 ) LabelCommandInstruction {
 	out := labelCommandInstruction{
@@ -31,7 +31,7 @@ func createLabelCommandInstructionInternally(
 }
 
 // Instruction returns the instruction
-func (obj *labelCommandInstruction) Instruction() LanguageLabelInstruction {
+func (obj *labelCommandInstruction) Instruction() LabelInstruction {
 	return obj.ins
 }
 

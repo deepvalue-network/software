@@ -3,7 +3,7 @@ package parsers
 import "errors"
 
 type testCommandInstructionBuilder struct {
-	ins    LanguageTestInstruction
+	ins    TestInstruction
 	scopes Scopes
 }
 
@@ -22,7 +22,7 @@ func (app *testCommandInstructionBuilder) Create() TestCommandInstructionBuilder
 }
 
 // WithInstruction adds an instruction to the builder
-func (app *testCommandInstructionBuilder) WithInstruction(ins LanguageTestInstruction) TestCommandInstructionBuilder {
+func (app *testCommandInstructionBuilder) WithInstruction(ins TestInstruction) TestCommandInstructionBuilder {
 	app.ins = ins
 	return app
 }
@@ -36,7 +36,7 @@ func (app *testCommandInstructionBuilder) WithScopes(scopes Scopes) TestCommandI
 // Now builds a new TestCommandInstruction instance
 func (app *testCommandInstructionBuilder) Now() (TestCommandInstruction, error) {
 	if app.ins == nil {
-		return nil, errors.New("the LanguageTestInstruction is mandatory in order to build a TestCommandInstruction instance")
+		return nil, errors.New("the TestInstruction is mandatory in order to build a TestCommandInstruction instance")
 	}
 
 	if app.scopes != nil {

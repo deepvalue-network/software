@@ -1,17 +1,17 @@
 package mains
 
 import (
-	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
+	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapter creates a new adapter instance
 func NewAdapter(
-	languageInstructionAdapter language_instruction.Adapter,
+	instructionAdapter application_instruction.Adapter,
 ) Adapter {
 	builder := NewBuilder()
 	instructionBuilder := NewInstructionBuilder()
-	return createAdapter(languageInstructionAdapter, builder, instructionBuilder)
+	return createAdapter(instructionAdapter, builder, instructionBuilder)
 }
 
 // NewBuilder creates a new builder instance
@@ -46,14 +46,14 @@ type Main interface {
 // InstructionBuilder represents a main instruction builder
 type InstructionBuilder interface {
 	Create() InstructionBuilder
-	WithInstruction(ins language_instruction.Instruction) InstructionBuilder
+	WithInstruction(ins application_instruction.Instruction) InstructionBuilder
 	WithScopes(scopes []bool) InstructionBuilder
 	Now() (Instruction, error)
 }
 
 // Instruction represents a main instruction
 type Instruction interface {
-	Instruction() language_instruction.Instruction
+	Instruction() application_instruction.Instruction
 	HasScopes() bool
 	Scopes() []bool
 }

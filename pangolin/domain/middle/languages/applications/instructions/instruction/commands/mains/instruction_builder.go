@@ -3,11 +3,11 @@ package mains
 import (
 	"errors"
 
-	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
+	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 )
 
 type instructionBuilder struct {
-	ins    language_instruction.Instruction
+	ins    application_instruction.Instruction
 	scopes []bool
 }
 
@@ -26,7 +26,7 @@ func (app *instructionBuilder) Create() InstructionBuilder {
 }
 
 // WithInstruction adds an instruction to the builder
-func (app *instructionBuilder) WithInstruction(ins language_instruction.Instruction) InstructionBuilder {
+func (app *instructionBuilder) WithInstruction(ins application_instruction.Instruction) InstructionBuilder {
 	app.ins = ins
 	return app
 }

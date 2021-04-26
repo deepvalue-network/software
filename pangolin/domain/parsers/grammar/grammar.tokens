@@ -47,7 +47,7 @@ mainCommand
     ;
 
 mainCommandInstruction
-    : scopesWithArrow? languageInstruction
+    : scopesWithArrow? instruction
     ;
 
 testCommand
@@ -55,7 +55,7 @@ testCommand
     ;
 
 testCommandInstruction
-    : scopesWithArrow? languageTestInstruction
+    : scopesWithArrow? testInstruction
     ;
 
 labelCommand
@@ -63,7 +63,7 @@ labelCommand
     ;
 
 labelCommandInstruction
-    : scopesWithArrow? languageLabelInstruction
+    : scopesWithArrow? labelInstruction
     ;
 
 scopesWithArrow

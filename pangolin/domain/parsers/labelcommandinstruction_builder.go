@@ -3,7 +3,7 @@ package parsers
 import "errors"
 
 type labelCommandInstructionBuilder struct {
-	ins    LanguageLabelInstruction
+	ins    LabelInstruction
 	scopes Scopes
 }
 
@@ -22,7 +22,7 @@ func (app *labelCommandInstructionBuilder) Create() LabelCommandInstructionBuild
 }
 
 // WithInstruction adds an instruction to the builder
-func (app *labelCommandInstructionBuilder) WithInstruction(ins LanguageLabelInstruction) LabelCommandInstructionBuilder {
+func (app *labelCommandInstructionBuilder) WithInstruction(ins LabelInstruction) LabelCommandInstructionBuilder {
 	app.ins = ins
 	return app
 }
@@ -36,7 +36,7 @@ func (app *labelCommandInstructionBuilder) WithScopes(scopes Scopes) LabelComman
 // Now builds a new LabelCommandInstruction instance
 func (app *labelCommandInstructionBuilder) Now() (LabelCommandInstruction, error) {
 	if app.ins == nil {
-		return nil, errors.New("the LanguageLabelInstruction is mandatory in order to build a LabelCommandInstruction instance")
+		return nil, errors.New("the LabelInstruction is mandatory in order to build a LabelCommandInstruction instance")
 	}
 
 	if app.scopes != nil {

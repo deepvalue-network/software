@@ -1,29 +1,29 @@
 package mains
 
 import (
-	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
+	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 )
 
 type instruction struct {
-	ins    language_instruction.Instruction
+	ins    application_instruction.Instruction
 	scopes []bool
 }
 
 func createInstruction(
-	ins language_instruction.Instruction,
+	ins application_instruction.Instruction,
 ) Instruction {
 	return createInstructionInternally(ins, nil)
 }
 
 func createInstructionWithScopes(
-	ins language_instruction.Instruction,
+	ins application_instruction.Instruction,
 	scopes []bool,
 ) Instruction {
 	return createInstructionInternally(ins, scopes)
 }
 
 func createInstructionInternally(
-	ins language_instruction.Instruction,
+	ins application_instruction.Instruction,
 	scopes []bool,
 ) Instruction {
 	out := instruction{
@@ -35,7 +35,7 @@ func createInstructionInternally(
 }
 
 // Instruction returns the instruction
-func (obj *instruction) Instruction() language_instruction.Instruction {
+func (obj *instruction) Instruction() application_instruction.Instruction {
 	return obj.ins
 }
 

@@ -514,14 +514,14 @@ type MainCommand interface {
 // MainCommandInstructionBuilder represents a main command instruction builder
 type MainCommandInstructionBuilder interface {
 	Create() MainCommandInstructionBuilder
-	WithInstruction(ins LanguageInstruction) MainCommandInstructionBuilder
+	WithInstruction(ins Instruction) MainCommandInstructionBuilder
 	WithScopes(scopes Scopes) MainCommandInstructionBuilder
 	Now() (MainCommandInstruction, error)
 }
 
 // MainCommandInstruction represents a main command instruction
 type MainCommandInstruction interface {
-	Instruction() LanguageInstruction
+	Instruction() Instruction
 	HasScopes() bool
 	Scopes() Scopes
 }
@@ -545,14 +545,14 @@ type TestCommand interface {
 // TestCommandInstructionBuilder represents a test command instruction builder
 type TestCommandInstructionBuilder interface {
 	Create() TestCommandInstructionBuilder
-	WithInstruction(ins LanguageTestInstruction) TestCommandInstructionBuilder
+	WithInstruction(ins TestInstruction) TestCommandInstructionBuilder
 	WithScopes(scopes Scopes) TestCommandInstructionBuilder
 	Now() (TestCommandInstruction, error)
 }
 
 // TestCommandInstruction represents a test command instruction
 type TestCommandInstruction interface {
-	Instruction() LanguageTestInstruction
+	Instruction() TestInstruction
 	HasScopes() bool
 	Scopes() Scopes
 }
@@ -576,14 +576,14 @@ type LabelCommand interface {
 // LabelCommandInstructionBuilder represents a label command instruction builder
 type LabelCommandInstructionBuilder interface {
 	Create() LabelCommandInstructionBuilder
-	WithInstruction(ins LanguageLabelInstruction) LabelCommandInstructionBuilder
+	WithInstruction(ins LabelInstruction) LabelCommandInstructionBuilder
 	WithScopes(scopes Scopes) LabelCommandInstructionBuilder
 	Now() (LabelCommandInstruction, error)
 }
 
 // LabelCommandInstruction represents a label command instruction
 type LabelCommandInstruction interface {
-	Instruction() LanguageLabelInstruction
+	Instruction() LabelInstruction
 	HasScopes() bool
 	Scopes() Scopes
 }

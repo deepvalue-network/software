@@ -3,7 +3,7 @@ package parsers
 import "errors"
 
 type mainCommandInstructionBuilder struct {
-	ins    LanguageInstruction
+	ins    Instruction
 	scopes Scopes
 }
 
@@ -22,7 +22,7 @@ func (app *mainCommandInstructionBuilder) Create() MainCommandInstructionBuilder
 }
 
 // WithInstruction adds an instruction to the builder
-func (app *mainCommandInstructionBuilder) WithInstruction(ins LanguageInstruction) MainCommandInstructionBuilder {
+func (app *mainCommandInstructionBuilder) WithInstruction(ins Instruction) MainCommandInstructionBuilder {
 	app.ins = ins
 	return app
 }
@@ -36,7 +36,7 @@ func (app *mainCommandInstructionBuilder) WithScopes(scopes Scopes) MainCommandI
 // WithScopes add scopes to the builder
 func (app *mainCommandInstructionBuilder) Now() (MainCommandInstruction, error) {
 	if app.ins == nil {
-		return nil, errors.New("the LanguageInstruction is mandatory in order to build a MainCommandInstruction instance")
+		return nil, errors.New("the Instruction is mandatory in order to build a MainCommandInstruction instance")
 	}
 
 	if app.scopes != nil {

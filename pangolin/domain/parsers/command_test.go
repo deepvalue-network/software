@@ -47,7 +47,6 @@ func Test_commmand_withHead_Success(t *testing.T) {
 	}
 }
 
-
 func Test_commmand_withLabel_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("command", grammarFile)
@@ -90,7 +89,6 @@ func Test_commmand_withLabel_Success(t *testing.T) {
 		return
 	}
 }
-
 
 func Test_commmand_withLanguage_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
@@ -135,7 +133,6 @@ func Test_commmand_withLanguage_Success(t *testing.T) {
 	}
 }
 
-
 func Test_commmand_withMain_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("command", grammarFile)
@@ -179,7 +176,6 @@ func Test_commmand_withMain_Success(t *testing.T) {
 	}
 }
 
-
 func Test_commmand_withScript_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("command", grammarFile)
@@ -222,7 +218,6 @@ func Test_commmand_withScript_Success(t *testing.T) {
 		return
 	}
 }
-
 
 func Test_commmand_withTest_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"

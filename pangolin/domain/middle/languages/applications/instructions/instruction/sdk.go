@@ -2,9 +2,25 @@ package instruction
 
 import (
 	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
+
+// NewAdapter creates a new adapter instance
+func NewAdapter(
+	instructionAdapter standard_instruction.Adapter,
+	commandAdapter commands.Adapter,
+	matchAdapter match.Adapter,
+) Adapter {
+	builder := NewBuilder()
+	return createAdapter(
+		instructionAdapter,
+		commandAdapter,
+		matchAdapter,
+		builder,
+	)
+}
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
@@ -20,6 +36,7 @@ type Adapter interface {
 type Builder interface {
 	Create() Builder
 	WithInstruction(ins standard_instruction.Instruction) Builder
+	WithCommand(command commands.Command) Builder
 	WithMatch(match match.Match) Builder
 	Now() (Instruction, error)
 }
@@ -28,6 +45,8 @@ type Builder interface {
 type Instruction interface {
 	IsInstruction() bool
 	Instruction() standard_instruction.Instruction
+	IsCommand() bool
+	Command() commands.Command
 	IsMatch() bool
 	Match() match.Match
 }

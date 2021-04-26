@@ -1126,9 +1126,9 @@ func (app *parser) exitMainCommandInstruction(tree lexers.NodeTree) (interface{}
 		}
 	}
 
-	instructionCode := tree.CodeFromName("languageInstruction")
+	instructionCode := tree.CodeFromName("instruction")
 	if instructionCode != "" {
-		if ins, ok := app.languageInstruction[instructionCode]; ok {
+		if ins, ok := app.instruction[instructionCode]; ok {
 			builder.WithInstruction(ins)
 		}
 	}
@@ -1184,9 +1184,9 @@ func (app *parser) exitTestCommandInstruction(tree lexers.NodeTree) (interface{}
 		}
 	}
 
-	instructionCode := tree.CodeFromName("languageTestInstruction")
+	instructionCode := tree.CodeFromName("testInstruction")
 	if instructionCode != "" {
-		if ins, ok := app.languageTestInstruction[instructionCode]; ok {
+		if ins, ok := app.testInstruction[instructionCode]; ok {
 			builder.WithInstruction(ins)
 		}
 	}
@@ -1242,9 +1242,9 @@ func (app *parser) exitLabelCommandInstruction(tree lexers.NodeTree) (interface{
 		}
 	}
 
-	instructionCode := tree.CodeFromName("languageLabelInstruction")
+	instructionCode := tree.CodeFromName("labelInstruction")
 	if instructionCode != "" {
-		if ins, ok := app.languageLabelInstruction[instructionCode]; ok {
+		if ins, ok := app.labelInstruction[instructionCode]; ok {
 			builder.WithInstruction(ins)
 		}
 	}

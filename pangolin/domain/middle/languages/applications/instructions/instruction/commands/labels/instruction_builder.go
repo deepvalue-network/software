@@ -3,7 +3,7 @@ package labels
 import (
 	"errors"
 
-	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label/instructions/instruction"
+	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
 )
 
 type instructionBuilder struct {

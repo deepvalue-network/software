@@ -1,4 +1,4 @@
 test myVariable, myTest:
-    match: myInput.
-    +* -> match: myInput.
+    *+ -> assign: first, sec.
+    assert: 0.
 .

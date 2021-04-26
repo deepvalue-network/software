@@ -1,4 +1,4 @@
 main myVariable:
     *+ -> assign: myVariable, 43.
-    match: myInput.
+    add: myInput, first, second.
 .

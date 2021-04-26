@@ -1,25 +1,25 @@
 package parsers
 
 type mainCommandInstruction struct {
-	ins    LanguageInstruction
+	ins    Instruction
 	scopes Scopes
 }
 
 func createMainCommandInstruction(
-	ins LanguageInstruction,
+	ins Instruction,
 ) MainCommandInstruction {
 	return createMainCommandInstructionInternally(ins, nil)
 }
 
 func createMainCommandInstructionWithScopes(
-	ins LanguageInstruction,
+	ins Instruction,
 	scopes Scopes,
 ) MainCommandInstruction {
 	return createMainCommandInstructionInternally(ins, scopes)
 }
 
 func createMainCommandInstructionInternally(
-	ins LanguageInstruction,
+	ins Instruction,
 	scopes Scopes,
 ) MainCommandInstruction {
 	out := mainCommandInstruction{
@@ -31,7 +31,7 @@ func createMainCommandInstructionInternally(
 }
 
 // Instruction returns the instruction
-func (obj *mainCommandInstruction) Instruction() LanguageInstruction {
+func (obj *mainCommandInstruction) Instruction() Instruction {
 	return obj.ins
 }
 

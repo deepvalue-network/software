@@ -1,25 +1,25 @@
 package mains
 
 import (
-	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
+	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type adapter struct {
-	languageInstructionAdapter language_instruction.Adapter
-	builder                    Builder
-	instructionBuilder         InstructionBuilder
+	instructionAdapter application_instruction.Adapter
+	builder            Builder
+	instructionBuilder InstructionBuilder
 }
 
 func createAdapter(
-	languageInstructionAdapter language_instruction.Adapter,
+	instructionAdapter application_instruction.Adapter,
 	builder Builder,
 	instructionBuilder InstructionBuilder,
 ) Adapter {
 	out := adapter{
-		languageInstructionAdapter: languageInstructionAdapter,
-		builder:                    builder,
-		instructionBuilder:         instructionBuilder,
+		instructionAdapter: instructionAdapter,
+		builder:            builder,
+		instructionBuilder: instructionBuilder,
 	}
 
 	return &out
@@ -31,7 +31,7 @@ func (app *adapter) ToMain(parsed parsers.MainCommand) (Main, error) {
 	mainCommandInstructions := parsed.Instructions()
 	for _, oneMainCommandIns := range mainCommandInstructions {
 		parsedLangIns := oneMainCommandIns.Instruction()
-		langIns, err := app.languageInstructionAdapter.ToInstruction(parsedLangIns)
+		langIns, err := app.instructionAdapter.ToInstruction(parsedLangIns)
 		if err != nil {
 			return nil, err
 		}

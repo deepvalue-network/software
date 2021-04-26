@@ -1,25 +1,25 @@
 package parsers
 
 type testCommandInstruction struct {
-	ins    LanguageTestInstruction
+	ins    TestInstruction
 	scopes Scopes
 }
 
 func createTestCommandInstruction(
-	ins LanguageTestInstruction,
+	ins TestInstruction,
 ) TestCommandInstruction {
 	return createTestCommandInstructionInternally(ins, nil)
 }
 
 func createTestCommandInstructionWithScopes(
-	ins LanguageTestInstruction,
+	ins TestInstruction,
 	scopes Scopes,
 ) TestCommandInstruction {
 	return createTestCommandInstructionInternally(ins, scopes)
 }
 
 func createTestCommandInstructionInternally(
-	ins LanguageTestInstruction,
+	ins TestInstruction,
 	scopes Scopes,
 ) TestCommandInstruction {
 	out := testCommandInstruction{
@@ -31,7 +31,7 @@ func createTestCommandInstructionInternally(
 }
 
 // Instruction returns the instruction
-func (obj *testCommandInstruction) Instruction() LanguageTestInstruction {
+func (obj *testCommandInstruction) Instruction() TestInstruction {
 	return obj.ins
 }
 
