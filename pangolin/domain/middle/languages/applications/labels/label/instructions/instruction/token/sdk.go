@@ -1,5 +1,17 @@
 package token
 
+import (
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
+)
+
+// NewAdapter creates a new adapter instance
+func NewAdapter() Adapter {
+	builder := NewBuilder()
+	codeMatchBuilder := NewCodeMatchBuilder()
+	codeBuilder := NewCodeBuilder()
+	return createAdapter(builder, codeMatchBuilder, codeBuilder)
+}
+
 // NewBuilder creates a new token builder
 func NewBuilder() Builder {
 	return createBuilder()
@@ -13,6 +25,11 @@ func NewCodeMatchBuilder() CodeMatchBuilder {
 // NewCodeBuilder creates a new code builder
 func NewCodeBuilder() CodeBuilder {
 	return createCodeBuilder()
+}
+
+// Adapter represents a token adapter
+type Adapter interface {
+	ToToken(parsed parsers.Token) (Token, error)
 }
 
 // Builder represents a token builder
