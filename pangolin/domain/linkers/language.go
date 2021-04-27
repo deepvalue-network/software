@@ -1,19 +1,17 @@
 package linkers
 
-import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle"
-)
+import "github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
 
 type language struct {
 	app     Application
-	matches []middle.PatternMatch
+	matches []definitions.PatternMatch
 	paths   Paths
 	root    string
 }
 
 func createLanguage(
 	app Application,
-	matches []middle.PatternMatch,
+	matches []definitions.PatternMatch,
 	paths Paths,
 	root string,
 ) Language {
@@ -33,7 +31,7 @@ func (obj *language) Application() Application {
 }
 
 // PatternMatches return the pattern matches
-func (obj *language) PatternMatches() []middle.PatternMatch {
+func (obj *language) PatternMatches() []definitions.PatternMatch {
 	return obj.matches
 }
 

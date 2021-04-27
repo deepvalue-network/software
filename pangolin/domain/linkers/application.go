@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
 )
 
 type application struct {
@@ -16,7 +16,7 @@ type application struct {
 	ins       instructions.Instructions
 	tests     tests.Tests
 	lbls      labels.Labels
-	variables variables.Variables
+	variables []variable.Variable
 	imports   []External
 	mp        map[string]Application
 }
@@ -27,7 +27,7 @@ func createApplication(
 	ins instructions.Instructions,
 	tests tests.Tests,
 	lbls labels.Labels,
-	variables variables.Variables,
+	variables []variable.Variable,
 ) Application {
 	return createApplicationInternally(name, version, ins, tests, lbls, variables, nil, map[string]Application{})
 }
@@ -38,7 +38,7 @@ func createApplicationWithImports(
 	ins instructions.Instructions,
 	tests tests.Tests,
 	lbls labels.Labels,
-	variables variables.Variables,
+	variables []variable.Variable,
 	imports []External,
 	mp map[string]Application,
 ) Application {
@@ -51,7 +51,7 @@ func createApplicationInternally(
 	ins instructions.Instructions,
 	tests tests.Tests,
 	lbls labels.Labels,
-	variables variables.Variables,
+	variables []variable.Variable,
 	imports []External,
 	mp map[string]Application,
 ) Application {
@@ -95,7 +95,7 @@ func (obj *application) Labels() labels.Labels {
 }
 
 // Variables returns the variables
-func (obj *application) Variables() variables.Variables {
+func (obj *application) Variables() []variable.Variable {
 	return obj.variables
 }
 

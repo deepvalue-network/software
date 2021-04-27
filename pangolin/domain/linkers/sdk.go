@@ -1,11 +1,11 @@
 package linkers
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
 )
 
 // NewProgramBuilder creates a new program builder instance
@@ -70,7 +70,7 @@ type ApplicationBuilder interface {
 	WithInstructions(ins instructions.Instructions) ApplicationBuilder
 	WithTests(tests tests.Tests) ApplicationBuilder
 	WithLabels(labels labels.Labels) ApplicationBuilder
-	WithVariables(vars variables.Variables) ApplicationBuilder
+	WithVariables(vars []variable.Variable) ApplicationBuilder
 	WithImports(imps []External) ApplicationBuilder
 	Now() (Application, error)
 }
@@ -82,7 +82,7 @@ type Application interface {
 	Instructions() instructions.Instructions
 	Tests() tests.Tests
 	Labels() labels.Labels
-	Variables() variables.Variables
+	Variables() []variable.Variable
 	HasImports() bool
 	Imports() []External
 	Import(name string) (Application, error)
@@ -144,7 +144,7 @@ type LanguageReference interface {
 type LanguageBuilder interface {
 	Create() LanguageBuilder
 	WithApplication(app Application) LanguageBuilder
-	WithPatternMatches(matches []middle.PatternMatch) LanguageBuilder
+	WithPatternMatches(matches []definitions.PatternMatch) LanguageBuilder
 	WithPaths(paths Paths) LanguageBuilder
 	WithRoot(root string) LanguageBuilder
 	Now() (Language, error)
@@ -153,7 +153,7 @@ type LanguageBuilder interface {
 // Language represents a language application
 type Language interface {
 	Application() Application
-	PatternMatches() []middle.PatternMatch
+	PatternMatches() []definitions.PatternMatch
 	Paths() Paths
 	Root() string
 }

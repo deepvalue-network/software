@@ -4,9 +4,9 @@ import (
 	"errors"
 
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/variables"
 )
 
 type applicationBuilder struct {
@@ -15,7 +15,7 @@ type applicationBuilder struct {
 	ins       instructions.Instructions
 	tests     tests.Tests
 	lbls      labels.Labels
-	variables variables.Variables
+	variables []variable.Variable
 	imports   []External
 }
 
@@ -63,7 +63,7 @@ func (app *applicationBuilder) WithLabels(lbls labels.Labels) ApplicationBuilder
 }
 
 // WithVariables add variables to the builder
-func (app *applicationBuilder) WithVariables(variables variables.Variables) ApplicationBuilder {
+func (app *applicationBuilder) WithVariables(variables []variable.Variable) ApplicationBuilder {
 	app.variables = variables
 	return app
 }
@@ -100,6 +100,10 @@ func (app *applicationBuilder) Now() (Application, error) {
 
 	if app.lbls == nil {
 		return nil, errors.New("the labels are mandatory in order to build a Label instance")
+	}
+
+	if app.variables != nil && len(app.variables) <= 0 {
+		app.variables = nil
 	}
 
 	if app.variables == nil {

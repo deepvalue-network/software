@@ -3,12 +3,12 @@ package linkers
 import (
 	"errors"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
 )
 
 type languageBuilder struct {
 	app     Application
-	matches []middle.PatternMatch
+	matches []definitions.PatternMatch
 	paths   Paths
 	root    string
 }
@@ -36,7 +36,7 @@ func (app *languageBuilder) WithApplication(appli Application) LanguageBuilder {
 }
 
 // WithPatternMatches add pattern matches to the builder
-func (app *languageBuilder) WithPatternMatches(matches []middle.PatternMatch) LanguageBuilder {
+func (app *languageBuilder) WithPatternMatches(matches []definitions.PatternMatch) LanguageBuilder {
 	app.matches = matches
 	return app
 }
@@ -67,7 +67,7 @@ func (app *languageBuilder) Now() (Language, error) {
 		return nil, errors.New("the root pattern is mandatory in order to build a Language instance")
 	}
 
-	if len(app.matches) <= 0 {
+	if app.matches != nil && len(app.matches) <= 0 {
 		app.matches = nil
 	}
 
