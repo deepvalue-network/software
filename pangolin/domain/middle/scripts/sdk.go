@@ -27,6 +27,7 @@ type Builder interface {
 	WithVersion(version string) Builder
 	WithLanguagePath(lang string) Builder
 	WithScriptPath(script string) Builder
+	WithOutput(output string) Builder
 	Now() (Script, error)
 }
 
@@ -36,4 +37,5 @@ type Script interface {
 	Version() string
 	LanguagePath() string
 	ScriptPath() string
+	Output() string
 }

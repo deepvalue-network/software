@@ -1,4 +1,4 @@
-package scripts
+package application
 
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/compilers"
@@ -14,11 +14,10 @@ const scriptName = "default"
 
 // NewCompiler creates a new compiler application
 func NewCompiler(
-	parser parsers.Parser,
+	middleAdapter middle.Adapter,
 	linker Linker,
 	interpreterBuilder interpreters.Builder,
 ) Compiler {
-	middleAdapter := middle.NewAdapter(parser)
 	compilerApplication := compilers.NewApplication(middleAdapter, interpreterBuilder)
 	return createCompiler(compilerApplication, linker)
 }
@@ -39,21 +38,25 @@ func NewLinker(
 ) Linker {
 	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
 	applicationBuilder := linkers.NewApplicationBuilder()
-	programBuilder := linkers.NewProgramBuilder()
 	languageBuilder := linkers.NewLanguageBuilder()
+	programBuilder := linkers.NewProgramBuilder()
+	languageDefinitionBuilder := linkers.NewLanguageDefinitionBuilder()
 	pathsBuilder := linkers.NewPathsBuilder()
 	scriptBuilder := linkers.NewScriptBuilder()
 	languageReferenceBuilder := linkers.NewLanguageReferenceBuilder()
+	languageApplicationBuilder := linkers.NewLanguageApplicationBuilder()
 	return createLinker(
 		grammarRetrieverCriteriaBuilder,
 		parserBuilder,
 		parser,
 		applicationBuilder,
-		programBuilder,
 		languageBuilder,
+		programBuilder,
+		languageDefinitionBuilder,
 		pathsBuilder,
 		scriptBuilder,
 		languageReferenceBuilder,
+		languageApplicationBuilder,
 		dirPath,
 	)
 }

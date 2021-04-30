@@ -2,7 +2,7 @@ package linkers
 
 type program struct {
 	app    Application
-	lang   LanguageReference
+	lang   Language
 	script Script
 }
 
@@ -10,7 +10,7 @@ func createProgramWithApplication(app Application) Program {
 	return createProgramInternally(app, nil, nil)
 }
 
-func createProgramWithLanguage(lang LanguageReference) Program {
+func createProgramWithLanguage(lang Language) Program {
 	return createProgramInternally(nil, lang, nil)
 }
 
@@ -20,7 +20,7 @@ func createProgramWithScript(script Script) Program {
 
 func createProgramInternally(
 	app Application,
-	lang LanguageReference,
+	lang Language,
 	script Script,
 ) Program {
 	out := program{
@@ -48,7 +48,7 @@ func (obj *program) IsLanguage() bool {
 }
 
 // Language returns the language, if any
-func (obj *program) Language() LanguageReference {
+func (obj *program) Language() Language {
 	return obj.lang
 }
 

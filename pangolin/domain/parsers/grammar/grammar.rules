@@ -112,6 +112,7 @@ SCRIPT_NAME: 'name';
 SCRIPT_VERSION: 'version';
 SCRIPT_SCRIPT: 'script';
 SCRIPT_LANGUAGE: 'language';
+SCRIPT_OUTPUT: 'output';
 
 // cascade
 CASCADE_NAME: 'name';

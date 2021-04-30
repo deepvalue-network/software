@@ -4,23 +4,29 @@ import (
 	"errors"
 
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 )
 
 type builder struct {
-	machineBuilder MachineBuilder
-	valueBuilder   computable.Builder
-	program        linkers.Program
+	stackFrameBuilder      StackFrameBuilder
+	machineBuilder         MachineBuilder
+	machineLanguageBuilder MachineLanguageBuilder
+	valueBuilder           computable.Builder
+	program                linkers.Program
 }
 
 func createBuilder(
+	stackFrameBuilder StackFrameBuilder,
 	machineBuilder MachineBuilder,
+	machineLanguageBuilder MachineLanguageBuilder,
 	valueBuilder computable.Builder,
 ) Builder {
 	out := builder{
-		machineBuilder: machineBuilder,
-		valueBuilder:   valueBuilder,
-		program:        nil,
+		stackFrameBuilder:      stackFrameBuilder,
+		machineBuilder:         machineBuilder,
+		machineLanguageBuilder: machineLanguageBuilder,
+		valueBuilder:           valueBuilder,
+		program:                nil,
 	}
 
 	return &out
@@ -28,7 +34,12 @@ func createBuilder(
 
 // Create initializes the builder
 func (app *builder) Create() Builder {
-	return createBuilder(app.machineBuilder, app.valueBuilder)
+	return createBuilder(
+		app.stackFrameBuilder,
+		app.machineBuilder,
+		app.machineLanguageBuilder,
+		app.valueBuilder,
+	)
 }
 
 // WithProgram adds a program to the builder
@@ -45,20 +56,25 @@ func (app *builder) Now() (Interpreter, error) {
 
 	if app.program.IsScript() {
 		linkedScript := app.program.Script()
-		script := createScript(app.machineBuilder, app.valueBuilder, linkedScript)
+		script := createScript(app.machineLanguageBuilder, app.valueBuilder, linkedScript)
 		return createInterpreterWithScript(script), nil
 	}
 
 	if app.program.IsApplication() {
 		linkedApp := app.program.Application()
-		app := createApplication(app.machineBuilder, linkedApp)
+		app := createApplication(app.machineBuilder, app.stackFrameBuilder, linkedApp)
 		return createInterpreterWithApplication(app), nil
 	}
 
 	if app.program.IsLanguage() {
-		linkedLang := app.program.Language().Language()
-		lang := createLanguage(app.machineBuilder, app.valueBuilder, linkedLang)
-		return createInterpreterWithLanguage(lang), nil
+		linkedLang := app.program.Language()
+		if linkedLang.IsReference() {
+			linkedLangDef := linkedLang.Reference().Definition()
+			lang := createLanguage(app.stackFrameBuilder, app.machineBuilder, app.machineLanguageBuilder, app.valueBuilder, linkedLangDef)
+			return createInterpreterWithLanguage(lang), nil
+		}
+
+		return nil, errors.New("->-> finish the language application in the builder")
 	}
 
 	return nil, errors.New("the Interpreter is invalid")

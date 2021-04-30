@@ -6,9 +6,8 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	instructionAdapter instruction.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	instructionAdapter := instruction.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(instructionAdapter, builder)
 }

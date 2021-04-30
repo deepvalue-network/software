@@ -6,9 +6,8 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	langLabelInsAdapter label_instruction.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	langLabelInsAdapter := label_instruction.NewAdapter()
 	builder := NewBuilder()
 	instructionBuilder := NewInstructionBuilder()
 	return createAdapter(langLabelInsAdapter, builder, instructionBuilder)

@@ -7,8 +7,8 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/transform"
-	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 )
 
 type frame struct {

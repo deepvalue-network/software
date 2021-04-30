@@ -7,6 +7,7 @@ type scriptValueBuilder struct {
 	version    string
 	scriptPath RelativePath
 	langPath   RelativePath
+	output     string
 }
 
 func createScriptValueBuilder() ScriptValueBuilder {
@@ -15,6 +16,7 @@ func createScriptValueBuilder() ScriptValueBuilder {
 		version:    "",
 		scriptPath: nil,
 		langPath:   nil,
+		output:     "",
 	}
 
 	return &out
@@ -49,6 +51,12 @@ func (app *scriptValueBuilder) WithLanguagePath(langPath RelativePath) ScriptVal
 	return app
 }
 
+// WithOutput adds an output variable to the builder
+func (app *scriptValueBuilder) WithOutput(output string) ScriptValueBuilder {
+	app.output = output
+	return app
+}
+
 // Now builds a new ScriptValue instance
 func (app *scriptValueBuilder) Now() (ScriptValue, error) {
 	if app.name != "" {
@@ -65,6 +73,10 @@ func (app *scriptValueBuilder) Now() (ScriptValue, error) {
 
 	if app.langPath != nil {
 		return createScriptValueWithLanguagePath(app.langPath), nil
+	}
+
+	if app.output != "" {
+		return createScriptValueWithOutput(app.output), nil
 	}
 
 	return nil, errors.New("the ScriptValue is invalid")

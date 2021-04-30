@@ -7,10 +7,9 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	languageAdapter standard_instruction.Adapter,
-	testAdapter test_instruction.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	languageAdapter := standard_instruction.NewAdapter()
+	testAdapter := test_instruction.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(languageAdapter, testAdapter, builder)
 }

@@ -7,10 +7,9 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	definitionAdapter definitions.Adapter,
-	applicationAdapter applications.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	definitionAdapter := definitions.NewAdapter()
+	applicationAdapter := applications.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(definitionAdapter, applicationAdapter, builder)
 }

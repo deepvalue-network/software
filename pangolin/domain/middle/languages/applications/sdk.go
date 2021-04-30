@@ -9,12 +9,11 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	headAdapter heads.Adapter,
-	labelsAdapter labels.Adapter,
-	instructionsAdapter instructions.Adapter,
-	testsAdapter tests.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	headAdapter := heads.NewAdapter()
+	labelsAdapter := labels.NewAdapter()
+	instructionsAdapter := instructions.NewAdapter()
+	testsAdapter := tests.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(headAdapter, labelsAdapter, instructionsAdapter, testsAdapter, builder)
 }

@@ -50,5 +50,11 @@ func (app *builder) Now() (Labels, error) {
 		app.lst = []label.Label{}
 	}
 
-	return createLabels(app.lst), nil
+	mp := map[string]label.Label{}
+	for _, lbl := range app.lst {
+		name := lbl.Name()
+		mp[name] = lbl
+	}
+
+	return createLabels(mp, app.lst), nil
 }

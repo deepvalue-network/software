@@ -1652,6 +1652,7 @@ func (app *parser) exitScriptValue(tree lexers.NodeTree) (interface{}, error) {
 		"SCRIPT_VERSION",
 		"SCRIPT_SCRIPT",
 		"SCRIPT_LANGUAGE",
+		"SCRIPT_OUTPUT",
 	})
 
 	switch section {
@@ -1677,6 +1678,9 @@ func (app *parser) exitScriptValue(tree lexers.NodeTree) (interface{}, error) {
 		if filePath, ok := app.relativePath[pathCode]; ok {
 			builder.WithLanguagePath(filePath)
 		}
+	case "SCRIPT_OUTPUT":
+		variableName := tree.CodeFromName("VARIABLE_PATTERN")
+		builder.WithOutput(variableName)
 	}
 
 	ins, err := builder.Now()

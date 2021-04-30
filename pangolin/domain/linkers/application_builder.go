@@ -4,30 +4,27 @@ import (
 	"errors"
 
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
 )
 
 type applicationBuilder struct {
-	name      string
-	version   string
-	ins       instructions.Instructions
-	tests     tests.Tests
-	lbls      labels.Labels
-	variables []variable.Variable
-	imports   []External
+	name    string
+	version string
+	ins     instructions.Instructions
+	tests   tests.Tests
+	lbls    labels.Labels
+	imports []External
 }
 
 func createApplicationBuilder() ApplicationBuilder {
 	out := applicationBuilder{
-		name:      "",
-		version:   "",
-		ins:       nil,
-		tests:     nil,
-		lbls:      nil,
-		variables: nil,
-		imports:   nil,
+		name:    "",
+		version: "",
+		ins:     nil,
+		tests:   nil,
+		lbls:    nil,
+		imports: nil,
 	}
 
 	return &out
@@ -62,12 +59,6 @@ func (app *applicationBuilder) WithLabels(lbls labels.Labels) ApplicationBuilder
 	return app
 }
 
-// WithVariables add variables to the builder
-func (app *applicationBuilder) WithVariables(variables []variable.Variable) ApplicationBuilder {
-	app.variables = variables
-	return app
-}
-
 // WithImports add external imports to the builder
 func (app *applicationBuilder) WithImports(imports []External) ApplicationBuilder {
 	app.imports = imports
@@ -99,15 +90,7 @@ func (app *applicationBuilder) Now() (Application, error) {
 	}
 
 	if app.lbls == nil {
-		return nil, errors.New("the labels are mandatory in order to build a Label instance")
-	}
-
-	if app.variables != nil && len(app.variables) <= 0 {
-		app.variables = nil
-	}
-
-	if app.variables == nil {
-		return nil, errors.New("the variables are mandatory in order to build a Variable instance")
+		return nil, errors.New("the labels are mandatory in order to build an Application instance")
 	}
 
 	if app.imports != nil {
@@ -122,7 +105,6 @@ func (app *applicationBuilder) Now() (Application, error) {
 			app.ins,
 			app.tests,
 			app.lbls,
-			app.variables,
 			app.imports,
 			mp,
 		), nil
@@ -134,6 +116,5 @@ func (app *applicationBuilder) Now() (Application, error) {
 		app.ins,
 		app.tests,
 		app.lbls,
-		app.variables,
 	), nil
 }

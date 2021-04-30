@@ -1,24 +1,16 @@
 package linkers
 
-import (
-	"errors"
-
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
-)
+import "errors"
 
 type languageBuilder struct {
-	app     Application
-	matches []definitions.PatternMatch
-	paths   Paths
-	root    string
+	ref LanguageReference
+	app LanguageApplication
 }
 
 func createLanguageBuilder() LanguageBuilder {
 	out := languageBuilder{
-		app:     nil,
-		matches: nil,
-		paths:   nil,
-		root:    "",
+		ref: nil,
+		app: nil,
 	}
 
 	return &out
@@ -29,51 +21,27 @@ func (app *languageBuilder) Create() LanguageBuilder {
 	return createLanguageBuilder()
 }
 
+// WithReference adds a reference to the builder
+func (app *languageBuilder) WithReference(ref LanguageReference) LanguageBuilder {
+	app.ref = ref
+	return app
+}
+
 // WithApplication adds an application to the builder
-func (app *languageBuilder) WithApplication(appli Application) LanguageBuilder {
+func (app *languageBuilder) WithApplication(appli LanguageApplication) LanguageBuilder {
 	app.app = appli
-	return app
-}
-
-// WithPatternMatches add pattern matches to the builder
-func (app *languageBuilder) WithPatternMatches(matches []definitions.PatternMatch) LanguageBuilder {
-	app.matches = matches
-	return app
-}
-
-// WithPaths adds a paths to the builder
-func (app *languageBuilder) WithPaths(paths Paths) LanguageBuilder {
-	app.paths = paths
-	return app
-}
-
-// WithRoot adds a root to the builder
-func (app *languageBuilder) WithRoot(root string) LanguageBuilder {
-	app.root = root
 	return app
 }
 
 // Now builds a new Language instance
 func (app *languageBuilder) Now() (Language, error) {
-	if app.app == nil {
-		return nil, errors.New("the application is mandatory in order to build a Language instance")
+	if app.ref != nil {
+		return createLanguageWithReference(app.ref), nil
 	}
 
-	if app.paths == nil {
-		return nil, errors.New("the Paths instance is mandatory in order to build a Language instance")
+	if app.app != nil {
+		return createLanguageWithLanguageApplication(app.app), nil
 	}
 
-	if app.root == "" {
-		return nil, errors.New("the root pattern is mandatory in order to build a Language instance")
-	}
-
-	if app.matches != nil && len(app.matches) <= 0 {
-		app.matches = nil
-	}
-
-	if app.matches == nil {
-		return nil, errors.New("the []PatternMatch are mandatory in order to build a Language instance")
-	}
-
-	return createLanguage(app.app, app.matches, app.paths, app.root), nil
+	return nil, errors.New("the Language is invalid")
 }

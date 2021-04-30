@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests"
 )
 
-type application struct {
+type languageApplication struct {
 	name    string
 	version string
 	ins     instructions.Instructions
@@ -19,17 +19,17 @@ type application struct {
 	mp      map[string]Application
 }
 
-func createApplication(
+func createLanguageApplication(
 	name string,
 	version string,
 	ins instructions.Instructions,
 	tests tests.Tests,
 	lbls labels.Labels,
-) Application {
-	return createApplicationInternally(name, version, ins, tests, lbls, nil, map[string]Application{})
+) LanguageApplication {
+	return createLanguageApplicationInternally(name, version, ins, tests, lbls, nil, map[string]Application{})
 }
 
-func createApplicationWithImports(
+func createLanguageApplicationWithImports(
 	name string,
 	version string,
 	ins instructions.Instructions,
@@ -37,11 +37,11 @@ func createApplicationWithImports(
 	lbls labels.Labels,
 	imports []External,
 	mp map[string]Application,
-) Application {
-	return createApplicationInternally(name, version, ins, tests, lbls, imports, mp)
+) LanguageApplication {
+	return createLanguageApplicationInternally(name, version, ins, tests, lbls, imports, mp)
 }
 
-func createApplicationInternally(
+func createLanguageApplicationInternally(
 	name string,
 	version string,
 	ins instructions.Instructions,
@@ -49,8 +49,8 @@ func createApplicationInternally(
 	lbls labels.Labels,
 	imports []External,
 	mp map[string]Application,
-) Application {
-	out := application{
+) LanguageApplication {
+	out := languageApplication{
 		name:    name,
 		version: version,
 		ins:     ins,
@@ -64,42 +64,42 @@ func createApplicationInternally(
 }
 
 // Name returns the name
-func (obj *application) Name() string {
+func (obj *languageApplication) Name() string {
 	return obj.name
 }
 
 // Version returns the version
-func (obj *application) Version() string {
+func (obj *languageApplication) Version() string {
 	return obj.version
 }
 
 // Instructions returns the instructions
-func (obj *application) Instructions() instructions.Instructions {
+func (obj *languageApplication) Instructions() instructions.Instructions {
 	return obj.ins
 }
 
 // Tests returns the tests
-func (obj *application) Tests() tests.Tests {
+func (obj *languageApplication) Tests() tests.Tests {
 	return obj.tests
 }
 
 // Labels returns the labels
-func (obj *application) Labels() labels.Labels {
+func (obj *languageApplication) Labels() labels.Labels {
 	return obj.lbls
 }
 
 // HasImports returns true if there is imports, false otherwise
-func (obj *application) HasImports() bool {
+func (obj *languageApplication) HasImports() bool {
 	return obj.imports != nil
 }
 
 // Imports returns the imports, if any
-func (obj *application) Imports() []External {
+func (obj *languageApplication) Imports() []External {
 	return obj.imports
 }
 
-// Import returns an imported application by name, if any
-func (obj *application) Import(name string) (Application, error) {
+// Import returns an imported languageApplication by name, if any
+func (obj *languageApplication) Import(name string) (Application, error) {
 	if app, ok := obj.mp[name]; ok {
 		return app, nil
 	}

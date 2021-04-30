@@ -1,4 +1,4 @@
-package scripts
+package application
 
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"

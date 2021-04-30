@@ -40,6 +40,11 @@ func Test_scriptValue_withName_Success(t *testing.T) {
 		t.Errorf("the scriptValue was NOT expecting a script")
 		return
 	}
+
+	if value.IsOutput() {
+		t.Errorf("the scriptValue was NOT expecting an output")
+		return
+	}
 }
 
 func Test_scriptValue_withVersion_Success(t *testing.T) {
@@ -76,6 +81,11 @@ func Test_scriptValue_withVersion_Success(t *testing.T) {
 
 	if value.IsScript() {
 		t.Errorf("the scriptValue was NOT expecting a script")
+		return
+	}
+
+	if value.IsOutput() {
+		t.Errorf("the scriptValue was NOT expecting an output")
 		return
 	}
 }
@@ -116,6 +126,11 @@ func Test_scriptValue_withLanguage_Success(t *testing.T) {
 		t.Errorf("the scriptValue was NOT expecting a script")
 		return
 	}
+
+	if value.IsOutput() {
+		t.Errorf("the scriptValue was NOT expecting an output")
+		return
+	}
 }
 
 func Test_scriptValue_withScript_Success(t *testing.T) {
@@ -152,6 +167,54 @@ func Test_scriptValue_withScript_Success(t *testing.T) {
 
 	if value.Script().String() != "./my/path/script.rod" {
 		t.Errorf("the name was expected to be %s, %s returned", "./my/path/script.rod", value.Script().String())
+		return
+	}
+
+	if value.IsOutput() {
+		t.Errorf("the scriptValue was NOT expecting an output")
+		return
+	}
+}
+
+func Test_scriptValue_withOutput_Success(t *testing.T) {
+	grammarFile := "./grammar/grammar.json"
+	pars := createParserForTests("scriptValue", grammarFile)
+
+	file := "./tests/codes/scriptvalue/output.rod"
+	ins, err := pars.ExecuteFile(file)
+	if err != nil {
+		t.Errorf(err.Error())
+		return
+	}
+
+	value := ins.(ScriptValue)
+	if value.IsName() {
+		t.Errorf("the scriptValue was NOT expecting to be a name")
+		return
+	}
+
+	if value.IsVersion() {
+		t.Errorf("the scriptValue was NOT expecting a version")
+		return
+	}
+
+	if value.IsLanguage() {
+		t.Errorf("the scriptValue was NOT expecting a language")
+		return
+	}
+
+	if value.IsScript() {
+		t.Errorf("the scriptValue was NOT expecting a script")
+		return
+	}
+
+	if !value.IsOutput() {
+		t.Errorf("the scriptValue was expecting an output variable")
+		return
+	}
+
+	if value.Output() != "myOutput" {
+		t.Errorf("the name was expected to be %s, %s returned", "myOutput", value.Output())
 		return
 	}
 }

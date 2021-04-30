@@ -8,11 +8,10 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	instructionAdapter standard_instruction.Adapter,
-	commandAdapter commands.Adapter,
-	matchAdapter match.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	instructionAdapter := standard_instruction.NewAdapter()
+	commandAdapter := commands.NewAdapter()
+	matchAdapter := match.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(
 		instructionAdapter,

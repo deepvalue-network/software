@@ -24,10 +24,12 @@ func (app *adapter) ToScript(parsed parsers.Script) (Script, error) {
 	version := parsed.Version()
 	scriptPath := parsed.Script().String()
 	languagePath := parsed.Language().String()
+	output := parsed.Output()
 	return app.builder.Create().
 		WithName(name).
 		WithVersion(version).
 		WithLanguagePath(languagePath).
 		WithScriptPath(scriptPath).
+		WithOutput(output).
 		Now()
 }

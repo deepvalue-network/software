@@ -14,6 +14,12 @@ func NewBuilder() Builder {
 	return createBuilder()
 }
 
+// NewPatternMatchAdapter creates a new pattern match adapter instance
+func NewPatternMatchAdapter() PatternMatchAdapter {
+	builder := NewPatternMatchBuilder()
+	return createPatternMatchAdapter(builder)
+}
+
 // NewPatternMatchBuilder creates a new pattern match builder
 func NewPatternMatchBuilder() PatternMatchBuilder {
 	return createPatternMatchBuilder()

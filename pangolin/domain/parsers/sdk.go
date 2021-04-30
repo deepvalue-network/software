@@ -266,6 +266,7 @@ type Script interface {
 	Version() string
 	Script() RelativePath
 	Language() RelativePath
+	Output() string
 }
 
 // ScriptValueBuilder represents a script value builder
@@ -275,6 +276,7 @@ type ScriptValueBuilder interface {
 	WithVersion(version string) ScriptValueBuilder
 	WithScriptPath(scriptPath RelativePath) ScriptValueBuilder
 	WithLanguagePath(langPath RelativePath) ScriptValueBuilder
+	WithOutput(output string) ScriptValueBuilder
 	Now() (ScriptValue, error)
 }
 
@@ -288,6 +290,8 @@ type ScriptValue interface {
 	Script() RelativePath
 	IsLanguage() bool
 	Language() RelativePath
+	IsOutput() bool
+	Output() string
 }
 
 // LanguageApplicationBuilder represents a language application builder

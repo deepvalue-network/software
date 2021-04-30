@@ -8,11 +8,10 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	applicationAdapter applications.Adapter,
-	languageAdapter languages.Adapter,
-	scriptAdapter scripts.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	applicationAdapter := applications.NewAdapter()
+	languageAdapter := languages.NewAdapter()
+	scriptAdapter := scripts.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(applicationAdapter, languageAdapter, scriptAdapter, builder)
 }

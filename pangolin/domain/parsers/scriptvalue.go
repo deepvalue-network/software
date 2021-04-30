@@ -5,22 +5,27 @@ type scriptValue struct {
 	version    string
 	scriptPath RelativePath
 	langPath   RelativePath
+	output     string
 }
 
 func createScriptValueWithName(name string) ScriptValue {
-	return createScriptValueInternally(name, "", nil, nil)
+	return createScriptValueInternally(name, "", nil, nil, "")
 }
 
 func createScriptValueWithVersion(version string) ScriptValue {
-	return createScriptValueInternally("", version, nil, nil)
+	return createScriptValueInternally("", version, nil, nil, "")
 }
 
 func createScriptValueWithScriptPath(scriptPath RelativePath) ScriptValue {
-	return createScriptValueInternally("", "", scriptPath, nil)
+	return createScriptValueInternally("", "", scriptPath, nil, "")
 }
 
 func createScriptValueWithLanguagePath(langPath RelativePath) ScriptValue {
-	return createScriptValueInternally("", "", nil, langPath)
+	return createScriptValueInternally("", "", nil, langPath, "")
+}
+
+func createScriptValueWithOutput(output string) ScriptValue {
+	return createScriptValueInternally("", "", nil, nil, output)
 }
 
 func createScriptValueInternally(
@@ -28,12 +33,14 @@ func createScriptValueInternally(
 	version string,
 	scriptPath RelativePath,
 	langPath RelativePath,
+	output string,
 ) ScriptValue {
 	out := scriptValue{
 		name:       name,
 		version:    version,
 		scriptPath: scriptPath,
 		langPath:   langPath,
+		output:     output,
 	}
 
 	return &out
@@ -77,4 +84,14 @@ func (obj *scriptValue) IsLanguage() bool {
 // Language returns the langPath, if any
 func (obj *scriptValue) Language() RelativePath {
 	return obj.langPath
+}
+
+// IsOutput returns true if there is an output variable, false otherwise
+func (obj *scriptValue) IsOutput() bool {
+	return obj.output != ""
+}
+
+// Output returns the output variable, if any
+func (obj *scriptValue) Output() string {
+	return obj.output
 }

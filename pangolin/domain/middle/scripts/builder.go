@@ -7,6 +7,7 @@ type builder struct {
 	version string
 	lang    string
 	script  string
+	output  string
 }
 
 func createBuilder() Builder {
@@ -15,6 +16,7 @@ func createBuilder() Builder {
 		version: "",
 		lang:    "",
 		script:  "",
+		output:  "",
 	}
 
 	return &out
@@ -49,6 +51,12 @@ func (app *builder) WithScriptPath(script string) Builder {
 	return app
 }
 
+// WithOutput adds an output to the builder
+func (app *builder) WithOutput(output string) Builder {
+	app.output = output
+	return app
+}
+
 // Now builds  new script instance
 func (app *builder) Now() (Script, error) {
 	if app.name == "" {
@@ -67,5 +75,9 @@ func (app *builder) Now() (Script, error) {
 		return nil, errors.New("the script path is mandatory in order to build a Script instance")
 	}
 
-	return createScript(app.name, app.version, app.lang, app.script), nil
+	if app.output == "" {
+		return nil, errors.New("the output is mandatory in order to build a Script instance")
+	}
+
+	return createScript(app.name, app.version, app.lang, app.script, app.output), nil
 }

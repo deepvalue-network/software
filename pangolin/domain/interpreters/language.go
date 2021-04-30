@@ -7,24 +7,30 @@ import (
 	"path/filepath"
 
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 )
 
 type language struct {
-	machineBuilder MachineBuilder
-	valueBuilder   computable.Builder
-	language       linkers.Language
+	stackFrameBuilder      StackFrameBuilder
+	machineBuilder         MachineBuilder
+	machineLanguageBuilder MachineLanguageBuilder
+	valueBuilder           computable.Builder
+	language               linkers.LanguageDefinition
 }
 
 func createLanguage(
+	stackFrameBuilder StackFrameBuilder,
 	machineBuilder MachineBuilder,
+	machineLanguageBuilder MachineLanguageBuilder,
 	valueBuilder computable.Builder,
-	linkedLanguage linkers.Language,
+	linkedLanguage linkers.LanguageDefinition,
 ) Language {
 	out := language{
-		machineBuilder: machineBuilder,
-		valueBuilder:   valueBuilder,
-		language:       linkedLanguage,
+		stackFrameBuilder:      stackFrameBuilder,
+		machineBuilder:         machineBuilder,
+		machineLanguageBuilder: machineLanguageBuilder,
+		valueBuilder:           valueBuilder,
+		language:               linkedLanguage,
 	}
 
 	return &out
@@ -49,12 +55,20 @@ func (app *language) Tests(names []string) error {
 	fmt.Printf("++++++++++++++++++++++++++++++++++\n")
 
 	baseDir := app.language.Paths().BaseDir()
-	tests := app.language.Application().Tests().All()
+	langApp := app.language.Application()
+	tests := langApp.Tests().All()
+	labels := langApp.Labels()
 	for _, oneTest := range tests {
-		machine, err := app.machineBuilder.Create().WithLanguage(app.language).Now()
+		stackframe := app.stackFrameBuilder.Create().Now()
+		machine, err := createMachineFromLanguageLabels(app.machineBuilder, stackframe, labels)
 		if err != nil {
 			return err
 		}
+
+		/*machineLanguage, err := app.machineLanguageBuilder.Create().WithLanguage(app.language).WithMachine(machine).Now()
+		if err != nil {
+			return err
+		}*/
 
 		name := oneTest.Name()
 		fmt.Printf("\n-----------------------------------\n")
@@ -62,16 +76,21 @@ func (app *language) Tests(names []string) error {
 		testInstructions := oneTest.Instructions().All()
 		for index, oneTestInstruction := range testInstructions {
 			// if the machine is stopped, stop:
-			if machine.StackFrame().Current().IsStopped() {
+			if stackframe.Current().IsStopped() {
 				break
 			}
 
-			if oneTestInstruction.IsAssert() {
-				assert := oneTestInstruction.Assert()
+			if !oneTestInstruction.IsTest() {
+				continue
+			}
+
+			testInstruction := oneTestInstruction.Test()
+			if testInstruction.IsAssert() {
+				assert := testInstruction.Assert()
 				assertIndex := assert.Index()
 				if assert.HasCondition() {
 					condition := assert.Condition()
-					condVal, err := machine.StackFrame().Current().Fetch(condition)
+					condVal, err := stackframe.Current().Fetch(condition)
 					if err != nil {
 						return err
 					}
@@ -94,8 +113,8 @@ func (app *language) Tests(names []string) error {
 				break
 			}
 
-			if oneTestInstruction.IsInstruction() {
-				ins := oneTestInstruction.Instruction()
+			if testInstruction.IsInstruction() {
+				ins := testInstruction.Instruction()
 				err := machine.Receive(ins)
 				if err != nil {
 					return err
@@ -104,8 +123,8 @@ func (app *language) Tests(names []string) error {
 				continue
 			}
 
-			if oneTestInstruction.IsReadFile() {
-				readFile := oneTestInstruction.ReadFile()
+			if testInstruction.IsReadFile() {
+				readFile := testInstruction.ReadFile()
 				relativePath := readFile.Path()
 				joinedPath := filepath.Join(baseDir, relativePath)
 				absPath, err := filepath.Abs(joinedPath)
@@ -126,7 +145,7 @@ func (app *language) Tests(names []string) error {
 				}
 
 				variable := readFile.Variable()
-				err = machine.StackFrame().Current().UpdateValue(variable, computable)
+				err = stackframe.Current().UpdateValue(variable, computable)
 				if err != nil {
 					return err
 				}

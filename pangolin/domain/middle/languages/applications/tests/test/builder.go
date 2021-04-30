@@ -39,7 +39,7 @@ func (app *builder) WithInstructions(ins instructions.Instructions) Builder {
 
 // Now builds a new Test instance
 func (app *builder) Now() (Test, error) {
-	if app.name != "" {
+	if app.name == "" {
 		return nil, errors.New("the name is mandatory in order to build a Test instance")
 	}
 

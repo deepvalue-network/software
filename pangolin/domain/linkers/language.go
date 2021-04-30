@@ -1,46 +1,50 @@
 package linkers
 
-import "github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
-
 type language struct {
-	app     Application
-	matches []definitions.PatternMatch
-	paths   Paths
-	root    string
+	ref LanguageReference
+	app LanguageApplication
 }
 
-func createLanguage(
-	app Application,
-	matches []definitions.PatternMatch,
-	paths Paths,
-	root string,
+func createLanguageWithReference(
+	ref LanguageReference,
+) Language {
+	return createLanguageInternally(ref, nil)
+}
+
+func createLanguageWithLanguageApplication(
+	app LanguageApplication,
+) Language {
+	return createLanguageInternally(nil, app)
+}
+
+func createLanguageInternally(
+	ref LanguageReference,
+	app LanguageApplication,
 ) Language {
 	out := language{
-		app:     app,
-		matches: matches,
-		paths:   paths,
-		root:    root,
+		ref: ref,
+		app: app,
 	}
 
 	return &out
 }
 
-// Application return the application
-func (obj *language) Application() Application {
+// IsReference returns true if there is a reference, false otherwise
+func (obj *language) IsReference() bool {
+	return obj.ref != nil
+}
+
+// Reference returns the reference, if any
+func (obj *language) Reference() LanguageReference {
+	return obj.ref
+}
+
+// IsApplication returns true if there is an application, false otherwise
+func (obj *language) IsApplication() bool {
+	return obj.app != nil
+}
+
+// Application returns the application, if any
+func (obj *language) Application() LanguageApplication {
 	return obj.app
-}
-
-// PatternMatches return the pattern matches
-func (obj *language) PatternMatches() []definitions.PatternMatch {
-	return obj.matches
-}
-
-// Paths return the paths
-func (obj *language) Paths() Paths {
-	return obj.paths
-}
-
-// Root return the root pattern
-func (obj *language) Root() string {
-	return obj.root
 }

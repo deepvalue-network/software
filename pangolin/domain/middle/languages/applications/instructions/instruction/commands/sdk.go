@@ -11,14 +11,13 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	headAdapter heads.Adapter,
-	labelAdapter labels.Adapter,
-	languageAdapter languages.Adapter,
-	mainAdapter mains.Adapter,
-	scriptAdapter scripts.Adapter,
-	testAdapter tests.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	headAdapter := heads.NewAdapter()
+	labelAdapter := labels.NewAdapter()
+	languageAdapter := languages.NewAdapter()
+	mainAdapter := mains.NewAdapter()
+	scriptAdapter := scripts.NewAdapter()
+	testAdapter := tests.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(
 		headAdapter,

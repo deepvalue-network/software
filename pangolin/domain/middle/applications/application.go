@@ -1,11 +1,11 @@
 package applications
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
 )
 
 type application struct {

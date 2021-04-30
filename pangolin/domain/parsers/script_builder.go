@@ -33,6 +33,7 @@ func (app *scriptBuilder) Now() (Script, error) {
 
 	name := ""
 	version := ""
+	output := ""
 	var script RelativePath
 	var language RelativePath
 	for _, oneValue := range app.values {
@@ -55,6 +56,11 @@ func (app *scriptBuilder) Now() (Script, error) {
 			language = oneValue.Language()
 			continue
 		}
+
+		if oneValue.IsOutput() {
+			output = oneValue.Output()
+			continue
+		}
 	}
 
 	if name == "" {
@@ -73,5 +79,9 @@ func (app *scriptBuilder) Now() (Script, error) {
 		return nil, errors.New("the language is mandatory in order to build a Script instance")
 	}
 
-	return createScript(name, version, script, language), nil
+	if output == "" {
+		return nil, errors.New("the output variable is mandatory in order to build a Script instance")
+	}
+
+	return createScript(name, version, script, language, output), nil
 }

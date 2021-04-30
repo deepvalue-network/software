@@ -8,11 +8,10 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	labelAdapter label_instruction.Adapter,
-	languageAdapter language_instruction.Adapter,
-	tokenAdapter token.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	labelAdapter := label_instruction.NewAdapter()
+	languageAdapter := language_instruction.NewAdapter()
+	tokenAdapter := token.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(labelAdapter, languageAdapter, tokenAdapter, builder)
 }

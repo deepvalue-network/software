@@ -39,5 +39,11 @@ func (app *builder) Now() (Labels, error) {
 		return nil, errors.New("the []Label are mandatory in order to build an Labels instance")
 	}
 
-	return createLabels(app.list), nil
+	mp := map[string]label.Label{}
+	for _, oneLabel := range app.list {
+		name := oneLabel.Name()
+		mp[name] = oneLabel
+	}
+
+	return createLabels(mp, app.list), nil
 }

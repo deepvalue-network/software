@@ -2,15 +2,22 @@ package linkers
 
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
+	language_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions"
+	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
+	language_tests "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
 )
 
 // NewProgramBuilder creates a new program builder instance
 func NewProgramBuilder() ProgramBuilder {
 	return createProgramBuilder()
+}
+
+// NewLanguageBuilder creates a new language builder instance
+func NewLanguageBuilder() LanguageBuilder {
+	return createLanguageBuilder()
 }
 
 // NewApplicationBuilder creates a new application builder
@@ -33,9 +40,14 @@ func NewLanguageReferenceBuilder() LanguageReferenceBuilder {
 	return createLanguageReferenceBuilder()
 }
 
-// NewLanguageBuilder creates a new language builder
-func NewLanguageBuilder() LanguageBuilder {
-	return createLanguageBuilder()
+// NewLanguageDefinitionBuilder creates a new language builder
+func NewLanguageDefinitionBuilder() LanguageDefinitionBuilder {
+	return createLanguageDefinitionBuilder()
+}
+
+// NewLanguageApplicationBuilder creates a new language application builder
+func NewLanguageApplicationBuilder() LanguageApplicationBuilder {
+	return createLanguageApplicationBuilder()
 }
 
 // NewPathsBuilder creates a new paths builder
@@ -47,7 +59,7 @@ func NewPathsBuilder() PathsBuilder {
 type ProgramBuilder interface {
 	Create() ProgramBuilder
 	WithApplication(app Application) ProgramBuilder
-	WithLanguage(lang LanguageReference) ProgramBuilder
+	WithLanguage(lang Language) ProgramBuilder
 	WithScript(script Script) ProgramBuilder
 	Now() (Program, error)
 }
@@ -57,9 +69,25 @@ type Program interface {
 	IsApplication() bool
 	Application() Application
 	IsLanguage() bool
-	Language() LanguageReference
+	Language() Language
 	IsScript() bool
 	Script() Script
+}
+
+// LanguageBuilder represents a language builder
+type LanguageBuilder interface {
+	Create() LanguageBuilder
+	WithReference(ref LanguageReference) LanguageBuilder
+	WithApplication(app LanguageApplication) LanguageBuilder
+	Now() (Language, error)
+}
+
+// Language represents a language
+type Language interface {
+	IsReference() bool
+	Reference() LanguageReference
+	IsApplication() bool
+	Application() LanguageApplication
 }
 
 // ApplicationBuilder represents an application builder
@@ -70,7 +98,6 @@ type ApplicationBuilder interface {
 	WithInstructions(ins instructions.Instructions) ApplicationBuilder
 	WithTests(tests tests.Tests) ApplicationBuilder
 	WithLabels(labels labels.Labels) ApplicationBuilder
-	WithVariables(vars []variable.Variable) ApplicationBuilder
 	WithImports(imps []External) ApplicationBuilder
 	Now() (Application, error)
 }
@@ -82,7 +109,6 @@ type Application interface {
 	Instructions() instructions.Instructions
 	Tests() tests.Tests
 	Labels() labels.Labels
-	Variables() []variable.Variable
 	HasImports() bool
 	Imports() []External
 	Import(name string) (Application, error)
@@ -113,6 +139,7 @@ type ScriptBuilder interface {
 	WithName(name string) ScriptBuilder
 	WithVersion(version string) ScriptBuilder
 	WithCode(code string) ScriptBuilder
+	WithOutput(output string) ScriptBuilder
 	Now() (Script, error)
 }
 
@@ -122,40 +149,63 @@ type Script interface {
 	Name() string
 	Version() string
 	Code() string
+	Output() string
 }
 
 // LanguageReferenceBuilder represents a language reference builder
 type LanguageReferenceBuilder interface {
 	Create() LanguageReferenceBuilder
-	WithLanguage(language Language) LanguageReferenceBuilder
+	WithDefinition(def LanguageDefinition) LanguageReferenceBuilder
 	WithInputVariable(input string) LanguageReferenceBuilder
-	WithOutputVariable(output string) LanguageReferenceBuilder
 	Now() (LanguageReference, error)
 }
 
 // LanguageReference represents a language reference
 type LanguageReference interface {
-	Language() Language
+	Definition() LanguageDefinition
 	Input() string
-	Output() string
 }
 
-// LanguageBuilder represents a language builder
-type LanguageBuilder interface {
-	Create() LanguageBuilder
-	WithApplication(app Application) LanguageBuilder
-	WithPatternMatches(matches []definitions.PatternMatch) LanguageBuilder
-	WithPaths(paths Paths) LanguageBuilder
-	WithRoot(root string) LanguageBuilder
-	Now() (Language, error)
+// LanguageDefinitionBuilder represents a language builder
+type LanguageDefinitionBuilder interface {
+	Create() LanguageDefinitionBuilder
+	WithApplication(app LanguageApplication) LanguageDefinitionBuilder
+	WithPatternMatches(matches []definitions.PatternMatch) LanguageDefinitionBuilder
+	WithPaths(paths Paths) LanguageDefinitionBuilder
+	WithRoot(root string) LanguageDefinitionBuilder
+	Now() (LanguageDefinition, error)
 }
 
-// Language represents a language application
-type Language interface {
-	Application() Application
+// LanguageDefinition represents a language definition
+type LanguageDefinition interface {
+	Application() LanguageApplication
 	PatternMatches() []definitions.PatternMatch
 	Paths() Paths
 	Root() string
+}
+
+// LanguageApplicationBuilder represents a language application builder
+type LanguageApplicationBuilder interface {
+	Create() LanguageApplicationBuilder
+	WithName(name string) LanguageApplicationBuilder
+	WithVersion(version string) LanguageApplicationBuilder
+	WithInstructions(ins language_instructions.Instructions) LanguageApplicationBuilder
+	WithTests(tests language_tests.Tests) LanguageApplicationBuilder
+	WithLabels(labels language_labels.Labels) LanguageApplicationBuilder
+	WithImports(imps []External) LanguageApplicationBuilder
+	Now() (LanguageApplication, error)
+}
+
+// LanguageApplication represents a linked language application
+type LanguageApplication interface {
+	Name() string
+	Version() string
+	Instructions() language_instructions.Instructions
+	Tests() language_tests.Tests
+	Labels() language_labels.Labels
+	HasImports() bool
+	Imports() []External
+	Import(name string) (Application, error)
 }
 
 // PathsBuilder represents a paths builder

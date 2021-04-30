@@ -6,9 +6,8 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	labelAdapter label.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	labelAdapter := label.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(labelAdapter, builder)
 }
@@ -33,4 +32,5 @@ type Builder interface {
 // Labels represents labels
 type Labels interface {
 	All() []label.Label
+	Fetch(name string) (label.Label, error)
 }

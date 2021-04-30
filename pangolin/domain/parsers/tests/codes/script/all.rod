@@ -3,4 +3,5 @@ script:
     version: 2019.03.23.
     script: "./my/script.rod".
     language: "./my/lang.rod".
+    output: myOutput.
 .

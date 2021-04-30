@@ -9,22 +9,34 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/transform"
-	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable"
-	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
+	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
+	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
+	language_label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label/instructions/instruction"
 )
 
+// CallLabelFunc represents a call label func
+type CallLabelFunc func(name string) error
+
+// FetchStackFrameFunc represents a fetch stackframe func
+type FetchStackFrameFunc func() StackFrame
+
 // NewBuilder creates a new interpreter builder instance
-func NewBuilder(machineBuilder MachineBuilder) Builder {
+func NewBuilder(machineLanguageBuilder MachineLanguageBuilder) Builder {
+	stackFrameBuilder := NewStackFrameBuilder()
+	machineBuilder := NewMachineBuilder()
 	valueBuilder := computable.NewBuilder()
-	return createBuilder(machineBuilder, valueBuilder)
+	return createBuilder(stackFrameBuilder, machineBuilder, machineLanguageBuilder, valueBuilder)
 }
 
-// NewMachineBuilder creates a new machineBuilder instance
-func NewMachineBuilder(
+// NewMachineLanguageBuilder creates a new machine language builder
+func NewMachineLanguageBuilder(
 	lexerAdapterBuilder lexers.AdapterBuilder,
 	events []lexers.Event,
-) MachineBuilder {
+) MachineLanguageBuilder {
+	machineBuilder := NewMachineBuilder()
 	variableBuilder := var_variable.NewBuilder()
 	valueBuilder := var_value.NewBuilder()
 	computableValueBuilder := computable.NewBuilder()
@@ -32,7 +44,8 @@ func NewMachineBuilder(
 	lexerParserBuilder := lexer_parser.NewBuilder()
 	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
 	stackFrameBuilder := NewStackFrameBuilder()
-	return createMachineBuilder(
+	return createMachineLanguageBuilder(
+		machineBuilder,
 		variableBuilder,
 		valueBuilder,
 		computableValueBuilder,
@@ -42,6 +55,14 @@ func NewMachineBuilder(
 		grammarRetrieverCriteriaBuilder,
 		stackFrameBuilder,
 		events,
+	)
+}
+
+// NewMachineBuilder creates a new machineBuilder instance
+func NewMachineBuilder() MachineBuilder {
+	computableValueBuilder := computable.NewBuilder()
+	return createMachineBuilder(
+		computableValueBuilder,
 	)
 }
 
@@ -94,15 +115,31 @@ type Language interface {
 // MachineBuilder represents a machine builder
 type MachineBuilder interface {
 	Create() MachineBuilder
-	WithLanguage(lang linkers.Language) MachineBuilder
-	WithApplication(app linkers.Application) MachineBuilder
-	WithInput(input map[string]computable.Value) MachineBuilder
+	WithCallLabelFunc(callLabelFunc CallLabelFunc) MachineBuilder
+	WithFetchStackFunc(fetchStackFunc FetchStackFrameFunc) MachineBuilder
 	Now() (Machine, error)
 }
 
 // Machine represents a machine that receives 1 instruction at a time
 type Machine interface {
 	Receive(ins instruction.Instruction) error
+	ReceiveLbl(lblIns label_instruction.Instruction) (bool, error)
+}
+
+// MachineLanguageBuilder represents a machine language builder
+type MachineLanguageBuilder interface {
+	Create() MachineLanguageBuilder
+	WithLanguage(lang linkers.LanguageDefinition) MachineLanguageBuilder
+	WithInput(input map[string]computable.Value) MachineLanguageBuilder
+	WithMachine(machine Machine) MachineLanguageBuilder
+	Now() (MachineLanguage, error)
+}
+
+// MachineLanguage represents a language machine that receives 1 instruction at a time
+type MachineLanguage interface {
+	Receive(ins language_instruction.Instruction) error
+	ReceiveLbl(lblIns language_label_instruction.Instruction) (bool, error)
+	Machine() Machine
 	StackFrame() StackFrame
 }
 

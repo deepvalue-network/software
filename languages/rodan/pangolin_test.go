@@ -4,27 +4,20 @@ import (
 	"errors"
 	"path/filepath"
 	"testing"
+
+	"github.com/deepvalue-network/software/pangolin/bundles"
 )
 
 func TestPangolin_executeTests_Success(t *testing.T) {
-	// generate then save language:
+	name := "pangolin"
+	grammarFile := "../../pangolin/domain/parsers/grammar/grammar.json"
 	langPath := "language.pangolin"
 	dirPath, err := filepath.Abs(".")
 	if err != nil {
 		panic(err)
 	}
 
-	parserLinker, interpreterBuilder, err := create(dirPath)
-	if err != nil {
-		panic(err)
-	}
-
-	program, err := parserLinker.File(langPath)
-	if err != nil {
-		panic(err)
-	}
-
-	interpreter, err := interpreterBuilder.Create().WithProgram(program).Now()
+	interpreter, err := bundles.NewInterpreter(dirPath, langPath, grammarFile, name)
 	if err != nil {
 		panic(err)
 	}

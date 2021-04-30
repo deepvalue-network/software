@@ -6,9 +6,8 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	externalAdapter externals.Adapter,
-) Adapter {
+func NewAdapter() Adapter {
+	externalAdapter := externals.NewAdapter()
 	builder := NewBuilder()
 	return createAdapter(externalAdapter, builder)
 }

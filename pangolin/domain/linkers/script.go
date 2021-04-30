@@ -5,6 +5,7 @@ type script struct {
 	name     string
 	version  string
 	code     string
+	output   string
 }
 
 func createScript(
@@ -12,12 +13,14 @@ func createScript(
 	name string,
 	version string,
 	code string,
+	output string,
 ) Script {
 	out := script{
 		language: language,
 		name:     name,
 		version:  version,
 		code:     code,
+		output:   output,
 	}
 
 	return &out
@@ -41,4 +44,9 @@ func (obj *script) Version() string {
 // Code returns the code
 func (obj *script) Code() string {
 	return obj.code
+}
+
+// Output returns the output
+func (obj *script) Output() string {
+	return obj.output
 }

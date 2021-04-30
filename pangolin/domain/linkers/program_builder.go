@@ -6,7 +6,7 @@ import (
 
 type programBuilder struct {
 	app    Application
-	lang   LanguageReference
+	lang   Language
 	script Script
 }
 
@@ -32,7 +32,7 @@ func (app *programBuilder) WithApplication(appli Application) ProgramBuilder {
 }
 
 // WithLanguage adds a language to the builder
-func (app *programBuilder) WithLanguage(lang LanguageReference) ProgramBuilder {
+func (app *programBuilder) WithLanguage(lang Language) ProgramBuilder {
 	app.lang = lang
 	return app
 }

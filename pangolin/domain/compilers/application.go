@@ -7,7 +7,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 	"github.com/deepvalue-network/software/pangolin/domain/middle"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/variables/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
@@ -17,6 +17,7 @@ type application struct {
 	parser             parsers.Parser
 	middleAdapter      middle.Adapter
 	programBuilder     linkers.ProgramBuilder
+	languageBuilder    linkers.LanguageBuilder
 }
 
 func createApplication(
@@ -24,12 +25,14 @@ func createApplication(
 	interpreterBuilder interpreters.Builder,
 	middleAdapter middle.Adapter,
 	programBuilder linkers.ProgramBuilder,
+	languageBuilder linkers.LanguageBuilder,
 ) Application {
 	out := application{
 		computableBuilder:  computableBuilder,
 		interpreterBuilder: interpreterBuilder,
 		middleAdapter:      middleAdapter,
 		programBuilder:     programBuilder,
+		languageBuilder:    languageBuilder,
 	}
 
 	return &out
@@ -38,10 +41,10 @@ func createApplication(
 // Execute executes the compiler application
 func (app *application) Execute(script linkers.Script) (middle.Program, error) {
 	langRef := script.Language()
-	lang := langRef.Language()
-	langApp := lang.Application()
+	langDef := langRef.Definition()
+	langApp := langDef.Application()
 	inVariable := langRef.Input()
-	outVariable := langRef.Output()
+	outVariable := script.Output()
 	code := script.Code()
 
 	codeValue, err := app.computableBuilder.Create().WithString(code).Now()
@@ -53,7 +56,12 @@ func (app *application) Execute(script linkers.Script) (middle.Program, error) {
 		inVariable: codeValue,
 	}
 
-	linkedProgram, err := app.programBuilder.Create().WithApplication(langApp).Now()
+	lang, err := app.languageBuilder.Create().WithApplication(langApp).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	linkedProgram, err := app.programBuilder.Create().WithLanguage(lang).Now()
 	if err != nil {
 		return nil, err
 	}

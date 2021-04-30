@@ -1,8 +1,8 @@
 package labels
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapter creates a new adapter instance
@@ -33,4 +33,5 @@ type Builder interface {
 // Labels represents labels
 type Labels interface {
 	All() []label.Label
+	Fetch(name string) (label.Label, error)
 }

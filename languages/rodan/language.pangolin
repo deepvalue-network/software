@@ -4,7 +4,6 @@ language:
     rules: "./rules.pangolin".
     logic: "./logic.pangolin".
     in: input.
-    out: output.
     matches:
         program: |exitProgram.
         printCommand: |exitPrintCommand.

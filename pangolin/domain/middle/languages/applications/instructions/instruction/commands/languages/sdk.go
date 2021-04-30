@@ -6,12 +6,11 @@ import (
 )
 
 // NewAdapter creates a new adapter instance
-func NewAdapter(
-	patternMatchadapter definitions.PatternMatchAdapter,
-) Adapter {
+func NewAdapter() Adapter {
+	patternMatchAdapter := definitions.NewPatternMatchAdapter()
 	builder := NewBuilder()
 	valueBuilder := NewValueBuilder()
-	return createAdapter(patternMatchadapter, builder, valueBuilder)
+	return createAdapter(patternMatchAdapter, builder, valueBuilder)
 }
 
 // NewBuilder creates a new builder instance
