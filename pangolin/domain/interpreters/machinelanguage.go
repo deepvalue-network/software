@@ -9,7 +9,6 @@ import (
 	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
-	language_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions"
 	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/match"
@@ -27,10 +26,9 @@ type machineLanguage struct {
 	lexerParserBuilder     lexer_parser.Builder
 	lexerAdapterBuilder    lexers.AdapterBuilder
 	patternMatches         map[string]definitions.PatternMatch
-	instructions           language_instructions.Instructions
 	lbls                   map[string]label_instructions.Instructions
 	machine                Machine
-	stkFrame               StackFrame
+	fetchStackFrameFn      FetchStackFrameFunc
 	currentToken           lexers.NodeTree
 }
 
@@ -44,7 +42,7 @@ func createMachineLanguage(
 	patternMatches map[string]definitions.PatternMatch,
 	lbls map[string]label_instructions.Instructions,
 	machine Machine,
-	stkFrame StackFrame,
+	fetchStackFrameFn FetchStackFrameFunc,
 ) MachineLanguage {
 	out := machineLanguage{
 		variableBuilder:        variableBuilder,
@@ -56,7 +54,7 @@ func createMachineLanguage(
 		patternMatches:         patternMatches,
 		lbls:                   lbls,
 		machine:                machine,
-		stkFrame:               stkFrame,
+		fetchStackFrameFn:      fetchStackFrameFn,
 		currentToken:           nil,
 	}
 
@@ -75,7 +73,7 @@ func (app *machineLanguage) Receive(langIns language_instruction.Instruction) er
 
 	if langIns.IsCommand() {
 		command := langIns.Command()
-		err := app.command(command)
+		err := app.Command(command)
 		if err != nil {
 			return err
 		}
@@ -84,7 +82,7 @@ func (app *machineLanguage) Receive(langIns language_instruction.Instruction) er
 
 	if langIns.IsMatch() {
 		match := langIns.Match()
-		err := app.match(match)
+		err := app.Match(match)
 		if err != nil {
 			return err
 		}
@@ -111,27 +109,19 @@ func (app *machineLanguage) ReceiveLbl(lblIns label_instruction.Instruction) (bo
 	return false, err
 }
 
-// Machine returns the machine instance
-func (app *machineLanguage) Machine() Machine {
-	return app.machine
+// Command executes a command to the machine language
+func (app *machineLanguage) Command(command commands.Command) error {
+	panic(errors.New("finish command in machine language"))
 }
 
-// StackFrame returns the stackFrame
-func (app *machineLanguage) StackFrame() StackFrame {
-	return app.stkFrame
-}
-
-func (app *machineLanguage) command(command commands.Command) error {
-	return nil
-}
-
-func (app *machineLanguage) match(match match.Match) error {
+// Match executes a match to the machine language
+func (app *machineLanguage) Match(match match.Match) error {
 	if app.lexerAdapterBuilder == nil {
 		return errors.New("the lexerAdapter builder is mandatory in order to execute a Match instruction in the machine")
 	}
 
 	inputName := match.Input()
-	input, err := app.stkFrame.Current().Fetch(inputName)
+	input, err := app.fetchStackFrameFn().Current().Fetch(inputName)
 	if err != nil {
 		return err
 	}
@@ -252,7 +242,7 @@ func (app *machineLanguage) token(token token.Token) error {
 			return err
 		}
 
-		err = app.stkFrame.Current().UpdateValue(sectionName, computableSection)
+		err = app.fetchStackFrameFn().Current().UpdateValue(sectionName, computableSection)
 		if err != nil {
 			return err
 		}
@@ -263,7 +253,7 @@ func (app *machineLanguage) token(token token.Token) error {
 			return err
 		}
 
-		err = app.stkFrame.Current().UpdateValue(retName, computableCode)
+		err = app.fetchStackFrameFn().Current().UpdateValue(retName, computableCode)
 		if err != nil {
 			return err
 		}
@@ -285,7 +275,7 @@ func (app *machineLanguage) token(token token.Token) error {
 			return err
 		}
 
-		err = app.stkFrame.Current().UpdateValue(retName, computableCode)
+		err = app.fetchStackFrameFn().Current().UpdateValue(retName, computableCode)
 		if err != nil {
 			return err
 		}
@@ -304,7 +294,7 @@ func (app *machineLanguage) token(token token.Token) error {
 			return err
 		}
 
-		err = app.stkFrame.Current().UpdateValue(retName, computableCode)
+		err = app.fetchStackFrameFn().Current().UpdateValue(retName, computableCode)
 		if err != nil {
 			return err
 		}
@@ -335,13 +325,13 @@ func (app *machineLanguage) token(token token.Token) error {
 				return err
 			}
 
-			err = app.stkFrame.Current().Insert(variable)
+			err = app.fetchStackFrameFn().Current().Insert(variable)
 			if err != nil {
 				return err
 			}
 
 			// push:
-			app.stkFrame.Push()
+			app.fetchStackFrameFn().Push()
 		}
 
 		// amount:
@@ -360,7 +350,7 @@ func (app *machineLanguage) token(token token.Token) error {
 			return err
 		}
 
-		err = app.stkFrame.Current().Insert(variable)
+		err = app.fetchStackFrameFn().Current().Insert(variable)
 		if err != nil {
 			return err
 		}

@@ -15,7 +15,6 @@ import (
 )
 
 type machineLanguageBuilder struct {
-	machineBuilder                  MachineBuilder
 	variableBuilder                 var_variable.Builder
 	valueBuilder                    var_value.Builder
 	computableValueBuilder          computable.Builder
@@ -27,11 +26,11 @@ type machineLanguageBuilder struct {
 	events                          []lexers.Event
 	lang                            linkers.LanguageDefinition
 	input                           map[string]computable.Value
+	fetchStackFrameFn               FetchStackFrameFunc
 	machine                         Machine
 }
 
 func createMachineLanguageBuilder(
-	machineBuilder MachineBuilder,
 	variableBuilder var_variable.Builder,
 	valueBuilder var_value.Builder,
 	computableValueBuilder computable.Builder,
@@ -43,7 +42,6 @@ func createMachineLanguageBuilder(
 	events []lexers.Event,
 ) MachineLanguageBuilder {
 	out := machineLanguageBuilder{
-		machineBuilder:                  machineBuilder,
 		variableBuilder:                 variableBuilder,
 		valueBuilder:                    valueBuilder,
 		computableValueBuilder:          computableValueBuilder,
@@ -55,6 +53,7 @@ func createMachineLanguageBuilder(
 		events:                          events,
 		lang:                            nil,
 		input:                           nil,
+		fetchStackFrameFn:               nil,
 		machine:                         nil,
 	}
 
@@ -64,7 +63,6 @@ func createMachineLanguageBuilder(
 // Create initializes the builder
 func (app *machineLanguageBuilder) Create() MachineLanguageBuilder {
 	return createMachineLanguageBuilder(
-		app.machineBuilder,
 		app.variableBuilder,
 		app.valueBuilder,
 		app.computableValueBuilder,
@@ -89,6 +87,12 @@ func (app *machineLanguageBuilder) WithInput(input map[string]computable.Value) 
 	return app
 }
 
+// WithFetchStackFunc adds a fetchStackFunc func to the builder
+func (app *machineLanguageBuilder) WithFetchStackFunc(fetchStackFrameFn FetchStackFrameFunc) MachineLanguageBuilder {
+	app.fetchStackFrameFn = fetchStackFrameFn
+	return app
+}
+
 // WithMachine adds a machine to the builder
 func (app *machineLanguageBuilder) WithMachine(machine Machine) MachineLanguageBuilder {
 	app.machine = machine
@@ -101,6 +105,10 @@ func (app *machineLanguageBuilder) Now() (MachineLanguage, error) {
 		return nil, errors.New("the language definition is mandatory in order to build a MachineLanguage instance")
 	}
 
+	if app.fetchStackFrameFn == nil {
+		return nil, errors.New("the fetchStackFrame func is mandatory in order to build a MachineLanguage instance")
+	}
+
 	if app.machine == nil {
 		return nil, errors.New("the machine is mandatory in order to build a MachineLanguage instance")
 	}
@@ -108,9 +116,6 @@ func (app *machineLanguageBuilder) Now() (MachineLanguage, error) {
 	if app.input == nil {
 		app.input = map[string]computable.Value{}
 	}
-
-	stackFrame := app.stackFrameBuilder.Create().
-		Now()
 
 	root := app.lang.Root()
 	paths := app.lang.Paths()
@@ -158,6 +163,6 @@ func (app *machineLanguageBuilder) Now() (MachineLanguage, error) {
 		patternMatches,
 		lbls,
 		app.machine,
-		stackFrame,
+		app.fetchStackFrameFn,
 	), nil
 }

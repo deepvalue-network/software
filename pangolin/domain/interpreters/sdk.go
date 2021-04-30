@@ -14,6 +14,8 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
 	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/match"
 	language_label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label/instructions/instruction"
 )
 
@@ -36,7 +38,6 @@ func NewMachineLanguageBuilder(
 	lexerAdapterBuilder lexers.AdapterBuilder,
 	events []lexers.Event,
 ) MachineLanguageBuilder {
-	machineBuilder := NewMachineBuilder()
 	variableBuilder := var_variable.NewBuilder()
 	valueBuilder := var_value.NewBuilder()
 	computableValueBuilder := computable.NewBuilder()
@@ -45,7 +46,6 @@ func NewMachineLanguageBuilder(
 	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
 	stackFrameBuilder := NewStackFrameBuilder()
 	return createMachineLanguageBuilder(
-		machineBuilder,
 		variableBuilder,
 		valueBuilder,
 		computableValueBuilder,
@@ -131,16 +131,17 @@ type MachineLanguageBuilder interface {
 	Create() MachineLanguageBuilder
 	WithLanguage(lang linkers.LanguageDefinition) MachineLanguageBuilder
 	WithInput(input map[string]computable.Value) MachineLanguageBuilder
+	WithFetchStackFunc(fetchStackFunc FetchStackFrameFunc) MachineLanguageBuilder
 	WithMachine(machine Machine) MachineLanguageBuilder
 	Now() (MachineLanguage, error)
 }
 
 // MachineLanguage represents a language machine that receives 1 instruction at a time
 type MachineLanguage interface {
+	Match(match match.Match) error
+	Command(command commands.Command) error
 	Receive(ins language_instruction.Instruction) error
 	ReceiveLbl(lblIns language_label_instruction.Instruction) (bool, error)
-	Machine() Machine
-	StackFrame() StackFrame
 }
 
 // StackFrameBuilder represents a stackframe builder

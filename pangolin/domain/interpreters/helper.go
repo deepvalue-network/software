@@ -49,7 +49,7 @@ func createMachineFromLanguageLabels(
 	machineBuilder MachineBuilder,
 	stackFrame StackFrame,
 	labels language_labels.Labels,
-) (Machine, error) {
+) (Machine, CallLabelFunc, FetchStackFrameFunc, error) {
 	var machineLang MachineLanguage
 	callLabelFunc := func(name string) error {
 		lbl, err := labels.Fetch(name)
@@ -78,8 +78,8 @@ func createMachineFromLanguageLabels(
 
 	mach, err := machineBuilder.Create().WithCallLabelFunc(callLabelFunc).WithFetchStackFunc(fetchStackframeFunc).Now()
 	if err != nil {
-		return nil, err
+		return nil, nil, nil, err
 	}
 
-	return mach, nil
+	return mach, callLabelFunc, fetchStackframeFunc, nil
 }

@@ -56,7 +56,7 @@ func (app *builder) Now() (Interpreter, error) {
 
 	if app.program.IsScript() {
 		linkedScript := app.program.Script()
-		script := createScript(app.machineLanguageBuilder, app.valueBuilder, linkedScript)
+		script := createScript(app.stackFrameBuilder, app.machineBuilder, app.machineLanguageBuilder, app.valueBuilder, linkedScript)
 		return createInterpreterWithScript(script), nil
 	}
 
