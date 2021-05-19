@@ -4,8 +4,8 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type application struct {
@@ -13,7 +13,7 @@ type application struct {
 	main    instructions.Instructions
 	tests   tests.Tests
 	labels  labels.Labels
-	extends []externals.External
+	extends []parsers.ImportSingle
 }
 
 func createApplication(
@@ -30,7 +30,7 @@ func createApplicationWithExtends(
 	main instructions.Instructions,
 	tests tests.Tests,
 	labels labels.Labels,
-	extends []externals.External,
+	extends []parsers.ImportSingle,
 ) Application {
 	return createApplicationInternally(head, main, tests, labels, extends)
 }
@@ -40,7 +40,7 @@ func createApplicationInternally(
 	main instructions.Instructions,
 	tests tests.Tests,
 	labels labels.Labels,
-	extends []externals.External,
+	extends []parsers.ImportSingle,
 ) Application {
 	out := application{
 		head:    head,
@@ -79,6 +79,6 @@ func (obj *application) HasExtends() bool {
 }
 
 // Extends returns the extends, if any
-func (obj *application) Extends() []externals.External {
+func (obj *application) Extends() []parsers.ImportSingle {
 	return obj.extends
 }

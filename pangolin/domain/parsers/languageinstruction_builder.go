@@ -3,15 +3,13 @@ package parsers
 import "errors"
 
 type languageInstructionBuilder struct {
-	ins     Instruction
-	match   Match
+	ins     LanguageInstructionCommon
 	command Command
 }
 
 func createLanguageInstructionBuilder() LanguageInstructionBuilder {
 	out := languageInstructionBuilder{
 		ins:     nil,
-		match:   nil,
 		command: nil,
 	}
 
@@ -24,14 +22,8 @@ func (app *languageInstructionBuilder) Create() LanguageInstructionBuilder {
 }
 
 // WithInstruction adds an instruction to the builder
-func (app *languageInstructionBuilder) WithInstruction(ins Instruction) LanguageInstructionBuilder {
+func (app *languageInstructionBuilder) WithInstruction(ins LanguageInstructionCommon) LanguageInstructionBuilder {
 	app.ins = ins
-	return app
-}
-
-// WithMatch adds a match to the builder
-func (app *languageInstructionBuilder) WithMatch(match Match) LanguageInstructionBuilder {
-	app.match = match
 	return app
 }
 
@@ -45,10 +37,6 @@ func (app *languageInstructionBuilder) WithCommand(command Command) LanguageInst
 func (app *languageInstructionBuilder) Now() (LanguageInstruction, error) {
 	if app.ins != nil {
 		return createLanguageInstructionWithInstruction(app.ins), nil
-	}
-
-	if app.match != nil {
-		return createLanguageInstructionWithMatch(app.match), nil
 	}
 
 	if app.command != nil {

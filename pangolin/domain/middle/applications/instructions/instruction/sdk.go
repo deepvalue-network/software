@@ -7,9 +7,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/transform"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/value"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variablename"
 	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
@@ -19,8 +17,6 @@ import (
 func NewAdapter() Adapter {
 	stackframeBuilder := stackframe.NewBuilder()
 	skipBuilder := stackframe.NewSkipBuilder()
-	transformBuilder := transform.NewBuilder()
-	variableNameBuilder := variablename.NewBuilder()
 	conditionBuilder := condition.NewBuilder()
 	propositionBuilder := condition.NewPropositionBuilder()
 	remainingBuilder := remaining.NewBuilder()
@@ -35,8 +31,6 @@ func NewAdapter() Adapter {
 	return createAdapter(
 		stackframeBuilder,
 		skipBuilder,
-		transformBuilder,
-		variableNameBuilder,
 		conditionBuilder,
 		propositionBuilder,
 		remainingBuilder,
@@ -65,8 +59,6 @@ type Adapter interface {
 type Builder interface {
 	Create() Builder
 	WithStackframe(stackframe stackframe.Stackframe) Builder
-	WithTransform(transform transform.Transform) Builder
-	WithVariableName(variableName variablename.VariableName) Builder
 	WithCondition(condition condition.Condition) Builder
 	WithStandard(standard standard.Standard) Builder
 	WithRemaining(remaining remaining.Remaining) Builder
@@ -83,10 +75,6 @@ type Builder interface {
 type Instruction interface {
 	IsStackframe() bool
 	Stackframe() stackframe.Stackframe
-	IsTransform() bool
-	Transform() transform.Transform
-	IsVariableName() bool
-	VariableName() variablename.VariableName
 	IsCondition() bool
 	Condition() condition.Condition
 	IsStandard() bool

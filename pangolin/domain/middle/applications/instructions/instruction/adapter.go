@@ -7,37 +7,31 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/transform"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/value"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variablename"
 	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type adapter struct {
-	stackFrameBuilder   stackframe.Builder
-	skipBuilder         stackframe.SkipBuilder
-	transformBuilder    transform.Builder
-	variableNameBuilder variablename.Builder
-	conditionBuilder    condition.Builder
-	propositionBuilder  condition.PropositionBuilder
-	remainingBuilder    remaining.Builder
-	standardBuilder     standard.Builder
-	valueBuilder        value.Builder
-	varValueAdapter     var_value.Adapter
-	varValueFactory     var_value.Factory
-	varVariableBuilder  var_variable.Builder
-	callBuilder         call.Builder
-	exitBuilder         exit.Builder
-	builder             Builder
+	stackFrameBuilder  stackframe.Builder
+	skipBuilder        stackframe.SkipBuilder
+	conditionBuilder   condition.Builder
+	propositionBuilder condition.PropositionBuilder
+	remainingBuilder   remaining.Builder
+	standardBuilder    standard.Builder
+	valueBuilder       value.Builder
+	varValueAdapter    var_value.Adapter
+	varValueFactory    var_value.Factory
+	varVariableBuilder var_variable.Builder
+	callBuilder        call.Builder
+	exitBuilder        exit.Builder
+	builder            Builder
 }
 
 func createAdapter(
 	stackFrameBuilder stackframe.Builder,
 	skipBuilder stackframe.SkipBuilder,
-	transformBuilder transform.Builder,
-	variableNameBuilder variablename.Builder,
 	conditionBuilder condition.Builder,
 	propositionBuilder condition.PropositionBuilder,
 	remainingBuilder remaining.Builder,
@@ -51,21 +45,19 @@ func createAdapter(
 	builder Builder,
 ) Adapter {
 	out := adapter{
-		stackFrameBuilder:   stackFrameBuilder,
-		skipBuilder:         skipBuilder,
-		transformBuilder:    transformBuilder,
-		variableNameBuilder: variableNameBuilder,
-		conditionBuilder:    conditionBuilder,
-		propositionBuilder:  propositionBuilder,
-		remainingBuilder:    remainingBuilder,
-		standardBuilder:     standardBuilder,
-		valueBuilder:        valueBuilder,
-		varValueAdapter:     varValueAdapter,
-		varValueFactory:     varValueFactory,
-		varVariableBuilder:  varVariableBuilder,
-		callBuilder:         callBuilder,
-		exitBuilder:         exitBuilder,
-		builder:             builder,
+		stackFrameBuilder:  stackFrameBuilder,
+		skipBuilder:        skipBuilder,
+		conditionBuilder:   conditionBuilder,
+		propositionBuilder: propositionBuilder,
+		remainingBuilder:   remainingBuilder,
+		standardBuilder:    standardBuilder,
+		valueBuilder:       valueBuilder,
+		varValueAdapter:    varValueAdapter,
+		varValueFactory:    varValueFactory,
+		varVariableBuilder: varVariableBuilder,
+		callBuilder:        callBuilder,
+		exitBuilder:        exitBuilder,
+		builder:            builder,
 	}
 
 	return &out
@@ -353,15 +345,6 @@ func (app *adapter) exit(parsed parsers.Exit) (exit.Exit, error) {
 	}
 
 	return builder.Now()
-}
-
-func (app *adapter) transform(parsed parsers.TransformOperation) transform.Builder {
-	builder := app.transformBuilder.Create()
-	input := parsed.Input()
-	builder.WithInput(input)
-
-	result := parsed.Result()
-	return builder.WithResult(result)
 }
 
 func (app *adapter) conditionFromJump(parsed parsers.Jump) (condition.Condition, error) {

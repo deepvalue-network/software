@@ -97,7 +97,7 @@ languageTestDeclaration
     ;
 
 languageTestInstruction
-    : languageInstruction
+    : languageInstructionCommon
     | testInstruction
     ;
 
@@ -116,8 +116,12 @@ languageLabelInstruction
     ;
 
 languageInstruction
-    : instruction
+    : languageInstructionCommon
     | command
+    ;
+
+languageInstructionCommon
+    : instruction
     | match DOT
     ;
 
@@ -383,10 +387,6 @@ relational
 logical
     : AND COLON standardOperation
     | OR COLON standardOperation
-    ;
-
-transformOperation
-    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN
     ;
 
 standardOperation

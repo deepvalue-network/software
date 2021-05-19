@@ -3,9 +3,8 @@ package remaining
 // NewBuilder creates a new builder
 func NewBuilder() Builder {
 	arythmeticBuilder := createArythmeticBuilder()
-	miscBuilder := createMiscBuilder()
 	operationBuilder := createOperationBuilder()
-	return createBuilder(arythmeticBuilder, miscBuilder, operationBuilder)
+	return createBuilder(arythmeticBuilder, operationBuilder)
 }
 
 // Builder represents the remaining builder
@@ -17,7 +16,6 @@ type Builder interface {
 	WithSecond(second string) Builder
 	WithOperation(operation Operation) Builder
 	IsDiv() Builder
-	IsMatch() Builder
 	Now() (Remaining, error)
 }
 
@@ -34,28 +32,13 @@ type Remaining interface {
 type OperationBuilder interface {
 	Create() OperationBuilder
 	WithArythmetic(ary Arythmetic) OperationBuilder
-	WithMisc(misc Misc) OperationBuilder
 	Now() (Operation, error)
 }
 
 // Operation represents an operation instruction
 type Operation interface {
-	IsMisc() bool
-	Misc() Misc
 	IsArythmetic() bool
 	Arythmetic() Arythmetic
-}
-
-// MiscBuilder represents a misc builder
-type MiscBuilder interface {
-	Create() MiscBuilder
-	IsMatch() MiscBuilder
-	Now() (Misc, error)
-}
-
-// Misc represents a misc operation
-type Misc interface {
-	IsMatch() bool
 }
 
 // ArythmeticBuilder represents the arythmetic builder

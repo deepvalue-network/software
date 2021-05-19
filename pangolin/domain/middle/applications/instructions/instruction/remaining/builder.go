@@ -4,7 +4,6 @@ import "errors"
 
 type builder struct {
 	arythmeticBuilder ArythmeticBuilder
-	miscBuilder       MiscBuilder
 	operationBuilder  OperationBuilder
 	result            string
 	remaining         string
@@ -12,17 +11,14 @@ type builder struct {
 	second            string
 	operation         Operation
 	isDiv             bool
-	isMatch           bool
 }
 
 func createBuilder(
 	arythmeticBuilder ArythmeticBuilder,
-	miscBuilder MiscBuilder,
 	operationBuilder OperationBuilder,
 ) Builder {
 	out := builder{
 		arythmeticBuilder: arythmeticBuilder,
-		miscBuilder:       miscBuilder,
 		operationBuilder:  operationBuilder,
 		result:            "",
 		remaining:         "",
@@ -30,7 +26,6 @@ func createBuilder(
 		second:            "",
 		operation:         nil,
 		isDiv:             false,
-		isMatch:           false,
 	}
 
 	return &out
@@ -38,7 +33,7 @@ func createBuilder(
 
 // Create initializes the builder
 func (app *builder) Create() Builder {
-	return createBuilder(app.arythmeticBuilder, app.miscBuilder, app.operationBuilder)
+	return createBuilder(app.arythmeticBuilder, app.operationBuilder)
 }
 
 // WithResult add result to the builder
@@ -77,12 +72,6 @@ func (app *builder) IsDiv() Builder {
 	return app
 }
 
-// IsMatch flags the builder as a match
-func (app *builder) IsMatch() Builder {
-	app.isMatch = true
-	return app
-}
-
 // Now builds a new Remaining instance
 func (app *builder) Now() (Remaining, error) {
 	if app.result == "" {
@@ -113,15 +102,6 @@ func (app *builder) Now() (Remaining, error) {
 		}
 
 		operationBuilder.WithArythmetic(ary)
-	}
-
-	if app.isMatch {
-		misc, err := app.miscBuilder.Create().IsMatch().Now()
-		if err != nil {
-			return nil, err
-		}
-
-		operationBuilder.WithMisc(misc)
 	}
 
 	op, err := operationBuilder.Now()

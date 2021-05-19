@@ -1,16 +1,14 @@
 package heads
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapter creates a new adapter instance
 func NewAdapter() Adapter {
-	externalAdapter := externals.NewAdapter()
 	builder := NewBuilder()
 	valueBuilder := NewValueBuilder()
-	return createAdapter(externalAdapter, builder, valueBuilder)
+	return createAdapter(builder, valueBuilder)
 }
 
 // NewBuilder creates a new builder instance
@@ -47,7 +45,7 @@ type ValueBuilder interface {
 	Create() ValueBuilder
 	WithName(name string) ValueBuilder
 	WithVersion(version string) ValueBuilder
-	WithImports(imports []externals.External) ValueBuilder
+	WithImports(imports []parsers.ImportSingle) ValueBuilder
 	Now() (Value, error)
 }
 
@@ -58,5 +56,5 @@ type Value interface {
 	IsVersion() bool
 	Version() string
 	IsImports() bool
-	Imports() []externals.External
+	Imports() []parsers.ImportSingle
 }

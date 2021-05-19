@@ -3,12 +3,12 @@ package instruction
 import (
 	"errors"
 
-	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
+	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 )
 
 type builder struct {
-	lang standard_instruction.Instruction
+	lang standard_instruction.CommonInstruction
 	test test_instruction.Instruction
 }
 
@@ -27,7 +27,7 @@ func (app *builder) Create() Builder {
 }
 
 // WithLanguage adds a language to the builder
-func (app *builder) WithLanguage(lang standard_instruction.Instruction) Builder {
+func (app *builder) WithLanguage(lang standard_instruction.CommonInstruction) Builder {
 	app.lang = lang
 	return app
 }

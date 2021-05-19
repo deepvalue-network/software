@@ -46,13 +46,13 @@ type Language interface {
 type ValueBuilder interface {
 	Create() ValueBuilder
 	WithRoot(root string) ValueBuilder
-	WithTokensPath(tokensPath string) ValueBuilder
-	WithRulesPath(rulesPath string) ValueBuilder
-	WithLogicsPath(logicsPath string) ValueBuilder
+	WithTokensPath(tokensPath parsers.RelativePath) ValueBuilder
+	WithRulesPath(rulesPath parsers.RelativePath) ValueBuilder
+	WithLogicsPath(logicsPath parsers.RelativePath) ValueBuilder
 	WithPatternMatches(patternMatches []definitions.PatternMatch) ValueBuilder
 	WithInputVariable(inputVariable string) ValueBuilder
-	WithChannelsPath(channelsPath string) ValueBuilder
-	WithExtends(extends []string) ValueBuilder
+	WithChannelsPath(channelsPath parsers.RelativePath) ValueBuilder
+	WithExtends(extends []parsers.RelativePath) ValueBuilder
 	Now() (Value, error)
 }
 
@@ -61,17 +61,17 @@ type Value interface {
 	IsRoot() bool
 	Root() string
 	IsTokensPath() bool
-	TokensPath() string
+	TokensPath() parsers.RelativePath
 	IsRulesPath() bool
-	RulesPath() string
+	RulesPath() parsers.RelativePath
 	IsLogicsPath() bool
-	LogicsPath() string
+	LogicsPath() parsers.RelativePath
 	IsPatternMatches() bool
 	PatternMatches() []definitions.PatternMatch
 	IsInputVariable() bool
 	InputVariable() string
 	IsChannelsPath() bool
-	ChannelsPath() string
+	ChannelsPath() parsers.RelativePath
 	IsExtends() bool
-	Extends() []string
+	Extends() []parsers.RelativePath
 }

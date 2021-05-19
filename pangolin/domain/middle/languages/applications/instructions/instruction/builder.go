@@ -3,22 +3,18 @@ package instruction
 import (
 	"errors"
 
-	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/match"
 )
 
 type builder struct {
-	ins     standard_instruction.Instruction
+	ins     CommonInstruction
 	command commands.Command
-	match   match.Match
 }
 
 func createBuilder() Builder {
 	out := builder{
 		ins:     nil,
 		command: nil,
-		match:   nil,
 	}
 
 	return &out
@@ -30,7 +26,7 @@ func (app *builder) Create() Builder {
 }
 
 // WithInstruction adds an instruction to the builder
-func (app *builder) WithInstruction(ins standard_instruction.Instruction) Builder {
+func (app *builder) WithInstruction(ins CommonInstruction) Builder {
 	app.ins = ins
 	return app
 }
@@ -38,12 +34,6 @@ func (app *builder) WithInstruction(ins standard_instruction.Instruction) Builde
 // WithCommand adds a command to the builder
 func (app *builder) WithCommand(command commands.Command) Builder {
 	app.command = command
-	return app
-}
-
-// WithMatch adds a match to the builder
-func (app *builder) WithMatch(match match.Match) Builder {
-	app.match = match
 	return app
 }
 
@@ -55,10 +45,6 @@ func (app *builder) Now() (Instruction, error) {
 
 	if app.command != nil {
 		return createInstructionWithCommand(app.command), nil
-	}
-
-	if app.match != nil {
-		return createInstructionWithMatch(app.match), nil
 	}
 
 	return nil, errors.New("the Instruction is invalid")

@@ -1,6 +1,8 @@
 package linkers
 
 import (
+	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
+	"github.com/deepvalue-network/software/pangolin/domain/middle"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
@@ -8,7 +10,36 @@ import (
 	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
 	language_tests "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
+
+const scriptName = "default"
+
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	middleAdapter := middle.NewAdapter()
+	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
+	applicationBuilder := NewApplicationBuilder()
+	languageBuilder := NewLanguageBuilder()
+	programBuilder := NewProgramBuilder()
+	languageDefinitionBuilder := NewLanguageDefinitionBuilder()
+	pathsBuilder := NewPathsBuilder()
+	scriptBuilder := NewScriptBuilder()
+	languageReferenceBuilder := NewLanguageReferenceBuilder()
+	languageApplicationBuilder := NewLanguageApplicationBuilder()
+	return createBuilder(
+		middleAdapter,
+		grammarRetrieverCriteriaBuilder,
+		applicationBuilder,
+		languageBuilder,
+		programBuilder,
+		languageDefinitionBuilder,
+		pathsBuilder,
+		scriptBuilder,
+		languageReferenceBuilder,
+		languageApplicationBuilder,
+	)
+}
 
 // NewProgramBuilder creates a new program builder instance
 func NewProgramBuilder() ProgramBuilder {
@@ -53,6 +84,19 @@ func NewLanguageApplicationBuilder() LanguageApplicationBuilder {
 // NewPathsBuilder creates a new paths builder
 func NewPathsBuilder() PathsBuilder {
 	return createPathsBuilder()
+}
+
+// Builder represents a linker builder
+type Builder interface {
+	Create() Builder
+	WithPreviousParser(prevParser parsers.Parser) Builder
+	WithDirPath(dirPath string) Builder
+	Now() (Linker, error)
+}
+
+// Linker represents a linker application
+type Linker interface {
+	Execute(parsed parsers.Program) (Program, error)
 }
 
 // ProgramBuilder represents a program builder

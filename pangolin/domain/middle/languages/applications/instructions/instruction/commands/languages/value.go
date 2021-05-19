@@ -1,59 +1,62 @@
 package languages
 
-import "github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
+)
 
 type value struct {
 	root           string
-	tokensPath     string
-	rulesPath      string
-	logicsPath     string
+	tokensPath     parsers.RelativePath
+	rulesPath      parsers.RelativePath
+	logicsPath     parsers.RelativePath
 	patternMatches []definitions.PatternMatch
 	inputVariable  string
-	channelsPath   string
-	extends        []string
+	channelsPath   parsers.RelativePath
+	extends        []parsers.RelativePath
 }
 
 func createValueWithRoot(root string) Value {
-	return createValueInternally(root, "", "", "", nil, "", "", nil)
+	return createValueInternally(root, nil, nil, nil, nil, "", nil, nil)
 }
 
-func createValueWithTokensPath(tokensPath string) Value {
-	return createValueInternally("", tokensPath, "", "", nil, "", "", nil)
+func createValueWithTokensPath(tokensPath parsers.RelativePath) Value {
+	return createValueInternally("", tokensPath, nil, nil, nil, "", nil, nil)
 }
 
-func createValueWithRulesPath(rulesPath string) Value {
-	return createValueInternally("", "", rulesPath, "", nil, "", "", nil)
+func createValueWithRulesPath(rulesPath parsers.RelativePath) Value {
+	return createValueInternally("", nil, rulesPath, nil, nil, "", nil, nil)
 }
 
-func createValueWithLogicsPath(logicsPath string) Value {
-	return createValueInternally("", "", "", logicsPath, nil, "", "", nil)
+func createValueWithLogicsPath(logicsPath parsers.RelativePath) Value {
+	return createValueInternally("", nil, nil, logicsPath, nil, "", nil, nil)
 }
 
 func createValueWithPatternMatches(patternMatches []definitions.PatternMatch) Value {
-	return createValueInternally("", "", "", "", patternMatches, "", "", nil)
+	return createValueInternally("", nil, nil, nil, patternMatches, "", nil, nil)
 }
 
 func createValueWithInputVariable(inputVariable string) Value {
-	return createValueInternally("", "", "", "", nil, inputVariable, "", nil)
+	return createValueInternally("", nil, nil, nil, nil, inputVariable, nil, nil)
 }
 
-func createValueWithChannelsPath(channelsPath string) Value {
-	return createValueInternally("", "", "", "", nil, "", channelsPath, nil)
+func createValueWithChannelsPath(channelsPath parsers.RelativePath) Value {
+	return createValueInternally("", nil, nil, nil, nil, "", channelsPath, nil)
 }
 
-func createValueWithExtends(extends []string) Value {
-	return createValueInternally("", "", "", "", nil, "", "", extends)
+func createValueWithExtends(extends []parsers.RelativePath) Value {
+	return createValueInternally("", nil, nil, nil, nil, "", nil, extends)
 }
 
 func createValueInternally(
 	root string,
-	tokensPath string,
-	rulesPath string,
-	logicsPath string,
+	tokensPath parsers.RelativePath,
+	rulesPath parsers.RelativePath,
+	logicsPath parsers.RelativePath,
 	patternMatches []definitions.PatternMatch,
 	inputVariable string,
-	channelsPath string,
-	extends []string,
+	channelsPath parsers.RelativePath,
+	extends []parsers.RelativePath,
 ) Value {
 	out := value{
 		root:           root,
@@ -81,31 +84,31 @@ func (obj *value) Root() string {
 
 // IsTokensPath returns true if there is a tokensPath, false otherwise
 func (obj *value) IsTokensPath() bool {
-	return obj.tokensPath != ""
+	return obj.tokensPath != nil
 }
 
 // TokensPath returns the tokensPath, if any
-func (obj *value) TokensPath() string {
+func (obj *value) TokensPath() parsers.RelativePath {
 	return obj.tokensPath
 }
 
 // IsRulesPath returns true if there is a rulesPath, false otherwise
 func (obj *value) IsRulesPath() bool {
-	return obj.rulesPath != ""
+	return obj.rulesPath != nil
 }
 
 // RulesPath returns the rulesPath, if any
-func (obj *value) RulesPath() string {
+func (obj *value) RulesPath() parsers.RelativePath {
 	return obj.rulesPath
 }
 
 // IsLogicsPath returns true if there is a logicsPath, false otherwise
 func (obj *value) IsLogicsPath() bool {
-	return obj.logicsPath != ""
+	return obj.logicsPath != nil
 }
 
 // LogicsPath returns the logicsPath, if any
-func (obj *value) LogicsPath() string {
+func (obj *value) LogicsPath() parsers.RelativePath {
 	return obj.logicsPath
 }
 
@@ -131,11 +134,11 @@ func (obj *value) InputVariable() string {
 
 // IsChannelsPath returns true if there is a channelsPath, false otherwise
 func (obj *value) IsChannelsPath() bool {
-	return obj.channelsPath != ""
+	return obj.channelsPath != nil
 }
 
 // ChannelsPath returns the channelsPath, if any
-func (obj *value) ChannelsPath() string {
+func (obj *value) ChannelsPath() parsers.RelativePath {
 	return obj.channelsPath
 }
 
@@ -145,6 +148,6 @@ func (obj *value) IsExtends() bool {
 }
 
 // Extends returns the extends, if any
-func (obj *value) Extends() []string {
+func (obj *value) Extends() []parsers.RelativePath {
 	return obj.extends
 }

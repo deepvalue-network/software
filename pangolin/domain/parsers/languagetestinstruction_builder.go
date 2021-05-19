@@ -3,7 +3,7 @@ package parsers
 import "errors"
 
 type languageTestInstructionBuilder struct {
-	lang LanguageInstruction
+	lang LanguageInstructionCommon
 	test TestInstruction
 }
 
@@ -22,7 +22,7 @@ func (app *languageTestInstructionBuilder) Create() LanguageTestInstructionBuild
 }
 
 // WithLanguageInstruction adds a language instruction to the builder
-func (app *languageTestInstructionBuilder) WithLanguageInstruction(languageIns LanguageInstruction) LanguageTestInstructionBuilder {
+func (app *languageTestInstructionBuilder) WithLanguageInstruction(languageIns LanguageInstructionCommon) LanguageTestInstructionBuilder {
 	app.lang = languageIns
 	return app
 }

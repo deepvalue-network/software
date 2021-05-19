@@ -1,12 +1,12 @@
 package parsers
 
 type languageTestInstruction struct {
-	lang LanguageInstruction
+	lang LanguageInstructionCommon
 	test TestInstruction
 }
 
 func createLanguageTestInstructionWithLanguage(
-	lang LanguageInstruction,
+	lang LanguageInstructionCommon,
 ) LanguageTestInstruction {
 	return createLanguageTestInstructionInternally(lang, nil)
 }
@@ -18,7 +18,7 @@ func createLanguageTestInstructionWithTest(
 }
 
 func createLanguageTestInstructionInternally(
-	lang LanguageInstruction,
+	lang LanguageInstructionCommon,
 	test TestInstruction,
 ) LanguageTestInstruction {
 	out := languageTestInstruction{
@@ -35,7 +35,7 @@ func (obj *languageTestInstruction) IsLanguageInstruction() bool {
 }
 
 // LanguageInstruction returns the language instruction, if any
-func (obj *languageTestInstruction) LanguageInstruction() LanguageInstruction {
+func (obj *languageTestInstruction) LanguageInstruction() LanguageInstructionCommon {
 	return obj.lang
 }
 

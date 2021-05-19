@@ -7,18 +7,14 @@ import (
 )
 
 type builder struct {
-	isIncoming bool
-	isOutgoing bool
-	name       string
-	value      var_value.Value
+	name  string
+	value var_value.Value
 }
 
 func createBuilder() Builder {
 	out := builder{
-		isIncoming: false,
-		isOutgoing: false,
-		name:       "",
-		value:      nil,
+		name:  "",
+		value: nil,
 	}
 
 	return &out
@@ -41,18 +37,6 @@ func (app *builder) WithValue(val var_value.Value) Builder {
 	return app
 }
 
-// IsIncoming adds an incoming
-func (app *builder) IsIncoming() Builder {
-	app.isIncoming = true
-	return app
-}
-
-// IsOutgoing adds an outgoing to the builder
-func (app *builder) IsOutgoing() Builder {
-	app.isOutgoing = true
-	return app
-}
-
 // Now builds a new Variable instance
 func (app *builder) Now() (Variable, error) {
 	if app.name == "" {
@@ -64,8 +48,6 @@ func (app *builder) Now() (Variable, error) {
 	}
 
 	return createVariable(
-		app.isIncoming,
-		app.isOutgoing,
 		app.name,
 		app.value,
 	), nil

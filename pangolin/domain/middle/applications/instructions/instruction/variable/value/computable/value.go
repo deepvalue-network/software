@@ -22,8 +22,6 @@ type value struct {
 	floatSixtyFour *float64
 	isToken        bool
 	token          lexers.NodeTree
-	isStackFrame   bool
-	isFrame        bool
 }
 
 func createValueWithNil() Value {
@@ -43,8 +41,6 @@ func createValueWithNil() Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -65,8 +61,6 @@ func createValueWithBool(bl *bool) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -87,8 +81,6 @@ func createValueWithString(str *string) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -109,8 +101,6 @@ func createValueWithInt8(intHeight *int8) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -131,8 +121,6 @@ func createValueWithInt16(intSixteen *int16) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -153,8 +141,6 @@ func createValueWithInt32(intThirtyTwo *int32) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -175,8 +161,6 @@ func createValueWithInt64(intSixtyFour *int64) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -197,8 +181,6 @@ func createValueWithUint8(uintHeight *uint8) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -219,8 +201,6 @@ func createValueWithUint16(uintSixteen *uint16) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -241,8 +221,6 @@ func createValueWithUint32(uintThirtyTwo *uint32) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -263,8 +241,6 @@ func createValueWithUint64(uintSixtyFour *uint64) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -285,8 +261,6 @@ func createValueWithFloat32(floatThirtyTwo *float32) Value {
 		nil,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -307,8 +281,6 @@ func createValueWithFloat64(floatSixtyFour *float64) Value {
 		floatSixtyFour,
 		false,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -329,8 +301,6 @@ func createValueWithNilToken() Value {
 		nil,
 		true,
 		nil,
-		false,
-		false,
 	)
 }
 
@@ -351,52 +321,6 @@ func createValueWithToken(token lexers.NodeTree) Value {
 		nil,
 		true,
 		token,
-		false,
-		false,
-	)
-}
-
-func createValueWithStackFrame() Value {
-	return createValueInternally(
-		false,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		false,
-		nil,
-		true,
-		false,
-	)
-}
-
-func createValueWithFrame() Value {
-	return createValueInternally(
-		false,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		false,
-		nil,
-		false,
-		true,
 	)
 }
 
@@ -416,8 +340,6 @@ func createValueInternally(
 	floatSixtyFour *float64,
 	isToken bool,
 	token lexers.NodeTree,
-	isStackFrame bool,
-	isFrame bool,
 ) Value {
 	out := value{
 		isNil:          isNil,
@@ -435,8 +357,6 @@ func createValueInternally(
 		floatSixtyFour: floatSixtyFour,
 		isToken:        isToken,
 		token:          token,
-		isStackFrame:   isStackFrame,
-		isFrame:        isFrame,
 	}
 
 	return &out
@@ -577,16 +497,6 @@ func (obj *value) Token() lexers.NodeTree {
 	return obj.token
 }
 
-// IsStackFrame returns true if the value is a stackframe, false otherwise
-func (obj *value) IsStackFrame() bool {
-	return obj.isStackFrame
-}
-
-// IsFrame returns true if the value is a frame, false otherwise
-func (obj *value) IsFrame() bool {
-	return obj.isFrame
-}
-
 // StringRepresentation returns the string representation
 func (obj *value) StringRepresentation() string {
 	if obj.IsNil() {
@@ -653,17 +563,9 @@ func (obj *value) StringRepresentation() string {
 		return strconv.FormatFloat(*val, 'f', -1, 64)
 	}
 
-	if obj.IsToken() {
-		if obj.Token() != nil {
-			return obj.Token().Code()
-		}
-
-		return "nil"
+	if obj.Token() != nil {
+		return obj.Token().Code()
 	}
 
-	if obj.IsStackFrame() {
-		return "stackframe"
-	}
-
-	return "frame"
+	return "nil"
 }

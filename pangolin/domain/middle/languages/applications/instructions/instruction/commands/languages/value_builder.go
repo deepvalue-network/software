@@ -4,28 +4,29 @@ import (
 	"errors"
 
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type valueBuilder struct {
 	root           string
-	tokensPath     string
-	rulesPath      string
-	logicsPath     string
+	tokensPath     parsers.RelativePath
+	rulesPath      parsers.RelativePath
+	logicsPath     parsers.RelativePath
 	patternMatches []definitions.PatternMatch
 	inputVariable  string
-	channelsPath   string
-	extends        []string
+	channelsPath   parsers.RelativePath
+	extends        []parsers.RelativePath
 }
 
 func createValueBuilder() ValueBuilder {
 	out := valueBuilder{
 		root:           "",
-		tokensPath:     "",
-		rulesPath:      "",
-		logicsPath:     "",
+		tokensPath:     nil,
+		rulesPath:      nil,
+		logicsPath:     nil,
 		patternMatches: nil,
 		inputVariable:  "",
-		channelsPath:   "",
+		channelsPath:   nil,
 		extends:        nil,
 	}
 
@@ -44,19 +45,19 @@ func (app *valueBuilder) WithRoot(root string) ValueBuilder {
 }
 
 // WithTokensPath adds a tokensPath to the builder
-func (app *valueBuilder) WithTokensPath(tokensPath string) ValueBuilder {
+func (app *valueBuilder) WithTokensPath(tokensPath parsers.RelativePath) ValueBuilder {
 	app.tokensPath = tokensPath
 	return app
 }
 
 // WithRulesPath adds a rulesPath to the builder
-func (app *valueBuilder) WithRulesPath(rulesPath string) ValueBuilder {
+func (app *valueBuilder) WithRulesPath(rulesPath parsers.RelativePath) ValueBuilder {
 	app.rulesPath = rulesPath
 	return app
 }
 
 // WithLogicsPath adds a logicsPath to the builder
-func (app *valueBuilder) WithLogicsPath(logicsPath string) ValueBuilder {
+func (app *valueBuilder) WithLogicsPath(logicsPath parsers.RelativePath) ValueBuilder {
 	app.logicsPath = logicsPath
 	return app
 }
@@ -74,13 +75,13 @@ func (app *valueBuilder) WithInputVariable(inputVariable string) ValueBuilder {
 }
 
 // WithChannelsPath adds a channelsPath to the builder
-func (app *valueBuilder) WithChannelsPath(channelsPath string) ValueBuilder {
+func (app *valueBuilder) WithChannelsPath(channelsPath parsers.RelativePath) ValueBuilder {
 	app.channelsPath = channelsPath
 	return app
 }
 
 // WithExtends adds an extends to the builder
-func (app *valueBuilder) WithExtends(extends []string) ValueBuilder {
+func (app *valueBuilder) WithExtends(extends []parsers.RelativePath) ValueBuilder {
 	app.extends = extends
 	return app
 }
@@ -91,15 +92,15 @@ func (app *valueBuilder) Now() (Value, error) {
 		return createValueWithRoot(app.root), nil
 	}
 
-	if app.tokensPath != "" {
+	if app.tokensPath != nil {
 		return createValueWithTokensPath(app.tokensPath), nil
 	}
 
-	if app.rulesPath != "" {
+	if app.rulesPath != nil {
 		return createValueWithRulesPath(app.rulesPath), nil
 	}
 
-	if app.logicsPath != "" {
+	if app.logicsPath != nil {
 		return createValueWithLogicsPath(app.logicsPath), nil
 	}
 
@@ -111,7 +112,7 @@ func (app *valueBuilder) Now() (Value, error) {
 		return createValueWithInputVariable(app.inputVariable), nil
 	}
 
-	if app.channelsPath != "" {
+	if app.channelsPath != nil {
 		return createValueWithChannelsPath(app.channelsPath), nil
 	}
 

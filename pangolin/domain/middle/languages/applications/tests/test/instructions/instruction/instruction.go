@@ -1,17 +1,17 @@
 package instruction
 
 import (
-	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
+	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 )
 
 type instruction struct {
-	lang standard_instruction.Instruction
+	lang standard_instruction.CommonInstruction
 	test test_instruction.Instruction
 }
 
 func createInstructionWithLanguage(
-	lang standard_instruction.Instruction,
+	lang standard_instruction.CommonInstruction,
 ) Instruction {
 	return createInstructionInternally(lang, nil)
 }
@@ -23,7 +23,7 @@ func createInstructionWithTest(
 }
 
 func createInstructionInternally(
-	lang standard_instruction.Instruction,
+	lang standard_instruction.CommonInstruction,
 	test test_instruction.Instruction,
 ) Instruction {
 	out := instruction{
@@ -40,7 +40,7 @@ func (obj *instruction) IsLanguage() bool {
 }
 
 // Language returns the language, if any
-func (obj *instruction) Language() standard_instruction.Instruction {
+func (obj *instruction) Language() standard_instruction.CommonInstruction {
 	return obj.lang
 }
 

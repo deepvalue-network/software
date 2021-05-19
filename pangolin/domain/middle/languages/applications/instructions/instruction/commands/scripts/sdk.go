@@ -43,8 +43,8 @@ type ValueBuilder interface {
 	Create() ValueBuilder
 	WithName(name string) ValueBuilder
 	WithVersion(version string) ValueBuilder
-	WithLanguagePath(langPath string) ValueBuilder
-	WithScriptPath(scriptPath string) ValueBuilder
+	WithLanguagePath(langPath parsers.RelativePath) ValueBuilder
+	WithScriptPath(scriptPath parsers.RelativePath) ValueBuilder
 	Now() (Value, error)
 }
 
@@ -55,7 +55,7 @@ type Value interface {
 	IsVersion() bool
 	Version() string
 	IsLanguagePath() bool
-	LanguagePath() string
+	LanguagePath() parsers.RelativePath
 	IsScriptPath() bool
-	ScriptPath() string
+	ScriptPath() parsers.RelativePath
 }

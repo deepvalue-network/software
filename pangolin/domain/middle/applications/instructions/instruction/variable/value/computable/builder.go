@@ -21,8 +21,6 @@ type builder struct {
 	uintSixtyFour  *uint64
 	isToken        bool
 	token          lexers.NodeTree
-	isStackFrame   bool
-	isFrame        bool
 }
 
 func createBuilder() Builder {
@@ -41,8 +39,6 @@ func createBuilder() Builder {
 		uintSixtyFour:  nil,
 		isToken:        false,
 		token:          nil,
-		isStackFrame:   false,
-		isFrame:        false,
 	}
 
 	return &out
@@ -138,18 +134,6 @@ func (app *builder) WithToken(tok lexers.NodeTree) Builder {
 	return app
 }
 
-// IsStackFrame adds a stackFrame to the builder
-func (app *builder) IsStackFrame() Builder {
-	app.isStackFrame = true
-	return app
-}
-
-// IsFrame adds a frame to the builder
-func (app *builder) IsFrame() Builder {
-	app.isFrame = true
-	return app
-}
-
 // Now builds a new Value instance
 func (app *builder) Now() (Value, error) {
 	if app.intHeight != nil {
@@ -207,16 +191,6 @@ func (app *builder) Now() (Value, error) {
 
 		return createValueWithNilToken(), nil
 	}
-
-	if app.isStackFrame {
-		return createValueWithStackFrame(), nil
-	}
-
-	if app.isFrame {
-		return createValueWithFrame(), nil
-	}
-
-	panic(errors.New("voila"))
 
 	return nil, errors.New("the computable Value is invalid")
 }

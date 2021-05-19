@@ -8,6 +8,6 @@ require (
 	github.com/go-gl/mathgl v1.0.0
 	github.com/gorilla/mux v1.8.0
 	github.com/satori/go.uuid v1.2.0
-	github.com/steve-care-software/products v0.0.0-20210205004815-c0e7c3bb8d9d // indirect
+	github.com/steve-care-software/products v0.0.0-20210205004815-c0e7c3bb8d9d
 	go.dedis.ch/kyber/v3 v3.0.13
 )

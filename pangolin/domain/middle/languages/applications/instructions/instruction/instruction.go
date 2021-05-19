@@ -1,44 +1,33 @@
 package instruction
 
 import (
-	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/match"
 )
 
 type instruction struct {
-	ins     standard_instruction.Instruction
+	ins     CommonInstruction
 	command commands.Command
-	match   match.Match
 }
 
 func createInstructionWithInstruction(
-	ins standard_instruction.Instruction,
+	ins CommonInstruction,
 ) Instruction {
-	return createInstructionInternally(ins, nil, nil)
+	return createInstructionInternally(ins, nil)
 }
 
 func createInstructionWithCommand(
 	command commands.Command,
 ) Instruction {
-	return createInstructionInternally(nil, command, nil)
-}
-
-func createInstructionWithMatch(
-	match match.Match,
-) Instruction {
-	return createInstructionInternally(nil, nil, match)
+	return createInstructionInternally(nil, command)
 }
 
 func createInstructionInternally(
-	ins standard_instruction.Instruction,
+	ins CommonInstruction,
 	command commands.Command,
-	match match.Match,
 ) Instruction {
 	out := instruction{
 		ins:     ins,
 		command: command,
-		match:   match,
 	}
 
 	return &out
@@ -50,7 +39,7 @@ func (obj *instruction) IsInstruction() bool {
 }
 
 // Instruction returns the instruction, if any
-func (obj *instruction) Instruction() standard_instruction.Instruction {
+func (obj *instruction) Instruction() CommonInstruction {
 	return obj.ins
 }
 
@@ -62,14 +51,4 @@ func (obj *instruction) IsCommand() bool {
 // Command returns the command, if any
 func (obj *instruction) Command() commands.Command {
 	return obj.command
-}
-
-// IsMatch returns true if there is a match, false otherwise
-func (obj *instruction) IsMatch() bool {
-	return obj.match != nil
-}
-
-// Match returns the match, if any
-func (obj *instruction) Match() match.Match {
-	return obj.match
 }

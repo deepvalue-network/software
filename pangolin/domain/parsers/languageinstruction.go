@@ -1,37 +1,28 @@
 package parsers
 
 type languageInstruction struct {
-	ins     Instruction
-	match   Match
+	ins     LanguageInstructionCommon
 	command Command
 }
 
 func createLanguageInstructionWithInstruction(
-	ins Instruction,
+	ins LanguageInstructionCommon,
 ) LanguageInstruction {
-	return createLanguageInstructionInternally(ins, nil, nil)
-}
-
-func createLanguageInstructionWithMatch(
-	match Match,
-) LanguageInstruction {
-	return createLanguageInstructionInternally(nil, match, nil)
+	return createLanguageInstructionInternally(ins, nil)
 }
 
 func createLanguageInstructionWithCommand(
 	command Command,
 ) LanguageInstruction {
-	return createLanguageInstructionInternally(nil, nil, command)
+	return createLanguageInstructionInternally(nil, command)
 }
 
 func createLanguageInstructionInternally(
-	ins Instruction,
-	match Match,
+	ins LanguageInstructionCommon,
 	command Command,
 ) LanguageInstruction {
 	out := languageInstruction{
 		ins:     ins,
-		match:   match,
 		command: command,
 	}
 
@@ -44,18 +35,8 @@ func (obj *languageInstruction) IsInstruction() bool {
 }
 
 // Instruction returns the instruction, if any
-func (obj *languageInstruction) Instruction() Instruction {
+func (obj *languageInstruction) Instruction() LanguageInstructionCommon {
 	return obj.ins
-}
-
-// IsMatch returns true if there is a match, false otherwise
-func (obj *languageInstruction) IsMatch() bool {
-	return obj.match != nil
-}
-
-// Match returns a match, if any
-func (obj *languageInstruction) Match() Match {
-	return obj.match
 }
 
 // IsCommand returns true if there is a command, false otherwise

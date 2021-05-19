@@ -1,14 +1,26 @@
 package parsers
 
-import "errors"
+import (
+	"errors"
+	"path/filepath"
+)
 
 type relativePathBuilder struct {
-	sections []FolderSection
+	folderNameBuilder    FolderNameBuilder
+	folderSectionBuilder FolderSectionBuilder
+	sections             []FolderSection
+	path                 string
 }
 
-func createRelativePathBuilder() RelativePathBuilder {
+func createRelativePathBuilder(
+	folderNameBuilder FolderNameBuilder,
+	folderSectionBuilder FolderSectionBuilder,
+) RelativePathBuilder {
 	out := relativePathBuilder{
-		sections: nil,
+		folderNameBuilder:    folderNameBuilder,
+		folderSectionBuilder: folderSectionBuilder,
+		sections:             nil,
+		path:                 "",
 	}
 
 	return &out
@@ -16,7 +28,7 @@ func createRelativePathBuilder() RelativePathBuilder {
 
 // Create initializes the builder
 func (app *relativePathBuilder) Create() RelativePathBuilder {
-	return createRelativePathBuilder()
+	return createRelativePathBuilder(app.folderNameBuilder, app.folderSectionBuilder)
 }
 
 // WithSections add sections to the builder
@@ -25,8 +37,56 @@ func (app *relativePathBuilder) WithSections(sections []FolderSection) RelativeP
 	return app
 }
 
+func (app *relativePathBuilder) WithPath(path string) RelativePathBuilder {
+	app.path = path
+	return app
+}
+
 // Now builds a new RelativePath instance
 func (app *relativePathBuilder) Now() (RelativePath, error) {
+	if app.path != "" {
+		folderSections := []FolderSection{}
+		folders := filepath.SplitList(app.path)
+		amount := len(folders)
+		for index, oneName := range folders {
+			folderNameBuilder := app.folderNameBuilder.Create()
+
+			hasDots := false
+			if oneName == "." {
+				folderNameBuilder.IsCurrent()
+				hasDots = true
+			}
+
+			if oneName == ".." {
+				folderNameBuilder.IsPrevious()
+				hasDots = true
+			}
+
+			if !hasDots {
+				folderNameBuilder.WithName(oneName)
+			}
+
+			folderName, err := folderNameBuilder.Now()
+			if err != nil {
+				return nil, err
+			}
+
+			folderSectionBuilder := app.folderSectionBuilder.Create().WithName(folderName)
+			if (index + 1) >= amount {
+				folderSectionBuilder.IsTail()
+			}
+
+			folderSection, err := folderSectionBuilder.Now()
+			if err != nil {
+				return nil, err
+			}
+
+			folderSections = append(folderSections, folderSection)
+		}
+
+		app.sections = folderSections
+	}
+
 	if app.sections == nil {
 		app.sections = []FolderSection{}
 	}

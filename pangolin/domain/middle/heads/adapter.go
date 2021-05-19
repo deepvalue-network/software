@@ -1,22 +1,18 @@
 package heads
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type adapter struct {
-	externalAdapter externals.Adapter
-	builder         Builder
+	builder Builder
 }
 
 func createAdapter(
-	externalAdapter externals.Adapter,
 	builder Builder,
 ) Adapter {
 	out := adapter{
-		externalAdapter: externalAdapter,
-		builder:         builder,
+		builder: builder,
 	}
 
 	return &out
@@ -29,12 +25,7 @@ func (app *adapter) ToHead(parsed parsers.HeadSection) (Head, error) {
 	builder := app.builder.Create().WithName(name).WithVersion(version)
 	if parsed.HasImport() {
 		parsedImports := parsed.Import()
-		extends, err := app.externalAdapter.ToExternals(parsedImports)
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithImports(extends)
+		builder.WithImports(parsedImports)
 	}
 
 	return builder.Now()

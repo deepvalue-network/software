@@ -3,38 +3,33 @@ package interpreters
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"path/filepath"
 
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters/machines"
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
-	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
-	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
-	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions/instruction"
 )
 
 type language struct {
-	stackFrameBuilder      StackFrameBuilder
-	machineBuilder         MachineBuilder
-	machineLanguageBuilder MachineLanguageBuilder
-	valueBuilder           computable.Builder
-	language               linkers.LanguageDefinition
+	machineStateFactory       machines.LanguageStateFactory
+	stackFrameBuilder         stackframes.Builder
+	machineLanguageBuilder    machines.LanguageInstructionBuilder
+	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder
+	languageDef               linkers.LanguageDefinition
 }
 
 func createLanguage(
-	stackFrameBuilder StackFrameBuilder,
-	machineBuilder MachineBuilder,
-	machineLanguageBuilder MachineLanguageBuilder,
-	valueBuilder computable.Builder,
-	linkedLanguage linkers.LanguageDefinition,
+	machineStateFactory machines.LanguageStateFactory,
+	stackFrameBuilder stackframes.Builder,
+	machineLanguageBuilder machines.LanguageInstructionBuilder,
+	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder,
+	languageDef linkers.LanguageDefinition,
 ) Language {
 	out := language{
-		stackFrameBuilder:      stackFrameBuilder,
-		machineBuilder:         machineBuilder,
-		machineLanguageBuilder: machineLanguageBuilder,
-		valueBuilder:           valueBuilder,
-		language:               linkedLanguage,
+		machineStateFactory:       machineStateFactory,
+		stackFrameBuilder:         stackFrameBuilder,
+		machineLanguageBuilder:    machineLanguageBuilder,
+		machineLangTestInsBuilder: machineLangTestInsBuilder,
+		languageDef:               languageDef,
 	}
 
 	return &out
@@ -43,33 +38,35 @@ func createLanguage(
 //TestsAll executes all tests
 func (app *language) TestsAll() error {
 	names := []string{}
-	tests := app.language.Application().Tests().All()
+	tests := app.languageDef.Application().Tests().All()
 	for _, oneTest := range tests {
 		name := oneTest.Name()
 		names = append(names, name)
 	}
 
-	return app.Tests(names)
+	return app.TestByNames(names)
 }
 
-// Tests executes the tests of an application in the interpreter
-func (app *language) Tests(names []string) error {
+// TestByNames executes the tests of an application in the interpreter
+func (app *language) TestByNames(names []string) error {
 	fmt.Printf("\n++++++++++++++++++++++++++++++++++\n")
-	fmt.Printf("Executing %d tests...\n", len(names))
+	fmt.Printf("Executing %d language tests...\n", len(names))
 	fmt.Printf("++++++++++++++++++++++++++++++++++\n")
 
-	baseDir := app.language.Paths().BaseDir()
-	langApp := app.language.Application()
+	baseDir := app.languageDef.Paths().BaseDir()
+	langApp := app.languageDef.Application()
 	tests := langApp.Tests().All()
 	labels := langApp.Labels()
 	for _, oneTest := range tests {
+		languageState := app.machineStateFactory.Create()
 		stackframe := app.stackFrameBuilder.Create().Now()
-		machine, _, fetchStackFrameFunc, err := createMachineFromLanguageLabels(app.machineBuilder, stackframe, labels)
-		if err != nil {
-			return err
-		}
+		testInsMachine, err := app.machineLangTestInsBuilder.Create().
+			WithStackFrame(stackframe).
+			WithLanguageLabels(labels).
+			WithState(languageState).
+			WithBaseDir(baseDir).
+			Now()
 
-		machineLanguage, err := app.machineLanguageBuilder.Create().WithLanguage(app.language).WithMachine(machine).WithFetchStackFunc(fetchStackFrameFunc).Now()
 		if err != nil {
 			return err
 		}
@@ -84,9 +81,10 @@ func (app *language) Tests(names []string) error {
 				return nil
 			}
 
-			stops, err := app.languageTestInstruction(oneTestInstruction, baseDir, index, stackframe, machine, machineLanguage)
+			stops, err := testInsMachine.Receive(oneTestInstruction)
 			if err != nil {
-				return err
+				str := fmt.Sprintf("index: %d, error: %s", index, err.Error())
+				return errors.New(str)
 			}
 
 			if stops {
@@ -98,147 +96,4 @@ func (app *language) Tests(names []string) error {
 	}
 
 	return nil
-}
-
-func (app *language) languageTestInstruction(
-	testIns language_test_instruction.Instruction,
-	baseDir string,
-	index int,
-	stackframe StackFrame,
-	machine Machine,
-	machineLanguage MachineLanguage,
-) (bool, error) {
-	if testIns.IsLanguage() {
-		langIns := testIns.Language()
-		return app.languageInstruction(
-			langIns,
-			baseDir,
-			index,
-			stackframe,
-			machine,
-			machineLanguage,
-		)
-	}
-
-	testInstruction := testIns.Test()
-	return app.testInstruction(
-		testInstruction,
-		baseDir,
-		index,
-		stackframe,
-		machine,
-	)
-}
-
-func (app *language) testInstruction(
-	testIns test_instruction.Instruction,
-	baseDir string,
-	index int,
-	stackframe StackFrame,
-	machine Machine,
-) (bool, error) {
-	if testIns.IsAssert() {
-		assert := testIns.Assert()
-		assertIndex := assert.Index()
-		if assert.HasCondition() {
-			condition := assert.Condition()
-			condVal, err := stackframe.Current().Fetch(condition)
-			if err != nil {
-				return false, err
-			}
-
-			if !condVal.IsBool() {
-				str := fmt.Sprintf("the assert's condition was expected to contain a bool, index: %d", index)
-				return false, errors.New(str)
-			}
-
-			val := condVal.Bool()
-			if *val {
-				fmt.Printf("-> Assert, index: %d\n", assertIndex)
-				return true, nil
-			}
-
-			return false, nil
-		}
-
-		fmt.Printf("-> Assert, index: %d\n", assertIndex)
-		return true, nil
-	}
-
-	if testIns.IsInstruction() {
-		ins := testIns.Instruction()
-		return app.instruction(ins, machine)
-	}
-
-	if testIns.IsReadFile() {
-		readFile := testIns.ReadFile()
-		relativePath := readFile.Path()
-		joinedPath := filepath.Join(baseDir, relativePath)
-		absPath, err := filepath.Abs(joinedPath)
-		if err != nil {
-			str := fmt.Sprintf("there was an error while reading the relative path (%s): %s", relativePath, err.Error())
-			return false, errors.New(str)
-		}
-
-		contents, err := ioutil.ReadFile(absPath)
-		if err != nil {
-			return false, err
-		}
-
-		contentsStr := string(contents)
-		computable, err := app.valueBuilder.Create().WithString(contentsStr).Now()
-		if err != nil {
-			return false, err
-		}
-
-		variable := readFile.Variable()
-		err = stackframe.Current().UpdateValue(variable, computable)
-		if err != nil {
-			return false, err
-		}
-
-		return false, nil
-	}
-
-	return false, nil
-}
-
-func (app *language) languageInstruction(
-	testIns language_instruction.Instruction,
-	baseDir string,
-	index int,
-	stackframe StackFrame,
-	machine Machine,
-	machineLanguage MachineLanguage,
-) (bool, error) {
-	if testIns.IsInstruction() {
-		ins := testIns.Instruction()
-		return app.instruction(ins, machine)
-	}
-
-	if testIns.IsCommand() {
-		command := testIns.Command()
-		err := machineLanguage.Command(command)
-		return false, err
-	}
-
-	if testIns.IsMatch() {
-		match := testIns.Match()
-		err := machineLanguage.Match(match)
-		return false, err
-	}
-
-	panic(errors.New("finish languageInstruction method in language, inside the interpreter"))
-}
-
-func (app *language) instruction(
-	ins standard_instruction.Instruction,
-	machine Machine,
-) (bool, error) {
-	err := machine.Receive(ins)
-	if err != nil {
-		return false, err
-	}
-
-	return false, nil
 }

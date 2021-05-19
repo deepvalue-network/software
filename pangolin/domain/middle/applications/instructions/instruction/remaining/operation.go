@@ -1,22 +1,16 @@
 package remaining
 
 type operation struct {
-	ary  Arythmetic
-	misc Misc
+	ary Arythmetic
 }
 
 func createOperationWithArythmetic(ary Arythmetic) Operation {
-	return createOperationInternally(ary, nil)
+	return createOperationInternally(ary)
 }
 
-func createOperationWithMisc(misc Misc) Operation {
-	return createOperationInternally(nil, misc)
-}
-
-func createOperationInternally(ary Arythmetic, misc Misc) Operation {
+func createOperationInternally(ary Arythmetic) Operation {
 	out := operation{
-		ary:  ary,
-		misc: misc,
+		ary: ary,
 	}
 
 	return &out
@@ -30,14 +24,4 @@ func (obj *operation) IsArythmetic() bool {
 // Arythmetic returns the arythmetic operation, if any
 func (obj *operation) Arythmetic() Arythmetic {
 	return obj.ary
-}
-
-// IsMisc returns true if the operation is a misc, false otherwise
-func (obj *operation) IsMisc() bool {
-	return obj.misc != nil
-}
-
-// Misc returns the misc operation, if any
-func (obj *operation) Misc() Misc {
-	return obj.misc
 }

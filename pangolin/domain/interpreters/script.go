@@ -6,86 +6,101 @@ import (
 
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type script struct {
-	stackFrameBuilder      StackFrameBuilder
-	machineBuilder         MachineBuilder
-	machineLanguageBuilder MachineLanguageBuilder
-	valueBuilder           computable.Builder
-	script                 linkers.Script
+	application       Application
+	computableBuilder computable.Builder
+	parser            parsers.Parser
+	programBuilder    linkers.ProgramBuilder
+	languageBuilder   linkers.LanguageBuilder
+	linker            linkers.Linker
 }
 
 func createScript(
-	stackFrameBuilder StackFrameBuilder,
-	machineBuilder MachineBuilder,
-	machineLanguageBuilder MachineLanguageBuilder,
-	valueBuilder computable.Builder,
-	linkedScript linkers.Script,
+	application Application,
+	computableBuilder computable.Builder,
+	programBuilder linkers.ProgramBuilder,
+	languageBuilder linkers.LanguageBuilder,
+	linker linkers.Linker,
 ) Script {
 	out := script{
-		stackFrameBuilder:      stackFrameBuilder,
-		machineBuilder:         machineBuilder,
-		machineLanguageBuilder: machineLanguageBuilder,
-		valueBuilder:           valueBuilder,
-		script:                 linkedScript,
+		application:       application,
+		computableBuilder: computableBuilder,
+		programBuilder:    programBuilder,
+		languageBuilder:   languageBuilder,
+		linker:            linker,
 	}
 
 	return &out
 }
 
-// Execute executes a script in the interpreter
-func (app *script) Execute(input map[string]computable.Value) (string, error) {
-	code := app.script.Code()
-	inStr, err := app.valueBuilder.Create().WithString(code).Now()
-	if err != nil {
-		return "", err
-	}
-	langRef := app.script.Language()
+// Execute converts a script to an application instance
+func (app *script) Execute(script linkers.Script) (linkers.Application, error) {
+	langRef := script.Language()
 	langDef := langRef.Definition()
-	langLabels := langDef.Application().Labels()
-	inVar := langRef.Input()
-	input[inVar] = inStr
+	langApp := langDef.Application()
+	inVariable := langRef.Input()
+	outVariable := script.Output()
+	code := script.Code()
 
-	stackFrame := app.stackFrameBuilder.Create().WithVariables(input).Now()
-	machine, _, fetchStackframeFunc, err := createMachineFromLanguageLabels(app.machineBuilder, stackFrame, langLabels)
+	codeValue, err := app.computableBuilder.Create().WithString(code).Now()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	machineLanguage, err := app.machineLanguageBuilder.Create().WithInput(input).WithLanguage(langDef).WithFetchStackFunc(fetchStackframeFunc).WithMachine(machine).Now()
+	input := map[string]computable.Value{
+		inVariable: codeValue,
+	}
+
+	lang, err := app.languageBuilder.Create().WithApplication(langApp).Now()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	application := langDef.Application()
-	err = app.execute(machineLanguage, application)
+	linkedProgram, err := app.programBuilder.Create().WithLanguage(lang).Now()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	outVar := app.script.Output()
-	outVal, err := stackFrame.Current().Fetch(outVar)
+	if !linkedProgram.IsApplication() {
+		return nil, errors.New("the linked program was expected to be an application")
+	}
+
+	stackFrame, err := app.application.Execute(input)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	if !outVal.IsString() {
-		str := fmt.Sprintf("the output variable (%s) was expected to be a string", outVar)
-		return "", errors.New(str)
+	computedCodeValue, err := stackFrame.Current().Fetch(outVariable)
+	if err != nil {
+		return nil, err
 	}
 
-	return outVal.StringRepresentation(), nil
-}
+	if !computedCodeValue.IsString() {
+		str := fmt.Sprintf("the output variable (%s) was expected to contain code and therefore be a string", outVariable)
+		return nil, errors.New(str)
+	}
 
-func (app *script) execute(machine MachineLanguage, linkedLangApp linkers.LanguageApplication) error {
-	ins := linkedLangApp.Instructions().All()
-	for _, oneIns := range ins {
-		err := machine.Receive(oneIns)
+	pOutputCode := computedCodeValue.String()
+	programIns, err := app.parser.ExecuteScript(*pOutputCode)
+	if err != nil {
+		return nil, err
+	}
+
+	if parsedProgram, ok := programIns.(parsers.Program); ok {
+		linkedProg, err := app.linker.Execute(parsedProgram)
 		if err != nil {
-			return err
+			return nil, err
 		}
+
+		if linkedProg.IsApplication() {
+			return nil, errors.New("the linked program was expected to contain an application instance")
+		}
+
+		return linkedProg.Application(), nil
 	}
 
-	return nil
+	return nil, errors.New("the parsed compiled output was expected to contain a parsers.Program instance")
 }

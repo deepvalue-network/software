@@ -11,86 +11,463 @@ import (
 const quaotationChar = '"'
 const scriptHeadDelimiter = "----"
 
+// NewProgramBuilder creates a new program builder
+func NewProgramBuilder() ProgramBuilder {
+	return createProgramBuilder()
+}
+
+// NewApplicationBuilder creates a new application builder
+func NewApplicationBuilder() ApplicationBuilder {
+	return createApplicationBuilder()
+}
+
+// NewLanguageBuilder creates a new language builder
+func NewLanguageBuilder() LanguageBuilder {
+	return createLanguageBuilder()
+}
+
+// NewScopesBuilder creates a new scopes builder
+func NewScopesBuilder() ScopesBuilder {
+	return createScopesBuilder()
+}
+
+// NewScopeBuilder creates a new scope builder
+func NewScopeBuilder() ScopeBuilder {
+	return createScopeBuilder()
+}
+
+// NewCommandBuilder creates a new command builder
+func NewCommandBuilder() CommandBuilder {
+	return createCommandBuilder()
+}
+
+// NewLanguageCommandBuilder creates a new language command builder
+func NewLanguageCommandBuilder() LanguageCommandBuilder {
+	return createLanguageCommandBuilder()
+}
+
+// NewScriptCommandBuilder creates a new script command builder
+func NewScriptCommandBuilder() ScriptCommandBuilder {
+	return createScriptCommandBuilder()
+}
+
+// NewHeadCommandBuilder creates a new head command builder
+func NewHeadCommandBuilder() HeadCommandBuilder {
+	return createHeadCommandBuilder()
+}
+
+// NewMainCommandBuilder creates a new main command builder
+func NewMainCommandBuilder() MainCommandBuilder {
+	return createMainCommandBuilder()
+}
+
+// NewMainCommandInstructionBuilder creates a new main command instruction builder
+func NewMainCommandInstructionBuilder() MainCommandInstructionBuilder {
+	return createMainCommandInstructionBuilder()
+}
+
+// NewTestCommandBuilder creates a new test command builder
+func NewTestCommandBuilder() TestCommandBuilder {
+	return createTestCommandBuilder()
+}
+
+// NewTestCommandInstructionBuilder creates a new test command instruction builder
+func NewTestCommandInstructionBuilder() TestCommandInstructionBuilder {
+	return createTestCommandInstructionBuilder()
+}
+
+// NewLabelCommandBuilder creates a new label command builder
+func NewLabelCommandBuilder() LabelCommandBuilder {
+	return createLabelCommandBuilder()
+}
+
+// NewLabelCommandInstructionBuilder creates a new label command instruction builder
+func NewLabelCommandInstructionBuilder() LabelCommandInstructionBuilder {
+	return createLabelCommandInstructionBuilder()
+}
+
+// NewLanguageApplicationBuilder creates a new language application builder
+func NewLanguageApplicationBuilder() LanguageApplicationBuilder {
+	return createLanguageApplicationBuilder()
+}
+
+// NewLanguageMainSectionBuilder creates a new language main section builder
+func NewLanguageMainSectionBuilder() LanguageMainSectionBuilder {
+	return createLanguageMainSectionBuilder()
+}
+
+// NewLanguageTestSectionBuilder creates a new language test section builder
+func NewLanguageTestSectionBuilder() LanguageTestSectionBuilder {
+	return createLanguageTestSectionBuilder()
+}
+
+// NewLanguageTestDeclarationBuilder creates a new language test declaration builder
+func NewLanguageTestDeclarationBuilder() LanguageTestDeclarationBuilder {
+	return createLanguageTestDeclarationBuilder()
+}
+
+// NewLanguageTestInstructionBuilder creates a new language test instruction builder
+func NewLanguageTestInstructionBuilder() LanguageTestInstructionBuilder {
+	return createLanguageTestInstructionBuilder()
+}
+
+// NewLanguageLabelSectionBuilder creates a new language label section builder
+func NewLanguageLabelSectionBuilder() LanguageLabelSectionBuilder {
+	return createLanguageLabelSectionBuilder()
+}
+
+// NewLanguageLabelDeclarationBuilder creates a new language label declaration builder
+func NewLanguageLabelDeclarationBuilder() LanguageLabelDeclarationBuilder {
+	return createLanguageLabelDeclarationBuilder()
+}
+
+// NewLanguageLabelInstructionBuilder creates a new language label instruction builder
+func NewLanguageLabelInstructionBuilder() LanguageLabelInstructionBuilder {
+	return createLanguageLabelInstructionBuilder()
+}
+
+// NewLanguageInstructionBuilder creates a new language instruction builder
+func NewLanguageInstructionBuilder() LanguageInstructionBuilder {
+	return createLanguageInstructionBuilder()
+}
+
+// NewLanguageInstructionCommonBuilder creates a new language instruction common builder
+func NewLanguageInstructionCommonBuilder() LanguageInstructionCommonBuilder {
+	return createLanguageInstructionCommonBuilder()
+}
+
+// NewLanguageDefinitionBuilder creates a new language definition builder
+func NewLanguageDefinitionBuilder() LanguageDefinitionBuilder {
+	return createLanguageDefinitionBuilder()
+}
+
+// NewLanguageValueBuilder creates a new language value builder
+func NewLanguageValueBuilder() LanguageValueBuilder {
+	return createLanguageValueBuilder()
+}
+
+// NewScriptBuilder creates a new script builder
+func NewScriptBuilder() ScriptBuilder {
+	return createScriptBuilder()
+}
+
+// NewScriptValueBuilder creates a new script value builder
+func NewScriptValueBuilder() ScriptValueBuilder {
+	return createScriptValueBuilder()
+}
+
+// NewPatternMatchBuilder creates a new pattern match builder
+func NewPatternMatchBuilder() PatternMatchBuilder {
+	return createPatternMatchBuilder()
+}
+
+// NewPatternLabelsBuilder creeates a new pattern labels builder
+func NewPatternLabelsBuilder() PatternLabelsBuilder {
+	return createPatternLabelsBuilder()
+}
+
+// NewRelativePathsBuilder creates a new relative paths builder
+func NewRelativePathsBuilder() RelativePathsBuilder {
+	return createRelativePathsBuilder()
+}
+
+// NewFolderNameBuilder creates a new folder name builder
+func NewFolderNameBuilder() FolderNameBuilder {
+	return createFolderNameBuilder()
+}
+
+// NewFolderSectionBuilder creates a new folder section builder
+func NewFolderSectionBuilder() FolderSectionBuilder {
+	return createFolderSectionBuilder()
+}
+
+// NewRelativePathBuilder creates a new relative path builder
+func NewRelativePathBuilder() RelativePathBuilder {
+	folderNameBuilder := NewFolderNameBuilder()
+	folderSectionBuilder := NewFolderSectionBuilder()
+	return createRelativePathBuilder(folderNameBuilder, folderSectionBuilder)
+}
+
+// NewTestSectionBuilder creates a new test section builder
+func NewTestSectionBuilder() TestSectionBuilder {
+	return createTestSectionBuilder()
+}
+
+// NewTestDeclarationBuilder creates a new test declaration builder
+func NewTestDeclarationBuilder() TestDeclarationBuilder {
+	return createTestDeclarationBuilder()
+}
+
+// NewTestInstructionBuilder creates a new test instruction builder
+func NewTestInstructionBuilder() TestInstructionBuilder {
+	return createTestInstructionBuilder()
+}
+
+// NewAssertBuilder creates a new assert builder
+func NewAssertBuilder() AssertBuilder {
+	return createAssertBuilder()
+}
+
+// NewReadFileBuilder creates a new read file builder
+func NewReadFileBuilder() ReadFileBuilder {
+	return createReadFileBuilder()
+}
+
+// NewHeadSectionBuilder creates a new head section builder
+func NewHeadSectionBuilder() HeadSectionBuilder {
+	return createHeadSectionBuilder()
+}
+
+// NewHeadValueBuilder creates a new head value builder
+func NewHeadValueBuilder() HeadValueBuilder {
+	return createHeadValueBuilder()
+}
+
+// NewImportSingleBuilder creates a new import single builder
+func NewImportSingleBuilder() ImportSingleBuilder {
+	return createImportSingleBuilder()
+}
+
+// NewLabelSectionBuilder creates a new label section builder
+func NewLabelSectionBuilder() LabelSectionBuilder {
+	return createLabelSectionBuilder()
+}
+
+// NewLabelDeclarationBuilder creates a new label declaration builder
+func NewLabelDeclarationBuilder() LabelDeclarationBuilder {
+	return createLabelDeclarationBuilder()
+}
+
+// NewLabelInstructonBuilder creates a new label instruction builder
+func NewLabelInstructonBuilder() LabelInstructionBuilder {
+	return createLabelInstructionBuilder()
+}
+
+// NewMainSectionBuilder creates a new main section builder
+func NewMainSectionBuilder() MainSectionBuilder {
+	return createMainSectionBuilder()
+}
+
+// NewInstructionBuilder creates a new instruction builder
+func NewInstructionBuilder() InstructionBuilder {
+	return createInstructionBuilder()
+}
+
+// NewSpecificTokenCodeBuilder creates a new specific token code builder
+func NewSpecificTokenCodeBuilder() SpecificTokenCodeBuilder {
+	return createSpecificTokenCodeBuilder()
+}
+
+// NewTokenSectionBuilder creates a new token section builder
+func NewTokenSectionBuilder() TokenSectionBuilder {
+	return createTokenSectionBuilder()
+}
+
+// NewCodeMatchBuilder creates a new code match builder
+func NewCodeMatchBuilder() CodeMatchBuilder {
+	return createCodeMatchBuilder()
+}
+
+// NewTokenBuilder creates a new token builder
+func NewTokenBuilder() TokenBuilder {
+	return createTokenBuilder()
+}
+
+// NewVariableBuilder creates a new variable builder
+func NewVariableBuilder() VariableBuilder {
+	return createVariableBuilder()
+}
+
+// NewConcatenationBuilder creates a new concatenation builder
+func NewConcatenationBuilder() ConcatenationBuilder {
+	return createConcatenationBuilder()
+}
+
+// NewDeclarationBuilder creates a new declaration builder
+func NewDeclarationBuilder() DeclarationBuilder {
+	return createDeclarationBuilder()
+}
+
+// NewAssignmentBuilder creates a new assignment builder
+func NewAssignmentBuilder() AssignmentBuilder {
+	return createAssignmentBuilder()
+}
+
+// NewValueRepresentationBuilder creates a new value representation builder
+func NewValueRepresentationBuilder() ValueRepresentationBuilder {
+	return createValueRepresentationBuilder()
+}
+
+// NewValueBuilder creates a new value builder
+func NewValueBuilder() ValueBuilder {
+	return createValueBuilder()
+}
+
+// NewNumericValueBuilder creates a new numeric value buildeer
+func NewNumericValueBuilder() NumericValueBuilder {
+	return createNumericValueBuilder()
+}
+
+// NewTypeBuilder creates a new type builder
+func NewTypeBuilder() TypeBuilder {
+	return createTypeBuilder()
+}
+
+// NewOperationBuilder creates a new operation builder
+func NewOperationBuilder() OperationBuilder {
+	return createOperationalBuilder()
+}
+
+// NewArythmeticBuilder creates a new arythmetic builder
+func NewArythmeticBuilder() ArythmeticBuilder {
+	return createArythmeticBuilder()
+}
+
+// NewRelationalBuilder creates a new relational builder
+func NewRelationalBuilder() RelationalBuilder {
+	return createRelationalBuilder()
+}
+
+// NewLogicalBuilder creates a new logical builder
+func NewLogicalBuilder() LogicalBuilder {
+	return createLogicalBuilder()
+}
+
+// NewStandardOperationBuilder creates a new standard operation builder
+func NewStandardOperationBuilder() StandardOperationBuilder {
+	return createStandardOperationBuilder()
+}
+
+// NewRemainingOperationBuilder creates a new remaining operation builder
+func NewRemainingOperationBuilder() RemainingOperationBuilder {
+	return createRemainingOperationBuilder()
+}
+
+// NewPrintBuilder creates a new print builder
+func NewPrintBuilder() PrintBuilder {
+	return createPrintBuilder()
+}
+
+// NewJumpBuilder creates a new jump builder
+func NewJumpBuilder() JumpBuilder {
+	return createJumpBuilder()
+}
+
+// NewMatchBuilder creates a new match builder
+func NewMatchBuilder() MatchBuilder {
+	return createMatchBuilder()
+}
+
+// NewExitBuilder creates a new exit builder
+func NewExitBuilder() ExitBuilder {
+	return createExitBuilder()
+}
+
+// NewCallBuilder creates a new call builder
+func NewCallBuilder() CallBuilder {
+	return createCallBuilder()
+}
+
+// NewStackFrameBuilder creates a new stack frame builder
+func NewStackFrameBuilder() StackFrameBuilder {
+	return createStackFrameBuilder()
+}
+
+// NewIndexBuilder creates a new index builder
+func NewIndexBuilder() IndexBuilder {
+	return createIndexBuilder()
+}
+
+// NewSkipBuilder creates a new skip builder
+func NewSkipBuilder() SkipBuilder {
+	return createSkipBuilder()
+}
+
+// NewIntPointerBuilder creates a new int pointer builder
+func NewIntPointerBuilder() IntPointerBuilder {
+	return createIntPointerBuilder()
+}
+
 // NewParserBuilder creates a new ParserBuilder instance
 func NewParserBuilder() ParserBuilder {
 	application := lparser.NewApplication()
 	parserBuilder := lparser.NewBuilder()
 	lexerBuilder := lexers.NewBuilder()
-	programBuilder := createProgramBuilder()
-	languageBuilder := createLanguageBuilder()
-	scopesBuilder := createScopesBuilder()
-	scopeBuilder := createScopeBuilder()
-	commandBuilder := createCommandBuilder()
-	languageCommandBuilder := createLanguageCommandBuilder()
-	scriptCommandBuilder := createScriptCommandBuilder()
-	headCommandBuilder := createHeadCommandBuilder()
-	mainCommandBuilder := createMainCommandBuilder()
-	mainCommandInstructionBuilder := createMainCommandInstructionBuilder()
-	testCommandBuilder := createTestCommandBuilder()
-	testCommandInstructionBuilder := createTestCommandInstructionBuilder()
-	labelCommandBuilder := createLabelCommandBuilder()
-	labelCommandInstructionBuilder := createLabelCommandInstructionBuilder()
-	languageApplicationBuilder := createLanguageApplicationBuilder()
-	languageMainSectionBuilder := createLanguageMainSectionBuilder()
-	languageTestSectionBuilder := createLanguageTestSectionBuilder()
-	languageTestDeclarationBuilder := createLanguageTestDeclarationBuilder()
-	languageTestInstructionBuilder := createLanguageTestInstructionBuilder()
-	languageLabelSectionBuilder := createLanguageLabelSectionBuilder()
-	languageLabelDeclarationBuilder := createLanguageLabelDeclarationBuilder()
-	languageLabelInstructionBuilder := createLanguageLabelInstructionBuilder()
-	languageInstructionBuilder := createLanguageInstructionBuilder()
-	languageDefinitionBuilder := createLanguageDefinitionBuilder()
-	languageValueBuilder := createLanguageValueBuilder()
-	scriptBuilder := createScriptBuilder()
-	scriptValueBuilder := createScriptValueBuilder()
-	patternMatchBuilder := createPatternMatchBuilder()
-	patternLabelsBuilder := createPatternLabelsBuilder()
-	relativePathsBuilder := createRelativePathsBuilder()
-	relativePathBuilder := createRelativePathBuilder()
-	folderSectionBuilder := createFolderSectionBuilder()
-	folderNameBuilder := createFolderNameBuilder()
-	applicationBuilder := createApplicationBuilder()
-	testSectionBuilder := createTestSectionBuilder()
-	testDeclarationBuilder := createTestDeclarationBuilder()
-	testInstructionBuilder := createTestInstructionBuilder()
-	assertBuilder := createAssertBuilder()
-	readFileBuilder := createReadFileBuilder()
-	headSectionBuilder := createHeadSectionBuilder()
-	headValueBuilder := createHeadValueBuilder()
-	importSingleBuilder := createImportSingleBuilder()
-	labelSectionBuilder := createLabelSectionBuilder()
-	labelDeclarationBuilder := createLabelDeclarationBuilder()
-	labelInstructionBuilder := createLabelInstructionBuilder()
-	mainSectionBuilder := createMainSectionBuilder()
-	instructionBuilder := createInstructionBuilder()
-	specificTokenCodeBuilder := createSpecificTokenCodeBuilder()
-	tokenSectionBuilder := createTokenSectionBuilder()
-	codeMatchBuilder := createCodeMatchBuilder()
-	tokenBuilder := createTokenBuilder()
-	variableBuilder := createVariableBuilder()
-	concatenationBuilder := createConcatenationBuilder()
-	declarationBuilder := createDeclarationBuilder()
-	assignmentBuilder := createAssignmentBuilder()
-	valueRepresentationBuilder := createValueRepresentationBuilder()
-	valueBuilder := createValueBuilder()
-	numericValueBuilder := createNumericValueBuilder()
-	typeBuilder := createTypeBuilder()
-	operationBuilder := createOperationalBuilder()
-	arythmeticBuilder := createArythmeticBuilder()
-	relationalBuilder := createRelationalBuilder()
-	logicalBuilder := createLogicalBuilder()
-	transformOperationBuilder := createTransformOperationBuilder()
-	standardOperationBuilder := createStandardOperationBuilder()
-	remainingOperationBuilder := createRemainingOperationBuilder()
-	printBuilder := createPrintBuilder()
-	jumpBuilder := createJumpBuilder()
-	matchBuilder := createMatchBuilder()
-	exitBuilder := createExitBuilder()
-	callBuilder := createCallBuilder()
-	stackFrameBuilder := createStackFrameBuilder()
-	indexBuilder := createIndexBuilder()
-	skipBuilder := createSkipBuilder()
-	intPointerBuilder := createIntPointerBuilder()
+	programBuilder := NewProgramBuilder()
+	languageBuilder := NewLanguageBuilder()
+	scopesBuilder := NewScopesBuilder()
+	scopeBuilder := NewScopeBuilder()
+	commandBuilder := NewCommandBuilder()
+	languageCommandBuilder := NewLanguageCommandBuilder()
+	scriptCommandBuilder := NewScriptCommandBuilder()
+	headCommandBuilder := NewHeadCommandBuilder()
+	mainCommandBuilder := NewMainCommandBuilder()
+	mainCommandInstructionBuilder := NewMainCommandInstructionBuilder()
+	testCommandBuilder := NewTestCommandBuilder()
+	testCommandInstructionBuilder := NewTestCommandInstructionBuilder()
+	labelCommandBuilder := NewLabelCommandBuilder()
+	labelCommandInstructionBuilder := NewLabelCommandInstructionBuilder()
+	languageApplicationBuilder := NewLanguageApplicationBuilder()
+	languageMainSectionBuilder := NewLanguageMainSectionBuilder()
+	languageTestSectionBuilder := NewLanguageTestSectionBuilder()
+	languageTestDeclarationBuilder := NewLanguageTestDeclarationBuilder()
+	languageTestInstructionBuilder := NewLanguageTestInstructionBuilder()
+	languageLabelSectionBuilder := NewLanguageLabelSectionBuilder()
+	languageLabelDeclarationBuilder := NewLanguageLabelDeclarationBuilder()
+	languageLabelInstructionBuilder := NewLanguageLabelInstructionBuilder()
+	languageInstructionBuilder := NewLanguageInstructionBuilder()
+	languageInstructionCommonBuilder := NewLanguageInstructionCommonBuilder()
+	languageDefinitionBuilder := NewLanguageDefinitionBuilder()
+	languageValueBuilder := NewLanguageValueBuilder()
+	scriptBuilder := NewScriptBuilder()
+	scriptValueBuilder := NewScriptValueBuilder()
+	patternMatchBuilder := NewPatternMatchBuilder()
+	patternLabelsBuilder := NewPatternLabelsBuilder()
+	relativePathsBuilder := NewRelativePathsBuilder()
+	folderNameBuilder := NewFolderNameBuilder()
+	folderSectionBuilder := NewFolderSectionBuilder()
+	relativePathBuilder := NewRelativePathBuilder()
+	applicationBuilder := NewApplicationBuilder()
+	testSectionBuilder := NewTestSectionBuilder()
+	testDeclarationBuilder := NewTestDeclarationBuilder()
+	testInstructionBuilder := NewTestInstructionBuilder()
+	assertBuilder := NewAssertBuilder()
+	readFileBuilder := NewReadFileBuilder()
+	headSectionBuilder := NewHeadSectionBuilder()
+	headValueBuilder := NewHeadValueBuilder()
+	importSingleBuilder := NewImportSingleBuilder()
+	labelSectionBuilder := NewLabelSectionBuilder()
+	labelDeclarationBuilder := NewLabelDeclarationBuilder()
+	labelInstructionBuilder := NewLabelInstructonBuilder()
+	mainSectionBuilder := NewMainSectionBuilder()
+	instructionBuilder := NewInstructionBuilder()
+	specificTokenCodeBuilder := NewSpecificTokenCodeBuilder()
+	tokenSectionBuilder := NewTokenSectionBuilder()
+	codeMatchBuilder := NewCodeMatchBuilder()
+	tokenBuilder := NewTokenBuilder()
+	variableBuilder := NewVariableBuilder()
+	concatenationBuilder := NewConcatenationBuilder()
+	declarationBuilder := NewDeclarationBuilder()
+	assignmentBuilder := NewAssignmentBuilder()
+	valueRepresentationBuilder := NewValueRepresentationBuilder()
+	valueBuilder := NewValueBuilder()
+	numericValueBuilder := NewNumericValueBuilder()
+	typeBuilder := NewTypeBuilder()
+	operationBuilder := NewOperationBuilder()
+	arythmeticBuilder := NewArythmeticBuilder()
+	relationalBuilder := NewRelationalBuilder()
+	logicalBuilder := NewLogicalBuilder()
+	standardOperationBuilder := NewStandardOperationBuilder()
+	remainingOperationBuilder := NewRemainingOperationBuilder()
+	printBuilder := NewPrintBuilder()
+	jumpBuilder := NewJumpBuilder()
+	matchBuilder := NewMatchBuilder()
+	exitBuilder := NewExitBuilder()
+	callBuilder := NewCallBuilder()
+	stackFrameBuilder := NewStackFrameBuilder()
+	indexBuilder := NewIndexBuilder()
+	skipBuilder := NewSkipBuilder()
+	intPointerBuilder := NewIntPointerBuilder()
 
 	return createParserBuilder(
 		application,
@@ -119,6 +496,7 @@ func NewParserBuilder() ParserBuilder {
 		languageLabelDeclarationBuilder,
 		languageLabelInstructionBuilder,
 		languageInstructionBuilder,
+		languageInstructionCommonBuilder,
 		languageDefinitionBuilder,
 		languageValueBuilder,
 		scriptBuilder,
@@ -159,7 +537,6 @@ func NewParserBuilder() ParserBuilder {
 		arythmeticBuilder,
 		relationalBuilder,
 		logicalBuilder,
-		transformOperationBuilder,
 		standardOperationBuilder,
 		remainingOperationBuilder,
 		printBuilder,
@@ -354,7 +731,7 @@ type LanguageTestDeclaration interface {
 // LanguageTestInstructionBuilder represents a language test instruction builder
 type LanguageTestInstructionBuilder interface {
 	Create() LanguageTestInstructionBuilder
-	WithLanguageInstruction(languageIns LanguageInstruction) LanguageTestInstructionBuilder
+	WithLanguageInstruction(languageIns LanguageInstructionCommon) LanguageTestInstructionBuilder
 	WithTestInstruction(testIns TestInstruction) LanguageTestInstructionBuilder
 	Now() (LanguageTestInstruction, error)
 }
@@ -362,7 +739,7 @@ type LanguageTestInstructionBuilder interface {
 // LanguageTestInstruction represents a language test instruction
 type LanguageTestInstruction interface {
 	IsLanguageInstruction() bool
-	LanguageInstruction() LanguageInstruction
+	LanguageInstruction() LanguageInstructionCommon
 	IsTestInstruction() bool
 	TestInstruction() TestInstruction
 }
@@ -415,8 +792,7 @@ type LanguageLabelInstruction interface {
 // LanguageInstructionBuilder represents a language instruction builder
 type LanguageInstructionBuilder interface {
 	Create() LanguageInstructionBuilder
-	WithInstruction(ins Instruction) LanguageInstructionBuilder
-	WithMatch(match Match) LanguageInstructionBuilder
+	WithInstruction(ins LanguageInstructionCommon) LanguageInstructionBuilder
 	WithCommand(command Command) LanguageInstructionBuilder
 	Now() (LanguageInstruction, error)
 }
@@ -424,11 +800,25 @@ type LanguageInstructionBuilder interface {
 // LanguageInstruction represents a language instruction
 type LanguageInstruction interface {
 	IsInstruction() bool
+	Instruction() LanguageInstructionCommon
+	IsCommand() bool
+	Command() Command
+}
+
+// LanguageInstructionCommonBuilder represents a language instruction common builder
+type LanguageInstructionCommonBuilder interface {
+	Create() LanguageInstructionCommonBuilder
+	WithInstruction(ins Instruction) LanguageInstructionCommonBuilder
+	WithMatch(match Match) LanguageInstructionCommonBuilder
+	Now() (LanguageInstructionCommon, error)
+}
+
+// LanguageInstructionCommon represents a language instruction common
+type LanguageInstructionCommon interface {
+	IsInstruction() bool
 	Instruction() Instruction
 	IsMatch() bool
 	Match() Match
-	IsCommand() bool
-	Command() Command
 }
 
 // CommandBuilder represents a command builder
@@ -720,6 +1110,7 @@ type RelativePaths interface {
 type RelativePathBuilder interface {
 	Create() RelativePathBuilder
 	WithSections(sections []FolderSection) RelativePathBuilder
+	WithPath(path string) RelativePathBuilder
 	Now() (RelativePath, error)
 }
 
@@ -1297,20 +1688,6 @@ type Logical interface {
 	And() StandardOperation
 	IsOr() bool
 	Or() StandardOperation
-}
-
-// TransformOperationBuilder represents a transform operation builder
-type TransformOperationBuilder interface {
-	Create() TransformOperationBuilder
-	WithInput(input string) TransformOperationBuilder
-	WithResult(result string) TransformOperationBuilder
-	Now() (TransformOperation, error)
-}
-
-// TransformOperation represents a transform operation
-type TransformOperation interface {
-	Input() string
-	Result() string
 }
 
 // StandardOperationBuilder represents a standard operation builder

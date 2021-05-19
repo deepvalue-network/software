@@ -1,20 +1,24 @@
 package scripts
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
+)
 
 type valueBuilder struct {
 	name       string
 	version    string
-	langPath   string
-	scriptPath string
+	langPath   parsers.RelativePath
+	scriptPath parsers.RelativePath
 }
 
 func createValueBuilder() ValueBuilder {
 	out := valueBuilder{
 		name:       "",
 		version:    "",
-		langPath:   "",
-		scriptPath: "",
+		langPath:   nil,
+		scriptPath: nil,
 	}
 
 	return &out
@@ -38,13 +42,13 @@ func (app *valueBuilder) WithVersion(version string) ValueBuilder {
 }
 
 // WithLanguagePath adds a language path to the builder
-func (app *valueBuilder) WithLanguagePath(langPath string) ValueBuilder {
+func (app *valueBuilder) WithLanguagePath(langPath parsers.RelativePath) ValueBuilder {
 	app.langPath = langPath
 	return app
 }
 
 // WithScriptPath adds a script path to the builder
-func (app *valueBuilder) WithScriptPath(scriptPath string) ValueBuilder {
+func (app *valueBuilder) WithScriptPath(scriptPath parsers.RelativePath) ValueBuilder {
 	app.scriptPath = scriptPath
 	return app
 }
@@ -59,11 +63,11 @@ func (app *valueBuilder) Now() (Value, error) {
 		return createValueWithVersion(app.version), nil
 	}
 
-	if app.langPath != "" {
+	if app.langPath != nil {
 		return createValueWithLanguagePath(app.langPath), nil
 	}
 
-	if app.scriptPath != "" {
+	if app.scriptPath != nil {
 		return createValueWithScriptPath(app.scriptPath), nil
 	}
 

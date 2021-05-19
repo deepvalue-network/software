@@ -9,41 +9,35 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/transform"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/value"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variablename"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 )
 
 type builder struct {
-	stackframe   stackframe.Stackframe
-	transform    transform.Transform
-	variableName variablename.VariableName
-	condition    condition.Condition
-	standard     standard.Standard
-	remaining    remaining.Remaining
-	value        value.Value
-	insert       variable.Variable
-	save         variable.Variable
-	del          string
-	call         call.Call
-	exit         exit.Exit
+	stackframe stackframe.Stackframe
+	condition  condition.Condition
+	standard   standard.Standard
+	remaining  remaining.Remaining
+	value      value.Value
+	insert     variable.Variable
+	save       variable.Variable
+	del        string
+	call       call.Call
+	exit       exit.Exit
 }
 
 func createBuilder() Builder {
 	out := builder{
-		stackframe:   nil,
-		transform:    nil,
-		variableName: nil,
-		condition:    nil,
-		standard:     nil,
-		remaining:    nil,
-		value:        nil,
-		insert:       nil,
-		save:         nil,
-		del:          "",
-		call:         nil,
-		exit:         nil,
+		stackframe: nil,
+		condition:  nil,
+		standard:   nil,
+		remaining:  nil,
+		value:      nil,
+		insert:     nil,
+		save:       nil,
+		del:        "",
+		call:       nil,
+		exit:       nil,
 	}
 
 	return &out
@@ -57,18 +51,6 @@ func (app *builder) Create() Builder {
 // WithStackframe adds a stackframe to the builder
 func (app *builder) WithStackframe(stackframe stackframe.Stackframe) Builder {
 	app.stackframe = stackframe
-	return app
-}
-
-// WithTransform adds a transform to the builder
-func (app *builder) WithTransform(transform transform.Transform) Builder {
-	app.transform = transform
-	return app
-}
-
-// WithVariableName adds a variableName to the builder
-func (app *builder) WithVariableName(variableName variablename.VariableName) Builder {
-	app.variableName = variableName
 	return app
 }
 
@@ -130,14 +112,6 @@ func (app *builder) WithExit(exit exit.Exit) Builder {
 func (app *builder) Now() (Instruction, error) {
 	if app.stackframe != nil {
 		return createInstructionWithStackframe(app.stackframe), nil
-	}
-
-	if app.transform != nil {
-		return createInstructionWithTransform(app.transform), nil
-	}
-
-	if app.variableName != nil {
-		return createInstructionWithVariableName(app.variableName), nil
 	}
 
 	if app.condition != nil {

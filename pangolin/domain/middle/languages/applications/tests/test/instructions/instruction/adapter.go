@@ -31,7 +31,7 @@ func (app *adapter) ToInstruction(parsed parsers.LanguageTestInstruction) (Instr
 	builder := app.builder.Create()
 	if parsed.IsLanguageInstruction() {
 		parsedLangIns := parsed.LanguageInstruction()
-		langIns, err := app.languageAdapter.ToInstruction(parsedLangIns)
+		langIns, err := app.languageAdapter.ToCommonInstruction(parsedLangIns)
 		if err != nil {
 			return nil, err
 		}

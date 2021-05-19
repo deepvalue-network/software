@@ -27,7 +27,7 @@ type Adapter interface {
 // Builder represents an instruction builder
 type Builder interface {
 	Create() Builder
-	WithLanguage(lang standard_instruction.Instruction) Builder
+	WithLanguage(lang standard_instruction.CommonInstruction) Builder
 	WithTest(test test_instruction.Instruction) Builder
 	Now() (Instruction, error)
 }
@@ -35,7 +35,7 @@ type Builder interface {
 // Instruction represents a test instruction
 type Instruction interface {
 	IsLanguage() bool
-	Language() standard_instruction.Instruction
+	Language() standard_instruction.CommonInstruction
 	IsTest() bool
 	Test() test_instruction.Instruction
 }

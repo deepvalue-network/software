@@ -3,14 +3,12 @@ package remaining
 import "errors"
 
 type operationBuilder struct {
-	ary  Arythmetic
-	misc Misc
+	ary Arythmetic
 }
 
 func createOperationBuilder() OperationBuilder {
 	out := operationBuilder{
-		ary:  nil,
-		misc: nil,
+		ary: nil,
 	}
 
 	return &out
@@ -27,20 +25,10 @@ func (app *operationBuilder) WithArythmetic(ary Arythmetic) OperationBuilder {
 	return app
 }
 
-// WithMisc adds a misc to the builder
-func (app *operationBuilder) WithMisc(misc Misc) OperationBuilder {
-	app.misc = misc
-	return app
-}
-
 // Now builds a new Operation instance
 func (app *operationBuilder) Now() (Operation, error) {
 	if app.ary != nil {
 		return createOperationWithArythmetic(app.ary), nil
-	}
-
-	if app.misc != nil {
-		return createOperationWithMisc(app.misc), nil
 	}
 
 	return nil, errors.New("the Operation is invalid")

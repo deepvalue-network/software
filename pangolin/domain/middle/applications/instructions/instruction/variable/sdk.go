@@ -14,15 +14,11 @@ type Builder interface {
 	Create() Builder
 	WithName(name string) Builder
 	WithValue(val var_value.Value) Builder
-	IsIncoming() Builder
-	IsOutgoing() Builder
 	Now() (Variable, error)
 }
 
 // Variable represents a variable
 type Variable interface {
-	IsIncoming() bool
-	IsOutgoing() bool
 	Name() string
 	Value() var_value.Value
 }

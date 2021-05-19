@@ -36,12 +36,12 @@ func (app *adapter) ToScript(parsed parsers.ScriptCommand) (Script, error) {
 		}
 
 		if oneValue.IsScript() {
-			scriptPath := oneValue.Script().String()
+			scriptPath := oneValue.Script()
 			valueBuilder.WithScriptPath(scriptPath)
 		}
 
 		if oneValue.IsLanguage() {
-			langPath := oneValue.Language().String()
+			langPath := oneValue.Language()
 			valueBuilder.WithLanguagePath(langPath)
 		}
 

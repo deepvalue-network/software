@@ -20,8 +20,6 @@ type Builder interface {
 	WithUint64(uintSixtyFour uint64) Builder
 	WithFloat32(floatThirtyTwo float32) Builder
 	WithFloat64(floatSixtyFour float64) Builder
-	IsStackFrame() Builder
-	IsFrame() Builder
 	Now() (Value, error)
 }
 
@@ -52,7 +50,5 @@ type Value interface {
 	FloatThirtyTwo() *float32
 	IsFloatSixtyFour() bool
 	FloatSixtyFour() *float64
-	IsStackFrame() bool
-	IsFrame() bool
 	StringRepresentation() string
 }

@@ -7,79 +7,65 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/transform"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variablename"
 )
 
 type instruction struct {
-	stackframe   stackframe.Stackframe
-	transform    transform.Transform
-	variableName variablename.VariableName
-	condition    condition.Condition
-	standard     standard.Standard
-	remaining    remaining.Remaining
-	value        value.Value
-	insert       variable.Variable
-	save         variable.Variable
-	del          string
-	call         call.Call
-	exit         exit.Exit
+	stackframe stackframe.Stackframe
+	condition  condition.Condition
+	standard   standard.Standard
+	remaining  remaining.Remaining
+	value      value.Value
+	insert     variable.Variable
+	save       variable.Variable
+	del        string
+	call       call.Call
+	exit       exit.Exit
 }
 
 func createInstructionWithStackframe(stackframe stackframe.Stackframe) Instruction {
-	return createInstructionInternally(stackframe, nil, nil, nil, nil, nil, nil, nil, nil, "", nil, nil)
-}
-
-func createInstructionWithTransform(transform transform.Transform) Instruction {
-	return createInstructionInternally(nil, transform, nil, nil, nil, nil, nil, nil, nil, "", nil, nil)
-}
-
-func createInstructionWithVariableName(variableName variablename.VariableName) Instruction {
-	return createInstructionInternally(nil, nil, variableName, nil, nil, nil, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(stackframe, nil, nil, nil, nil, nil, nil, "", nil, nil)
 }
 
 func createInstructionWithCondition(condition condition.Condition) Instruction {
-	return createInstructionInternally(nil, nil, nil, condition, nil, nil, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, condition, nil, nil, nil, nil, nil, "", nil, nil)
 }
 
 func createInstructionWithStandard(standard standard.Standard) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, standard, nil, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, standard, nil, nil, nil, nil, "", nil, nil)
 }
 
 func createInstructionWithRemaining(remaining remaining.Remaining) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, remaining, nil, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, remaining, nil, nil, nil, "", nil, nil)
 }
 
 func createInstructionWithValue(value value.Value) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, value, nil, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, value, nil, nil, "", nil, nil)
 }
 
 func createInstructionWithInsert(insert variable.Variable) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, insert, nil, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, insert, nil, "", nil, nil)
 }
 
 func createInstructionWithSave(save variable.Variable) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, save, "", nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, save, "", nil, nil)
 }
 
 func createInstructionWithDelete(del string) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, del, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, del, nil, nil)
 }
 
 func createInstructionWithCall(call call.Call) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, "", call, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, "", call, nil)
 }
 
 func createInstructionWithExit(exit exit.Exit) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, "", nil, exit)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, "", nil, exit)
 }
 
 func createInstructionInternally(
 	stackframe stackframe.Stackframe,
-	transform transform.Transform,
-	variableName variablename.VariableName,
 	condition condition.Condition,
 	standard standard.Standard,
 	remaining remaining.Remaining,
@@ -91,18 +77,16 @@ func createInstructionInternally(
 	exit exit.Exit,
 ) Instruction {
 	out := instruction{
-		stackframe:   stackframe,
-		transform:    transform,
-		variableName: variableName,
-		condition:    condition,
-		standard:     standard,
-		remaining:    remaining,
-		value:        value,
-		insert:       insert,
-		save:         save,
-		del:          del,
-		call:         call,
-		exit:         exit,
+		stackframe: stackframe,
+		condition:  condition,
+		standard:   standard,
+		remaining:  remaining,
+		value:      value,
+		insert:     insert,
+		save:       save,
+		del:        del,
+		call:       call,
+		exit:       exit,
 	}
 
 	return &out
@@ -116,26 +100,6 @@ func (obj *instruction) IsStackframe() bool {
 // Stackframe returns the stackframe, if any
 func (obj *instruction) Stackframe() stackframe.Stackframe {
 	return obj.stackframe
-}
-
-// IsTransform returns true if there is a transform, false otherwise
-func (obj *instruction) IsTransform() bool {
-	return obj.transform != nil
-}
-
-// Transform returns the transform, if any
-func (obj *instruction) Transform() transform.Transform {
-	return obj.transform
-}
-
-// IsVariableName returns true if there is a variableName, false otherwise
-func (obj *instruction) IsVariableName() bool {
-	return obj.variableName != nil
-}
-
-// VariableName returns the variableName, if any
-func (obj *instruction) VariableName() variablename.VariableName {
-	return obj.variableName
 }
 
 // IsCondition returns true if there is a condition, false otherwise

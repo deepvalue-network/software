@@ -3,11 +3,11 @@ package applications
 import (
 	"errors"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/externals"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type builder struct {
@@ -15,7 +15,7 @@ type builder struct {
 	main    instructions.Instructions
 	tests   tests.Tests
 	labels  labels.Labels
-	extends []externals.External
+	extends []parsers.ImportSingle
 }
 
 func createBuilder() Builder {
@@ -60,7 +60,7 @@ func (app *builder) WithLabels(labels labels.Labels) Builder {
 }
 
 // WithExtends add extends to the builder
-func (app *builder) WithExtends(extends []externals.External) Builder {
+func (app *builder) WithExtends(extends []parsers.ImportSingle) Builder {
 	app.extends = extends
 	return app
 }

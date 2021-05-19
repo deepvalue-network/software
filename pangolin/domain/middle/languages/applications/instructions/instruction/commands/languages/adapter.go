@@ -37,22 +37,22 @@ func (app *adapter) ToLanguage(parsed parsers.LanguageCommand) (Language, error)
 		}
 
 		if oneParsedValue.IsTokens() {
-			tokensPath := oneParsedValue.Tokens().String()
+			tokensPath := oneParsedValue.Tokens()
 			valueBuilder.WithTokensPath(tokensPath)
 		}
 
 		if oneParsedValue.IsChannels() {
-			channelsPath := oneParsedValue.Channels().String()
+			channelsPath := oneParsedValue.Channels()
 			valueBuilder.WithChannelsPath(channelsPath)
 		}
 
 		if oneParsedValue.IsRules() {
-			rulesPath := oneParsedValue.Rules().String()
+			rulesPath := oneParsedValue.Rules()
 			valueBuilder.WithRulesPath(rulesPath)
 		}
 
 		if oneParsedValue.IsLogic() {
-			logicsPath := oneParsedValue.Logic().String()
+			logicsPath := oneParsedValue.Logic()
 			valueBuilder.WithLogicsPath(logicsPath)
 		}
 
@@ -62,13 +62,8 @@ func (app *adapter) ToLanguage(parsed parsers.LanguageCommand) (Language, error)
 		}
 
 		if oneParsedValue.IsExtends() {
-			extendPaths := []string{}
 			parsedExtendPaths := oneParsedValue.Extends()
-			for _, oneExtendPath := range parsedExtendPaths {
-				extendPaths = append(extendPaths, oneExtendPath.String())
-			}
-
-			valueBuilder.WithExtends(extendPaths)
+			valueBuilder.WithExtends(parsedExtendPaths)
 		}
 
 		if oneParsedValue.IsPatternMatches() {
