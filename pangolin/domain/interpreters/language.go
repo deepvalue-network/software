@@ -4,67 +4,91 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters/composers"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/machines"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 )
 
 type language struct {
+	composerBuilder           composers.Builder
 	machineStateFactory       machines.LanguageStateFactory
 	stackFrameBuilder         stackframes.Builder
-	machineLanguageBuilder    machines.LanguageInstructionBuilder
 	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder
-	languageDef               linkers.LanguageDefinition
+	machineLangInsBuilder     machines.LanguageInstructionBuilder
 }
 
 func createLanguage(
+	composerBuilder composers.Builder,
 	machineStateFactory machines.LanguageStateFactory,
 	stackFrameBuilder stackframes.Builder,
-	machineLanguageBuilder machines.LanguageInstructionBuilder,
 	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder,
-	languageDef linkers.LanguageDefinition,
+	machineLangInsBuilder machines.LanguageInstructionBuilder,
 ) Language {
 	out := language{
+		composerBuilder:           composerBuilder,
 		machineStateFactory:       machineStateFactory,
 		stackFrameBuilder:         stackFrameBuilder,
-		machineLanguageBuilder:    machineLanguageBuilder,
 		machineLangTestInsBuilder: machineLangTestInsBuilder,
-		languageDef:               languageDef,
+		machineLangInsBuilder:     machineLangInsBuilder,
 	}
 
 	return &out
 }
 
+// Execute executes a language application
+func (app *language) Execute(linkedLangDef linkers.LanguageDefinition, input map[string]computable.Value) (linkers.Application, error) {
+	stackFrame := app.stackFrameBuilder.Create().WithVariables(input).Now()
+	composer, err := app.composerBuilder.Create().WithStackFrame(stackFrame).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	state := app.machineStateFactory.Create()
+	machineLangInsApp, err := app.machineLangInsBuilder.Create().WithComposer(composer).WithLanguage(linkedLangDef).WithStackFrame(stackFrame).WithState(state).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	insList := linkedLangDef.Application().Instructions().All()
+	for _, oneIns := range insList {
+		err := machineLangInsApp.Receive(oneIns)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return composer.Now()
+}
+
 //TestsAll executes all tests
-func (app *language) TestsAll() error {
+func (app *language) TestsAll(linkedLangDef linkers.LanguageDefinition) error {
 	names := []string{}
-	tests := app.languageDef.Application().Tests().All()
+	tests := linkedLangDef.Application().Tests().All()
 	for _, oneTest := range tests {
 		name := oneTest.Name()
 		names = append(names, name)
 	}
 
-	return app.TestByNames(names)
+	return app.TestByNames(linkedLangDef, names)
 }
 
 // TestByNames executes the tests of an application in the interpreter
-func (app *language) TestByNames(names []string) error {
+func (app *language) TestByNames(linkedLangDef linkers.LanguageDefinition, names []string) error {
 	fmt.Printf("\n++++++++++++++++++++++++++++++++++\n")
 	fmt.Printf("Executing %d language tests...\n", len(names))
 	fmt.Printf("++++++++++++++++++++++++++++++++++\n")
 
-	baseDir := app.languageDef.Paths().BaseDir()
-	langApp := app.languageDef.Application()
+	langApp := linkedLangDef.Application()
 	tests := langApp.Tests().All()
-	labels := langApp.Labels()
 	for _, oneTest := range tests {
 		languageState := app.machineStateFactory.Create()
 		stackframe := app.stackFrameBuilder.Create().Now()
 		testInsMachine, err := app.machineLangTestInsBuilder.Create().
+			WithLanguage(linkedLangDef).
 			WithStackFrame(stackframe).
-			WithLabels(labels).
 			WithState(languageState).
-			WithBaseDir(baseDir).
 			Now()
 
 		if err != nil {

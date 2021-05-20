@@ -14,14 +14,38 @@ import (
 )
 
 type languageInstruction struct {
-	langCommonIns          LanguageInstructionCommon
-	insApp                 Instruction
-	composerApp            composers.Composer
 	variableBuilder        var_variable.Builder
 	valueBuilder           var_value.Builder
 	computableValueBuilder computable.Builder
+	langCommonIns          LanguageInstructionCommon
+	insApp                 Instruction
 	stackFrame             stackframes.StackFrame
 	languageState          LanguageState
+	composerApp            composers.Composer
+}
+
+func createLanguageInstruction(
+	variableBuilder var_variable.Builder,
+	valueBuilder var_value.Builder,
+	computableValueBuilder computable.Builder,
+	langCommonIns LanguageInstructionCommon,
+	insApp Instruction,
+	stackFrame stackframes.StackFrame,
+	languageState LanguageState,
+	composerApp composers.Composer,
+) LanguageInstruction {
+	out := languageInstruction{
+		variableBuilder:        variableBuilder,
+		valueBuilder:           valueBuilder,
+		computableValueBuilder: computableValueBuilder,
+		langCommonIns:          langCommonIns,
+		insApp:                 insApp,
+		stackFrame:             stackFrame,
+		languageState:          languageState,
+		composerApp:            composerApp,
+	}
+
+	return &out
 }
 
 // Receive receives an instruction

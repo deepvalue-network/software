@@ -14,28 +14,25 @@ type application struct {
 	insMachineBuilder     machines.InstructionBuilder
 	testInsMachineBuilder machines.TestInstructionBuilder
 	stackFrameBuilder     stackframes.Builder
-	linkedApp             linkers.Application
 }
 
 func createApplication(
 	insMachineBuilder machines.InstructionBuilder,
 	testInsMachineBuilder machines.TestInstructionBuilder,
 	stackFrameBuilder stackframes.Builder,
-	linkedApp linkers.Application,
 ) Application {
 	out := application{
 		insMachineBuilder:     insMachineBuilder,
 		testInsMachineBuilder: testInsMachineBuilder,
 		stackFrameBuilder:     stackFrameBuilder,
-		linkedApp:             linkedApp,
 	}
 
 	return &out
 }
 
 // Execute executes an application in the interpreter
-func (app *application) Execute(input map[string]computable.Value) (stackframes.StackFrame, error) {
-	labels := app.linkedApp.Labels()
+func (app *application) Execute(linkedApp linkers.Application, input map[string]computable.Value) (stackframes.StackFrame, error) {
+	labels := linkedApp.Labels()
 	stackFrame := app.stackFrameBuilder.Create().WithVariables(input).Now()
 	machine, err := app.insMachineBuilder.Create().WithLabels(labels).WithStackFrame(stackFrame).Now()
 	if err != nil {
@@ -46,7 +43,7 @@ func (app *application) Execute(input map[string]computable.Value) (stackframes.
 		return nil, err
 	}
 
-	err = app.execute(machine, app.linkedApp)
+	err = app.execute(machine, linkedApp)
 	if err != nil {
 		return nil, err
 	}
@@ -55,26 +52,26 @@ func (app *application) Execute(input map[string]computable.Value) (stackframes.
 }
 
 // TestsAll executes all tests
-func (app *application) TestsAll() error {
+func (app *application) TestsAll(linkedApp linkers.Application) error {
 	names := []string{}
-	tests := app.linkedApp.Tests().All()
+	tests := linkedApp.Tests().All()
 	for _, oneTest := range tests {
 		name := oneTest.Name()
 		names = append(names, name)
 	}
 
-	return app.TestByNames(names)
+	return app.TestByNames(linkedApp, names)
 }
 
 // TestByNames executes tests by names
-func (app *application) TestByNames(names []string) error {
+func (app *application) TestByNames(linkedApp linkers.Application, names []string) error {
 	fmt.Printf("\n++++++++++++++++++++++++++++++++++\n")
 	fmt.Printf("Executing %d language tests...\n", len(names))
 	fmt.Printf("++++++++++++++++++++++++++++++++++\n")
 
 	baseDir := "./"
-	tests := app.linkedApp.Tests().All()
-	labels := app.linkedApp.Labels()
+	tests := linkedApp.Tests().All()
+	labels := linkedApp.Labels()
 	for _, oneTest := range tests {
 		stackframe := app.stackFrameBuilder.Create().Now()
 		testInsMachine, err := app.testInsMachineBuilder.Create().

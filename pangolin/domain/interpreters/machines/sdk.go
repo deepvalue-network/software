@@ -4,19 +4,74 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/composers"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
+	lexer_parser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
+	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
 	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
 	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
-	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
 	language_label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label/instructions/instruction"
 	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions/instruction"
 )
 
 // CallLabelByNameFn represents a func to call a label by name
 type CallLabelByNameFn func(name string) error
+
+// NewLanguageTestInstructionBuilder creates a language test instruction builder
+func NewLanguageTestInstructionBuilder(
+	lexerAdapterBuilder lexers.AdapterBuilder,
+	events []lexers.Event,
+) LanguageTestInstructionBuilder {
+	langCommonInsBuilder := NewLanguageInstructionCommonBuilder(lexerAdapterBuilder, events)
+	testInsAppBuilder := NewTestInstructionBuilder()
+	return createLanguageTestInstructionBuilder(
+		langCommonInsBuilder,
+		testInsAppBuilder,
+	)
+}
+
+// NewLanguageInstructionBuilder creates a new language instruction builder
+func NewLanguageInstructionBuilder(
+	lexerAdapterBuilder lexers.AdapterBuilder,
+	events []lexers.Event,
+) LanguageInstructionBuilder {
+	variableBuilder := var_variable.NewBuilder()
+	valueBuilder := var_value.NewBuilder()
+	computableValueBuilder := computable.NewBuilder()
+	langCommonInsBuilder := NewLanguageInstructionCommonBuilder(lexerAdapterBuilder, events)
+	insAppBuilder := NewInstructionBuilder()
+	return createLanguageInstructionBuilder(
+		variableBuilder,
+		valueBuilder,
+		computableValueBuilder,
+		langCommonInsBuilder,
+		insAppBuilder,
+	)
+}
+
+// NewLanguageInstructionCommonBuilder creates a new language instruction common builder
+func NewLanguageInstructionCommonBuilder(
+	lexerAdapterBuilder lexers.AdapterBuilder,
+	events []lexers.Event,
+) LanguageInstructionCommonBuilder {
+	insAppBuilder := NewInstructionBuilder()
+	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
+	lexerParserApplication := lexer_parser.NewApplication()
+	lexerParserBuilder := lexer_parser.NewBuilder()
+	return createLanguageInstructionCommonBuilder(
+		events,
+		insAppBuilder,
+		grammarRetrieverCriteriaBuilder,
+		lexerParserApplication,
+		lexerParserBuilder,
+		lexerAdapterBuilder,
+	)
+}
 
 // NewTestInstructionBuilder creates a new test instruction builder
 func NewTestInstructionBuilder() TestInstructionBuilder {
@@ -39,10 +94,9 @@ func NewLanguageStateFactory() LanguageStateFactory {
 // LanguageTestInstructionBuilder represents a language test instruction builder
 type LanguageTestInstructionBuilder interface {
 	Create() LanguageTestInstructionBuilder
+	WithLanguage(langDef linkers.LanguageDefinition) LanguageTestInstructionBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) LanguageTestInstructionBuilder
-	WithLabels(labels language_labels.Labels) LanguageTestInstructionBuilder
 	WithState(state LanguageState) LanguageTestInstructionBuilder
-	WithBaseDir(baseDir string) LanguageTestInstructionBuilder
 	Now() (LanguageTestInstruction, error)
 }
 
@@ -54,8 +108,8 @@ type LanguageTestInstruction interface {
 // LanguageInstructionBuilder represents a language instruction builder
 type LanguageInstructionBuilder interface {
 	Create() LanguageInstructionBuilder
-	WithComposer(composer composers.Composer) LanguageInstructionBuilder
-	WithLabels(labels language_labels.Labels) LanguageInstructionCommonBuilder
+	WithComposer(composerApp composers.Composer) LanguageInstructionBuilder
+	WithLanguage(langDef linkers.LanguageDefinition) LanguageInstructionBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) LanguageInstructionBuilder
 	WithState(state LanguageState) LanguageInstructionBuilder
 	Now() (LanguageInstruction, error)
@@ -70,6 +124,7 @@ type LanguageInstruction interface {
 // LanguageInstructionCommonBuilder represents a language instruction common builder
 type LanguageInstructionCommonBuilder interface {
 	Create() LanguageInstructionCommonBuilder
+	WithLanguage(langDef linkers.LanguageDefinition) LanguageInstructionCommonBuilder
 	WithCallLabelFn(labelFn CallLabelByNameFn) LanguageInstructionCommonBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) LanguageInstructionCommonBuilder
 	WithState(state LanguageState) LanguageInstructionCommonBuilder

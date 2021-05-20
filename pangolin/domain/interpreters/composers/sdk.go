@@ -10,8 +10,8 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
-// NewComposerBuilder creates a new composer builder
-func NewComposerBuilder(linker linkers.Linker) ComposerBuilder {
+// NewBuilder creates a new composer builder
+func NewBuilder(linker linkers.Linker) Builder {
 	instructionAdapterBuilder := NewInstructionAdapterBuilder()
 	stackFrameBuilder := stackframes.NewBuilder()
 	programBuilder := parsers.NewProgramBuilder()
@@ -32,7 +32,7 @@ func NewComposerBuilder(linker linkers.Linker) ComposerBuilder {
 	labelDeclarationBuilder := parsers.NewLabelDeclarationBuilder()
 	mainSectionBuilder := parsers.NewMainSectionBuilder()
 
-	return createComposerBuilder(
+	return createBuilder(
 		linker,
 		instructionAdapterBuilder,
 		stackFrameBuilder,
@@ -119,10 +119,10 @@ func NewInstructionAdapterBuilder() InstructionAdapterBuilder {
 	)
 }
 
-// ComposerBuilder represents a composer builder
-type ComposerBuilder interface {
-	Create() ComposerBuilder
-	WithStackFrame(stackFrame stackframes.StackFrame) ComposerBuilder
+// Builder represents a composer builder
+type Builder interface {
+	Create() Builder
+	WithStackFrame(stackFrame stackframes.StackFrame) Builder
 	Now() (Composer, error)
 }
 

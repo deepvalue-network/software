@@ -68,7 +68,8 @@ func (app *script) Execute(script linkers.Script) (linkers.Application, error) {
 		return nil, errors.New("the linked program was expected to be an application")
 	}
 
-	stackFrame, err := app.application.Execute(input)
+	linkedApp := linkedProgram.Application()
+	stackFrame, err := app.application.Execute(linkedApp, input)
 	if err != nil {
 		return nil, err
 	}

@@ -8,7 +8,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
-type composerBuilder struct {
+type builder struct {
 	linker                     linkers.Linker
 	instructionAdapterBuilder  InstructionAdapterBuilder
 	stackFrameBuilder          stackframes.Builder
@@ -32,7 +32,7 @@ type composerBuilder struct {
 	stackFrame                 stackframes.StackFrame
 }
 
-func createComposerBuilder(
+func createBuilder(
 	linker linkers.Linker,
 	instructionAdapterBuilder InstructionAdapterBuilder,
 	stackFrameBuilder stackframes.Builder,
@@ -53,8 +53,8 @@ func createComposerBuilder(
 	headValueBuilder parsers.HeadValueBuilder,
 	testDeclarationBuilder parsers.TestDeclarationBuilder,
 	labelDeclarationBuilder parsers.LabelDeclarationBuilder,
-) ComposerBuilder {
-	out := composerBuilder{
+) Builder {
+	out := builder{
 		linker:                     linker,
 		instructionAdapterBuilder:  instructionAdapterBuilder,
 		stackFrameBuilder:          stackFrameBuilder,
@@ -82,8 +82,8 @@ func createComposerBuilder(
 }
 
 // Create initializes the builder
-func (app *composerBuilder) Create() ComposerBuilder {
-	return createComposerBuilder(
+func (app *builder) Create() Builder {
+	return createBuilder(
 		app.linker,
 		app.instructionAdapterBuilder,
 		app.stackFrameBuilder,
@@ -108,13 +108,13 @@ func (app *composerBuilder) Create() ComposerBuilder {
 }
 
 // WithStackFrame adds a stackFrameto the builder
-func (app *composerBuilder) WithStackFrame(stackFrame stackframes.StackFrame) ComposerBuilder {
+func (app *builder) WithStackFrame(stackFrame stackframes.StackFrame) Builder {
 	app.stackFrame = stackFrame
 	return app
 }
 
 // Now builds a new Composer instance
-func (app *composerBuilder) Now() (Composer, error) {
+func (app *builder) Now() (Composer, error) {
 	if app.stackFrame != nil {
 		return nil, errors.New("the stackFrame is mandatory in order to build a Composer instance")
 	}

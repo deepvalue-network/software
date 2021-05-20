@@ -6,57 +6,41 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	lexer_parser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
-	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
-	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/match"
-	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
 )
 
 type languageInstructionCommon struct {
-	variableBuilder        var_variable.Builder
-	valueBuilder           var_value.Builder
-	computableValueBuilder computable.Builder
 	lexerParserApplication lexer_parser.Application
 	lexerParserBuilder     lexer_parser.Builder
 	lexerAdapterBuilder    lexers.AdapterBuilder
 	patternMatches         map[string]definitions.PatternMatch
 	insApp                 Instruction
-	langInsApp             LanguageInstruction
-	stackFrame             stackframes.StackFrame
-	labels                 language_labels.Labels
 	languageState          LanguageState
+	stackFrame             stackframes.StackFrame
+	callLabelFn            CallLabelByNameFn
 }
 
 func createLanguageInstructionCommon(
-	variableBuilder var_variable.Builder,
-	valueBuilder var_value.Builder,
-	computableValueBuilder computable.Builder,
 	lexerParserApplication lexer_parser.Application,
 	lexerParserBuilder lexer_parser.Builder,
 	lexerAdapterBuilder lexers.AdapterBuilder,
 	patternMatches map[string]definitions.PatternMatch,
 	insApp Instruction,
-	langInsApp LanguageInstruction,
-	stackFrame stackframes.StackFrame,
-	labels language_labels.Labels,
 	languageState LanguageState,
+	stackFrame stackframes.StackFrame,
+	callLabelFn CallLabelByNameFn,
 ) LanguageInstructionCommon {
 	out := languageInstructionCommon{
-		variableBuilder:        variableBuilder,
-		valueBuilder:           valueBuilder,
-		computableValueBuilder: computableValueBuilder,
 		lexerParserApplication: lexerParserApplication,
 		lexerParserBuilder:     lexerParserBuilder,
 		lexerAdapterBuilder:    lexerAdapterBuilder,
 		patternMatches:         patternMatches,
 		insApp:                 insApp,
-		langInsApp:             langInsApp,
-		stackFrame:             stackFrame,
-		labels:                 labels,
 		languageState:          languageState,
+		stackFrame:             stackFrame,
+		callLabelFn:            callLabelFn,
 	}
 
 	return &out
@@ -161,23 +145,5 @@ func (app *languageInstructionCommon) match(match match.Match) error {
 
 func (app *languageInstructionCommon) treeLabelInstructions(labelName string, tree lexers.NodeTree) error {
 	app.languageState.ChangeCurrentToken(tree)
-
-	lbl, err := app.labels.Fetch(labelName)
-	if err != nil {
-		return err
-	}
-
-	insList := lbl.Instructions().All()
-	for _, oneInstruction := range insList {
-		stops, err := app.langInsApp.ReceiveLbl(oneInstruction)
-		if err != nil {
-			return err
-		}
-
-		if stops {
-			break
-		}
-	}
-
-	return nil
+	return app.callLabelFn(labelName)
 }
