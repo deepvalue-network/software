@@ -62,7 +62,7 @@ func (app *language) TestByNames(names []string) error {
 		stackframe := app.stackFrameBuilder.Create().Now()
 		testInsMachine, err := app.machineLangTestInsBuilder.Create().
 			WithStackFrame(stackframe).
-			WithLanguageLabels(labels).
+			WithLabels(labels).
 			WithState(languageState).
 			WithBaseDir(baseDir).
 			Now()

@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
 )
 
@@ -12,8 +11,7 @@ type languageTestInstructionBuilder struct {
 	insLangCommonApp  LanguageInstructionCommonBuilder
 	testInsAppBuilder TestInstructionBuilder
 	stackFrame        stackframes.StackFrame
-	labels            labels.Labels
-	langLabels        language_labels.Labels
+	labels            language_labels.Labels
 	state             LanguageState
 	baseDir           string
 }
@@ -27,7 +25,6 @@ func createLanguageTestInstructionBuilder(
 		testInsAppBuilder: testInsAppBuilder,
 		stackFrame:        nil,
 		labels:            nil,
-		langLabels:        nil,
 		state:             nil,
 		baseDir:           "",
 	}
@@ -46,15 +43,9 @@ func (app *languageTestInstructionBuilder) WithStackFrame(stackFrame stackframes
 	return app
 }
 
-// WithLabels add labels to the builder
-func (app *languageTestInstructionBuilder) WithLabels(labels labels.Labels) LanguageTestInstructionBuilder {
-	app.labels = labels
-	return app
-}
-
 // WithLanguageLabels add language labels to the builder
-func (app *languageTestInstructionBuilder) WithLanguageLabels(langLabels language_labels.Labels) LanguageTestInstructionBuilder {
-	app.langLabels = langLabels
+func (app *languageTestInstructionBuilder) WithLabels(labels language_labels.Labels) LanguageTestInstructionBuilder {
+	app.labels = labels
 	return app
 }
 
@@ -77,10 +68,6 @@ func (app *languageTestInstructionBuilder) Now() (LanguageTestInstruction, error
 	}
 
 	if app.labels == nil {
-		return nil, errors.New("the Labels are mandatory in order to build a LanguageTestInstruction instance")
-	}
-
-	if app.langLabels == nil {
 		return nil, errors.New("the language Labels are mandatory in order to build a LanguageTestInstruction instance")
 	}
 
@@ -92,12 +79,17 @@ func (app *languageTestInstructionBuilder) Now() (LanguageTestInstruction, error
 		return nil, errors.New("the base directory is mandatory in order to build a LanguageTestInstruction instance")
 	}
 
-	langCommonInsApp, err := app.insLangCommonApp.Create().WithState(app.state).WithLabels(app.langLabels).WithStackFrame(app.stackFrame).Now()
+	labelCallFn, err := fromLanguageLabelsToCallLabelByNameFunc(app.stackFrame, app.labels)
 	if err != nil {
 		return nil, err
 	}
 
-	testInsApp, err := app.testInsAppBuilder.Create().WithLabels(app.labels).WithStackFrame(app.stackFrame).WithBaseDir(app.baseDir).Now()
+	langCommonInsApp, err := app.insLangCommonApp.Create().WithState(app.state).WithCallLabelFn(labelCallFn).WithStackFrame(app.stackFrame).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	testInsApp, err := app.testInsAppBuilder.Create().WithCallLabelFn(labelCallFn).WithStackFrame(app.stackFrame).WithBaseDir(app.baseDir).Now()
 	if err != nil {
 		return nil, err
 	}

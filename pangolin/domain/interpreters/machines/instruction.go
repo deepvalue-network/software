@@ -9,25 +9,24 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/condition"
 	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	label_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions"
 	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
 )
 
 type instruction struct {
 	computableValueBuilder computable.Builder
-	labels                 labels.Labels
+	labelFn                CallLabelByNameFn
 	stackFrame             stackframes.StackFrame
 }
 
 func createInstruction(
 	computableValueBuilder computable.Builder,
-	labels labels.Labels,
+	labelFn CallLabelByNameFn,
 	stackFrame stackframes.StackFrame,
 ) Instruction {
 	out := instruction{
 		computableValueBuilder: computableValueBuilder,
-		labels:                 labels,
+		labelFn:                labelFn,
 		stackFrame:             stackFrame,
 	}
 
@@ -222,24 +221,7 @@ func (app *instruction) proposition(prop condition.Proposition) error {
 	}
 
 	name := prop.Name()
-	lbl, err := app.labels.Fetch(name)
-	if err != nil {
-		return err
-	}
-
-	lblInsList := lbl.Instructions().All()
-	for _, oneLblIns := range lblInsList {
-		stop, err := app.ReceiveLbl(oneLblIns)
-		if err != nil {
-			return err
-		}
-
-		if stop {
-			break
-		}
-	}
-
-	return nil
+	return app.labelFn(name)
 }
 
 func (app *instruction) print(val var_value.Value) error {

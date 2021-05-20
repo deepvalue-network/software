@@ -12,6 +12,7 @@ type testInstructionBuilder struct {
 	instructionBuilder InstructionBuilder
 	computableBuilder  computable.Builder
 	stackFrame         stackframes.StackFrame
+	labelFn            CallLabelByNameFn
 	labels             labels.Labels
 	baseDir            string
 }
@@ -24,6 +25,7 @@ func createTestInstructionBuilder(
 		instructionBuilder: instructionBuilder,
 		computableBuilder:  computableBuilder,
 		stackFrame:         nil,
+		labelFn:            nil,
 		labels:             nil,
 	}
 
@@ -35,7 +37,13 @@ func (app *testInstructionBuilder) Create() TestInstructionBuilder {
 	return createTestInstructionBuilder(app.instructionBuilder, app.computableBuilder)
 }
 
-// WithLabels add Labels to the builder
+// WithCallLabelFn adds a call label func to the builder
+func (app *testInstructionBuilder) WithCallLabelFn(labelFn CallLabelByNameFn) TestInstructionBuilder {
+	app.labelFn = labelFn
+	return app
+}
+
+// WithLabels add labels to the builder
 func (app *testInstructionBuilder) WithLabels(labels labels.Labels) TestInstructionBuilder {
 	app.labels = labels
 	return app
@@ -55,15 +63,24 @@ func (app *testInstructionBuilder) WithBaseDir(baseDir string) TestInstructionBu
 
 // Now builds a new TestInstruction instance
 func (app *testInstructionBuilder) Now() (TestInstruction, error) {
-	if app.labels == nil {
-		return nil, errors.New("the Labels are mandatory in order to build a TestInstruction instance")
-	}
-
 	if app.stackFrame == nil {
 		return nil, errors.New("the stackFrame is mandatory in order to build a TestInstruction instance")
 	}
 
-	insApp, err := app.instructionBuilder.Create().WithLabels(app.labels).WithStackFrame(app.stackFrame).Now()
+	if app.labels != nil {
+		fn, err := fromLabelsToCallLabelByNameFunc(app.stackFrame, app.labels)
+		if err != nil {
+			return nil, err
+		}
+
+		app.labelFn = fn
+	}
+
+	if app.labelFn == nil {
+		return nil, errors.New("the CallLabelByNameFn are mandatory in order to build a TestInstruction instance")
+	}
+
+	insApp, err := app.instructionBuilder.Create().WithCallLabelFn(app.labelFn).WithStackFrame(app.stackFrame).Now()
 	if err != nil {
 		return nil, err
 	}

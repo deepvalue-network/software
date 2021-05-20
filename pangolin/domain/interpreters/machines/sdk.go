@@ -15,6 +15,9 @@ import (
 	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions/instruction"
 )
 
+// CallLabelByNameFn represents a func to call a label by name
+type CallLabelByNameFn func(name string) error
+
 // NewTestInstructionBuilder creates a new test instruction builder
 func NewTestInstructionBuilder() TestInstructionBuilder {
 	instructionBuilder := NewInstructionBuilder()
@@ -37,8 +40,7 @@ func NewLanguageStateFactory() LanguageStateFactory {
 type LanguageTestInstructionBuilder interface {
 	Create() LanguageTestInstructionBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) LanguageTestInstructionBuilder
-	WithLabels(labels labels.Labels) LanguageTestInstructionBuilder
-	WithLanguageLabels(labels language_labels.Labels) LanguageTestInstructionBuilder
+	WithLabels(labels language_labels.Labels) LanguageTestInstructionBuilder
 	WithState(state LanguageState) LanguageTestInstructionBuilder
 	WithBaseDir(baseDir string) LanguageTestInstructionBuilder
 	Now() (LanguageTestInstruction, error)
@@ -68,7 +70,7 @@ type LanguageInstruction interface {
 // LanguageInstructionCommonBuilder represents a language instruction common builder
 type LanguageInstructionCommonBuilder interface {
 	Create() LanguageInstructionCommonBuilder
-	WithLabels(labels language_labels.Labels) LanguageInstructionCommonBuilder
+	WithCallLabelFn(labelFn CallLabelByNameFn) LanguageInstructionCommonBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) LanguageInstructionCommonBuilder
 	WithState(state LanguageState) LanguageInstructionCommonBuilder
 	Now() (LanguageInstructionCommon, error)
@@ -82,6 +84,7 @@ type LanguageInstructionCommon interface {
 // TestInstructionBuilder represents a test instruction builder
 type TestInstructionBuilder interface {
 	Create() TestInstructionBuilder
+	WithCallLabelFn(labelFn CallLabelByNameFn) TestInstructionBuilder
 	WithLabels(labels labels.Labels) TestInstructionBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) TestInstructionBuilder
 	WithBaseDir(baseDir string) TestInstructionBuilder
@@ -96,6 +99,7 @@ type TestInstruction interface {
 // InstructionBuilder represents an instruction machine builder
 type InstructionBuilder interface {
 	Create() InstructionBuilder
+	WithCallLabelFn(labelFn CallLabelByNameFn) InstructionBuilder
 	WithLabels(labels labels.Labels) InstructionBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) InstructionBuilder
 	Now() (Instruction, error)

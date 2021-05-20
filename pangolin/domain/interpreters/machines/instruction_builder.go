@@ -10,6 +10,7 @@ import (
 
 type instructionBuilder struct {
 	computableValueBuilder computable.Builder
+	labelFn                CallLabelByNameFn
 	labels                 labels.Labels
 	stackFrame             stackframes.StackFrame
 }
@@ -19,6 +20,7 @@ func createInstructionBuilder(
 ) InstructionBuilder {
 	out := instructionBuilder{
 		computableValueBuilder: computableValueBuilder,
+		labelFn:                nil,
 		labels:                 nil,
 		stackFrame:             nil,
 	}
@@ -33,7 +35,12 @@ func (app *instructionBuilder) Create() InstructionBuilder {
 	)
 }
 
-// WithLabels add labels to the builder
+// WithCallLabelFn adds a callLabelByNameFn to the builder
+func (app *instructionBuilder) WithCallLabelFn(labelFn CallLabelByNameFn) InstructionBuilder {
+	app.labelFn = labelFn
+	return app
+}
+
 func (app *instructionBuilder) WithLabels(labels labels.Labels) InstructionBuilder {
 	app.labels = labels
 	return app
@@ -47,13 +54,22 @@ func (app *instructionBuilder) WithStackFrame(stackFrame stackframes.StackFrame)
 
 // Now builds a new Instruction instance
 func (app *instructionBuilder) Now() (Instruction, error) {
-	if app.labels == nil {
-		return nil, errors.New("the Labels are mandatory in order to build a Instruction instance")
-	}
-
 	if app.stackFrame == nil {
 		return nil, errors.New("the stackFrame is mandatory in order to build a Instruction instance")
 	}
 
-	return createInstruction(app.computableValueBuilder, app.labels, app.stackFrame), nil
+	if app.labels != nil {
+		fn, err := fromLabelsToCallLabelByNameFunc(app.stackFrame, app.labels)
+		if err != nil {
+			return nil, err
+		}
+
+		app.labelFn = fn
+	}
+
+	if app.labelFn == nil {
+		return nil, errors.New("the CallLabelByNameFn are mandatory in order to build a Instruction instance")
+	}
+
+	return createInstruction(app.computableValueBuilder, app.labelFn, app.stackFrame), nil
 }
