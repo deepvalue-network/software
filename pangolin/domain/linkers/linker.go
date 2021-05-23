@@ -17,17 +17,19 @@ import (
 )
 
 type linker struct {
-	prevParser                      parsers.Parser
 	middleAdapter                   middle.Adapter
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder
 	applicationBuilder              ApplicationBuilder
 	languageBuilder                 LanguageBuilder
+	executableBuilder               ExecutableBuilder
 	programBuilder                  ProgramBuilder
 	languageDefinitionBuilder       LanguageDefinitionBuilder
 	pathsBuilder                    PathsBuilder
 	scriptBuilder                   ScriptBuilder
+	testBuilder                     TestBuilder
 	languageReferenceBuilder        LanguageReferenceBuilder
 	languageApplicationBuilder      LanguageApplicationBuilder
+	parser                          parsers.Parser
 	dirPath                         string
 	currentPath                     string
 }
@@ -37,13 +39,15 @@ func createLinker(
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder,
 	applicationBuilder ApplicationBuilder,
 	languageBuilder LanguageBuilder,
+	executableBuilder ExecutableBuilder,
 	programBuilder ProgramBuilder,
 	languageDefinitionBuilder LanguageDefinitionBuilder,
 	pathsBuilder PathsBuilder,
 	scriptBuilder ScriptBuilder,
+	testBuilder TestBuilder,
 	languageReferenceBuilder LanguageReferenceBuilder,
 	languageApplicationBuilder LanguageApplicationBuilder,
-	prevParser parsers.Parser,
+	parser parsers.Parser,
 	dirPath string,
 ) Linker {
 	out := linker{
@@ -51,22 +55,48 @@ func createLinker(
 		grammarRetrieverCriteriaBuilder: grammarRetrieverCriteriaBuilder,
 		applicationBuilder:              applicationBuilder,
 		languageBuilder:                 languageBuilder,
+		executableBuilder:               executableBuilder,
 		programBuilder:                  programBuilder,
 		languageDefinitionBuilder:       languageDefinitionBuilder,
 		pathsBuilder:                    pathsBuilder,
 		scriptBuilder:                   scriptBuilder,
+		testBuilder:                     testBuilder,
 		languageReferenceBuilder:        languageReferenceBuilder,
 		languageApplicationBuilder:      languageApplicationBuilder,
-		prevParser:                      prevParser,
+		parser:                          parser,
 		dirPath:                         dirPath,
-		currentPath:                     "",
+		currentPath:                     dirPath,
 	}
 
 	return &out
 }
 
 // Execute links a parsed program into a linked program
-func (app *linker) Execute(parsed parsers.Program) (Program, error) {
+func (app *linker) Execute(parsed parsers.Program) (Executable, error) {
+	program, err := app.parsedProgram(parsed)
+	if err != nil {
+		return nil, err
+	}
+
+	if program.IsLanguage() {
+		return nil, errors.New("the linked executable cannot be a language")
+	}
+
+	builder := app.executableBuilder.Create()
+	if program.IsApplication() {
+		app := program.Application()
+		builder.WithApplication(app)
+	}
+
+	if program.IsScript() {
+		script := program.Script()
+		builder.WithScript(script)
+	}
+
+	return builder.Now()
+}
+
+func (app *linker) parsedProgram(parsed parsers.Program) (Program, error) {
 	middleProgram, err := app.middleAdapter.ToProgram(parsed)
 	if err != nil {
 		return nil, err
@@ -96,7 +126,7 @@ func (app *linker) program(
 	// language:
 	if program.IsLanguage() {
 		language := program.Language()
-		app, err := app.language(language, app.prevParser)
+		app, err := app.language(language)
 		if err != nil {
 			return nil, err
 		}
@@ -107,7 +137,7 @@ func (app *linker) program(
 	// script:
 	if program.IsScript() {
 		script := program.Script()
-		app, err := app.script(script, app.prevParser)
+		app, err := app.script(script)
 		if err != nil {
 			return nil, err
 		}
@@ -143,10 +173,9 @@ func (app *linker) application(
 
 func (app *linker) script(
 	script scripts.Script,
-	prevParser parsers.Parser,
 ) (Script, error) {
 	relLangPath := script.LanguagePath()
-	langRef, err := app.fileLanguageReference(relLangPath, prevParser)
+	langRef, err := app.fileLanguageReference(relLangPath)
 	if err != nil {
 		return nil, err
 	}
@@ -168,22 +197,62 @@ func (app *linker) script(
 
 	name := script.Name()
 	version := script.Version()
-	return app.scriptBuilder.Create().
+	output := script.Output()
+	builder := app.scriptBuilder.Create().
 		WithLanguage(langRef).
 		WithName(name).
 		WithVersion(version).
 		WithCode(string(content)).
-		Now()
+		WithOutput(output)
+
+	if script.HasTests() {
+		tests := []Test{}
+		parsedTests := script.Tests().All()
+		for _, oneParsedTest := range parsedTests {
+			parsedPath := oneParsedTest.Path()
+			parsedProg, err := app.parser.ExecuteFile(parsedPath)
+			if err != nil {
+				return nil, err
+			}
+
+			if castedParsedProg, ok := parsedProg.(parsers.Program); ok {
+				prog, err := app.Execute(castedParsedProg)
+				if err != nil {
+					return nil, err
+				}
+
+				if !prog.IsScript() {
+					return nil, errors.New("the test was expected to be written in a script")
+				}
+
+				name := oneParsedTest.Name()
+				testScript := prog.Script()
+				test, err := app.testBuilder.Create().WithName(name).WithScript(testScript).Now()
+				if err != nil {
+					return nil, err
+				}
+
+				tests = append(tests, test)
+				continue
+			}
+
+			str := fmt.Sprintf("the test script (path: %s) is not a valid Program", parsedPath)
+			return nil, errors.New(str)
+		}
+
+		builder.WithTests(tests)
+	}
+
+	return builder.Now()
 }
 
 func (app *linker) language(
 	language languages.Language,
-	prevParser parsers.Parser,
 ) (Language, error) {
 	builder := app.languageBuilder.Create()
 	if language.IsDefinition() {
 		def := language.Definition()
-		langRef, err := app.languageReference(def, prevParser)
+		langRef, err := app.languageReference(def)
 		if err != nil {
 			return nil, err
 		}
@@ -193,7 +262,7 @@ func (app *linker) language(
 
 	if language.IsApplication() {
 		langApp := language.Application()
-		app, err := app.languageApplication(langApp, prevParser)
+		app, err := app.languageApplication(langApp)
 		if err != nil {
 			return nil, err
 		}
@@ -206,7 +275,6 @@ func (app *linker) language(
 
 func (app *linker) languageApplication(
 	langApp language_applications.Application,
-	prevParser parsers.Parser,
 ) (LanguageApplication, error) {
 	head := langApp.Head()
 	if head.HasImports() {
@@ -229,18 +297,17 @@ func (app *linker) languageApplication(
 
 func (app *linker) languageDefinition(
 	def definitions.Definition,
-	prevParser parsers.Parser,
 ) (LanguageDefinition, error) {
 	// parse the logic with the parser:
 	relLogicsPath := def.LogicsPath()
 	absLogicsPath := filepath.Join(app.currentPath, relLogicsPath)
-	parsedProgram, err := prevParser.ExecuteFile(absLogicsPath)
+	parsedProgram, err := app.parser.ExecuteFile(absLogicsPath)
 	if err != nil {
 		return nil, err
 	}
 
 	if castedParsedProgram, ok := parsedProgram.(parsers.Program); ok {
-		program, err := app.Execute(castedParsedProgram)
+		program, err := app.parsedProgram(castedParsedProgram)
 		if err != nil {
 			return nil, err
 		}
@@ -291,9 +358,8 @@ func (app *linker) languageDefinition(
 
 func (app *linker) languageReference(
 	def definitions.Definition,
-	prevParser parsers.Parser,
 ) (LanguageReference, error) {
-	langDef, err := app.languageDefinition(def, prevParser)
+	langDef, err := app.languageDefinition(def)
 	if err != nil {
 		return nil, err
 	}
@@ -304,7 +370,6 @@ func (app *linker) languageReference(
 
 func (app *linker) fileLanguageReference(
 	relLangPath string,
-	prevParser parsers.Parser,
 ) (LanguageReference, error) {
 	// parse the language with the parser:
 	absLangPath := filepath.Join(app.currentPath, relLangPath)
@@ -312,25 +377,25 @@ func (app *linker) fileLanguageReference(
 	// set the current path:
 	app.currentPath = filepath.Dir(absLangPath)
 
-	parsedProgram, err := prevParser.ExecuteFile(absLangPath)
+	parsedProgram, err := app.parser.ExecuteFile(absLangPath)
 	if err != nil {
 		return nil, err
 	}
 
 	if castedProgram, ok := parsedProgram.(parsers.Program); ok {
-		program, err := app.Execute(castedProgram)
+		program, err := app.parsedProgram(castedProgram)
 		if err != nil {
 			return nil, err
 		}
 
 		if !program.IsLanguage() {
-			str := fmt.Sprintf("the language file (%s) was expected to contain a Language Definition program", absLangPath)
+			str := fmt.Sprintf("the language file (%s) was expected to contain a Language Reference program", absLangPath)
 			return nil, errors.New(str)
 		}
 
 		language := program.Language()
-		if !language.IsApplication() {
-			str := fmt.Sprintf("the language file (%s) was expected to contain a Language Definition program", absLangPath)
+		if !language.IsReference() {
+			str := fmt.Sprintf("the language file (%s) was expected to contain a Language Reference program", absLangPath)
 			return nil, errors.New(str)
 		}
 
@@ -343,7 +408,6 @@ func (app *linker) fileLanguageReference(
 
 func (app *linker) buildGrammarRetrieverCriteria(
 	def definitions.Definition,
-	parser parsers.Parser,
 ) (grammar.RetrieverCriteria, error) {
 	root := def.Root()
 	tokensPath := def.TokensPath()

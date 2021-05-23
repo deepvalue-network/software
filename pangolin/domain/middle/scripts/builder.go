@@ -8,6 +8,7 @@ type builder struct {
 	lang    string
 	script  string
 	output  string
+	tests   Tests
 }
 
 func createBuilder() Builder {
@@ -17,6 +18,7 @@ func createBuilder() Builder {
 		lang:    "",
 		script:  "",
 		output:  "",
+		tests:   nil,
 	}
 
 	return &out
@@ -57,6 +59,12 @@ func (app *builder) WithOutput(output string) Builder {
 	return app
 }
 
+// WithTests add tests to the builder
+func (app *builder) WithTests(tests Tests) Builder {
+	app.tests = tests
+	return app
+}
+
 // Now builds  new script instance
 func (app *builder) Now() (Script, error) {
 	if app.name == "" {
@@ -77,6 +85,10 @@ func (app *builder) Now() (Script, error) {
 
 	if app.output == "" {
 		return nil, errors.New("the output is mandatory in order to build a Script instance")
+	}
+
+	if app.tests != nil {
+		return createScriptWithTests(app.name, app.version, app.lang, app.script, app.output, app.tests), nil
 	}
 
 	return createScript(app.name, app.version, app.lang, app.script, app.output), nil

@@ -16,7 +16,6 @@ import (
 )
 
 type composer struct {
-	linker                     linkers.Linker
 	instructionAdapterBuilder  InstructionAdapterBuilder
 	stackFrameBuilder          stackframes.Builder
 	programBuilder             parsers.ProgramBuilder
@@ -37,6 +36,7 @@ type composer struct {
 	testDeclarationBuilder     parsers.TestDeclarationBuilder
 	labelDeclarationBuilder    parsers.LabelDeclarationBuilder
 	stackFrame                 stackframes.StackFrame
+	linker                     linkers.Linker
 	localTestStackFrames       map[string]stackframes.StackFrame
 	localLabelStackFrames      map[string]stackframes.StackFrame
 	languageValues             []parsers.LanguageValue
@@ -48,7 +48,6 @@ type composer struct {
 }
 
 func createComposer(
-	linker linkers.Linker,
 	instructionAdapterBuilder InstructionAdapterBuilder,
 	stackFrameBuilder stackframes.Builder,
 	programBuilder parsers.ProgramBuilder,
@@ -69,9 +68,9 @@ func createComposer(
 	testDeclarationBuilder parsers.TestDeclarationBuilder,
 	labelDeclarationBuilder parsers.LabelDeclarationBuilder,
 	stackFrame stackframes.StackFrame,
+	linker linkers.Linker,
 ) Composer {
 	out := composer{
-		linker:                     linker,
 		instructionAdapterBuilder:  instructionAdapterBuilder,
 		stackFrameBuilder:          stackFrameBuilder,
 		programBuilder:             programBuilder,
@@ -92,6 +91,7 @@ func createComposer(
 		testDeclarationBuilder:     testDeclarationBuilder,
 		labelDeclarationBuilder:    labelDeclarationBuilder,
 		stackFrame:                 stackFrame,
+		linker:                     linker,
 		localTestStackFrames:       map[string]stackframes.StackFrame{},
 		localLabelStackFrames:      map[string]stackframes.StackFrame{},
 		languageValues:             []parsers.LanguageValue{},

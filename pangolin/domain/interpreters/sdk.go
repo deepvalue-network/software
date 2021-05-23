@@ -10,36 +10,42 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
-// NewScript creates a new script instance
-func NewScript(
-	parser parsers.Parser,
-	linker linkers.Linker,
-) Script {
+const delimiter = "\n++++++++++++++++++++++++++++++++++\n"
+const printTestStr = "Test: %s\n"
+
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	scriptBuilder := NewScriptBuilder()
 	application := NewApplication()
+	return createBuilder(scriptBuilder, application)
+}
+
+// NewScriptBuilder creates a new script builder
+func NewScriptBuilder() ScriptBuilder {
 	computableBuilder := computable.NewBuilder()
 	programBuilder := linkers.NewProgramBuilder()
-	languageBuilder := linkers.NewLanguageBuilder()
-	return createScript(
-		application,
+	linkerLnguageBuilder := linkers.NewLanguageBuilder()
+	languageBuilder := NewLanguageBuilder()
+	application := NewApplication()
+	return createScriptBuilder(
 		computableBuilder,
 		programBuilder,
+		linkerLnguageBuilder,
 		languageBuilder,
-		linker,
+		application,
 	)
 }
 
-// NewLanguage creates a new language instance
-func NewLanguage(
-	linker linkers.Linker,
-	lexerAdapterBuilder lexers.AdapterBuilder,
-	events []lexers.Event,
-) Language {
-	composerBuilder := composers.NewBuilder(linker)
+// NewLanguageBuilder creates a new language builder
+func NewLanguageBuilder() LanguageBuilder {
+	lexerAdapterBuilder := lexers.NewAdapterBuilder()
+	composerBuilder := composers.NewBuilder()
 	machineStateFactory := machines.NewLanguageStateFactory()
 	stackFrameBuilder := stackframes.NewBuilder()
-	machineLangTestInsBuilder := machines.NewLanguageTestInstructionBuilder(lexerAdapterBuilder, events)
-	machineLangInsBuilder := machines.NewLanguageInstructionBuilder(lexerAdapterBuilder, events)
-	return createLanguage(
+	machineLangTestInsBuilder := machines.NewLanguageTestInstructionBuilder(lexerAdapterBuilder)
+	machineLangInsBuilder := machines.NewLanguageInstructionBuilder(lexerAdapterBuilder)
+	return createLanguageBuilder(
+		lexerAdapterBuilder,
 		composerBuilder,
 		machineStateFactory,
 		stackFrameBuilder,
@@ -56,21 +62,52 @@ func NewApplication() Application {
 	return createApplication(insMachineBuilder, testInsMachineBuilder, stackFrameBuilder)
 }
 
+// Builder represents an interpreter builder
+type Builder interface {
+	Create() Builder
+	WithParser(parser parsers.Parser) Builder
+	WithLinker(linker linkers.Linker) Builder
+	WithEvents(events []lexers.Event) Builder
+	Now() (Interpreter, error)
+}
+
+// Interpreter represents an interpreter
+type Interpreter interface {
+	Execute(excutable linkers.Executable, input map[string]computable.Value) (stackframes.StackFrame, error)
+	Tests(excutable linkers.Executable) error
+}
+
+// ScriptBuilder represents a script builder
+type ScriptBuilder interface {
+	Create() ScriptBuilder
+	WithParser(parser parsers.Parser) ScriptBuilder
+	WithLinker(linker linkers.Linker) ScriptBuilder
+	WithEvents(events []lexers.Event) ScriptBuilder
+	Now() (Script, error)
+}
+
 // Script represents a script interpreter
 type Script interface {
 	Execute(script linkers.Script) (linkers.Application, error)
+	Tests(script linkers.Script) error
+}
+
+// LanguageBuilder represents a language builder
+type LanguageBuilder interface {
+	Create() LanguageBuilder
+	WithLinker(linker linkers.Linker) LanguageBuilder
+	WithEvents(events []lexers.Event) LanguageBuilder
+	Now() (Language, error)
 }
 
 // Language represents a language interpreter
 type Language interface {
 	Execute(linkedLangDef linkers.LanguageDefinition, input map[string]computable.Value) (linkers.Application, error)
-	TestsAll(linkedLangDef linkers.LanguageDefinition) error
-	TestByNames(linkedLangDef linkers.LanguageDefinition, names []string) error
+	Tests(linkedLangDef linkers.LanguageDefinition) error
 }
 
 // Application represents an application interpreter
 type Application interface {
 	Execute(linkedApp linkers.Application, input map[string]computable.Value) (stackframes.StackFrame, error)
-	TestsAll(linkedApp linkers.Application) error
-	TestByNames(linkedApp linkers.Application, names []string) error
+	Tests(linkedApp linkers.Application) error
 }

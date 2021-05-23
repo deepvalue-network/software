@@ -51,26 +51,14 @@ func (app *application) Execute(linkedApp linkers.Application, input map[string]
 	return stackFrame, nil
 }
 
-// TestsAll executes all tests
-func (app *application) TestsAll(linkedApp linkers.Application) error {
-	names := []string{}
+// Tests execute tests
+func (app *application) Tests(linkedApp linkers.Application) error {
 	tests := linkedApp.Tests().All()
-	for _, oneTest := range tests {
-		name := oneTest.Name()
-		names = append(names, name)
-	}
-
-	return app.TestByNames(linkedApp, names)
-}
-
-// TestByNames executes tests by names
-func (app *application) TestByNames(linkedApp linkers.Application, names []string) error {
-	fmt.Printf("\n++++++++++++++++++++++++++++++++++\n")
-	fmt.Printf("Executing %d language tests...\n", len(names))
-	fmt.Printf("++++++++++++++++++++++++++++++++++\n")
+	fmt.Printf(delimiter)
+	fmt.Printf("Executing %d application tests...\n", len(tests))
+	fmt.Printf(delimiter)
 
 	baseDir := "./"
-	tests := linkedApp.Tests().All()
 	labels := linkedApp.Labels()
 	for _, oneTest := range tests {
 		stackframe := app.stackFrameBuilder.Create().Now()
@@ -85,8 +73,8 @@ func (app *application) TestByNames(linkedApp linkers.Application, names []strin
 		}
 
 		name := oneTest.Name()
-		fmt.Printf("\n-----------------------------------\n")
-		fmt.Printf("Test: %s\n", name)
+		fmt.Printf(delimiter)
+		fmt.Printf(printTestStr, name)
 		testInstructions := oneTest.Instructions().All()
 		for index, oneTestInstruction := range testInstructions {
 			// if the machine is stopped, stop:
@@ -105,7 +93,7 @@ func (app *application) TestByNames(linkedApp linkers.Application, names []strin
 			}
 		}
 
-		fmt.Printf("-----------------------------------\n")
+		fmt.Printf(delimiter)
 	}
 
 	return nil

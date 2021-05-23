@@ -7,6 +7,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/composers"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/machines"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 )
@@ -17,6 +18,8 @@ type language struct {
 	stackFrameBuilder         stackframes.Builder
 	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder
 	machineLangInsBuilder     machines.LanguageInstructionBuilder
+	linker                    linkers.Linker
+	events                    []lexers.Event
 }
 
 func createLanguage(
@@ -25,6 +28,8 @@ func createLanguage(
 	stackFrameBuilder stackframes.Builder,
 	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder,
 	machineLangInsBuilder machines.LanguageInstructionBuilder,
+	linker linkers.Linker,
+	events []lexers.Event,
 ) Language {
 	out := language{
 		composerBuilder:           composerBuilder,
@@ -32,6 +37,8 @@ func createLanguage(
 		stackFrameBuilder:         stackFrameBuilder,
 		machineLangTestInsBuilder: machineLangTestInsBuilder,
 		machineLangInsBuilder:     machineLangInsBuilder,
+		linker:                    linker,
+		events:                    events,
 	}
 
 	return &out
@@ -40,7 +47,7 @@ func createLanguage(
 // Execute executes a language application
 func (app *language) Execute(linkedLangDef linkers.LanguageDefinition, input map[string]computable.Value) (linkers.Application, error) {
 	stackFrame := app.stackFrameBuilder.Create().WithVariables(input).Now()
-	composer, err := app.composerBuilder.Create().WithStackFrame(stackFrame).Now()
+	composer, err := app.composerBuilder.Create().WithStackFrame(stackFrame).WithLinker(app.linker).Now()
 	if err != nil {
 		return nil, err
 	}
@@ -62,32 +69,26 @@ func (app *language) Execute(linkedLangDef linkers.LanguageDefinition, input map
 	return composer.Now()
 }
 
-//TestsAll executes all tests
-func (app *language) TestsAll(linkedLangDef linkers.LanguageDefinition) error {
-	names := []string{}
-	tests := linkedLangDef.Application().Tests().All()
-	for _, oneTest := range tests {
-		name := oneTest.Name()
-		names = append(names, name)
-	}
-
-	return app.TestByNames(linkedLangDef, names)
-}
-
-// TestByNames executes the tests of an application in the interpreter
-func (app *language) TestByNames(linkedLangDef linkers.LanguageDefinition, names []string) error {
-	fmt.Printf("\n++++++++++++++++++++++++++++++++++\n")
-	fmt.Printf("Executing %d language tests...\n", len(names))
-	fmt.Printf("++++++++++++++++++++++++++++++++++\n")
-
+//Tests executes tests
+func (app *language) Tests(linkedLangDef linkers.LanguageDefinition) error {
 	langApp := linkedLangDef.Application()
 	tests := langApp.Tests().All()
+	fmt.Printf(delimiter)
+	fmt.Printf("Executing %d language tests...\n", len(tests))
+	fmt.Printf(delimiter)
+
 	for _, oneTest := range tests {
 		languageState := app.machineStateFactory.Create()
-		stackframe := app.stackFrameBuilder.Create().Now()
+		stackFrame := app.stackFrameBuilder.Create().Now()
+		composer, err := app.composerBuilder.Create().WithStackFrame(stackFrame).WithLinker(app.linker).Now()
+		if err != nil {
+			return err
+		}
+
 		testInsMachine, err := app.machineLangTestInsBuilder.Create().
+			WithComposer(composer).
 			WithLanguage(linkedLangDef).
-			WithStackFrame(stackframe).
+			WithStackFrame(stackFrame).
 			WithState(languageState).
 			Now()
 
@@ -96,12 +97,12 @@ func (app *language) TestByNames(linkedLangDef linkers.LanguageDefinition, names
 		}
 
 		name := oneTest.Name()
-		fmt.Printf("\n-----------------------------------\n")
-		fmt.Printf("Test: %s\n", name)
+		fmt.Printf(delimiter)
+		fmt.Printf(printTestStr, name)
 		testInstructions := oneTest.Instructions().All()
 		for index, oneTestInstruction := range testInstructions {
 			// if the machine is stopped, stop:
-			if stackframe.Current().IsStopped() {
+			if stackFrame.Current().IsStopped() {
 				return nil
 			}
 
@@ -116,7 +117,7 @@ func (app *language) TestByNames(linkedLangDef linkers.LanguageDefinition, names
 			}
 		}
 
-		fmt.Printf("-----------------------------------\n")
+		fmt.Printf(delimiter)
 	}
 
 	return nil

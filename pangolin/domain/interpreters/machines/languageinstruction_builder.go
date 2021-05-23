@@ -5,6 +5,7 @@ import (
 
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/composers"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
+	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
 	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
@@ -21,6 +22,7 @@ type languageInstructionBuilder struct {
 	langDef                linkers.LanguageDefinition
 	stackFrame             stackframes.StackFrame
 	state                  LanguageState
+	events                 []lexers.Event
 }
 
 func createLanguageInstructionBuilder(
@@ -40,6 +42,7 @@ func createLanguageInstructionBuilder(
 		langDef:                nil,
 		stackFrame:             nil,
 		state:                  nil,
+		events:                 nil,
 	}
 
 	return &out
@@ -80,6 +83,12 @@ func (app *languageInstructionBuilder) WithState(state LanguageState) LanguageIn
 	return app
 }
 
+// WithEvents add events to the builder
+func (app *languageInstructionBuilder) WithEvents(events []lexers.Event) LanguageInstructionBuilder {
+	app.events = events
+	return app
+}
+
 // Now builds a new LanguageInstruction instance
 func (app *languageInstructionBuilder) Now() (LanguageInstruction, error) {
 	if app.composerApp == nil {
@@ -98,8 +107,9 @@ func (app *languageInstructionBuilder) Now() (LanguageInstruction, error) {
 		return nil, errors.New("the state is mandatory in order to build a LanguageInstruction instance")
 	}
 
+	var languageIns LanguageInstruction
 	labels := app.langDef.Application().Labels()
-	fn, err := fromLanguageLabelsToCallLabelByNameFunc(app.stackFrame, labels)
+	fn, err := fromLanguageLabelsToCallLabelByNameFunc(languageIns, app.stackFrame, labels)
 	if err != nil {
 		return nil, err
 	}
@@ -109,12 +119,19 @@ func (app *languageInstructionBuilder) Now() (LanguageInstruction, error) {
 		return nil, err
 	}
 
-	langCommonIns, err := app.langCommonInsBuilder.Create().WithCallLabelFn(fn).WithLanguage(app.langDef).Now()
+	langCommonIns, err := app.langCommonInsBuilder.Create().
+		WithCallLabelFn(fn).
+		WithLanguage(app.langDef).
+		WithStackFrame(app.stackFrame).
+		WithState(app.state).
+		WithEvents(app.events).
+		Now()
+
 	if err != nil {
 		return nil, err
 	}
 
-	return createLanguageInstruction(
+	languageIns = createLanguageInstruction(
 		app.variableBuilder,
 		app.valueBuilder,
 		app.computableValueBuilder,
@@ -123,5 +140,7 @@ func (app *languageInstructionBuilder) Now() (LanguageInstruction, error) {
 		app.stackFrame,
 		app.state,
 		app.composerApp,
-	), nil
+	)
+
+	return languageIns, nil
 }

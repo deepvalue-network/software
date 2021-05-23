@@ -13,6 +13,9 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
+// ParseFileFn parses a path and returns the parsed program
+type ParseFileFn func(filePath string) (parsers.Program, error)
+
 const scriptName = "default"
 
 // NewBuilder creates a new builder instance
@@ -21,10 +24,12 @@ func NewBuilder() Builder {
 	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
 	applicationBuilder := NewApplicationBuilder()
 	languageBuilder := NewLanguageBuilder()
+	executableBuilder := NewExecutableBuilder()
 	programBuilder := NewProgramBuilder()
 	languageDefinitionBuilder := NewLanguageDefinitionBuilder()
 	pathsBuilder := NewPathsBuilder()
 	scriptBuilder := NewScriptBuilder()
+	testBuilder := NewTestBuilder()
 	languageReferenceBuilder := NewLanguageReferenceBuilder()
 	languageApplicationBuilder := NewLanguageApplicationBuilder()
 	return createBuilder(
@@ -32,13 +37,20 @@ func NewBuilder() Builder {
 		grammarRetrieverCriteriaBuilder,
 		applicationBuilder,
 		languageBuilder,
+		executableBuilder,
 		programBuilder,
 		languageDefinitionBuilder,
 		pathsBuilder,
 		scriptBuilder,
+		testBuilder,
 		languageReferenceBuilder,
 		languageApplicationBuilder,
 	)
+}
+
+// NewExecutableBuilder creates a new executable builder
+func NewExecutableBuilder() ExecutableBuilder {
+	return createExecutableBuilder()
 }
 
 // NewProgramBuilder creates a new program builder instance
@@ -66,6 +78,11 @@ func NewScriptBuilder() ScriptBuilder {
 	return createScriptBuilder()
 }
 
+// NewTestBuilder creates a new test buildeer instance
+func NewTestBuilder() TestBuilder {
+	return createTestBuilder()
+}
+
 // NewLanguageReferenceBuilder creates a new language reference builder
 func NewLanguageReferenceBuilder() LanguageReferenceBuilder {
 	return createLanguageReferenceBuilder()
@@ -89,14 +106,30 @@ func NewPathsBuilder() PathsBuilder {
 // Builder represents a linker builder
 type Builder interface {
 	Create() Builder
-	WithPreviousParser(prevParser parsers.Parser) Builder
+	WithParser(parser parsers.Parser) Builder
 	WithDirPath(dirPath string) Builder
 	Now() (Linker, error)
 }
 
 // Linker represents a linker application
 type Linker interface {
-	Execute(parsed parsers.Program) (Program, error)
+	Execute(parsed parsers.Program) (Executable, error)
+}
+
+// ExecutableBuilder represents an executable builder
+type ExecutableBuilder interface {
+	Create() ExecutableBuilder
+	WithApplication(app Application) ExecutableBuilder
+	WithScript(script Script) ExecutableBuilder
+	Now() (Executable, error)
+}
+
+// Executable represents an executable
+type Executable interface {
+	IsApplication() bool
+	Application() Application
+	IsScript() bool
+	Script() Script
 }
 
 // ProgramBuilder represents a program builder
@@ -184,6 +217,7 @@ type ScriptBuilder interface {
 	WithVersion(version string) ScriptBuilder
 	WithCode(code string) ScriptBuilder
 	WithOutput(output string) ScriptBuilder
+	WithTests(tests []Test) ScriptBuilder
 	Now() (Script, error)
 }
 
@@ -194,6 +228,22 @@ type Script interface {
 	Version() string
 	Code() string
 	Output() string
+	HasTests() bool
+	Tests() []Test
+}
+
+// TestBuilder represents a test builder
+type TestBuilder interface {
+	Create() TestBuilder
+	WithName(name string) TestBuilder
+	WithScript(script Script) TestBuilder
+	Now() (Test, error)
+}
+
+// Test represents a script test
+type Test interface {
+	Name() string
+	Script() Script
 }
 
 // LanguageReferenceBuilder represents a language reference builder

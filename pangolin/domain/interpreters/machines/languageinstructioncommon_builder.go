@@ -12,7 +12,6 @@ import (
 )
 
 type languageInstructionCommonBuilder struct {
-	events                          []lexers.Event
 	insAppBuilder                   InstructionBuilder
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder
 	lexerParserApplication          lexer_parser.Application
@@ -22,10 +21,10 @@ type languageInstructionCommonBuilder struct {
 	stackFrame                      stackframes.StackFrame
 	state                           LanguageState
 	labelFn                         CallLabelByNameFn
+	events                          []lexers.Event
 }
 
 func createLanguageInstructionCommonBuilder(
-	events []lexers.Event,
 	insAppBuilder InstructionBuilder,
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder,
 	lexerParserApplication lexer_parser.Application,
@@ -33,7 +32,6 @@ func createLanguageInstructionCommonBuilder(
 	lexerAdapterBuilder lexers.AdapterBuilder,
 ) LanguageInstructionCommonBuilder {
 	out := languageInstructionCommonBuilder{
-		events:                          events,
 		insAppBuilder:                   insAppBuilder,
 		grammarRetrieverCriteriaBuilder: grammarRetrieverCriteriaBuilder,
 		lexerParserApplication:          lexerParserApplication,
@@ -43,6 +41,7 @@ func createLanguageInstructionCommonBuilder(
 		stackFrame:                      nil,
 		state:                           nil,
 		labelFn:                         nil,
+		events:                          nil,
 	}
 
 	return &out
@@ -51,7 +50,6 @@ func createLanguageInstructionCommonBuilder(
 // Create initializes the builder
 func (app *languageInstructionCommonBuilder) Create() LanguageInstructionCommonBuilder {
 	return createLanguageInstructionCommonBuilder(
-		app.events,
 		app.insAppBuilder,
 		app.grammarRetrieverCriteriaBuilder,
 		app.lexerParserApplication,
@@ -81,6 +79,12 @@ func (app *languageInstructionCommonBuilder) WithStackFrame(stackFrame stackfram
 // WithState adds a state to the builder
 func (app *languageInstructionCommonBuilder) WithState(state LanguageState) LanguageInstructionCommonBuilder {
 	app.state = state
+	return app
+}
+
+// WithEvents add events to the builder
+func (app *languageInstructionCommonBuilder) WithEvents(events []lexers.Event) LanguageInstructionCommonBuilder {
+	app.events = events
 	return app
 }
 

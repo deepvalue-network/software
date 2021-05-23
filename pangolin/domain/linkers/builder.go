@@ -13,13 +13,15 @@ type builder struct {
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder
 	applicationBuilder              ApplicationBuilder
 	languageBuilder                 LanguageBuilder
+	executableBuilder               ExecutableBuilder
 	programBuilder                  ProgramBuilder
 	languageDefinitionBuilder       LanguageDefinitionBuilder
 	pathsBuilder                    PathsBuilder
 	scriptBuilder                   ScriptBuilder
+	testBuilder                     TestBuilder
 	languageReferenceBuilder        LanguageReferenceBuilder
 	languageApplicationBuilder      LanguageApplicationBuilder
-	prevParser                      parsers.Parser
+	parser                          parsers.Parser
 	dirPath                         string
 }
 
@@ -28,25 +30,29 @@ func createBuilder(
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder,
 	applicationBuilder ApplicationBuilder,
 	languageBuilder LanguageBuilder,
+	executableBuilder ExecutableBuilder,
 	programBuilder ProgramBuilder,
 	languageDefinitionBuilder LanguageDefinitionBuilder,
 	pathsBuilder PathsBuilder,
 	scriptBuilder ScriptBuilder,
+	testBuilder TestBuilder,
 	languageReferenceBuilder LanguageReferenceBuilder,
 	languageApplicationBuilder LanguageApplicationBuilder,
 ) Builder {
 	out := builder{
-		middleAdapter:                   nil,
-		grammarRetrieverCriteriaBuilder: nil,
-		applicationBuilder:              nil,
-		languageBuilder:                 nil,
-		programBuilder:                  nil,
-		languageDefinitionBuilder:       nil,
-		pathsBuilder:                    nil,
-		scriptBuilder:                   nil,
-		languageReferenceBuilder:        nil,
-		languageApplicationBuilder:      nil,
-		prevParser:                      nil,
+		middleAdapter:                   middleAdapter,
+		grammarRetrieverCriteriaBuilder: grammarRetrieverCriteriaBuilder,
+		applicationBuilder:              applicationBuilder,
+		languageBuilder:                 languageBuilder,
+		executableBuilder:               executableBuilder,
+		programBuilder:                  programBuilder,
+		languageDefinitionBuilder:       languageDefinitionBuilder,
+		pathsBuilder:                    pathsBuilder,
+		scriptBuilder:                   scriptBuilder,
+		testBuilder:                     testBuilder,
+		languageReferenceBuilder:        languageReferenceBuilder,
+		languageApplicationBuilder:      languageApplicationBuilder,
+		parser:                          nil,
 		dirPath:                         "",
 	}
 
@@ -60,18 +66,20 @@ func (app *builder) Create() Builder {
 		app.grammarRetrieverCriteriaBuilder,
 		app.applicationBuilder,
 		app.languageBuilder,
+		app.executableBuilder,
 		app.programBuilder,
 		app.languageDefinitionBuilder,
 		app.pathsBuilder,
 		app.scriptBuilder,
+		app.testBuilder,
 		app.languageReferenceBuilder,
 		app.languageApplicationBuilder,
 	)
 }
 
-// WithPreviousParser adds a previous parser to the builder
-func (app *builder) WithPreviousParser(prevParser parsers.Parser) Builder {
-	app.prevParser = prevParser
+// WithParser adds a parser to the builder
+func (app *builder) WithParser(parser parsers.Parser) Builder {
+	app.parser = parser
 	return app
 }
 
@@ -83,8 +91,8 @@ func (app *builder) WithDirPath(dirPath string) Builder {
 
 // Now builds a new Linker instance
 func (app *builder) Now() (Linker, error) {
-	if app.prevParser == nil {
-		return nil, errors.New("the previous parser is mandatory in order to build a Linker instance")
+	if app.parser == nil {
+		return nil, errors.New("the parser is mandatory in order to build a Linker instance")
 	}
 
 	if app.dirPath == "" {
@@ -96,13 +104,15 @@ func (app *builder) Now() (Linker, error) {
 		app.grammarRetrieverCriteriaBuilder,
 		app.applicationBuilder,
 		app.languageBuilder,
+		app.executableBuilder,
 		app.programBuilder,
 		app.languageDefinitionBuilder,
 		app.pathsBuilder,
 		app.scriptBuilder,
+		app.testBuilder,
 		app.languageReferenceBuilder,
 		app.languageApplicationBuilder,
-		app.prevParser,
+		app.parser,
 		app.dirPath,
 	), nil
 }

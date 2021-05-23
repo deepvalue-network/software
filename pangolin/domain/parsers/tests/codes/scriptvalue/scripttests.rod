@@ -1,0 +1,4 @@
+tests:
+    firstTest: "./../myDir/myFirstTest.rod",
+    secondTest: "./../myDir/mySecondTest.rod"
+.

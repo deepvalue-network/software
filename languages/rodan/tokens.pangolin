@@ -1,10 +1,5 @@
 program
-    : printCommand
-    | assignment
-    ;
-
-printCommand
-    : CMD_PRINT assignable
+    : assignment
     ;
 
 assignment

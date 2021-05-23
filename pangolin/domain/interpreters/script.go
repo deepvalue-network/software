@@ -10,26 +10,31 @@ import (
 )
 
 type script struct {
-	application       Application
 	computableBuilder computable.Builder
-	parser            parsers.Parser
 	programBuilder    linkers.ProgramBuilder
 	languageBuilder   linkers.LanguageBuilder
+	application       Application
+	language          Language
+	parser            parsers.Parser
 	linker            linkers.Linker
 }
 
 func createScript(
-	application Application,
 	computableBuilder computable.Builder,
 	programBuilder linkers.ProgramBuilder,
 	languageBuilder linkers.LanguageBuilder,
+	application Application,
+	language Language,
+	parser parsers.Parser,
 	linker linkers.Linker,
 ) Script {
 	out := script{
-		application:       application,
 		computableBuilder: computableBuilder,
 		programBuilder:    programBuilder,
 		languageBuilder:   languageBuilder,
+		application:       application,
+		language:          language,
+		parser:            parser,
 		linker:            linker,
 	}
 
@@ -91,17 +96,60 @@ func (app *script) Execute(script linkers.Script) (linkers.Application, error) {
 	}
 
 	if parsedProgram, ok := programIns.(parsers.Program); ok {
-		linkedProg, err := app.linker.Execute(parsedProgram)
+		linkedExec, err := app.linker.Execute(parsedProgram)
 		if err != nil {
 			return nil, err
 		}
 
-		if linkedProg.IsApplication() {
-			return nil, errors.New("the linked program was expected to contain an application instance")
+		if linkedExec.IsApplication() {
+			return nil, errors.New("the linked executable was expected to contain an application instance")
 		}
 
-		return linkedProg.Application(), nil
+		return linkedExec.Application(), nil
 	}
 
 	return nil, errors.New("the parsed compiled output was expected to contain a parsers.Program instance")
+}
+
+// Tests execute the script tests
+func (app *script) Tests(script linkers.Script) error {
+	// execute the language tests first:
+	langDef := script.Language().Definition()
+	err := app.language.Tests(langDef)
+	if err != nil {
+		return err
+	}
+
+	// if there is no tests, return successfully:
+	if !script.HasTests() {
+		return nil
+	}
+
+	// execute the script tests:
+	tests := script.Tests()
+	fmt.Printf(delimiter)
+	fmt.Printf("Executing %d script tests...\n", len(tests))
+	fmt.Printf(delimiter)
+	for index, oneTest := range tests {
+		name := oneTest.Name()
+		script := oneTest.Script()
+
+		fmt.Printf(delimiter)
+		fmt.Printf(printTestStr, name)
+		linkedApp, err := app.Execute(script)
+		if err != nil {
+			str := fmt.Sprintf("error while linking script to application... index: %d, error: %s", index, err.Error())
+			return errors.New(str)
+		}
+
+		_, err = app.application.Execute(linkedApp, map[string]computable.Value{})
+		if err != nil {
+			str := fmt.Sprintf("error while executing script application... index: %d, error: %s", index, err.Error())
+			return errors.New(str)
+		}
+	}
+
+	fmt.Printf(delimiter)
+
+	return nil
 }

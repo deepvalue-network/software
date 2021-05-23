@@ -43,6 +43,8 @@ type parser struct {
 	languageValueBuilder             LanguageValueBuilder
 	scriptBuilder                    ScriptBuilder
 	scriptValueBuilder               ScriptValueBuilder
+	scriptTestsBuilder               ScriptTestsBuilder
+	scriptTestBuilder                ScriptTestBuilder
 	patternMatchBuilder              PatternMatchBuilder
 	patternLabelsBuilder             PatternLabelsBuilder
 	relativePathsBuilder             RelativePathsBuilder
@@ -119,6 +121,8 @@ type parser struct {
 	targetPath                       map[string]RelativePath
 	script                           map[string]Script
 	scriptValue                      map[string]ScriptValue
+	scriptTests                      map[string]ScriptTests
+	scriptTest                       map[string]ScriptTest
 	patternMatch                     map[string]PatternMatch
 	patternLabels                    map[string]PatternLabels
 	patternLabelEnter                map[string]string
@@ -212,6 +216,8 @@ func createParser(
 	languageValueBuilder LanguageValueBuilder,
 	scriptBuilder ScriptBuilder,
 	scriptValueBuilder ScriptValueBuilder,
+	scriptTestsBuilder ScriptTestsBuilder,
+	scriptTestBuilder ScriptTestBuilder,
 	patternMatchBuilder PatternMatchBuilder,
 	patternLabelsBuilder PatternLabelsBuilder,
 	relativePathsBuilder RelativePathsBuilder,
@@ -293,6 +299,8 @@ func createParser(
 		languageValueBuilder:             languageValueBuilder,
 		scriptBuilder:                    scriptBuilder,
 		scriptValueBuilder:               scriptValueBuilder,
+		scriptTestsBuilder:               scriptTestsBuilder,
+		scriptTestBuilder:                scriptTestBuilder,
 		patternMatchBuilder:              patternMatchBuilder,
 		patternLabelsBuilder:             patternLabelsBuilder,
 		relativePathsBuilder:             relativePathsBuilder,
@@ -464,6 +472,18 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 		lparser.ToEventsParams{
 			Token:  "scriptValue",
 			OnExit: app.exitScriptValue,
+		},
+		lparser.ToEventsParams{
+			Token:  "scriptTests",
+			OnExit: app.exitScriptTests,
+		},
+		lparser.ToEventsParams{
+			Token:  "scriptTestWithComma",
+			OnExit: app.exitScriptTestWithComma,
+		},
+		lparser.ToEventsParams{
+			Token:  "scriptTest",
+			OnExit: app.exitScriptTest,
 		},
 		lparser.ToEventsParams{
 			Token:  "patternMatch",
@@ -731,6 +751,10 @@ func (app *parser) ExecuteFile(filePath string) (interface{}, error) {
 
 // ExecuteScript executes the parser on a script
 func (app *parser) ExecuteScript(script string) (interface{}, error) {
+	if app.lexerAdapter == nil {
+		return nil, errors.New("the Lexer lexerAdapter must be set in order to use the ExecuteScript method")
+	}
+
 	lexer, err := app.lexerAdapter.ToLexer(string(script))
 	if err != nil {
 		return nil, err
@@ -769,6 +793,8 @@ func (app *parser) init() {
 	app.targetPath = map[string]RelativePath{}
 	app.script = map[string]Script{}
 	app.scriptValue = map[string]ScriptValue{}
+	app.scriptTest = map[string]ScriptTest{}
+	app.scriptTests = map[string]ScriptTests{}
 	app.patternMatch = map[string]PatternMatch{}
 	app.patternLabels = map[string]PatternLabels{}
 	app.patternLabelEnter = map[string]string{}
@@ -1677,6 +1703,7 @@ func (app *parser) exitScriptValue(tree lexers.NodeTree) (interface{}, error) {
 		"SCRIPT_SCRIPT",
 		"SCRIPT_LANGUAGE",
 		"SCRIPT_OUTPUT",
+		"SCRIPT_TESTS",
 	})
 
 	switch section {
@@ -1696,15 +1723,24 @@ func (app *parser) exitScriptValue(tree lexers.NodeTree) (interface{}, error) {
 		pathCode := tree.CodeFromName("relativePath")
 		if filePath, ok := app.relativePath[pathCode]; ok {
 			builder.WithScriptPath(filePath)
+			break
 		}
 	case "SCRIPT_LANGUAGE":
 		pathCode := tree.CodeFromName("relativePath")
 		if filePath, ok := app.relativePath[pathCode]; ok {
 			builder.WithLanguagePath(filePath)
+			break
 		}
 	case "SCRIPT_OUTPUT":
 		variableName := tree.CodeFromName("VARIABLE_PATTERN")
 		builder.WithOutput(variableName)
+		break
+	case "SCRIPT_TESTS":
+		scriptTestsCode := tree.CodeFromName("scriptTests")
+		if scriptTest, ok := app.scriptTests[scriptTestsCode]; ok {
+			builder.WithScriptTests(scriptTest)
+			break
+		}
 	}
 
 	ins, err := builder.Now()
@@ -1713,6 +1749,67 @@ func (app *parser) exitScriptValue(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.scriptValue[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitScriptTests(tree lexers.NodeTree) (interface{}, error) {
+	list := []ScriptTest{}
+	code := tree.CodeFromName("scriptTest")
+	if script, ok := app.scriptTest[code]; ok {
+		list = append(list, script)
+	}
+
+	codes := tree.CodesFromName("scriptTestWithComma")
+	for _, oneCode := range codes {
+		if script, ok := app.scriptTest[oneCode]; ok {
+			list = append(list, script)
+		}
+	}
+
+	builder := app.scriptTestsBuilder.Create()
+	if len(list) > 0 {
+		builder.WithTests(list)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.scriptTests[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitScriptTestWithComma(tree lexers.NodeTree) (interface{}, error) {
+	code := tree.CodeFromName("scriptTest")
+	if code != "" {
+		if test, ok := app.scriptTest[code]; ok {
+			app.scriptTest[tree.Code()] = test
+			return test, nil
+		}
+	}
+
+	return nil, errors.New("the scriptTest cannot be found")
+}
+
+func (app *parser) exitScriptTest(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.scriptTestBuilder.Create()
+	name := tree.CodeFromName("TEST_NAME_PATTERN")
+	if name != "" {
+		builder.WithName(name)
+	}
+
+	pathCode := tree.CodeFromName("relativePath")
+	if path, ok := app.relativePath[pathCode]; ok {
+		builder.WithPath(path)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.scriptTest[tree.Code()] = ins
 	return ins, nil
 }
 

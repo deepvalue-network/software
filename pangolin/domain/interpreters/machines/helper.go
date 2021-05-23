@@ -38,8 +38,7 @@ func fromLabelsToCallLabelByNameFunc(stackframe stackframes.StackFrame, labels l
 	return fn, nil
 }
 
-func fromLanguageLabelsToCallLabelByNameFunc(stackframe stackframes.StackFrame, labels language_labels.Labels) (CallLabelByNameFn, error) {
-	var insMachine LanguageInstruction
+func fromLanguageLabelsToCallLabelByNameFunc(insMachine LanguageInstruction, stackframe stackframes.StackFrame, labels language_labels.Labels) (CallLabelByNameFn, error) {
 	fn := func(name string) error {
 		lbl, err := labels.Fetch(name)
 		if err != nil {
@@ -61,11 +60,5 @@ func fromLanguageLabelsToCallLabelByNameFunc(stackframe stackframes.StackFrame, 
 		return nil
 	}
 
-	/*machine, err := NewLanguageInstructionBuilder().Create().WithCallLabelFn(fn).WithStackFrame(stackframe).Now()
-	if err != nil {
-		return nil, err
-	}
-
-	insMachine = machine*/
 	return fn, nil
 }

@@ -1,6 +1,11 @@
 package labels
 
-import "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label"
+import (
+	"errors"
+	"fmt"
+
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label"
+)
 
 type labels struct {
 	mp   map[string]label.Label
@@ -26,5 +31,10 @@ func (obj *labels) All() []label.Label {
 
 // Fetch fetches a label by name
 func (obj *labels) Fetch(name string) (label.Label, error) {
-	return nil, nil
+	if lbl, ok := obj.mp[name]; ok {
+		return lbl, nil
+	}
+
+	str := fmt.Sprintf("the label (name: %s) is not defined", name)
+	return nil, errors.New(str)
 }

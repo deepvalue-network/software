@@ -25,25 +25,25 @@ type CallLabelByNameFn func(name string) error
 // NewLanguageTestInstructionBuilder creates a language test instruction builder
 func NewLanguageTestInstructionBuilder(
 	lexerAdapterBuilder lexers.AdapterBuilder,
-	events []lexers.Event,
 ) LanguageTestInstructionBuilder {
-	langCommonInsBuilder := NewLanguageInstructionCommonBuilder(lexerAdapterBuilder, events)
+	langCommonInsBuilder := NewLanguageInstructionCommonBuilder(lexerAdapterBuilder)
 	testInsAppBuilder := NewTestInstructionBuilder()
+	langInsBuilder := NewLanguageInstructionBuilder(lexerAdapterBuilder)
 	return createLanguageTestInstructionBuilder(
 		langCommonInsBuilder,
 		testInsAppBuilder,
+		langInsBuilder,
 	)
 }
 
 // NewLanguageInstructionBuilder creates a new language instruction builder
 func NewLanguageInstructionBuilder(
 	lexerAdapterBuilder lexers.AdapterBuilder,
-	events []lexers.Event,
 ) LanguageInstructionBuilder {
 	variableBuilder := var_variable.NewBuilder()
 	valueBuilder := var_value.NewBuilder()
 	computableValueBuilder := computable.NewBuilder()
-	langCommonInsBuilder := NewLanguageInstructionCommonBuilder(lexerAdapterBuilder, events)
+	langCommonInsBuilder := NewLanguageInstructionCommonBuilder(lexerAdapterBuilder)
 	insAppBuilder := NewInstructionBuilder()
 	return createLanguageInstructionBuilder(
 		variableBuilder,
@@ -57,14 +57,12 @@ func NewLanguageInstructionBuilder(
 // NewLanguageInstructionCommonBuilder creates a new language instruction common builder
 func NewLanguageInstructionCommonBuilder(
 	lexerAdapterBuilder lexers.AdapterBuilder,
-	events []lexers.Event,
 ) LanguageInstructionCommonBuilder {
 	insAppBuilder := NewInstructionBuilder()
 	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
 	lexerParserApplication := lexer_parser.NewApplication()
 	lexerParserBuilder := lexer_parser.NewBuilder()
 	return createLanguageInstructionCommonBuilder(
-		events,
 		insAppBuilder,
 		grammarRetrieverCriteriaBuilder,
 		lexerParserApplication,
@@ -94,9 +92,11 @@ func NewLanguageStateFactory() LanguageStateFactory {
 // LanguageTestInstructionBuilder represents a language test instruction builder
 type LanguageTestInstructionBuilder interface {
 	Create() LanguageTestInstructionBuilder
+	WithComposer(composerApp composers.Composer) LanguageTestInstructionBuilder
 	WithLanguage(langDef linkers.LanguageDefinition) LanguageTestInstructionBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) LanguageTestInstructionBuilder
 	WithState(state LanguageState) LanguageTestInstructionBuilder
+	WithEvents(events []lexers.Event) LanguageTestInstructionBuilder
 	Now() (LanguageTestInstruction, error)
 }
 
@@ -112,6 +112,7 @@ type LanguageInstructionBuilder interface {
 	WithLanguage(langDef linkers.LanguageDefinition) LanguageInstructionBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) LanguageInstructionBuilder
 	WithState(state LanguageState) LanguageInstructionBuilder
+	WithEvents(events []lexers.Event) LanguageInstructionBuilder
 	Now() (LanguageInstruction, error)
 }
 
@@ -128,6 +129,7 @@ type LanguageInstructionCommonBuilder interface {
 	WithCallLabelFn(labelFn CallLabelByNameFn) LanguageInstructionCommonBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) LanguageInstructionCommonBuilder
 	WithState(state LanguageState) LanguageInstructionCommonBuilder
+	WithEvents(events []lexers.Event) LanguageInstructionCommonBuilder
 	Now() (LanguageInstructionCommon, error)
 }
 

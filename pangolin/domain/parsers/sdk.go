@@ -156,6 +156,16 @@ func NewScriptValueBuilder() ScriptValueBuilder {
 	return createScriptValueBuilder()
 }
 
+// NewScriptTestsBuilder creates a new script tests builder
+func NewScriptTestsBuilder() ScriptTestsBuilder {
+	return createScriptTestsBuilder()
+}
+
+// NewScriptTestBuilder creates a new script test builder
+func NewScriptTestBuilder() ScriptTestBuilder {
+	return createScriptTestBuilder()
+}
+
 // NewPatternMatchBuilder creates a new pattern match builder
 func NewPatternMatchBuilder() PatternMatchBuilder {
 	return createPatternMatchBuilder()
@@ -421,6 +431,8 @@ func NewParserBuilder() ParserBuilder {
 	languageValueBuilder := NewLanguageValueBuilder()
 	scriptBuilder := NewScriptBuilder()
 	scriptValueBuilder := NewScriptValueBuilder()
+	scriptTestsBuilder := NewScriptTestsBuilder()
+	scriptTestBuilder := NewScriptTestBuilder()
 	patternMatchBuilder := NewPatternMatchBuilder()
 	patternLabelsBuilder := NewPatternLabelsBuilder()
 	relativePathsBuilder := NewRelativePathsBuilder()
@@ -501,6 +513,8 @@ func NewParserBuilder() ParserBuilder {
 		languageValueBuilder,
 		scriptBuilder,
 		scriptValueBuilder,
+		scriptTestsBuilder,
+		scriptTestBuilder,
 		patternMatchBuilder,
 		patternLabelsBuilder,
 		relativePathsBuilder,
@@ -644,6 +658,8 @@ type Script interface {
 	Script() RelativePath
 	Language() RelativePath
 	Output() string
+	HasTests() bool
+	Tests() ScriptTests
 }
 
 // ScriptValueBuilder represents a script value builder
@@ -654,6 +670,7 @@ type ScriptValueBuilder interface {
 	WithScriptPath(scriptPath RelativePath) ScriptValueBuilder
 	WithLanguagePath(langPath RelativePath) ScriptValueBuilder
 	WithOutput(output string) ScriptValueBuilder
+	WithScriptTests(scriptTests ScriptTests) ScriptValueBuilder
 	Now() (ScriptValue, error)
 }
 
@@ -669,6 +686,34 @@ type ScriptValue interface {
 	Language() RelativePath
 	IsOutput() bool
 	Output() string
+	IsScriptTests() bool
+	ScriptTests() ScriptTests
+}
+
+// ScriptTestsBuilder represents a script tests builder
+type ScriptTestsBuilder interface {
+	Create() ScriptTestsBuilder
+	WithTests(tests []ScriptTest) ScriptTestsBuilder
+	Now() (ScriptTests, error)
+}
+
+// ScriptTests represents script tests
+type ScriptTests interface {
+	All() []ScriptTest
+}
+
+// ScriptTestBuilder represents a script test builder
+type ScriptTestBuilder interface {
+	Create() ScriptTestBuilder
+	WithName(name string) ScriptTestBuilder
+	WithPath(path RelativePath) ScriptTestBuilder
+	Now() (ScriptTest, error)
+}
+
+// ScriptTest represents a script test
+type ScriptTest interface {
+	Name() string
+	Path() RelativePath
 }
 
 // LanguageApplicationBuilder represents a language application builder

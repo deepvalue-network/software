@@ -20,7 +20,21 @@ scriptValue
     | SCRIPT_SCRIPT COLON relativePath DOT
     | SCRIPT_LANGUAGE COLON relativePath DOT
     | SCRIPT_OUTPUT COLON VARIABLE_PATTERN DOT
+    | SCRIPT_TESTS COLON scriptTests DOT
     ;
+
+scriptTests
+    : scriptTest scriptTestWithComma*
+    ;
+
+scriptTestWithComma
+    : COMMA scriptTest
+    ;
+
+scriptTest
+    : TEST_NAME_PATTERN COLON relativePath
+    ;
+
 
 command
     : languageCommand

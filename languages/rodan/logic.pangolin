@@ -5,10 +5,9 @@ head:
 
 labels:
     exitProgram:
-        print: "program".
-    .
-    exitPrintCommand:
-        print: "printCommand".
+        decl: isProgram|bool.
+        assign: isProgram, true.
+        push.
     .
     exitAssignee:
         decl: variableName|bool.

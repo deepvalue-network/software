@@ -1,8 +1,6 @@
 package parsers
 
 import (
-	"errors"
-
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	lexer_parser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
 )
@@ -39,6 +37,8 @@ type parserBuilder struct {
 	languageValueBuilder             LanguageValueBuilder
 	scriptBuilder                    ScriptBuilder
 	scriptValueBuilder               ScriptValueBuilder
+	scriptTestsBuilder               ScriptTestsBuilder
+	scriptTestBuilder                ScriptTestBuilder
 	patternMatchBuilder              PatternMatchBuilder
 	patternLabelsBuilder             PatternLabelsBuilder
 	relativePathsBuilder             RelativePathsBuilder
@@ -121,6 +121,8 @@ func createParserBuilder(
 	languageValueBuilder LanguageValueBuilder,
 	scriptBuilder ScriptBuilder,
 	scriptValueBuilder ScriptValueBuilder,
+	scriptTestsBuilder ScriptTestsBuilder,
+	scriptTestBuilder ScriptTestBuilder,
 	patternMatchBuilder PatternMatchBuilder,
 	patternLabelsBuilder PatternLabelsBuilder,
 	relativePathsBuilder RelativePathsBuilder,
@@ -201,6 +203,8 @@ func createParserBuilder(
 		languageValueBuilder:             languageValueBuilder,
 		scriptBuilder:                    scriptBuilder,
 		scriptValueBuilder:               scriptValueBuilder,
+		scriptTestsBuilder:               scriptTestsBuilder,
+		scriptTestBuilder:                scriptTestBuilder,
 		patternMatchBuilder:              patternMatchBuilder,
 		patternLabelsBuilder:             patternLabelsBuilder,
 		relativePathsBuilder:             relativePathsBuilder,
@@ -288,6 +292,8 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.languageValueBuilder,
 		app.scriptBuilder,
 		app.scriptValueBuilder,
+		app.scriptTestsBuilder,
+		app.scriptTestBuilder,
 		app.patternMatchBuilder,
 		app.patternLabelsBuilder,
 		app.relativePathsBuilder,
@@ -346,10 +352,6 @@ func (app *parserBuilder) WithLexerAdapter(lexerAdapter lexers.Adapter) ParserBu
 
 // Now builds a new Parser instance
 func (app *parserBuilder) Now() (Parser, error) {
-	if app.lexerAdapter == nil {
-		return nil, errors.New("the lexerAdapter is mandatory in order to build a Parser instance")
-	}
-
 	return createParser(
 		app.lexerAdapter,
 		app.lexerParserApplication,
@@ -383,6 +385,8 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.languageValueBuilder,
 		app.scriptBuilder,
 		app.scriptValueBuilder,
+		app.scriptTestsBuilder,
+		app.scriptTestBuilder,
 		app.patternMatchBuilder,
 		app.patternLabelsBuilder,
 		app.relativePathsBuilder,

@@ -1,7 +1,4 @@
 // commands:
-CMD_PRINT: '#';
-
-// commands:
 RETURN: 'return';
 CONTINUE: 'continue';
 RAISE: 'raise';

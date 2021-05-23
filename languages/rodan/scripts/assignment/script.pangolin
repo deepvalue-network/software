@@ -1,0 +1,7 @@
+script:
+    name: assignment.
+    version: 2021.05.22.
+    script: "./script.rod".
+    language: "./../../language.pangolin".
+    output: output.
+.

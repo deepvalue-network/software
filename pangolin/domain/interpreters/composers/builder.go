@@ -9,7 +9,6 @@ import (
 )
 
 type builder struct {
-	linker                     linkers.Linker
 	instructionAdapterBuilder  InstructionAdapterBuilder
 	stackFrameBuilder          stackframes.Builder
 	programBuilder             parsers.ProgramBuilder
@@ -30,10 +29,10 @@ type builder struct {
 	testDeclarationBuilder     parsers.TestDeclarationBuilder
 	labelDeclarationBuilder    parsers.LabelDeclarationBuilder
 	stackFrame                 stackframes.StackFrame
+	linker                     linkers.Linker
 }
 
 func createBuilder(
-	linker linkers.Linker,
 	instructionAdapterBuilder InstructionAdapterBuilder,
 	stackFrameBuilder stackframes.Builder,
 	programBuilder parsers.ProgramBuilder,
@@ -55,7 +54,6 @@ func createBuilder(
 	labelDeclarationBuilder parsers.LabelDeclarationBuilder,
 ) Builder {
 	out := builder{
-		linker:                     linker,
 		instructionAdapterBuilder:  instructionAdapterBuilder,
 		stackFrameBuilder:          stackFrameBuilder,
 		programBuilder:             programBuilder,
@@ -76,6 +74,7 @@ func createBuilder(
 		testDeclarationBuilder:     testDeclarationBuilder,
 		labelDeclarationBuilder:    labelDeclarationBuilder,
 		stackFrame:                 nil,
+		linker:                     nil,
 	}
 
 	return &out
@@ -84,7 +83,6 @@ func createBuilder(
 // Create initializes the builder
 func (app *builder) Create() Builder {
 	return createBuilder(
-		app.linker,
 		app.instructionAdapterBuilder,
 		app.stackFrameBuilder,
 		app.programBuilder,
@@ -107,6 +105,12 @@ func (app *builder) Create() Builder {
 	)
 }
 
+// WithLinker adds a linker to the builder
+func (app *builder) WithLinker(linker linkers.Linker) Builder {
+	app.linker = linker
+	return app
+}
+
 // WithStackFrame adds a stackFrameto the builder
 func (app *builder) WithStackFrame(stackFrame stackframes.StackFrame) Builder {
 	app.stackFrame = stackFrame
@@ -115,12 +119,15 @@ func (app *builder) WithStackFrame(stackFrame stackframes.StackFrame) Builder {
 
 // Now builds a new Composer instance
 func (app *builder) Now() (Composer, error) {
-	if app.stackFrame != nil {
+	if app.linker == nil {
+		return nil, errors.New("the linker is mandatory in order to build a Composer instance")
+	}
+
+	if app.stackFrame == nil {
 		return nil, errors.New("the stackFrame is mandatory in order to build a Composer instance")
 	}
 
 	return createComposer(
-		app.linker,
 		app.instructionAdapterBuilder,
 		app.stackFrameBuilder,
 		app.programBuilder,
@@ -141,5 +148,6 @@ func (app *builder) Now() (Composer, error) {
 		app.testDeclarationBuilder,
 		app.labelDeclarationBuilder,
 		app.stackFrame,
+		app.linker,
 	), nil
 }

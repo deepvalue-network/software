@@ -1,12 +1,36 @@
 package application
 
 import (
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
+
+// NewBuilder creates a new builder instance
+func NewBuilder() Builder {
+	lexerAdapterBuilder := lexers.NewAdapterBuilder()
+	parserBuilder := parsers.NewParserBuilder()
+	linkerBuilder := linkers.NewBuilder()
+	interpreterBuilder := interpreters.NewBuilder()
+	return createBuilder(
+		lexerAdapterBuilder,
+		parserBuilder,
+		linkerBuilder,
+		interpreterBuilder,
+	)
+}
+
+// Builder represents an application builder
+type Builder interface {
+	Create() Builder
+	WithCurrentDirPath(dirPath string) Builder
+	WithGrammarFilePath(grammarFilePath string) Builder
+	WithEvents(events []lexers.Event) Builder
+	Now() (Application, error)
+}
 
 // Application represents a pangolin application
 type Application interface {
@@ -28,13 +52,11 @@ type Parser interface {
 
 // Linker represents a pangolin linker
 type Linker interface {
-	Execute(parsed parsers.Program) (linkers.Program, error)
+	Execute(parsed parsers.Program) (linkers.Executable, error)
 }
 
 // Interpreter represents a pangolin interpreter
 type Interpreter interface {
-	Execute(linkedProg linkers.Program, input map[string]computable.Value) (stackframes.StackFrame, error)
-	TestsAll(linkedProg linkers.Program) error
-	TestByNames(linkedProg linkers.Program, names []string) error
-	TestByName(linkedProg linkers.Program, name string) error
+	Execute(excutable linkers.Executable, input map[string]computable.Value) (stackframes.StackFrame, error)
+	Tests(excutable linkers.Executable) error
 }

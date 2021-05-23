@@ -6,6 +6,7 @@ type script struct {
 	script   RelativePath
 	language RelativePath
 	output   string
+	tests    ScriptTests
 }
 
 func createScript(
@@ -15,12 +16,35 @@ func createScript(
 	language RelativePath,
 	output string,
 ) Script {
+	return createScriptInternally(name, version, scriptPath, language, output, nil)
+}
+
+func createScriptWithTests(
+	name string,
+	version string,
+	scriptPath RelativePath,
+	language RelativePath,
+	output string,
+	tests ScriptTests,
+) Script {
+	return createScriptInternally(name, version, scriptPath, language, output, tests)
+}
+
+func createScriptInternally(
+	name string,
+	version string,
+	scriptPath RelativePath,
+	language RelativePath,
+	output string,
+	tests ScriptTests,
+) Script {
 	out := script{
 		name:     name,
 		version:  version,
 		script:   scriptPath,
 		language: language,
 		output:   output,
+		tests:    tests,
 	}
 
 	return &out
@@ -49,4 +73,14 @@ func (obj *script) Language() RelativePath {
 // Output returns the output variable
 func (obj *script) Output() string {
 	return obj.output
+}
+
+// HasTests returns true if there is tests, false otherwise
+func (obj *script) HasTests() bool {
+	return obj.tests != nil
+}
+
+// Tests returns the tests, if any
+func (obj *script) Tests() ScriptTests {
+	return obj.tests
 }

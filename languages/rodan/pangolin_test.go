@@ -1,33 +1,44 @@
 package rodan
 
 import (
-	"errors"
-	"path/filepath"
+	"io/ioutil"
 	"testing"
 
 	"github.com/deepvalue-network/software/pangolin/bundles"
 )
 
 func TestPangolin_executeTests_Success(t *testing.T) {
-	name := "pangolin"
+	script, err := ioutil.ReadFile("./scripts/assignment/script.pangolin")
+	if err != nil {
+		t.Errorf("the error was expected to be nil, error returned: %s", err)
+		return
+	}
+
+	currentDirPath := "./scripts/assignment"
 	grammarFile := "../../pangolin/domain/parsers/grammar/grammar.json"
-	langPath := "language.pangolin"
-	dirPath, err := filepath.Abs(".")
+	pangolin := bundles.NewPangolin(grammarFile, currentDirPath)
+	lexer, err := pangolin.Lexer().Execute(string(script))
 	if err != nil {
-		panic(err)
+		t.Errorf("the error was expected to be nil, error returned: %s", err)
+		return
 	}
 
-	interpreter, err := bundles.NewInterpreter(dirPath, langPath, grammarFile, name)
+	program, err := pangolin.Parser().Execute(lexer)
 	if err != nil {
-		panic(err)
+		t.Errorf("the error was expected to be nil, error returned: %s", err)
+		return
 	}
 
-	if !interpreter.IsLanguage() {
-		panic(errors.New("the interpreter was expected to be a language interpreter"))
+	executable, err := pangolin.Linker().Execute(program)
+	if err != nil {
+		t.Errorf("the error was expected to be nil, error returned: %s", err)
+		return
 	}
 
-	err = interpreter.Language().TestsAll()
+	err = pangolin.Interpreter().Tests(executable)
 	if err != nil {
-		panic(err)
+		t.Errorf("the error was expected to be nil, error returned: %s", err)
+		return
 	}
+
 }

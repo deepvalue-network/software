@@ -11,7 +11,7 @@ import (
 )
 
 // NewBuilder creates a new composer builder
-func NewBuilder(linker linkers.Linker) Builder {
+func NewBuilder() Builder {
 	instructionAdapterBuilder := NewInstructionAdapterBuilder()
 	stackFrameBuilder := stackframes.NewBuilder()
 	programBuilder := parsers.NewProgramBuilder()
@@ -33,7 +33,6 @@ func NewBuilder(linker linkers.Linker) Builder {
 	mainSectionBuilder := parsers.NewMainSectionBuilder()
 
 	return createBuilder(
-		linker,
 		instructionAdapterBuilder,
 		stackFrameBuilder,
 		programBuilder,
@@ -122,6 +121,7 @@ func NewInstructionAdapterBuilder() InstructionAdapterBuilder {
 // Builder represents a composer builder
 type Builder interface {
 	Create() Builder
+	WithLinker(linker linkers.Linker) Builder
 	WithStackFrame(stackFrame stackframes.StackFrame) Builder
 	Now() (Composer, error)
 }
