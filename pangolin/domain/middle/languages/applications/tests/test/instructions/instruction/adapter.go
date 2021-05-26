@@ -49,5 +49,9 @@ func (app *adapter) ToInstruction(parsed parsers.LanguageTestInstruction) (Instr
 		builder.WithTest(test)
 	}
 
+	if parsed.IsInterpret() {
+		builder.IsInterpret()
+	}
+
 	return builder.Now()
 }

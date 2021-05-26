@@ -129,3 +129,21 @@ func Test_instruction_call_Success(t *testing.T) {
 		return
 	}
 }
+
+func Test_instruction_registry_Success(t *testing.T) {
+	grammarFile := "./grammar/grammar.json"
+	pars := createParserForTests("instruction", grammarFile)
+
+	file := "./tests/codes/instruction/registry.rod"
+	ins, err := pars.ExecuteFile(file)
+	if err != nil {
+		t.Errorf(err.Error())
+		return
+	}
+
+	instruction := ins.(Instruction)
+	if !instruction.IsRegistry() {
+		t.Errorf("the Instruction was expected to contain a registry")
+		return
+	}
+}

@@ -8,34 +8,39 @@ type instruction struct {
 	jmp        Jump
 	exit       Exit
 	call       Call
+	reg        Registry
 }
 
 func createInstructionWithVariable(variable Variable) Instruction {
-	return createInstructionInternally(variable, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(variable, nil, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithOperation(operation Operation) Instruction {
-	return createInstructionInternally(nil, operation, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, operation, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithPrint(print Print) Instruction {
-	return createInstructionInternally(nil, nil, print, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, print, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithStackFrame(stackFrame StackFrame) Instruction {
-	return createInstructionInternally(nil, nil, nil, stackFrame, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, stackFrame, nil, nil, nil, nil)
 }
 
 func createInstructionWithJump(jmp Jump) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, jmp, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, jmp, nil, nil, nil)
 }
 
 func createInstructionWithExit(exit Exit) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, exit, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, exit, nil, nil)
 }
 
 func createInstructionWithCall(call Call) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, call)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, call, nil)
+}
+
+func createInstructionWithRegistry(reg Registry) Instruction {
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, reg)
 }
 
 func createInstructionInternally(
@@ -46,6 +51,7 @@ func createInstructionInternally(
 	jmp Jump,
 	exit Exit,
 	call Call,
+	reg Registry,
 ) Instruction {
 	out := instruction{
 		variable:   variable,
@@ -55,6 +61,7 @@ func createInstructionInternally(
 		jmp:        jmp,
 		exit:       exit,
 		call:       call,
+		reg:        reg,
 	}
 
 	return &out
@@ -128,4 +135,14 @@ func (obj *instruction) IsCall() bool {
 // Call returns the call, if any
 func (obj *instruction) Call() Call {
 	return obj.call
+}
+
+// IsRegistry retruns true if the instruction is a registry, false otherwise
+func (obj *instruction) IsRegistry() bool {
+	return obj.reg != nil
+}
+
+// Registry returns the registry, if any
+func (obj *instruction) Registry() Registry {
+	return obj.reg
 }

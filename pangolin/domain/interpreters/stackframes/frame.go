@@ -199,15 +199,6 @@ func (app *frame) Remaining(first string, second string, result string, remainin
 	return nil
 }
 
-// PushTo pushes a frame to a variable's stack
-func (app *frame) PushTo(name string, frame Frame) error {
-	if app.isStopped {
-		return nil
-	}
-
-	return nil
-}
-
 // Insert inserts a new variable on the frame
 func (app *frame) Insert(vr var_variable.Variable) error {
 	if app.isStopped {

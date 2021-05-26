@@ -8,14 +8,16 @@ import (
 )
 
 type builder struct {
-	lang standard_instruction.CommonInstruction
-	test test_instruction.Instruction
+	lang          standard_instruction.CommonInstruction
+	test          test_instruction.Instruction
+	isInterpret bool
 }
 
 func createBuilder() Builder {
 	out := builder{
-		lang: nil,
-		test: nil,
+		lang:          nil,
+		test:          nil,
+		isInterpret: false,
 	}
 
 	return &out
@@ -38,6 +40,12 @@ func (app *builder) WithTest(test test_instruction.Instruction) Builder {
 	return app
 }
 
+// IsInterpret flags the builder as interpret
+func (app *builder) IsInterpret() Builder {
+	app.isInterpret = true
+	return app
+}
+
 // Now builds a new Instruction instance
 func (app *builder) Now() (Instruction, error) {
 	if app.lang != nil {
@@ -46,6 +54,10 @@ func (app *builder) Now() (Instruction, error) {
 
 	if app.test != nil {
 		return createInstructionWithTest(app.test), nil
+	}
+
+	if app.isInterpret {
+		return createInstructionWithInterpret(), nil
 	}
 
 	return nil, errors.New("the Instruction is invalid")

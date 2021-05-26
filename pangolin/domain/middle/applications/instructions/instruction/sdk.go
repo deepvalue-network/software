@@ -4,6 +4,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/exit"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/registry"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
@@ -27,6 +28,10 @@ func NewAdapter() Adapter {
 	varVariableBuilder := var_variable.NewBuilder()
 	callBuilder := call.NewBuilder()
 	exitBuilder := exit.NewBuilder()
+	registryIndexBuilder := registry.NewIndexBuilder()
+	registryRegisterBuilder := registry.NewRegisterBuilder()
+	registerFetchBuilder := registry.NewFetchBuilder()
+	registryBuilder := registry.NewBuilder()
 	builder := NewBuilder()
 	return createAdapter(
 		stackframeBuilder,
@@ -41,6 +46,10 @@ func NewAdapter() Adapter {
 		varVariableBuilder,
 		callBuilder,
 		exitBuilder,
+		registryIndexBuilder,
+		registryRegisterBuilder,
+		registerFetchBuilder,
+		registryBuilder,
 		builder,
 	)
 }
@@ -68,6 +77,7 @@ type Builder interface {
 	WithDelete(del string) Builder
 	WithCall(call call.Call) Builder
 	WithExit(exit exit.Exit) Builder
+	WithRegistry(reg registry.Registry) Builder
 	Now() (Instruction, error)
 }
 
@@ -93,4 +103,6 @@ type Instruction interface {
 	Call() call.Call
 	IsExit() bool
 	Exit() exit.Exit
+	IsRegistry() bool
+	Registry() registry.Registry
 }

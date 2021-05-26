@@ -31,5 +31,6 @@ func (app *builder) WithVariables(variables map[string]computable.Value) Builder
 
 // Now builds a new StackFrame instance
 func (app *builder) Now() StackFrame {
-	return createStackFrame(app.frameBuilder, app.variables)
+	registry := createRegistry()
+	return createStackFrame(app.frameBuilder, registry, app.variables)
 }

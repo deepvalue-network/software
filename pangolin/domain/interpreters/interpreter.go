@@ -3,7 +3,6 @@ package interpreters
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 )
 
 type interpreter struct {
@@ -24,7 +23,7 @@ func createInterpreter(
 }
 
 // Execute executes the interpreter
-func (app *interpreter) Execute(excutable linkers.Executable, input map[string]computable.Value) (stackframes.StackFrame, error) {
+func (app *interpreter) Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.Registry, error) {
 	if excutable.IsApplication() {
 		linkedApp := excutable.Application()
 		return app.application.Execute(linkedApp, input)

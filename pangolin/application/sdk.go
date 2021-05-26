@@ -5,7 +5,6 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
@@ -57,6 +56,6 @@ type Linker interface {
 
 // Interpreter represents a pangolin interpreter
 type Interpreter interface {
-	Execute(excutable linkers.Executable, input map[string]computable.Value) (stackframes.StackFrame, error)
+	Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.Registry, error)
 	Tests(excutable linkers.Executable) error
 }

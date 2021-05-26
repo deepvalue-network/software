@@ -263,6 +263,26 @@ func NewInstructionBuilder() InstructionBuilder {
 	return createInstructionBuilder()
 }
 
+// NewRegistryBuilder creates a new registry builder
+func NewRegistryBuilder() RegistryBuilder {
+	return createRegistryBuilder()
+}
+
+// NewFetchRegistryBuilder creates a new fetch registry builder
+func NewFetchRegistryBuilder() FetchRegistryBuilder {
+	return createFetchRegistryBuilder()
+}
+
+// NewUnregisterBuilder creates a new unregister builder
+func NewUnregisterBuilder() UnregisterBuilder {
+	return createUnregisterBuilder()
+}
+
+// NewRegisterBuilder creates a new register builder
+func NewRegisterBuilder() RegisterBuilder {
+	return createRegisterBuilder()
+}
+
 // NewSpecificTokenCodeBuilder creates a new specific token code builder
 func NewSpecificTokenCodeBuilder() SpecificTokenCodeBuilder {
 	return createSpecificTokenCodeBuilder()
@@ -453,6 +473,10 @@ func NewParserBuilder() ParserBuilder {
 	labelInstructionBuilder := NewLabelInstructonBuilder()
 	mainSectionBuilder := NewMainSectionBuilder()
 	instructionBuilder := NewInstructionBuilder()
+	registryBuilder := NewRegistryBuilder()
+	fetchRegistryBuilder := NewFetchRegistryBuilder()
+	unregisterBuilder := NewUnregisterBuilder()
+	registerBuilder := NewRegisterBuilder()
 	specificTokenCodeBuilder := NewSpecificTokenCodeBuilder()
 	tokenSectionBuilder := NewTokenSectionBuilder()
 	codeMatchBuilder := NewCodeMatchBuilder()
@@ -535,6 +559,10 @@ func NewParserBuilder() ParserBuilder {
 		labelInstructionBuilder,
 		mainSectionBuilder,
 		instructionBuilder,
+		registryBuilder,
+		fetchRegistryBuilder,
+		unregisterBuilder,
+		registerBuilder,
 		specificTokenCodeBuilder,
 		tokenSectionBuilder,
 		codeMatchBuilder,
@@ -778,6 +806,7 @@ type LanguageTestInstructionBuilder interface {
 	Create() LanguageTestInstructionBuilder
 	WithLanguageInstruction(languageIns LanguageInstructionCommon) LanguageTestInstructionBuilder
 	WithTestInstruction(testIns TestInstruction) LanguageTestInstructionBuilder
+	IsInterpret() LanguageTestInstructionBuilder
 	Now() (LanguageTestInstruction, error)
 }
 
@@ -787,6 +816,7 @@ type LanguageTestInstruction interface {
 	LanguageInstruction() LanguageInstructionCommon
 	IsTestInstruction() bool
 	TestInstruction() TestInstruction
+	IsInterpret() bool
 }
 
 // LanguageLabelSectionBuilder represents a language label section builder
@@ -1406,6 +1436,7 @@ type InstructionBuilder interface {
 	WithJump(jmp Jump) InstructionBuilder
 	WithExit(exit Exit) InstructionBuilder
 	WithCall(call Call) InstructionBuilder
+	WithRegistry(registry Registry) InstructionBuilder
 	Now() (Instruction, error)
 }
 
@@ -1425,6 +1456,71 @@ type Instruction interface {
 	Exit() Exit
 	IsCall() bool
 	Call() Call
+	IsRegistry() bool
+	Registry() Registry
+}
+
+// RegistryBuilder represents a registry builder
+type RegistryBuilder interface {
+	Create() RegistryBuilder
+	WithFetch(fetch FetchRegistry) RegistryBuilder
+	WithRegister(register Register) RegistryBuilder
+	WithUnregister(unregister Unregister) RegistryBuilder
+	Now() (Registry, error)
+}
+
+// Registry represents a registry instruction
+type Registry interface {
+	IsFetch() bool
+	Fetch() FetchRegistry
+	IsRegister() bool
+	Register() Register
+	IsUnregister() bool
+	Unregister() Unregister
+}
+
+// FetchRegistryBuilder represents a fetch registry builder
+type FetchRegistryBuilder interface {
+	Create() FetchRegistryBuilder
+	From(from string) FetchRegistryBuilder
+	To(to string) FetchRegistryBuilder
+	WithIndex(index IntPointer) FetchRegistryBuilder
+	Now() (FetchRegistry, error)
+}
+
+// FetchRegistry represents a fetch registry instruction
+type FetchRegistry interface {
+	To() string
+	From() string
+	HasIndex() bool
+	Index() IntPointer
+}
+
+// UnregisterBuilder represents an unregister builder
+type UnregisterBuilder interface {
+	Create() UnregisterBuilder
+	WithVariable(name string) UnregisterBuilder
+	Now() (Unregister, error)
+}
+
+// Unregister represents an unregister instruction
+type Unregister interface {
+	Variable() string
+}
+
+// RegisterBuilder represents a register pointer
+type RegisterBuilder interface {
+	Create() RegisterBuilder
+	WithVariable(variable string) RegisterBuilder
+	WithIndex(Index IntPointer) RegisterBuilder
+	Now() (Register, error)
+}
+
+// Register represents a register instruction
+type Register interface {
+	Variable() string
+	HasIndex() bool
+	Index() IntPointer
 }
 
 // TokenBuilder represents a token builder

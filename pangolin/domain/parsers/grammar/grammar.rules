@@ -95,6 +95,10 @@ ASSERT_IF: 'assert_if';
 PUSH: 'push';
 TRIGGER: 'trigger';
 FORMAT: 'format';
+INTERPRET: 'interpret';
+REGISTER: 'register';
+UNREGISTER: 'unregister';
+FETCH_REGISTRY: 'fetch_registry';
 
 // languages
 LANG_ROOT: 'root';

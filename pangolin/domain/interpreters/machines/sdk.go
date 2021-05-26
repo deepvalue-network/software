@@ -22,14 +22,19 @@ import (
 // CallLabelByNameFn represents a func to call a label by name
 type CallLabelByNameFn func(name string) error
 
+// InterpretCallBackFn represents an interpreter callback fn
+type InterpretCallBackFn func(composedApp linkers.Application, input stackframes.StackFrame) (stackframes.Registry, error)
+
 // NewLanguageTestInstructionBuilder creates a language test instruction builder
 func NewLanguageTestInstructionBuilder(
 	lexerAdapterBuilder lexers.AdapterBuilder,
 ) LanguageTestInstructionBuilder {
+	frameBuilder := stackframes.NewFrameBuilder()
 	langCommonInsBuilder := NewLanguageInstructionCommonBuilder(lexerAdapterBuilder)
 	testInsAppBuilder := NewTestInstructionBuilder()
 	langInsBuilder := NewLanguageInstructionBuilder(lexerAdapterBuilder)
 	return createLanguageTestInstructionBuilder(
+		frameBuilder,
 		langCommonInsBuilder,
 		testInsAppBuilder,
 		langInsBuilder,
@@ -92,6 +97,7 @@ func NewLanguageStateFactory() LanguageStateFactory {
 // LanguageTestInstructionBuilder represents a language test instruction builder
 type LanguageTestInstructionBuilder interface {
 	Create() LanguageTestInstructionBuilder
+	WithInterpreterCallBackkFn(interpreterCallBackFn InterpretCallBackFn) LanguageTestInstructionBuilder
 	WithComposer(composerApp composers.Composer) LanguageTestInstructionBuilder
 	WithLanguage(langDef linkers.LanguageDefinition) LanguageTestInstructionBuilder
 	WithStackFrame(stackFrame stackframes.StackFrame) LanguageTestInstructionBuilder

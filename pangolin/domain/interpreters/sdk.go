@@ -22,12 +22,14 @@ func NewBuilder() Builder {
 
 // NewScriptBuilder creates a new script builder
 func NewScriptBuilder() ScriptBuilder {
+	stackFrameBuilder := stackframes.NewBuilder()
 	computableBuilder := computable.NewBuilder()
 	programBuilder := linkers.NewProgramBuilder()
 	linkerLnguageBuilder := linkers.NewLanguageBuilder()
 	languageBuilder := NewLanguageBuilder()
 	application := NewApplication()
 	return createScriptBuilder(
+		stackFrameBuilder,
 		computableBuilder,
 		programBuilder,
 		linkerLnguageBuilder,
@@ -44,6 +46,7 @@ func NewLanguageBuilder() LanguageBuilder {
 	stackFrameBuilder := stackframes.NewBuilder()
 	machineLangTestInsBuilder := machines.NewLanguageTestInstructionBuilder(lexerAdapterBuilder)
 	machineLangInsBuilder := machines.NewLanguageInstructionBuilder(lexerAdapterBuilder)
+	application := NewApplication()
 	return createLanguageBuilder(
 		lexerAdapterBuilder,
 		composerBuilder,
@@ -51,6 +54,7 @@ func NewLanguageBuilder() LanguageBuilder {
 		stackFrameBuilder,
 		machineLangTestInsBuilder,
 		machineLangInsBuilder,
+		application,
 	)
 }
 
@@ -73,7 +77,7 @@ type Builder interface {
 
 // Interpreter represents an interpreter
 type Interpreter interface {
-	Execute(excutable linkers.Executable, input map[string]computable.Value) (stackframes.StackFrame, error)
+	Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.Registry, error)
 	Tests(excutable linkers.Executable) error
 }
 
@@ -102,12 +106,12 @@ type LanguageBuilder interface {
 
 // Language represents a language interpreter
 type Language interface {
-	Execute(linkedLangDef linkers.LanguageDefinition, input map[string]computable.Value) (linkers.Application, error)
+	Execute(linkedLangDef linkers.LanguageDefinition, input stackframes.StackFrame) (linkers.Application, error)
 	Tests(linkedLangDef linkers.LanguageDefinition) error
 }
 
 // Application represents an application interpreter
 type Application interface {
-	Execute(linkedApp linkers.Application, input map[string]computable.Value) (stackframes.StackFrame, error)
+	Execute(linkedApp linkers.Application, input stackframes.StackFrame) (stackframes.Registry, error)
 	Tests(linkedApp linkers.Application) error
 }

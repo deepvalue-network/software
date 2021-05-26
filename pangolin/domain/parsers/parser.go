@@ -65,6 +65,10 @@ type parser struct {
 	labelInstructionBuilder          LabelInstructionBuilder
 	mainSectionBuilder               MainSectionBuilder
 	instructionBuilder               InstructionBuilder
+	registryBuilder                  RegistryBuilder
+	fetchRegistryBuilder             FetchRegistryBuilder
+	unregisterBuilder                UnregisterBuilder
+	registerBuilder                  RegisterBuilder
 	specificTokenCodeBuilder         SpecificTokenCodeBuilder
 	tokenSectionBuilder              TokenSectionBuilder
 	codeMatchBuilder                 CodeMatchBuilder
@@ -145,6 +149,10 @@ type parser struct {
 	labelInstruction                 map[string]LabelInstruction
 	mainSection                      map[string]MainSection
 	instruction                      map[string]Instruction
+	registry                         map[string]Registry
+	fetchRegistry                    map[string]FetchRegistry
+	unregister                       map[string]Unregister
+	register                         map[string]Register
 	specificTokenCode                map[string]SpecificTokenCode
 	tokenSection                     map[string]TokenSection
 	codeMatch                        map[string]CodeMatch
@@ -238,6 +246,10 @@ func createParser(
 	labelInstructionBuilder LabelInstructionBuilder,
 	mainSectionBuilder MainSectionBuilder,
 	instructionBuilder InstructionBuilder,
+	registryBuilder RegistryBuilder,
+	fetchRegistryBuilder FetchRegistryBuilder,
+	unregisterBuilder UnregisterBuilder,
+	registerBuilder RegisterBuilder,
 	specificTokenCodeBuilder SpecificTokenCodeBuilder,
 	tokenSectionBuilder TokenSectionBuilder,
 	codeMatchBuilder CodeMatchBuilder,
@@ -321,6 +333,10 @@ func createParser(
 		labelInstructionBuilder:          labelInstructionBuilder,
 		mainSectionBuilder:               mainSectionBuilder,
 		instructionBuilder:               instructionBuilder,
+		registryBuilder:                  registryBuilder,
+		fetchRegistryBuilder:             fetchRegistryBuilder,
+		unregisterBuilder:                unregisterBuilder,
+		registerBuilder:                  registerBuilder,
 		specificTokenCodeBuilder:         specificTokenCodeBuilder,
 		tokenSectionBuilder:              tokenSectionBuilder,
 		codeMatchBuilder:                 codeMatchBuilder,
@@ -582,6 +598,22 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			OnExit: app.exitInstruction,
 		},
 		lparser.ToEventsParams{
+			Token:  "registry",
+			OnExit: app.exitRegistry,
+		},
+		lparser.ToEventsParams{
+			Token:  "fetchRegistry",
+			OnExit: app.exitFetchRegistry,
+		},
+		lparser.ToEventsParams{
+			Token:  "unregister",
+			OnExit: app.exitUnregister,
+		},
+		lparser.ToEventsParams{
+			Token:  "register",
+			OnExit: app.exitRegister,
+		},
+		lparser.ToEventsParams{
 			Token:  "callPattern",
 			OnExit: app.exitCallPattern,
 		},
@@ -817,6 +849,10 @@ func (app *parser) init() {
 	app.labelInstruction = map[string]LabelInstruction{}
 	app.mainSection = map[string]MainSection{}
 	app.instruction = map[string]Instruction{}
+	app.registry = map[string]Registry{}
+	app.fetchRegistry = map[string]FetchRegistry{}
+	app.unregister = map[string]Unregister{}
+	app.register = map[string]Register{}
 	app.specificTokenCode = map[string]SpecificTokenCode{}
 	app.tokenSection = map[string]TokenSection{}
 	app.codeMatch = map[string]CodeMatch{}
@@ -1402,6 +1438,7 @@ func (app *parser) exitLanguageTestInstruction(tree lexers.NodeTree) (interface{
 	section, code := tree.BestMatchFromNames([]string{
 		"languageInstructionCommon",
 		"testInstruction",
+		"INTERPRET",
 	})
 
 	switch section {
@@ -1416,6 +1453,9 @@ func (app *parser) exitLanguageTestInstruction(tree lexers.NodeTree) (interface{
 			builder.WithTestInstruction(ins)
 		}
 
+		break
+	case "INTERPRET":
+		builder.IsInterpret()
 		break
 	}
 
@@ -2342,6 +2382,7 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 		"jump",
 		"exit",
 		"call",
+		"registry",
 	})
 
 	switch section {
@@ -2382,6 +2423,11 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 			builder.WithCall(call)
 		}
 		break
+	case "registry":
+		if reg, ok := app.registry[code]; ok {
+			builder.WithRegistry(reg)
+		}
+		break
 	}
 
 	ins, err := builder.Now()
@@ -2390,6 +2436,112 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.instruction[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitRegistry(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.registryBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"register",
+		"unregister",
+		"fetchRegistry",
+	})
+
+	switch section {
+	case "register":
+		if reg, ok := app.register[code]; ok {
+			builder.WithRegister(reg)
+		}
+		break
+	case "unregister":
+		if unreg, ok := app.unregister[code]; ok {
+			builder.WithUnregister(unreg)
+		}
+		break
+	case "fetchRegistry":
+		if fetch, ok := app.fetchRegistry[code]; ok {
+			builder.WithFetch(fetch)
+		}
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.registry[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitFetchRegistry(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.fetchRegistryBuilder.Create()
+	variableNames := tree.CodesFromName("VARIABLE_PATTERN")
+	if len(variableNames) != 2 {
+		str := fmt.Sprintf("%d variableName was expected, %d returned", 2, len(variableNames))
+		return nil, errors.New(str)
+	}
+
+	if variableNames[0] != "" {
+		builder.To(variableNames[0])
+	}
+
+	if variableNames[1] != "" {
+		builder.From(variableNames[1])
+	}
+
+	intPointerCode := tree.CodeFromName("intPointer")
+	if intPointerCode != "" {
+		if intPointer, ok := app.intPointer[intPointerCode]; ok {
+			builder.WithIndex(intPointer)
+		}
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.fetchRegistry[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitUnregister(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.unregisterBuilder.Create()
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.unregister[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitRegister(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.registerBuilder.Create()
+	variableName := tree.CodeFromName("VARIABLE_PATTERN")
+	if variableName != "" {
+		builder.WithVariable(variableName)
+	}
+
+	intPointerCode := tree.CodeFromName("intPointer")
+	if intPointerCode != "" {
+		if intPointer, ok := app.intPointer[intPointerCode]; ok {
+			builder.WithIndex(intPointer)
+		}
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.register[tree.Code()] = ins
 	return ins, nil
 }
 

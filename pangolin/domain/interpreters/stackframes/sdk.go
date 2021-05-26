@@ -32,8 +32,10 @@ type StackFrame interface {
 	Push()
 	Pop() error
 	Index() int
+	Add(frame Frame)
 	Skip(index int) error
 	Current() Frame
+	Registry() Registry
 }
 
 // FrameBuilder represents a frame builder
@@ -47,7 +49,6 @@ type FrameBuilder interface {
 type Frame interface {
 	Standard(first string, second string, result string, operation standard.Operation) error
 	Remaining(first string, second string, result string, remaining string, operation remaining.Operation) error
-	PushTo(name string, frame Frame) error
 	Insert(operation var_variable.Variable) error
 	Update(operation var_variable.Variable) error
 	UpdateValue(name string, val computable.Value) error
@@ -55,6 +56,14 @@ type Frame interface {
 	Fetch(name string) (computable.Value, error)
 	Stop()
 	IsStopped() bool
+}
+
+// Registry represents a registry
+type Registry interface {
+	All() map[string]computable.Value
+	Fetch(name string) (computable.Value, error)
+	Insert(name string, val computable.Value) error
+	Delete(name string) error
 }
 
 // Computer represents a computer

@@ -4,6 +4,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/exit"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/registry"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
@@ -14,19 +15,23 @@ import (
 )
 
 type adapter struct {
-	stackFrameBuilder  stackframe.Builder
-	skipBuilder        stackframe.SkipBuilder
-	conditionBuilder   condition.Builder
-	propositionBuilder condition.PropositionBuilder
-	remainingBuilder   remaining.Builder
-	standardBuilder    standard.Builder
-	valueBuilder       value.Builder
-	varValueAdapter    var_value.Adapter
-	varValueFactory    var_value.Factory
-	varVariableBuilder var_variable.Builder
-	callBuilder        call.Builder
-	exitBuilder        exit.Builder
-	builder            Builder
+	stackFrameBuilder       stackframe.Builder
+	skipBuilder             stackframe.SkipBuilder
+	conditionBuilder        condition.Builder
+	propositionBuilder      condition.PropositionBuilder
+	remainingBuilder        remaining.Builder
+	standardBuilder         standard.Builder
+	valueBuilder            value.Builder
+	varValueAdapter         var_value.Adapter
+	varValueFactory         var_value.Factory
+	varVariableBuilder      var_variable.Builder
+	callBuilder             call.Builder
+	exitBuilder             exit.Builder
+	registryIndexBuilder    registry.IndexBuilder
+	registryRegisterBuilder registry.RegisterBuilder
+	registerFetchBuilder    registry.FetchBuilder
+	registryBuilder         registry.Builder
+	builder                 Builder
 }
 
 func createAdapter(
@@ -42,22 +47,30 @@ func createAdapter(
 	varVariableBuilder var_variable.Builder,
 	callBuilder call.Builder,
 	exitBuilder exit.Builder,
+	registryIndexBuilder registry.IndexBuilder,
+	registryRegisterBuilder registry.RegisterBuilder,
+	registerFetchBuilder registry.FetchBuilder,
+	registryBuilder registry.Builder,
 	builder Builder,
 ) Adapter {
 	out := adapter{
-		stackFrameBuilder:  stackFrameBuilder,
-		skipBuilder:        skipBuilder,
-		conditionBuilder:   conditionBuilder,
-		propositionBuilder: propositionBuilder,
-		remainingBuilder:   remainingBuilder,
-		standardBuilder:    standardBuilder,
-		valueBuilder:       valueBuilder,
-		varValueAdapter:    varValueAdapter,
-		varValueFactory:    varValueFactory,
-		varVariableBuilder: varVariableBuilder,
-		callBuilder:        callBuilder,
-		exitBuilder:        exitBuilder,
-		builder:            builder,
+		stackFrameBuilder:       stackFrameBuilder,
+		skipBuilder:             skipBuilder,
+		conditionBuilder:        conditionBuilder,
+		propositionBuilder:      propositionBuilder,
+		remainingBuilder:        remainingBuilder,
+		standardBuilder:         standardBuilder,
+		valueBuilder:            valueBuilder,
+		varValueAdapter:         varValueAdapter,
+		varValueFactory:         varValueFactory,
+		varVariableBuilder:      varVariableBuilder,
+		callBuilder:             callBuilder,
+		exitBuilder:             exitBuilder,
+		registryIndexBuilder:    registryIndexBuilder,
+		registryRegisterBuilder: registryRegisterBuilder,
+		registerFetchBuilder:    registerFetchBuilder,
+		registryBuilder:         registryBuilder,
+		builder:                 builder,
 	}
 
 	return &out
@@ -321,6 +334,86 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 		}
 
 		builder.WithCall(call)
+	}
+
+	if parsed.IsRegistry() {
+		parsedRegistry := parsed.Registry()
+		registry, err := app.registry(parsedRegistry)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithRegistry(registry)
+	}
+
+	return builder.Now()
+}
+
+func (app *adapter) registry(parsed parsers.Registry) (registry.Registry, error) {
+	builder := app.registryBuilder.Create()
+	if parsed.IsFetch() {
+		parsedFetch := parsed.Fetch()
+		to := parsedFetch.To()
+		from := parsedFetch.From()
+		fetchBuilder := app.registerFetchBuilder.Create().From(from).To(to)
+		if parsedFetch.HasIndex() {
+			parsedIndex := parsedFetch.Index()
+			index, err := app.registryIndex(parsedIndex)
+			if err != nil {
+				return nil, err
+			}
+
+			fetchBuilder.WithIndex(index)
+		}
+
+		fetch, err := fetchBuilder.Now()
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithFetch(fetch)
+	}
+
+	if parsed.IsRegister() {
+		parsedRegister := parsed.Register()
+		vr := parsedRegister.Variable()
+		registerBuilder := app.registryRegisterBuilder.Create().WithVariable(vr)
+		if parsedRegister.HasIndex() {
+			parsedIndex := parsedRegister.Index()
+			index, err := app.registryIndex(parsedIndex)
+			if err != nil {
+				return nil, err
+			}
+
+			registerBuilder.WithIndex(index)
+		}
+
+		register, err := registerBuilder.Now()
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithRegister(register)
+	}
+
+	if parsed.IsUnregister() {
+		unregister := parsed.Unregister().Variable()
+		builder.WithUnregister(unregister)
+	}
+
+	return builder.Now()
+}
+
+func (app *adapter) registryIndex(parsed parsers.IntPointer) (registry.Index, error) {
+	builder := app.registryIndexBuilder.Create()
+	if parsed.IsInt() {
+		intVal := parsed.Int()
+		builder.WithInt(intVal)
+	}
+
+	if parsed.IsVariable() {
+		vr := parsed.Variable()
+		builder.WithVariable(vr)
 	}
 
 	return builder.Now()

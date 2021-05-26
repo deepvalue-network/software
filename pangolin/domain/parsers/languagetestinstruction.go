@@ -1,29 +1,36 @@
 package parsers
 
 type languageTestInstruction struct {
-	lang LanguageInstructionCommon
-	test TestInstruction
+	lang        LanguageInstructionCommon
+	test        TestInstruction
+	isInterpret bool
 }
 
 func createLanguageTestInstructionWithLanguage(
 	lang LanguageInstructionCommon,
 ) LanguageTestInstruction {
-	return createLanguageTestInstructionInternally(lang, nil)
+	return createLanguageTestInstructionInternally(lang, nil, false)
 }
 
 func createLanguageTestInstructionWithTest(
 	test TestInstruction,
 ) LanguageTestInstruction {
-	return createLanguageTestInstructionInternally(nil, test)
+	return createLanguageTestInstructionInternally(nil, test, false)
+}
+
+func createLanguageTestInstructionWithIntepret() LanguageTestInstruction {
+	return createLanguageTestInstructionInternally(nil, nil, true)
 }
 
 func createLanguageTestInstructionInternally(
 	lang LanguageInstructionCommon,
 	test TestInstruction,
+	isInterpret bool,
 ) LanguageTestInstruction {
 	out := languageTestInstruction{
-		lang: lang,
-		test: test,
+		lang:        lang,
+		test:        test,
+		isInterpret: isInterpret,
 	}
 
 	return &out
@@ -47,4 +54,9 @@ func (obj *languageTestInstruction) IsTestInstruction() bool {
 // TestInstruction returns the test instruction, if any
 func (obj *languageTestInstruction) TestInstruction() TestInstruction {
 	return obj.test
+}
+
+// IsInterpret returns true if the instruction is interpret
+func (obj *languageTestInstruction) IsInterpret() bool {
+	return obj.isInterpret
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/condition"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/registry"
 	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 	label_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions"
@@ -167,7 +168,136 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 		return nil
 	}
 
+	if ins.IsRegistry() {
+		registry := ins.Registry()
+		if registry.IsFetch() {
+			fetch := registry.Fetch()
+			from := fetch.From()
+			to := fetch.To()
+			if fetch.HasIndex() {
+				index := fetch.Index()
+				indexInt, err := app.registryIndexToIndex(index)
+				if err != nil {
+					return err
+				}
+
+				currentIndex := app.stackFrame.Index()
+				err = app.stackFrame.Skip(indexInt)
+				if err != nil {
+					return err
+				}
+
+				fromVal, err := app.stackFrame.Registry().Fetch(from)
+				if err != nil {
+					return err
+				}
+
+				err = app.stackFrame.Current().UpdateValue(to, fromVal)
+				if err != nil {
+					return err
+				}
+
+				err = app.stackFrame.Skip(currentIndex)
+				if err != nil {
+					return err
+				}
+
+				return nil
+			}
+
+			fromVal, err := app.stackFrame.Registry().Fetch(from)
+			if err != nil {
+				return err
+			}
+
+			err = app.stackFrame.Current().UpdateValue(to, fromVal)
+			if err != nil {
+				return err
+			}
+
+			return nil
+		}
+
+		if registry.IsRegister() {
+			register := registry.Register()
+			variable := register.Variable()
+			if register.HasIndex() {
+				index := register.Index()
+				indexInt, err := app.registryIndexToIndex(index)
+				if err != nil {
+					return err
+				}
+
+				currentIndex := app.stackFrame.Index()
+				err = app.stackFrame.Skip(indexInt)
+				if err != nil {
+					return err
+				}
+
+				fromVal, err := app.stackFrame.Current().Fetch(variable)
+				if err != nil {
+					return err
+				}
+
+				err = app.stackFrame.Registry().Insert(variable, fromVal)
+				if err != nil {
+					return err
+				}
+
+				err = app.stackFrame.Skip(currentIndex)
+				if err != nil {
+					return err
+				}
+
+				return nil
+			}
+
+			fromVal, err := app.stackFrame.Current().Fetch(variable)
+			if err != nil {
+				return err
+			}
+
+			err = app.stackFrame.Registry().Insert(variable, fromVal)
+			if err != nil {
+				return err
+			}
+
+			return nil
+		}
+
+		if registry.IsUnregister() {
+			variable := registry.Unregister()
+			err := app.stackFrame.Registry().Delete(variable)
+			if err != nil {
+				return err
+			}
+
+			return nil
+		}
+	}
+
 	return errors.New("the instruction is invalid")
+}
+
+func (app *instruction) registryIndexToIndex(index registry.Index) (int, error) {
+
+	if index.IsInt() {
+
+	}
+
+	if index.IsVariable() {
+
+	}
+
+	/*
+
+		IsInt() bool
+		Int() int64
+		IsVariable() bool
+		Variable() string
+
+	*/
+	return 0, nil
 }
 
 // ReceiveLbl receives a label instruction

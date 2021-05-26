@@ -29,6 +29,7 @@ type Builder interface {
 	Create() Builder
 	WithLanguage(lang standard_instruction.CommonInstruction) Builder
 	WithTest(test test_instruction.Instruction) Builder
+	IsInterpret() Builder
 	Now() (Instruction, error)
 }
 
@@ -38,4 +39,5 @@ type Instruction interface {
 	Language() standard_instruction.CommonInstruction
 	IsTest() bool
 	Test() test_instruction.Instruction
+	IsInterpret() bool
 }

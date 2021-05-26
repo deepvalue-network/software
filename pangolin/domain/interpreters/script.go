@@ -4,12 +4,14 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type script struct {
+	stackFrameBuilder stackframes.Builder
 	computableBuilder computable.Builder
 	programBuilder    linkers.ProgramBuilder
 	languageBuilder   linkers.LanguageBuilder
@@ -20,6 +22,7 @@ type script struct {
 }
 
 func createScript(
+	stackFrameBuilder stackframes.Builder,
 	computableBuilder computable.Builder,
 	programBuilder linkers.ProgramBuilder,
 	languageBuilder linkers.LanguageBuilder,
@@ -29,6 +32,7 @@ func createScript(
 	linker linkers.Linker,
 ) Script {
 	out := script{
+		stackFrameBuilder: stackFrameBuilder,
 		computableBuilder: computableBuilder,
 		programBuilder:    programBuilder,
 		languageBuilder:   languageBuilder,
@@ -55,10 +59,9 @@ func (app *script) Execute(script linkers.Script) (linkers.Application, error) {
 		return nil, err
 	}
 
-	input := map[string]computable.Value{
+	input := app.stackFrameBuilder.Create().WithVariables(map[string]computable.Value{
 		inVariable: codeValue,
-	}
-
+	}).Now()
 	lang, err := app.languageBuilder.Create().WithApplication(langApp).Now()
 	if err != nil {
 		return nil, err
@@ -74,12 +77,12 @@ func (app *script) Execute(script linkers.Script) (linkers.Application, error) {
 	}
 
 	linkedApp := linkedProgram.Application()
-	stackFrame, err := app.application.Execute(linkedApp, input)
+	registry, err := app.application.Execute(linkedApp, input)
 	if err != nil {
 		return nil, err
 	}
 
-	computedCodeValue, err := stackFrame.Current().Fetch(outVariable)
+	computedCodeValue, err := registry.Fetch(outVariable)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +145,8 @@ func (app *script) Tests(script linkers.Script) error {
 			return errors.New(str)
 		}
 
-		_, err = app.application.Execute(linkedApp, map[string]computable.Value{})
+		input := app.stackFrameBuilder.Create().WithVariables(map[string]computable.Value{}).Now()
+		_, err = app.application.Execute(linkedApp, input)
 		if err != nil {
 			str := fmt.Sprintf("error while executing script application... index: %d, error: %s", index, err.Error())
 			return errors.New(str)

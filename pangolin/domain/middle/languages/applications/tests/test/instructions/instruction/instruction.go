@@ -6,29 +6,36 @@ import (
 )
 
 type instruction struct {
-	lang standard_instruction.CommonInstruction
-	test test_instruction.Instruction
+	lang          standard_instruction.CommonInstruction
+	test          test_instruction.Instruction
+	isInterpret bool
 }
 
 func createInstructionWithLanguage(
 	lang standard_instruction.CommonInstruction,
 ) Instruction {
-	return createInstructionInternally(lang, nil)
+	return createInstructionInternally(lang, nil, false)
 }
 
 func createInstructionWithTest(
 	test test_instruction.Instruction,
 ) Instruction {
-	return createInstructionInternally(nil, test)
+	return createInstructionInternally(nil, test, false)
+}
+
+func createInstructionWithInterpret() Instruction {
+	return createInstructionInternally(nil, nil, true)
 }
 
 func createInstructionInternally(
 	lang standard_instruction.CommonInstruction,
 	test test_instruction.Instruction,
+	isInterpret bool,
 ) Instruction {
 	out := instruction{
-		lang: lang,
-		test: test,
+		lang:          lang,
+		test:          test,
+		isInterpret: isInterpret,
 	}
 
 	return &out
@@ -52,4 +59,9 @@ func (obj *instruction) IsTest() bool {
 // Test returns the test, if any
 func (obj *instruction) Test() test_instruction.Instruction {
 	return obj.test
+}
+
+// IsInterpret returns true if there is an interpret, false otherwise
+func (obj *instruction) IsInterpret() bool {
+	return obj.isInterpret
 }

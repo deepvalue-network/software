@@ -10,30 +10,35 @@ import (
 )
 
 type languageTestInstructionBuilder struct {
-	insLangCommonApp  LanguageInstructionCommonBuilder
-	testInsAppBuilder TestInstructionBuilder
-	langInsBuilder    LanguageInstructionBuilder
-	composerApp       composers.Composer
-	langDef           linkers.LanguageDefinition
-	stackFrame        stackframes.StackFrame
-	state             LanguageState
-	events            []lexers.Event
+	frameBuilder          stackframes.FrameBuilder
+	insLangCommonApp      LanguageInstructionCommonBuilder
+	testInsAppBuilder     TestInstructionBuilder
+	langInsBuilder        LanguageInstructionBuilder
+	interpreterCallBackFn InterpretCallBackFn
+	composerApp           composers.Composer
+	langDef               linkers.LanguageDefinition
+	stackFrame            stackframes.StackFrame
+	state                 LanguageState
+	events                []lexers.Event
 }
 
 func createLanguageTestInstructionBuilder(
+	frameBuilder stackframes.FrameBuilder,
 	insLangCommonApp LanguageInstructionCommonBuilder,
 	testInsAppBuilder TestInstructionBuilder,
 	langInsBuilder LanguageInstructionBuilder,
 ) LanguageTestInstructionBuilder {
 	out := languageTestInstructionBuilder{
-		insLangCommonApp:  insLangCommonApp,
-		testInsAppBuilder: testInsAppBuilder,
-		langInsBuilder:    langInsBuilder,
-		composerApp:       nil,
-		langDef:           nil,
-		stackFrame:        nil,
-		state:             nil,
-		events:            nil,
+		frameBuilder:          frameBuilder,
+		insLangCommonApp:      insLangCommonApp,
+		testInsAppBuilder:     testInsAppBuilder,
+		langInsBuilder:        langInsBuilder,
+		interpreterCallBackFn: nil,
+		composerApp:           nil,
+		langDef:               nil,
+		stackFrame:            nil,
+		state:                 nil,
+		events:                nil,
 	}
 
 	return &out
@@ -41,7 +46,13 @@ func createLanguageTestInstructionBuilder(
 
 // Create initializes the builder
 func (app *languageTestInstructionBuilder) Create() LanguageTestInstructionBuilder {
-	return createLanguageTestInstructionBuilder(app.insLangCommonApp, app.testInsAppBuilder, app.langInsBuilder)
+	return createLanguageTestInstructionBuilder(app.frameBuilder, app.insLangCommonApp, app.testInsAppBuilder, app.langInsBuilder)
+}
+
+// WithInterpreterCallBackkFn adds an interpreter callbackfn to the builder
+func (app *languageTestInstructionBuilder) WithInterpreterCallBackkFn(interpreterCallBackFn InterpretCallBackFn) LanguageTestInstructionBuilder {
+	app.interpreterCallBackFn = interpreterCallBackFn
+	return app
 }
 
 // WithComposer adds a composer to the builder
@@ -76,6 +87,10 @@ func (app *languageTestInstructionBuilder) WithEvents(events []lexers.Event) Lan
 
 // Now builds a new LanguageTestInstruction instance
 func (app *languageTestInstructionBuilder) Now() (LanguageTestInstruction, error) {
+	if app.interpreterCallBackFn == nil {
+		return nil, errors.New("the interpreter callBack func is mandatory in order to build a LanguageTestInstruction instance")
+	}
+
 	if app.composerApp == nil {
 		return nil, errors.New("the composer is mandatory in order to build a LanguageTestInstruction instance")
 	}
@@ -133,5 +148,12 @@ func (app *languageTestInstructionBuilder) Now() (LanguageTestInstruction, error
 		return nil, err
 	}
 
-	return createLanguageTestInstruction(langCommonInsApp, testInsApp), nil
+	return createLanguageTestInstruction(
+		app.frameBuilder,
+		langCommonInsApp,
+		testInsApp,
+		app.composerApp,
+		app.stackFrame,
+		app.interpreterCallBackFn,
+	), nil
 }

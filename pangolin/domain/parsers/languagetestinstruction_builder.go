@@ -3,14 +3,16 @@ package parsers
 import "errors"
 
 type languageTestInstructionBuilder struct {
-	lang LanguageInstructionCommon
-	test TestInstruction
+	lang        LanguageInstructionCommon
+	test        TestInstruction
+	isInterpret bool
 }
 
 func createLanguageTestInstructionBuilder() LanguageTestInstructionBuilder {
 	out := languageTestInstructionBuilder{
-		lang: nil,
-		test: nil,
+		lang:        nil,
+		test:        nil,
+		isInterpret: false,
 	}
 
 	return &out
@@ -33,6 +35,12 @@ func (app *languageTestInstructionBuilder) WithTestInstruction(testIns TestInstr
 	return app
 }
 
+// IsInterpret flags the builder as interpret
+func (app *languageTestInstructionBuilder) IsInterpret() LanguageTestInstructionBuilder {
+	app.isInterpret = true
+	return app
+}
+
 // Now builds a new LanguageTestInstruction instance
 func (app *languageTestInstructionBuilder) Now() (LanguageTestInstruction, error) {
 	if app.lang != nil {
@@ -41,6 +49,10 @@ func (app *languageTestInstructionBuilder) Now() (LanguageTestInstruction, error
 
 	if app.test != nil {
 		return createLanguageTestInstructionWithTest(app.test), nil
+	}
+
+	if app.isInterpret {
+		return createLanguageTestInstructionWithIntepret(), nil
 	}
 
 	return nil, errors.New("the LanguageTestInstruction instance is invalid")

@@ -9,7 +9,6 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 )
 
 type language struct {
@@ -18,6 +17,7 @@ type language struct {
 	stackFrameBuilder         stackframes.Builder
 	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder
 	machineLangInsBuilder     machines.LanguageInstructionBuilder
+	application               Application
 	linker                    linkers.Linker
 	events                    []lexers.Event
 }
@@ -28,6 +28,7 @@ func createLanguage(
 	stackFrameBuilder stackframes.Builder,
 	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder,
 	machineLangInsBuilder machines.LanguageInstructionBuilder,
+	application Application,
 	linker linkers.Linker,
 	events []lexers.Event,
 ) Language {
@@ -37,6 +38,7 @@ func createLanguage(
 		stackFrameBuilder:         stackFrameBuilder,
 		machineLangTestInsBuilder: machineLangTestInsBuilder,
 		machineLangInsBuilder:     machineLangInsBuilder,
+		application:               application,
 		linker:                    linker,
 		events:                    events,
 	}
@@ -45,15 +47,21 @@ func createLanguage(
 }
 
 // Execute executes a language application
-func (app *language) Execute(linkedLangDef linkers.LanguageDefinition, input map[string]computable.Value) (linkers.Application, error) {
-	stackFrame := app.stackFrameBuilder.Create().WithVariables(input).Now()
-	composer, err := app.composerBuilder.Create().WithStackFrame(stackFrame).WithLinker(app.linker).Now()
+func (app *language) Execute(linkedLangDef linkers.LanguageDefinition, input stackframes.StackFrame) (linkers.Application, error) {
+	composer, err := app.composerBuilder.Create().WithStackFrame(input).WithLinker(app.linker).Now()
 	if err != nil {
 		return nil, err
 	}
 
 	state := app.machineStateFactory.Create()
-	machineLangInsApp, err := app.machineLangInsBuilder.Create().WithComposer(composer).WithLanguage(linkedLangDef).WithStackFrame(stackFrame).WithState(state).Now()
+	machineLangInsApp, err := app.machineLangInsBuilder.Create().
+		WithComposer(composer).
+		WithLanguage(linkedLangDef).
+		WithStackFrame(input).
+		WithState(state).
+		WithEvents(app.events).
+		Now()
+
 	if err != nil {
 		return nil, err
 	}
@@ -71,6 +79,10 @@ func (app *language) Execute(linkedLangDef linkers.LanguageDefinition, input map
 
 //Tests executes tests
 func (app *language) Tests(linkedLangDef linkers.LanguageDefinition) error {
+	interpreterCallBackFn := func(composedApp linkers.Application, input stackframes.StackFrame) (stackframes.Registry, error) {
+		return app.application.Execute(composedApp, input)
+	}
+
 	langApp := linkedLangDef.Application()
 	tests := langApp.Tests().All()
 	fmt.Printf(delimiter)
@@ -90,6 +102,8 @@ func (app *language) Tests(linkedLangDef linkers.LanguageDefinition) error {
 			WithLanguage(linkedLangDef).
 			WithStackFrame(stackFrame).
 			WithState(languageState).
+			WithEvents(app.events).
+			WithInterpreterCallBackkFn(interpreterCallBackFn).
 			Now()
 
 		if err != nil {

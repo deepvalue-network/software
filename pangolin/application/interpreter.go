@@ -4,7 +4,6 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 )
 
 type interpreter struct {
@@ -22,7 +21,7 @@ func createInterpreter(
 }
 
 // Execute executes an executable
-func (app *interpreter) Execute(excutable linkers.Executable, input map[string]computable.Value) (stackframes.StackFrame, error) {
+func (app *interpreter) Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.Registry, error) {
 	return app.in.Execute(excutable, input)
 }
 

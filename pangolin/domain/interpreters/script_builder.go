@@ -3,6 +3,7 @@ package interpreters
 import (
 	"errors"
 
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
@@ -10,6 +11,7 @@ import (
 )
 
 type scriptBuilder struct {
+	stackframeBuilder    stackframes.Builder
 	computableBuilder    computable.Builder
 	programBuilder       linkers.ProgramBuilder
 	linkerLnguageBuilder linkers.LanguageBuilder
@@ -21,6 +23,7 @@ type scriptBuilder struct {
 }
 
 func createScriptBuilder(
+	stackframeBuilder stackframes.Builder,
 	computableBuilder computable.Builder,
 	programBuilder linkers.ProgramBuilder,
 	linkerLnguageBuilder linkers.LanguageBuilder,
@@ -28,6 +31,7 @@ func createScriptBuilder(
 	application Application,
 ) ScriptBuilder {
 	out := scriptBuilder{
+		stackframeBuilder:    stackframeBuilder,
 		computableBuilder:    computableBuilder,
 		programBuilder:       programBuilder,
 		linkerLnguageBuilder: linkerLnguageBuilder,
@@ -44,6 +48,7 @@ func createScriptBuilder(
 // Create initializes the builder
 func (app *scriptBuilder) Create() ScriptBuilder {
 	return createScriptBuilder(
+		app.stackframeBuilder,
 		app.computableBuilder,
 		app.programBuilder,
 		app.linkerLnguageBuilder,
@@ -86,6 +91,7 @@ func (app *scriptBuilder) Now() (Script, error) {
 	}
 
 	return createScript(
+		app.stackframeBuilder,
 		app.computableBuilder,
 		app.programBuilder,
 		app.linkerLnguageBuilder,

@@ -17,6 +17,7 @@ type languageBuilder struct {
 	stackFrameBuilder         stackframes.Builder
 	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder
 	machineLangInsBuilder     machines.LanguageInstructionBuilder
+	application               Application
 	linker                    linkers.Linker
 	events                    []lexers.Event
 }
@@ -28,6 +29,7 @@ func createLanguageBuilder(
 	stackFrameBuilder stackframes.Builder,
 	machineLangTestInsBuilder machines.LanguageTestInstructionBuilder,
 	machineLangInsBuilder machines.LanguageInstructionBuilder,
+	application Application,
 ) LanguageBuilder {
 	out := languageBuilder{
 		lexerAdapterBuilder:       lexerAdapterBuilder,
@@ -36,6 +38,7 @@ func createLanguageBuilder(
 		stackFrameBuilder:         stackFrameBuilder,
 		machineLangTestInsBuilder: machineLangTestInsBuilder,
 		machineLangInsBuilder:     machineLangInsBuilder,
+		application:               application,
 		linker:                    nil,
 		events:                    nil,
 	}
@@ -52,6 +55,7 @@ func (app *languageBuilder) Create() LanguageBuilder {
 		app.stackFrameBuilder,
 		app.machineLangTestInsBuilder,
 		app.machineLangInsBuilder,
+		app.application,
 	)
 }
 
@@ -79,6 +83,7 @@ func (app *languageBuilder) Now() (Language, error) {
 		app.stackFrameBuilder,
 		app.machineLangTestInsBuilder,
 		app.machineLangInsBuilder,
+		app.application,
 		app.linker,
 		app.events,
 	), nil

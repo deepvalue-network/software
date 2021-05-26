@@ -59,6 +59,10 @@ type parserBuilder struct {
 	labelInstructionBuilder          LabelInstructionBuilder
 	mainSectionBuilder               MainSectionBuilder
 	instructionBuilder               InstructionBuilder
+	registryBuilder                  RegistryBuilder
+	fetchRegistryBuilder             FetchRegistryBuilder
+	unregisterBuilder                UnregisterBuilder
+	registerBuilder                  RegisterBuilder
 	specificTokenCodeBuilder         SpecificTokenCodeBuilder
 	tokenSectionBuilder              TokenSectionBuilder
 	codeMatchBuilder                 CodeMatchBuilder
@@ -143,6 +147,10 @@ func createParserBuilder(
 	labelInstructionBuilder LabelInstructionBuilder,
 	mainSectionBuilder MainSectionBuilder,
 	instructionBuilder InstructionBuilder,
+	registryBuilder RegistryBuilder,
+	fetchRegistryBuilder FetchRegistryBuilder,
+	unregisterBuilder UnregisterBuilder,
+	registerBuilder RegisterBuilder,
 	specificTokenCodeBuilder SpecificTokenCodeBuilder,
 	tokenSectionBuilder TokenSectionBuilder,
 	codeMatchBuilder CodeMatchBuilder,
@@ -225,6 +233,10 @@ func createParserBuilder(
 		labelInstructionBuilder:          labelInstructionBuilder,
 		mainSectionBuilder:               mainSectionBuilder,
 		instructionBuilder:               instructionBuilder,
+		registryBuilder:                  registryBuilder,
+		fetchRegistryBuilder:             fetchRegistryBuilder,
+		unregisterBuilder:                unregisterBuilder,
+		registerBuilder:                  registerBuilder,
 		specificTokenCodeBuilder:         specificTokenCodeBuilder,
 		tokenSectionBuilder:              tokenSectionBuilder,
 		codeMatchBuilder:                 codeMatchBuilder,
@@ -314,6 +326,10 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.labelInstructionBuilder,
 		app.mainSectionBuilder,
 		app.instructionBuilder,
+		app.registryBuilder,
+		app.fetchRegistryBuilder,
+		app.unregisterBuilder,
+		app.registerBuilder,
 		app.specificTokenCodeBuilder,
 		app.tokenSectionBuilder,
 		app.codeMatchBuilder,
@@ -407,6 +423,10 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.labelInstructionBuilder,
 		app.mainSectionBuilder,
 		app.instructionBuilder,
+		app.registryBuilder,
+		app.fetchRegistryBuilder,
+		app.unregisterBuilder,
+		app.registerBuilder,
 		app.specificTokenCodeBuilder,
 		app.tokenSectionBuilder,
 		app.codeMatchBuilder,

@@ -35,7 +35,6 @@ scriptTest
     : TEST_NAME_PATTERN COLON relativePath
     ;
 
-
 command
     : languageCommand
     | scriptCommand
@@ -113,6 +112,7 @@ languageTestDeclaration
 languageTestInstruction
     : languageInstructionCommon
     | testInstruction
+    | INTERPRET DOT
     ;
 
 languageLabelSection
@@ -313,6 +313,27 @@ instruction
     | jump DOT
     | exit DOT
     | call DOT
+    | registry DOT
+    ;
+
+registry
+    : register
+    | unregister
+    | fetchRegistry
+    ;
+
+fetchRegistry
+    : FETCH_REGISTRY COLON VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA intPointer
+    | FETCH_REGISTRY COLON VARIABLE_PATTERN COMMA VARIABLE_PATTERN
+    ;
+
+unregister
+    : UNREGISTER COLON VARIABLE_PATTERN
+    ;
+
+register
+    : REGISTER COLON VARIABLE_PATTERN COMMA intPointer
+    | REGISTER COLON VARIABLE_PATTERN
     ;
 
 variable

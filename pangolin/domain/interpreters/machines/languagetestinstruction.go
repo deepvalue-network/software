@@ -1,21 +1,35 @@
 package machines
 
 import (
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters/composers"
+	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions/instruction"
 )
 
 type languageTestInstruction struct {
-	insLangCommonApp LanguageInstructionCommon
-	testInsApp       TestInstruction
+	frameBuilder          stackframes.FrameBuilder
+	insLangCommonApp      LanguageInstructionCommon
+	testInsApp            TestInstruction
+	composerApp           composers.Composer
+	stackFrame            stackframes.StackFrame
+	interpreterCallBackFn InterpretCallBackFn
 }
 
 func createLanguageTestInstruction(
+	frameBuilder stackframes.FrameBuilder,
 	insLangCommonApp LanguageInstructionCommon,
 	testInsApp TestInstruction,
+	composerApp composers.Composer,
+	stackFrame stackframes.StackFrame,
+	interpreterCallBackFn InterpretCallBackFn,
 ) LanguageTestInstruction {
 	out := languageTestInstruction{
-		insLangCommonApp: insLangCommonApp,
-		testInsApp:       testInsApp,
+		frameBuilder:          frameBuilder,
+		insLangCommonApp:      insLangCommonApp,
+		testInsApp:            testInsApp,
+		composerApp:           composerApp,
+		stackFrame:            stackFrame,
+		interpreterCallBackFn: interpreterCallBackFn,
 	}
 
 	return &out
@@ -28,6 +42,22 @@ func (app *languageTestInstruction) Receive(testIns language_test_instruction.In
 		return false, app.insLangCommonApp.Receive(
 			langIns,
 		)
+	}
+
+	if testIns.IsInterpret() {
+		linkedApp, err := app.composerApp.Now()
+		if err != nil {
+			return false, err
+		}
+
+		reg, err := app.interpreterCallBackFn(linkedApp, app.stackFrame)
+		if err != nil {
+			return false, nil
+		}
+
+		variables := reg.All()
+		frame := app.frameBuilder.Create().WithVariables(variables).Now()
+		app.stackFrame.Add(frame)
 	}
 
 	testInstruction := testIns.Test()

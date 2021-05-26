@@ -12,14 +12,17 @@ type stackFrame struct {
 	variables    map[string]computable.Value
 	frames       []Frame
 	index        int
+	registry     Registry
 }
 
 func createStackFrame(
 	frameBuilder FrameBuilder,
+	registry Registry,
 	variables map[string]computable.Value,
 ) StackFrame {
 	out := stackFrame{
 		frameBuilder: frameBuilder,
+		registry:     registry,
 		variables:    variables,
 		index:        0,
 		frames: []Frame{
@@ -59,6 +62,12 @@ func (app *stackFrame) Index() int {
 	return app.index
 }
 
+// Add adds a frame
+func (app *stackFrame) Add(frame Frame) {
+	app.frames = append(app.frames, frame)
+	app.index++
+}
+
 // Skip skips the stackFrame to the specified index
 func (app *stackFrame) Skip(index int) error {
 	if index >= len(app.frames) {
@@ -78,4 +87,9 @@ func (app *stackFrame) Skip(index int) error {
 // Current returns the current frame
 func (app *stackFrame) Current() Frame {
 	return app.frames[app.index]
+}
+
+// Registry returns the registry
+func (app *stackFrame) Registry() Registry {
+	return app.registry
 }

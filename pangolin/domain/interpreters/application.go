@@ -7,7 +7,6 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/machines"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
 )
 
 type application struct {
@@ -31,10 +30,9 @@ func createApplication(
 }
 
 // Execute executes an application in the interpreter
-func (app *application) Execute(linkedApp linkers.Application, input map[string]computable.Value) (stackframes.StackFrame, error) {
+func (app *application) Execute(linkedApp linkers.Application, input stackframes.StackFrame) (stackframes.Registry, error) {
 	labels := linkedApp.Labels()
-	stackFrame := app.stackFrameBuilder.Create().WithVariables(input).Now()
-	machine, err := app.insMachineBuilder.Create().WithLabels(labels).WithStackFrame(stackFrame).Now()
+	machine, err := app.insMachineBuilder.Create().WithLabels(labels).WithStackFrame(input).Now()
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +46,7 @@ func (app *application) Execute(linkedApp linkers.Application, input map[string]
 		return nil, err
 	}
 
-	return stackFrame, nil
+	return input.Registry(), nil
 }
 
 // Tests execute tests

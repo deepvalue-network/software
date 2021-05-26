@@ -6,6 +6,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/exit"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/registry"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
@@ -24,6 +25,7 @@ type builder struct {
 	del        string
 	call       call.Call
 	exit       exit.Exit
+	reg        registry.Registry
 }
 
 func createBuilder() Builder {
@@ -38,6 +40,7 @@ func createBuilder() Builder {
 		del:        "",
 		call:       nil,
 		exit:       nil,
+		reg:        nil,
 	}
 
 	return &out
@@ -108,6 +111,12 @@ func (app *builder) WithExit(exit exit.Exit) Builder {
 	return app
 }
 
+// WithRegistry adds a registry to the builder
+func (app *builder) WithRegistry(reg registry.Registry) Builder {
+	app.reg = reg
+	return app
+}
+
 // Now builds a new Instruction instance
 func (app *builder) Now() (Instruction, error) {
 	if app.stackframe != nil {
@@ -148,6 +157,10 @@ func (app *builder) Now() (Instruction, error) {
 
 	if app.exit != nil {
 		return createInstructionWithExit(app.exit), nil
+	}
+
+	if app.reg != nil {
+		return createInstructionWithRegistry(app.reg), nil
 	}
 
 	return nil, errors.New("the Instruction is invalid")
