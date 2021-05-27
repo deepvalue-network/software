@@ -20,6 +20,6 @@ func createLinker(
 }
 
 // Execute takes a parsed program and links it
-func (app *linker) Execute(parsed parsers.Program) (linkers.Executable, error) {
+func (app *linker) Execute(parsed parsers.Program) (linkers.Program, error) {
 	return app.lnk.Execute(parsed)
 }

@@ -8,21 +8,22 @@ import (
 
 	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
 	"github.com/deepvalue-network/software/pangolin/domain/middle"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages"
-	language_applications "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/scripts"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/scripts"
+	language_applications "github.com/deepvalue-network/software/pangolin/domain/middle/applications"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/languages/definitions"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type linker struct {
 	middleAdapter                   middle.Adapter
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder
-	applicationBuilder              ApplicationBuilder
-	languageBuilder                 LanguageBuilder
-	executableBuilder               ExecutableBuilder
 	programBuilder                  ProgramBuilder
+	testableBuilder                 TestableBuilder
+	executableBuilder               ExecutableBuilder
+	applicationBuilder              ApplicationBuilder
 	languageDefinitionBuilder       LanguageDefinitionBuilder
 	pathsBuilder                    PathsBuilder
 	scriptBuilder                   ScriptBuilder
@@ -37,10 +38,10 @@ type linker struct {
 func createLinker(
 	middleAdapter middle.Adapter,
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder,
-	applicationBuilder ApplicationBuilder,
-	languageBuilder LanguageBuilder,
-	executableBuilder ExecutableBuilder,
 	programBuilder ProgramBuilder,
+	testableBuilder TestableBuilder,
+	executableBuilder ExecutableBuilder,
+	applicationBuilder ApplicationBuilder,
 	languageDefinitionBuilder LanguageDefinitionBuilder,
 	pathsBuilder PathsBuilder,
 	scriptBuilder ScriptBuilder,
@@ -53,10 +54,10 @@ func createLinker(
 	out := linker{
 		middleAdapter:                   middleAdapter,
 		grammarRetrieverCriteriaBuilder: grammarRetrieverCriteriaBuilder,
-		applicationBuilder:              applicationBuilder,
-		languageBuilder:                 languageBuilder,
-		executableBuilder:               executableBuilder,
 		programBuilder:                  programBuilder,
+		testableBuilder:                 testableBuilder,
+		executableBuilder:               executableBuilder,
+		applicationBuilder:              applicationBuilder,
 		languageDefinitionBuilder:       languageDefinitionBuilder,
 		pathsBuilder:                    pathsBuilder,
 		scriptBuilder:                   scriptBuilder,
@@ -72,28 +73,8 @@ func createLinker(
 }
 
 // Execute links a parsed program into a linked program
-func (app *linker) Execute(parsed parsers.Program) (Executable, error) {
-	program, err := app.parsedProgram(parsed)
-	if err != nil {
-		return nil, err
-	}
-
-	if program.IsLanguage() {
-		return nil, errors.New("the linked executable cannot be a language")
-	}
-
-	builder := app.executableBuilder.Create()
-	if program.IsApplication() {
-		app := program.Application()
-		builder.WithApplication(app)
-	}
-
-	if program.IsScript() {
-		script := program.Script()
-		builder.WithScript(script)
-	}
-
-	return builder.Now()
+func (app *linker) Execute(parsed parsers.Program) (Program, error) {
+	return app.parsedProgram(parsed)
 }
 
 func (app *linker) parsedProgram(parsed parsers.Program) (Program, error) {
@@ -108,13 +89,63 @@ func (app *linker) parsedProgram(parsed parsers.Program) (Program, error) {
 func (app *linker) program(
 	program middle.Program,
 ) (Program, error) {
-
-	// create the program builder:
 	builder := app.programBuilder.Create()
+	if program.IsTestable() {
+		testable := program.Testable()
+		linkedTestable, err := app.testable(testable)
+		if err != nil {
+			return nil, err
+		}
 
-	// application:
-	if program.IsApplication() {
-		appli := program.Application()
+		builder.WithTestable(linkedTestable)
+	}
+
+	if program.IsLanguage() {
+		langApp := program.Language()
+		linkedLangAppli, err := app.languageApplication(langApp)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithLanguage(linkedLangAppli)
+	}
+
+	return builder.Now()
+}
+
+func (app *linker) testable(
+	testable testables.Testable,
+) (Testable, error) {
+	builder := app.testableBuilder.Create()
+	if testable.IsExecutable() {
+		executable := testable.Executable()
+		linkedExecutable, err := app.executable(executable)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithExecutable(linkedExecutable)
+	}
+
+	if testable.IsLanguage() {
+		langDef := testable.Language()
+		linkedLangRef, err := app.languageReference(langDef)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithLanguage(linkedLangRef)
+	}
+
+	return builder.Now()
+}
+
+func (app *linker) executable(
+	executable executables.Executable,
+) (Executable, error) {
+	builder := app.executableBuilder.Create()
+	if executable.IsApplication() {
+		appli := executable.Application()
 		linkedApp, err := app.application(appli)
 		if err != nil {
 			return nil, err
@@ -123,29 +154,16 @@ func (app *linker) program(
 		builder.WithApplication(linkedApp)
 	}
 
-	// language:
-	if program.IsLanguage() {
-		language := program.Language()
-		app, err := app.language(language)
+	if executable.IsScript() {
+		script := executable.Script()
+		linkedScript, err := app.script(script)
 		if err != nil {
 			return nil, err
 		}
 
-		builder.WithLanguage(app)
+		builder.WithScript(linkedScript)
 	}
 
-	// script:
-	if program.IsScript() {
-		script := program.Script()
-		app, err := app.script(script)
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithScript(app)
-	}
-
-	// return the built program:
 	return builder.Now()
 }
 
@@ -221,13 +239,18 @@ func (app *linker) script(
 					return nil, err
 				}
 
-				if !prog.IsScript() {
-					return nil, errors.New("the test was expected to be written in a script")
+				if !prog.IsTestable() {
+					return nil, errors.New("the test was expected to contain a testable application")
+				}
+
+				testable := prog.Testable()
+				if !testable.IsExecutable() {
+					return nil, errors.New("the test was expected to contain an executable application")
 				}
 
 				name := oneParsedTest.Name()
-				testScript := prog.Script()
-				test, err := app.testBuilder.Create().WithName(name).WithScript(testScript).Now()
+				executable := testable.Executable()
+				test, err := app.testBuilder.Create().WithName(name).WithExecutable(executable).Now()
 				if err != nil {
 					return nil, err
 				}
@@ -241,33 +264,6 @@ func (app *linker) script(
 		}
 
 		builder.WithTests(tests)
-	}
-
-	return builder.Now()
-}
-
-func (app *linker) language(
-	language languages.Language,
-) (Language, error) {
-	builder := app.languageBuilder.Create()
-	if language.IsDefinition() {
-		def := language.Definition()
-		langRef, err := app.languageReference(def)
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithReference(langRef)
-	}
-
-	if language.IsApplication() {
-		langApp := language.Application()
-		app, err := app.languageApplication(langApp)
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithApplication(app)
 	}
 
 	return builder.Now()
@@ -317,11 +313,6 @@ func (app *linker) languageDefinition(
 			return nil, strErr
 		}
 
-		progLang := program.Language()
-		if !progLang.IsApplication() {
-			return nil, strErr
-		}
-
 		tokensPath := def.TokensPath()
 		rulesPath := def.RulesPath()
 		pathBuider := app.pathsBuilder.Create().
@@ -341,7 +332,7 @@ func (app *linker) languageDefinition(
 		}
 
 		root := def.Root()
-		langApp := progLang.Application()
+		langApp := program.Language()
 		patternMatches := def.PatternMatches()
 		return app.languageDefinitionBuilder.Create().
 			WithApplication(langApp).
@@ -388,18 +379,18 @@ func (app *linker) fileLanguageReference(
 			return nil, err
 		}
 
-		if !program.IsLanguage() {
-			str := fmt.Sprintf("the language file (%s) was expected to contain a Language Reference program", absLangPath)
+		if !program.IsTestable() {
+			str := fmt.Sprintf("the language file (%s) was expected to contain a testable program", absLangPath)
 			return nil, errors.New(str)
 		}
 
-		language := program.Language()
-		if !language.IsReference() {
-			str := fmt.Sprintf("the language file (%s) was expected to contain a Language Reference program", absLangPath)
+		testable := program.Testable()
+		if !testable.IsLanguage() {
+			str := fmt.Sprintf("the language file (%s) was expected to contain a testable language program", absLangPath)
 			return nil, errors.New(str)
 		}
 
-		return language.Reference(), nil
+		return testable.Language(), nil
 	}
 
 	str := fmt.Sprintf("the parsed program (relative path: %s) is invalid", absLangPath)

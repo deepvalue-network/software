@@ -1,18 +1,18 @@
 package tests
 
 import (
+	"errors"
+
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test"
 )
 
 type builder struct {
-	lst []test.Test
-	mp  map[string]test.Test
+	list []test.Test
 }
 
 func createBuilder() Builder {
 	out := builder{
-		lst: nil,
-		mp:  nil,
+		list: nil,
 	}
 
 	return &out
@@ -23,32 +23,21 @@ func (app *builder) Create() Builder {
 	return createBuilder()
 }
 
-// WithList add list to the builder
-func (app *builder) WithList(lst []test.Test) Builder {
-	app.lst = lst
+// WithList add tests to the builder
+func (app *builder) WithList(list []test.Test) Builder {
+	app.list = list
 	return app
 }
 
-// WithMap add map to the builder
-func (app *builder) WithMap(mp map[string]test.Test) Builder {
-	app.mp = mp
-	return app
-}
-
-// Now builds a new Tests instance
+// Now builds a new Instructins instance
 func (app *builder) Now() (Tests, error) {
-	if app.mp != nil {
-		lst := []test.Test{}
-		for _, oneLabel := range app.mp {
-			lst = append(lst, oneLabel)
-		}
-
-		app.lst = lst
+	if app.list != nil && len(app.list) <= 0 {
+		app.list = nil
 	}
 
-	if app.lst == nil {
-		app.lst = []test.Test{}
+	if app.list == nil {
+		return nil, errors.New("the []Test are mandatory in order to build an Tests instance")
 	}
 
-	return createTests(app.lst), nil
+	return createTests(app.list), nil
 }

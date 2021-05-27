@@ -16,14 +16,19 @@ func NewProgramBuilder() ProgramBuilder {
 	return createProgramBuilder()
 }
 
+// NewTestableBuilder creates a new testable builder
+func NewTestableBuilder() TestableBuilder {
+	return createTestableBuilder()
+}
+
+// NewExecutableBuilder creates a new executable builder
+func NewExecutableBuilder() ExecutableBuilder {
+	return createExecutableBuilder()
+}
+
 // NewApplicationBuilder creates a new application builder
 func NewApplicationBuilder() ApplicationBuilder {
 	return createApplicationBuilder()
-}
-
-// NewLanguageBuilder creates a new language builder
-func NewLanguageBuilder() LanguageBuilder {
-	return createLanguageBuilder()
 }
 
 // NewScopesBuilder creates a new scopes builder
@@ -424,7 +429,8 @@ func NewParserBuilder() ParserBuilder {
 	parserBuilder := lparser.NewBuilder()
 	lexerBuilder := lexers.NewBuilder()
 	programBuilder := NewProgramBuilder()
-	languageBuilder := NewLanguageBuilder()
+	testableBuilder := NewTestableBuilder()
+	executableBuilder := NewExecutableBuilder()
 	scopesBuilder := NewScopesBuilder()
 	scopeBuilder := NewScopeBuilder()
 	commandBuilder := NewCommandBuilder()
@@ -510,7 +516,8 @@ func NewParserBuilder() ParserBuilder {
 		parserBuilder,
 		lexerBuilder,
 		programBuilder,
-		languageBuilder,
+		testableBuilder,
+		executableBuilder,
 		scopesBuilder,
 		scopeBuilder,
 		commandBuilder,
@@ -640,36 +647,49 @@ type Parser interface {
 // ProgramBuilder represents the program builder
 type ProgramBuilder interface {
 	Create() ProgramBuilder
-	WithApplication(app Application) ProgramBuilder
-	WithLanguage(lang Language) ProgramBuilder
-	WithScript(script Script) ProgramBuilder
+	WithTestable(testable Testable) ProgramBuilder
+	WithLanguage(lang LanguageApplication) ProgramBuilder
 	Now() (Program, error)
 }
 
 // Program represents the program
 type Program interface {
+	IsTestable() bool
+	Testable() Testable
+	IsLanguage() bool
+	Language() LanguageApplication
+}
+
+// TestableBuilder represents a testable builder
+type TestableBuilder interface {
+	Create() TestableBuilder
+	WithExecutable(executable Executable) TestableBuilder
+	WithLanguage(language LanguageDefinition) TestableBuilder
+	Now() (Testable, error)
+}
+
+// Testable represents a testable program
+type Testable interface {
+	IsExecutable() bool
+	Executable() Executable
+	IsLanguage() bool
+	Language() LanguageDefinition
+}
+
+// ExecutableBuilder represents an executable builder
+type ExecutableBuilder interface {
+	Create() ExecutableBuilder
+	WithApplication(application Application) ExecutableBuilder
+	WithScript(script Script) ExecutableBuilder
+	Now() (Executable, error)
+}
+
+// Executable represents an executable program
+type Executable interface {
 	IsApplication() bool
 	Application() Application
-	IsLanguage() bool
-	Language() Language
 	IsScript() bool
 	Script() Script
-}
-
-// LanguageBuilder represents a language builder
-type LanguageBuilder interface {
-	Create() LanguageBuilder
-	WithApplication(application LanguageApplication) LanguageBuilder
-	WithDefinition(definition LanguageDefinition) LanguageBuilder
-	Now() (Language, error)
-}
-
-// Language represents a language
-type Language interface {
-	IsApplication() bool
-	Application() LanguageApplication
-	IsDefinition() bool
-	Definition() LanguageDefinition
 }
 
 // ScriptBuilder represents a script builder

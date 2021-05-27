@@ -17,16 +17,15 @@ func NewBuilder() Builder {
 	return createBuilder()
 }
 
-// Adapter represents the labels adapter
+// Adapter represents an adapter
 type Adapter interface {
-	ToLabels(section parsers.LabelSection) (Labels, error)
+	ToLabels(parsed parsers.LanguageLabelSection) (Labels, error)
 }
 
-// Builder represents the labels builder
+// Builder represents a labels builder
 type Builder interface {
 	Create() Builder
-	WithList(lst []label.Label) Builder
-	WithMap(mp map[string]label.Label) Builder
+	WithList(list []label.Label) Builder
 	Now() (Labels, error)
 }
 

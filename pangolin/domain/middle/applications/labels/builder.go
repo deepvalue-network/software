@@ -1,18 +1,18 @@
 package labels
 
 import (
+	"errors"
+
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label"
 )
 
 type builder struct {
-	lst []label.Label
-	mp  map[string]label.Label
+	list []label.Label
 }
 
 func createBuilder() Builder {
 	out := builder{
-		lst: nil,
-		mp:  nil,
+		list: nil,
 	}
 
 	return &out
@@ -23,38 +23,27 @@ func (app *builder) Create() Builder {
 	return createBuilder()
 }
 
-// WithList add list to the builder
-func (app *builder) WithList(lst []label.Label) Builder {
-	app.lst = lst
+// WithList add labels to the builder
+func (app *builder) WithList(list []label.Label) Builder {
+	app.list = list
 	return app
 }
 
-// WithMap add map to the builder
-func (app *builder) WithMap(mp map[string]label.Label) Builder {
-	app.mp = mp
-	return app
-}
-
-// Now builds a new Labels instance
+// Now builds a new Instructins instance
 func (app *builder) Now() (Labels, error) {
-	if app.mp != nil {
-		lst := []label.Label{}
-		for _, oneLabel := range app.mp {
-			lst = append(lst, oneLabel)
-		}
-
-		app.lst = lst
+	if app.list != nil && len(app.list) <= 0 {
+		app.list = nil
 	}
 
-	if app.lst == nil {
-		app.lst = []label.Label{}
+	if app.list == nil {
+		return nil, errors.New("the []Label are mandatory in order to build an Labels instance")
 	}
 
 	mp := map[string]label.Label{}
-	for _, lbl := range app.lst {
-		name := lbl.Name()
-		mp[name] = lbl
+	for _, oneLabel := range app.list {
+		name := oneLabel.Name()
+		mp[name] = oneLabel
 	}
 
-	return createLabels(mp, app.lst), nil
+	return createLabels(mp, app.list), nil
 }

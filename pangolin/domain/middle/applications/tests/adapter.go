@@ -22,18 +22,18 @@ func createAdapter(
 	return &out
 }
 
-// ToTests converts a testSection to tests
-func (app *adapter) ToTests(section parsers.TestSection) (Tests, error) {
-	lst := []test.Test{}
-	declarations := section.Declarations()
+// ToTests converts a parsed language test section to tests
+func (app *adapter) ToTests(parsed parsers.LanguageTestSection) (Tests, error) {
+	list := []test.Test{}
+	declarations := parsed.Declarations()
 	for _, oneDeclaration := range declarations {
 		test, err := app.testAdapter.ToTest(oneDeclaration)
 		if err != nil {
 			return nil, err
 		}
 
-		lst = append(lst, test)
+		list = append(list, test)
 	}
 
-	return app.builder.Create().WithList(lst).Now()
+	return app.builder.Create().WithList(list).Now()
 }

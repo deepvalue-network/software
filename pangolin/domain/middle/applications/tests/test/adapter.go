@@ -22,14 +22,14 @@ func createAdapter(
 	return &out
 }
 
-// ToTest converts a TestDeclaration to a Test instance
-func (app *adapter) ToTest(declaration parsers.TestDeclaration) (Test, error) {
-	name := declaration.Name()
-	parsedIns := declaration.Instructions()
-	ins, err := app.instructionsAdapter.ToInstructions(parsedIns)
+// ToTest converts a language test declaration to a Test instance
+func (app *adapter) ToTest(parsed parsers.LanguageTestDeclaration) (Test, error) {
+	parsedInstructions := parsed.Instructions()
+	instructions, err := app.instructionsAdapter.ToInstructions(parsedInstructions)
 	if err != nil {
 		return nil, err
 	}
 
-	return app.builder.Create().WithName(name).WithInstructions(ins).Now()
+	name := parsed.Name()
+	return app.builder.Create().WithName(name).WithInstructions(instructions).Now()
 }

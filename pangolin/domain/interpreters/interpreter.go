@@ -6,45 +6,28 @@ import (
 )
 
 type interpreter struct {
-	application Application
-	script      Script
+	testable   Testable
+	executable Executable
 }
 
 func createInterpreter(
-	application Application,
-	script Script,
+	testable Testable,
+	executable Executable,
 ) Interpreter {
 	out := interpreter{
-		application: application,
-		script:      script,
+		testable:   testable,
+		executable: executable,
 	}
 
 	return &out
 }
 
-// Execute executes the interpreter
-func (app *interpreter) Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.Registry, error) {
-	if excutable.IsApplication() {
-		linkedApp := excutable.Application()
-		return app.application.Execute(linkedApp, input)
-	}
-
-	linkedScript := excutable.Script()
-	linkedApp, err := app.script.Execute(linkedScript)
-	if err != nil {
-		return nil, err
-	}
-
-	return app.application.Execute(linkedApp, input)
+// Execute executes an executable instance
+func (app *interpreter) Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.StackFrame, error) {
+	return app.executable.Execute(excutable, input)
 }
 
-// Tests executes the  tests
-func (app *interpreter) Tests(excutable linkers.Executable) error {
-	if excutable.IsApplication() {
-		linkedApp := excutable.Application()
-		return app.application.Tests(linkedApp)
-	}
-
-	linkedScript := excutable.Script()
-	return app.script.Tests(linkedScript)
+// Tests executes tests on a testable instance
+func (app *interpreter) Tests(testable linkers.Testable) error {
+	return app.testable.Execute(testable)
 }

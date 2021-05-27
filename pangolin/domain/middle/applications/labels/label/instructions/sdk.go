@@ -17,20 +17,19 @@ func NewBuilder() Builder {
 	return createBuilder()
 }
 
-// Adapter represents the label instructions adapter
+// Adapter represents an instructions adapter
 type Adapter interface {
-	ToInstructions(instructions []parsers.LabelInstruction) (Instructions, error)
+	ToInstructions(parsed []parsers.LanguageLabelInstruction) (Instructions, error)
 }
 
-// Builder represents the label instructions builder
+// Builder represents an instructions builder
 type Builder interface {
 	Create() Builder
-	WithList(lst []instruction.Instruction) Builder
-	WithMap(mp map[string]instruction.Instruction) Builder
+	WithList(list []instruction.Instruction) Builder
 	Now() (Instructions, error)
 }
 
-// Instructions represents label instructions
+// Instructions represents instructions
 type Instructions interface {
 	All() []instruction.Instruction
 }

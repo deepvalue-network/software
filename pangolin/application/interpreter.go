@@ -21,11 +21,11 @@ func createInterpreter(
 }
 
 // Execute executes an executable
-func (app *interpreter) Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.Registry, error) {
+func (app *interpreter) Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.StackFrame, error) {
 	return app.in.Execute(excutable, input)
 }
 
 // Tests executes the tests of an executable
-func (app *interpreter) Tests(excutable linkers.Executable) error {
-	return app.in.Tests(excutable)
+func (app *interpreter) Tests(testable linkers.Testable) error {
+	return app.in.Tests(testable)
 }

@@ -1,10 +1,10 @@
 package stackframes
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
-	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/remaining"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/standard"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value/computable"
 )
 
 // NewBuilder creates a new builder

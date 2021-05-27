@@ -5,13 +5,13 @@ import (
 	"fmt"
 
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
-	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/condition"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/registry"
-	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
-	label_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions"
-	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
+	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/condition"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/registry"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value/computable"
+	label_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels/label/instructions"
+	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels/label/instructions/instruction"
 )
 
 type instruction struct {

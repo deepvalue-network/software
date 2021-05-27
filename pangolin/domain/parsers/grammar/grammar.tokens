@@ -1,12 +1,16 @@
 program
-    : application
-    | language
-    | script
+    : testable
+    | languageApplication
     ;
 
-language
-    : languageDefinition
-    | languageApplication
+testable
+    : executable
+    | languageDefinition
+    ;
+
+executable
+    : application
+    | script
     ;
 
 script

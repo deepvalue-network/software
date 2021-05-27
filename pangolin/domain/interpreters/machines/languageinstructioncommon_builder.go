@@ -8,7 +8,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
 	lexer_parser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/languages/definitions"
 )
 
 type languageInstructionCommonBuilder struct {

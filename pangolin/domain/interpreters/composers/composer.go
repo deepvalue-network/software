@@ -5,13 +5,13 @@ import (
 
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands"
-	command_heads "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/heads"
-	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/labels"
-	command_languages "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/languages"
-	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/mains"
-	command_scripts "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/scripts"
-	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands"
+	command_heads "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/heads"
+	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/labels"
+	command_languages "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/languages"
+	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/mains"
+	command_scripts "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/scripts"
+	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
@@ -19,11 +19,12 @@ type composer struct {
 	instructionAdapterBuilder  InstructionAdapterBuilder
 	stackFrameBuilder          stackframes.Builder
 	programBuilder             parsers.ProgramBuilder
+	testableBuilder            parsers.TestableBuilder
+	executableBuilder          parsers.ExecutableBuilder
 	applicationBuilder         parsers.ApplicationBuilder
 	labelSectionBuilder        parsers.LabelSectionBuilder
 	mainSectionBuilder         parsers.MainSectionBuilder
 	testSectionBuilder         parsers.TestSectionBuilder
-	languageBuilder            parsers.LanguageBuilder
 	languageApplicationBuilder parsers.LanguageApplicationBuilder
 	languageDefinitionBuilder  parsers.LanguageDefinitionBuilder
 	languageValueBuilder       parsers.LanguageValueBuilder
@@ -51,11 +52,12 @@ func createComposer(
 	instructionAdapterBuilder InstructionAdapterBuilder,
 	stackFrameBuilder stackframes.Builder,
 	programBuilder parsers.ProgramBuilder,
+	testableBuilder parsers.TestableBuilder,
+	executableBuilder parsers.ExecutableBuilder,
 	applicationBuilder parsers.ApplicationBuilder,
 	labelSectionBuilder parsers.LabelSectionBuilder,
 	mainSectionBuilder parsers.MainSectionBuilder,
 	testSectionBuilder parsers.TestSectionBuilder,
-	languageBuilder parsers.LanguageBuilder,
 	languageApplicationBuilder parsers.LanguageApplicationBuilder,
 	languageDefinitionBuilder parsers.LanguageDefinitionBuilder,
 	languageValueBuilder parsers.LanguageValueBuilder,
@@ -74,11 +76,12 @@ func createComposer(
 		instructionAdapterBuilder:  instructionAdapterBuilder,
 		stackFrameBuilder:          stackFrameBuilder,
 		programBuilder:             programBuilder,
+		testableBuilder:            testableBuilder,
+		executableBuilder:          executableBuilder,
 		applicationBuilder:         applicationBuilder,
 		labelSectionBuilder:        labelSectionBuilder,
 		mainSectionBuilder:         mainSectionBuilder,
 		testSectionBuilder:         testSectionBuilder,
-		languageBuilder:            languageBuilder,
 		languageApplicationBuilder: languageApplicationBuilder,
 		languageDefinitionBuilder:  languageDefinitionBuilder,
 		languageValueBuilder:       languageValueBuilder,
@@ -195,7 +198,17 @@ func (app *composer) Now() (linkers.Application, error) {
 		return nil, err
 	}
 
-	parsedProg, err := app.programBuilder.Create().WithApplication(parsedApp).Now()
+	parsedExec, err := app.executableBuilder.Create().WithApplication(parsedApp).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	parsedTestable, err := app.testableBuilder.Create().WithExecutable(parsedExec).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	parsedProg, err := app.programBuilder.Create().WithTestable(parsedTestable).Now()
 	if err != nil {
 		return nil, err
 	}
@@ -205,11 +218,21 @@ func (app *composer) Now() (linkers.Application, error) {
 		return nil, err
 	}
 
-	if linkedProg.IsApplication() {
-		return nil, errors.New("the composed program was expected to be an application")
+	if !linkedProg.IsTestable() {
+		return nil, errors.New("the composed program was expected to be a testable program")
 	}
 
-	return linkedProg.Application(), nil
+	linkedTestable := linkedProg.Testable()
+	if !linkedTestable.IsExecutable() {
+		return nil, errors.New("the composed program was expected to be an execuatble program")
+	}
+
+	linkedExecutable := linkedTestable.Executable()
+	if !linkedExecutable.IsApplication() {
+		return nil, errors.New("the composed program was expected to be an application program")
+	}
+
+	return linkedExecutable.Application(), nil
 }
 
 func (app *composer) receiveLabel(label command_labels.Label) error {

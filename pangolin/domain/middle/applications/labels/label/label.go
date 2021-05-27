@@ -1,15 +1,16 @@
 package label
 
-import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions"
-)
+import "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions"
 
 type label struct {
 	name string
 	ins  instructions.Instructions
 }
 
-func createLabel(name string, ins instructions.Instructions) Label {
+func createLabel(
+	name string,
+	ins instructions.Instructions,
+) Label {
 	out := label{
 		name: name,
 		ins:  ins,

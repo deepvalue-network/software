@@ -7,32 +7,30 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
 	lexer_parser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
-	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
-	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
-	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
-	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
-	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
-	language_label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label/instructions/instruction"
-	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions/instruction"
+	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	language_label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
+	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
+	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels"
+	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels/label/instructions/instruction"
+	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/tests/test/instructions/instruction"
 )
 
 // CallLabelByNameFn represents a func to call a label by name
 type CallLabelByNameFn func(name string) error
 
 // InterpretCallBackFn represents an interpreter callback fn
-type InterpretCallBackFn func(composedApp linkers.Application, input stackframes.StackFrame) (stackframes.Registry, error)
+type InterpretCallBackFn func(composedApp linkers.Application, input stackframes.StackFrame) (stackframes.StackFrame, error)
 
 // NewLanguageTestInstructionBuilder creates a language test instruction builder
-func NewLanguageTestInstructionBuilder(
-	lexerAdapterBuilder lexers.AdapterBuilder,
-) LanguageTestInstructionBuilder {
+func NewLanguageTestInstructionBuilder() LanguageTestInstructionBuilder {
 	frameBuilder := stackframes.NewFrameBuilder()
-	langCommonInsBuilder := NewLanguageInstructionCommonBuilder(lexerAdapterBuilder)
+	langCommonInsBuilder := NewLanguageInstructionCommonBuilder()
 	testInsAppBuilder := NewTestInstructionBuilder()
-	langInsBuilder := NewLanguageInstructionBuilder(lexerAdapterBuilder)
+	langInsBuilder := NewLanguageInstructionBuilder()
 	return createLanguageTestInstructionBuilder(
 		frameBuilder,
 		langCommonInsBuilder,
@@ -42,13 +40,11 @@ func NewLanguageTestInstructionBuilder(
 }
 
 // NewLanguageInstructionBuilder creates a new language instruction builder
-func NewLanguageInstructionBuilder(
-	lexerAdapterBuilder lexers.AdapterBuilder,
-) LanguageInstructionBuilder {
+func NewLanguageInstructionBuilder() LanguageInstructionBuilder {
 	variableBuilder := var_variable.NewBuilder()
 	valueBuilder := var_value.NewBuilder()
 	computableValueBuilder := computable.NewBuilder()
-	langCommonInsBuilder := NewLanguageInstructionCommonBuilder(lexerAdapterBuilder)
+	langCommonInsBuilder := NewLanguageInstructionCommonBuilder()
 	insAppBuilder := NewInstructionBuilder()
 	return createLanguageInstructionBuilder(
 		variableBuilder,
@@ -60,9 +56,8 @@ func NewLanguageInstructionBuilder(
 }
 
 // NewLanguageInstructionCommonBuilder creates a new language instruction common builder
-func NewLanguageInstructionCommonBuilder(
-	lexerAdapterBuilder lexers.AdapterBuilder,
-) LanguageInstructionCommonBuilder {
+func NewLanguageInstructionCommonBuilder() LanguageInstructionCommonBuilder {
+	lexerAdapterBuilder := lexers.NewAdapterBuilder()
 	insAppBuilder := NewInstructionBuilder()
 	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
 	lexerParserApplication := lexer_parser.NewApplication()

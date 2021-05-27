@@ -19,7 +19,7 @@ func NewBuilder() Builder {
 
 // Adapter represents a test adapter
 type Adapter interface {
-	ToTest(declaration parsers.TestDeclaration) (Test, error)
+	ToTest(parsed parsers.LanguageTestDeclaration) (Test, error)
 }
 
 // Builder represents a test builder

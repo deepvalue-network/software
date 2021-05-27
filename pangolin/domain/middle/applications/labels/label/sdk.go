@@ -1,8 +1,8 @@
 package label
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapter creates a new adapter instance
@@ -14,20 +14,19 @@ func NewAdapter() Adapter {
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
-	instructionsBuilder := instructions.NewBuilder()
-	return createBuilder(instructionsBuilder)
+	return createBuilder()
 }
 
-// Adapter represents the label adapter
+// Adapter represents a label adapter
 type Adapter interface {
-	ToLabel(declaration parsers.LabelDeclaration) (Label, error)
+	ToLabel(parsed parsers.LanguageLabelDeclaration) (Label, error)
 }
 
-// Builder represents the label builder
+// Builder represents a label builder
 type Builder interface {
 	Create() Builder
 	WithName(name string) Builder
-	WithInstructions(ins instructions.Instructions) Builder
+	WithInstructions(instructions instructions.Instructions) Builder
 	Now() (Label, error)
 }
 

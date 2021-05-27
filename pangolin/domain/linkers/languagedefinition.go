@@ -1,6 +1,6 @@
 package linkers
 
-import "github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+import "github.com/deepvalue-network/software/pangolin/domain/middle/testables/languages/definitions"
 
 type languageDefinition struct {
 	app     LanguageApplication

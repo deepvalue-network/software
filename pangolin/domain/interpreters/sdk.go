@@ -6,7 +6,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value/computable"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
@@ -15,58 +15,46 @@ const printTestStr = "Test: %s\n"
 
 // NewBuilder creates a new builder instance
 func NewBuilder() Builder {
-	scriptBuilder := NewScriptBuilder()
-	application := NewApplication()
-	return createBuilder(scriptBuilder, application)
+	testableBuilder := NewTestableBuilder()
+	executableBuilder := NewExecutableBuilder()
+	return createBuilder(executableBuilder, testableBuilder)
 }
 
-// NewScriptBuilder creates a new script builder
-func NewScriptBuilder() ScriptBuilder {
+// NewTestableBuilder creates a new testable builder instance
+func NewTestableBuilder() TestableBuilder {
+	testInsMachineBuilder := machines.NewTestInstructionBuilder()
+	machineStateFactory := machines.NewLanguageStateFactory()
+	machineLangTestInsBuilder := machines.NewLanguageTestInstructionBuilder()
+	stackFrameBuilder := stackframes.NewBuilder()
+	composerBuilder := composers.NewBuilder()
+	executableBuilder := NewExecutableBuilder()
+	return createTestableBuilder(
+		testInsMachineBuilder,
+		machineStateFactory,
+		machineLangTestInsBuilder,
+		stackFrameBuilder,
+		composerBuilder,
+		executableBuilder,
+	)
+}
+
+// NewExecutableBuilder creates a new executable builder instance
+func NewExecutableBuilder() ExecutableBuilder {
+	insMachineBuilder := machines.NewInstructionBuilder()
 	stackFrameBuilder := stackframes.NewBuilder()
 	computableBuilder := computable.NewBuilder()
 	programBuilder := linkers.NewProgramBuilder()
-	linkerLnguageBuilder := linkers.NewLanguageBuilder()
-	languageBuilder := NewLanguageBuilder()
-	application := NewApplication()
-	return createScriptBuilder(
+	testableBuilder := linkers.NewTestableBuilder()
+	return createExecutableBuilder(
+		insMachineBuilder,
 		stackFrameBuilder,
 		computableBuilder,
 		programBuilder,
-		linkerLnguageBuilder,
-		languageBuilder,
-		application,
+		testableBuilder,
 	)
 }
 
-// NewLanguageBuilder creates a new language builder
-func NewLanguageBuilder() LanguageBuilder {
-	lexerAdapterBuilder := lexers.NewAdapterBuilder()
-	composerBuilder := composers.NewBuilder()
-	machineStateFactory := machines.NewLanguageStateFactory()
-	stackFrameBuilder := stackframes.NewBuilder()
-	machineLangTestInsBuilder := machines.NewLanguageTestInstructionBuilder(lexerAdapterBuilder)
-	machineLangInsBuilder := machines.NewLanguageInstructionBuilder(lexerAdapterBuilder)
-	application := NewApplication()
-	return createLanguageBuilder(
-		lexerAdapterBuilder,
-		composerBuilder,
-		machineStateFactory,
-		stackFrameBuilder,
-		machineLangTestInsBuilder,
-		machineLangInsBuilder,
-		application,
-	)
-}
-
-// NewApplication creates a new application instance
-func NewApplication() Application {
-	insMachineBuilder := machines.NewInstructionBuilder()
-	testInsMachineBuilder := machines.NewTestInstructionBuilder()
-	stackFrameBuilder := stackframes.NewBuilder()
-	return createApplication(insMachineBuilder, testInsMachineBuilder, stackFrameBuilder)
-}
-
-// Builder represents an interpreter builder
+// Builder represents a builder
 type Builder interface {
 	Create() Builder
 	WithParser(parser parsers.Parser) Builder
@@ -75,43 +63,41 @@ type Builder interface {
 	Now() (Interpreter, error)
 }
 
-// Interpreter represents an interpreter
+// Interpreter represents the interpreter interface
 type Interpreter interface {
-	Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.Registry, error)
-	Tests(excutable linkers.Executable) error
+	Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.StackFrame, error)
+	Tests(testable linkers.Testable) error
 }
 
-// ScriptBuilder represents a script builder
-type ScriptBuilder interface {
-	Create() ScriptBuilder
-	WithParser(parser parsers.Parser) ScriptBuilder
-	WithLinker(linker linkers.Linker) ScriptBuilder
-	WithEvents(events []lexers.Event) ScriptBuilder
-	Now() (Script, error)
+// ExecutableBuilder represents an executable builder
+type ExecutableBuilder interface {
+	Create() ExecutableBuilder
+	WithParser(parser parsers.Parser) ExecutableBuilder
+	WithLinker(linker linkers.Linker) ExecutableBuilder
+	Now() (Executable, error)
 }
 
-// Script represents a script interpreter
-type Script interface {
-	Execute(script linkers.Script) (linkers.Application, error)
-	Tests(script linkers.Script) error
+// Executable represents the executable interface
+type Executable interface {
+	Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.StackFrame, error)
+	Application(appli linkers.Application, input stackframes.StackFrame) (stackframes.StackFrame, error)
+	Script(appli linkers.Script, input stackframes.StackFrame) (stackframes.StackFrame, error)
 }
 
-// LanguageBuilder represents a language builder
-type LanguageBuilder interface {
-	Create() LanguageBuilder
-	WithLinker(linker linkers.Linker) LanguageBuilder
-	WithEvents(events []lexers.Event) LanguageBuilder
-	Now() (Language, error)
+// TestableBuilder represents a testable builder
+type TestableBuilder interface {
+	Create() TestableBuilder
+	WithParser(parser parsers.Parser) TestableBuilder
+	WithLinker(linker linkers.Linker) TestableBuilder
+	WithEvents(events []lexers.Event) TestableBuilder
+	Now() (Testable, error)
 }
 
-// Language represents a language interpreter
-type Language interface {
-	Execute(linkedLangDef linkers.LanguageDefinition, input stackframes.StackFrame) (linkers.Application, error)
-	Tests(linkedLangDef linkers.LanguageDefinition) error
-}
-
-// Application represents an application interpreter
-type Application interface {
-	Execute(linkedApp linkers.Application, input stackframes.StackFrame) (stackframes.Registry, error)
-	Tests(linkedApp linkers.Application) error
+// Testable represents the testable interface
+type Testable interface {
+	Execute(testable linkers.Testable) error
+	Executable(executable linkers.Executable) error
+	Application(appli linkers.Application) error
+	Script(script linkers.Script) error
+	Language(language linkers.LanguageDefinition) error
 }

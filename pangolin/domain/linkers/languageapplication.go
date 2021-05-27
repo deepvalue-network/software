@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
 )
 
 type languageApplication struct {
@@ -16,7 +16,7 @@ type languageApplication struct {
 	tests   tests.Tests
 	lbls    labels.Labels
 	imports []External
-	mp      map[string]Application
+	mp      map[string]Executable
 }
 
 func createLanguageApplication(
@@ -26,7 +26,7 @@ func createLanguageApplication(
 	tests tests.Tests,
 	lbls labels.Labels,
 ) LanguageApplication {
-	return createLanguageApplicationInternally(name, version, ins, tests, lbls, nil, map[string]Application{})
+	return createLanguageApplicationInternally(name, version, ins, tests, lbls, nil, map[string]Executable{})
 }
 
 func createLanguageApplicationWithImports(
@@ -36,7 +36,7 @@ func createLanguageApplicationWithImports(
 	tests tests.Tests,
 	lbls labels.Labels,
 	imports []External,
-	mp map[string]Application,
+	mp map[string]Executable,
 ) LanguageApplication {
 	return createLanguageApplicationInternally(name, version, ins, tests, lbls, imports, mp)
 }
@@ -48,7 +48,7 @@ func createLanguageApplicationInternally(
 	tests tests.Tests,
 	lbls labels.Labels,
 	imports []External,
-	mp map[string]Application,
+	mp map[string]Executable,
 ) LanguageApplication {
 	out := languageApplication{
 		name:    name,
@@ -99,11 +99,11 @@ func (obj *languageApplication) Imports() []External {
 }
 
 // Import returns an imported languageApplication by name, if any
-func (obj *languageApplication) Import(name string) (Application, error) {
+func (obj *languageApplication) Import(name string) (Executable, error) {
 	if app, ok := obj.mp[name]; ok {
 		return app, nil
 	}
 
-	str := fmt.Sprintf("the name (%s) is not a valid imported application", name)
+	str := fmt.Sprintf("the name (%s) is not a valid imported executable", name)
 	return nil, errors.New(str)
 }

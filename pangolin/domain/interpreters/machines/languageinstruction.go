@@ -5,12 +5,12 @@ import (
 
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/composers"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
-	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
-	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value/computable"
-	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
-	language_label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label/instructions/instruction"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels/label/instructions/instruction/token"
+	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable"
+	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value/computable"
+	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	language_label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction/token"
 )
 
 type languageInstruction struct {

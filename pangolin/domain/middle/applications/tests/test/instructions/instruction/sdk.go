@@ -1,17 +1,17 @@
 package instruction
 
 import (
-	ins "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/tests/test/instructions/instruction"
+	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapter creates a new adapter instance
 func NewAdapter() Adapter {
-	instructionAdapter := ins.NewAdapter()
+	languageAdapter := standard_instruction.NewAdapter()
+	testAdapter := test_instruction.NewAdapter()
 	builder := NewBuilder()
-	assertBuilder := NewAssertBuilder()
-	readFileBuilder := NewReadFileBuilder()
-	return createAdapter(builder, assertBuilder, readFileBuilder, instructionAdapter)
+	return createAdapter(languageAdapter, testAdapter, builder)
 }
 
 // NewBuilder creates a new builder instance
@@ -19,65 +19,25 @@ func NewBuilder() Builder {
 	return createBuilder()
 }
 
-// NewReadFileBuilder creates a new readFile builder
-func NewReadFileBuilder() ReadFileBuilder {
-	return createReadFileBuilder()
-}
-
-// NewAssertBuilder creates a new assert builder instance
-func NewAssertBuilder() AssertBuilder {
-	return createAssertBuilder()
-}
-
 // Adapter represents an instruction adapter
 type Adapter interface {
-	ToInstruction(testInstruction parsers.TestInstruction) (Instruction, error)
+	ToInstruction(parsed parsers.LanguageTestInstruction) (Instruction, error)
 }
 
 // Builder represents an instruction builder
 type Builder interface {
 	Create() Builder
-	WithAssert(assert Assert) Builder
-	WithReadFile(readFile ReadFile) Builder
-	WithInstruction(ins ins.Instruction) Builder
+	WithLanguage(lang standard_instruction.CommonInstruction) Builder
+	WithTest(test test_instruction.Instruction) Builder
+	IsInterpret() Builder
 	Now() (Instruction, error)
 }
 
 // Instruction represents a test instruction
 type Instruction interface {
-	IsAssert() bool
-	Assert() Assert
-	IsReadFile() bool
-	ReadFile() ReadFile
-	IsInstruction() bool
-	Instruction() ins.Instruction
-}
-
-// ReadFileBuilder represents the readFile builder
-type ReadFileBuilder interface {
-	Create() ReadFileBuilder
-	WithVariable(variable string) ReadFileBuilder
-	WithPath(path string) ReadFileBuilder
-	Now() (ReadFile, error)
-}
-
-// ReadFile represents a readFile test instruction
-type ReadFile interface {
-	Variable() string
-	Path() string
-}
-
-// AssertBuilder represents an assert builder
-type AssertBuilder interface {
-	Create() AssertBuilder
-	WithIndex(index int) AssertBuilder
-	WithCondition(condition string) AssertBuilder
-	Now() (Assert, error)
-}
-
-// Assert represents an assert
-type Assert interface {
-	Index() int
-	HasCondition() bool
-	Condition() string
+	IsLanguage() bool
+	Language() standard_instruction.CommonInstruction
+	IsTest() bool
+	Test() test_instruction.Instruction
+	IsInterpret() bool
 }

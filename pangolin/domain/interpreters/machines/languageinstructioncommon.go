@@ -6,9 +6,9 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	lexer_parser "github.com/deepvalue-network/software/pangolin/domain/lexers/parser"
-	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/match"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/match"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/languages/definitions"
 )
 
 type languageInstructionCommon struct {

@@ -1,0 +1,38 @@
+head:
+    name: my_name.
+    version: 2020.03.04.
+    imports:
+        first: "./this/is/my/first.json".
+        second: "./this/is/my/second.json".
+    .
+.
+
+labels:
+    myLabel:
+        assign: myVariable, 43.
+    .
+
+    myLabelAgain:
+        print: myVariable.
+        ret.
+    .
+.
+
+main:
+    add: answer, first, second.
+    print: myVariable.
+    push.
+    assign: myVariable, 43.
+.
+
+tests:
+    firstTest:
+        assign: first, sec.
+        assert: 0.
+    .
+
+    secondTest:
+        assign: first, sec.
+        assert: 0.
+    .
+.

@@ -1,15 +1,19 @@
 package instruction
 
 import (
-	ins "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels/label/instructions/instruction"
+	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction/token"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapter creates a new adapter instance
 func NewAdapter() Adapter {
-	instructionAdapter := ins.NewAdapter()
+	labelAdapter := label_instruction.NewAdapter()
+	languageAdapter := language_instruction.NewAdapter()
+	tokenAdapter := token.NewAdapter()
 	builder := NewBuilder()
-	return createAdapter(instructionAdapter, builder)
+	return createAdapter(labelAdapter, languageAdapter, tokenAdapter, builder)
 }
 
 // NewBuilder creates a new builder instance
@@ -17,22 +21,26 @@ func NewBuilder() Builder {
 	return createBuilder()
 }
 
-// Adapter represents the label instruction adapter
+// Adapter represents an instruction adapter
 type Adapter interface {
-	ToInstruction(instruction parsers.LabelInstruction) (Instruction, error)
+	ToInstruction(parsed parsers.LanguageLabelInstruction) (Instruction, error)
 }
 
-// Builder represents a label instruction builder
+// Builder represents an instruction builder
 type Builder interface {
 	Create() Builder
-	IsRet() Builder
-	WithInstruction(ins ins.Instruction) Builder
+	WithLabel(label label_instruction.Instruction) Builder
+	WithLanguage(lang language_instruction.Instruction) Builder
+	WithToken(token token.Token) Builder
 	Now() (Instruction, error)
 }
 
-// Instruction represents a label instruction
+// Instruction represents a language label instruction
 type Instruction interface {
-	IsRet() bool
-	IsInstruction() bool
-	Instruction() ins.Instruction
+	IsLabel() bool
+	Label() label_instruction.Instruction
+	IsLanguage() bool
+	Language() language_instruction.Instruction
+	IsToken() bool
+	Token() token.Token
 }

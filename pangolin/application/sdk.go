@@ -51,11 +51,11 @@ type Parser interface {
 
 // Linker represents a pangolin linker
 type Linker interface {
-	Execute(parsed parsers.Program) (linkers.Executable, error)
+	Execute(parsed parsers.Program) (linkers.Program, error)
 }
 
 // Interpreter represents a pangolin interpreter
 type Interpreter interface {
-	Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.Registry, error)
-	Tests(excutable linkers.Executable) error
+	Execute(excutable linkers.Executable, input stackframes.StackFrame) (stackframes.StackFrame, error)
+	Tests(testable linkers.Testable) error
 }

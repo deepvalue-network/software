@@ -1,20 +1,16 @@
 package parsers
 
-import (
-	"errors"
-)
+import "errors"
 
 type programBuilder struct {
-	app    Application
-	lang   Language
-	script Script
+	testable Testable
+	language LanguageApplication
 }
 
 func createProgramBuilder() ProgramBuilder {
 	out := programBuilder{
-		app:    nil,
-		lang:   nil,
-		script: nil,
+		testable: nil,
+		language: nil,
 	}
 
 	return &out
@@ -25,36 +21,26 @@ func (app *programBuilder) Create() ProgramBuilder {
 	return createProgramBuilder()
 }
 
-// WithApplication adds an application to the builder
-func (app *programBuilder) WithApplication(application Application) ProgramBuilder {
-	app.app = application
+// WithTestable adds a testable to the builder
+func (app *programBuilder) WithTestable(testable Testable) ProgramBuilder {
+	app.testable = testable
 	return app
 }
 
 // WithLanguage adds a language to the builder
-func (app *programBuilder) WithLanguage(lang Language) ProgramBuilder {
-	app.lang = lang
-	return app
-}
-
-// WithScript adds a script to the builder
-func (app *programBuilder) WithScript(script Script) ProgramBuilder {
-	app.script = script
+func (app *programBuilder) WithLanguage(language LanguageApplication) ProgramBuilder {
+	app.language = language
 	return app
 }
 
 // Now builds a new Program instance
 func (app *programBuilder) Now() (Program, error) {
-	if app.app != nil {
-		return createProgramWithApplication(app.app), nil
+	if app.testable != nil {
+		return createProgramWithTestable(app.testable), nil
 	}
 
-	if app.lang != nil {
-		return createProgramWithLanguage(app.lang), nil
-	}
-
-	if app.script != nil {
-		return createProgramWithScript(app.script), nil
+	if app.language != nil {
+		return createProgramWithLanguage(app.language), nil
 	}
 
 	return nil, errors.New("the Program is invalid")

@@ -3,28 +3,25 @@ package applications
 import (
 	"errors"
 
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/heads"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
-	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type builder struct {
-	head    heads.Head
-	main    instructions.Instructions
-	tests   tests.Tests
-	labels  labels.Labels
-	extends []parsers.ImportSingle
+	head   heads.Head
+	labels labels.Labels
+	main   instructions.Instructions
+	tests  tests.Tests
 }
 
 func createBuilder() Builder {
 	out := builder{
-		head:    nil,
-		main:    nil,
-		tests:   nil,
-		labels:  nil,
-		extends: nil,
+		head:   nil,
+		labels: nil,
+		main:   nil,
+		tests:  nil,
 	}
 
 	return &out
@@ -41,27 +38,21 @@ func (app *builder) WithHead(head heads.Head) Builder {
 	return app
 }
 
-// WithMain add main instructions to the builder
-func (app *builder) WithMain(main instructions.Instructions) Builder {
-	app.main = main
-	return app
-}
-
-// WithTests add tests to the builder
-func (app *builder) WithTests(tests tests.Tests) Builder {
-	app.tests = tests
-	return app
-}
-
 // WithLabels add labels to the builder
 func (app *builder) WithLabels(labels labels.Labels) Builder {
 	app.labels = labels
 	return app
 }
 
-// WithExtends add extends to the builder
-func (app *builder) WithExtends(extends []parsers.ImportSingle) Builder {
-	app.extends = extends
+// WithMain add main instructions to the builder
+func (app *builder) WithMain(main instructions.Instructions) Builder {
+	app.main = main
+	return app
+}
+
+// WithTests add tests instructions to the builder
+func (app *builder) WithTests(tests tests.Tests) Builder {
+	app.tests = tests
 	return app
 }
 
@@ -71,25 +62,17 @@ func (app *builder) Now() (Application, error) {
 		return nil, errors.New("the head is mandatory in order to build an Application instance")
 	}
 
-	if app.main == nil {
-		return nil, errors.New("the main instructions is mandatory in order to build an Application instance")
-	}
-
-	if app.tests == nil {
-		return nil, errors.New("the tests is mandatory in order to build an Application instance")
-	}
-
 	if app.labels == nil {
 		return nil, errors.New("the labels is mandatory in order to build an Application instance")
 	}
 
-	if app.extends != nil && len(app.extends) <= 0 {
-		app.extends = nil
+	if app.main == nil {
+		return nil, errors.New("the main instructions is mandatory in order to build an Application instance")
 	}
 
-	if app.extends != nil {
-		return createApplicationWithExtends(app.head, app.main, app.tests, app.labels, app.extends), nil
+	if app.tests != nil {
+		return createApplicationWithTests(app.head, app.labels, app.main, app.tests), nil
 	}
 
-	return createApplication(app.head, app.main, app.tests, app.labels), nil
+	return createApplication(app.head, app.labels, app.main), nil
 }

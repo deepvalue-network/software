@@ -4,11 +4,11 @@ import (
 	"testing"
 )
 
-func Test_program_withApplication_Success(t *testing.T) {
+func Test_program_withTestable_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("program", grammarFile)
 
-	file := "./tests/codes/program/application.rod"
+	file := "./tests/codes/program/testable.rod"
 	ins, err := pars.ExecuteFile(file)
 	if err != nil {
 		t.Errorf(err.Error())
@@ -16,17 +16,22 @@ func Test_program_withApplication_Success(t *testing.T) {
 	}
 
 	prog := ins.(Program)
-	if !prog.IsApplication() {
-		t.Errorf("the program was expected to be an Application")
+	if !prog.IsTestable() {
+		t.Errorf("the program was expected to be a Testable instance")
+		return
+	}
+
+	if prog.IsLanguage() {
+		t.Errorf("the program was NOT expected to be a LanguageApplication instance")
 		return
 	}
 }
 
-func Test_program_withLanguage_Success(t *testing.T) {
+func Test_program_withLanguageApplication_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("program", grammarFile)
 
-	file := "./tests/codes/program/language.rod"
+	file := "./tests/codes/program/languageapplication.rod"
 	ins, err := pars.ExecuteFile(file)
 	if err != nil {
 		t.Errorf(err.Error())
@@ -34,26 +39,13 @@ func Test_program_withLanguage_Success(t *testing.T) {
 	}
 
 	prog := ins.(Program)
+	if prog.IsTestable() {
+		t.Errorf("the program was NOT expected to be a Testable instance")
+		return
+	}
+
 	if !prog.IsLanguage() {
-		t.Errorf("the program was expected to be a Language")
-		return
-	}
-}
-
-func Test_program_withScript_Success(t *testing.T) {
-	grammarFile := "./grammar/grammar.json"
-	pars := createParserForTests("program", grammarFile)
-
-	file := "./tests/codes/program/script.rod"
-	ins, err := pars.ExecuteFile(file)
-	if err != nil {
-		t.Errorf(err.Error())
-		return
-	}
-
-	prog := ins.(Program)
-	if !prog.IsScript() {
-		t.Errorf("the program was expected to be a Script")
+		t.Errorf("the program was expected to be a LanguageApplication instance")
 		return
 	}
 }

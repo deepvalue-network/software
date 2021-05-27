@@ -12,11 +12,12 @@ type builder struct {
 	instructionAdapterBuilder  InstructionAdapterBuilder
 	stackFrameBuilder          stackframes.Builder
 	programBuilder             parsers.ProgramBuilder
+	testableBuilder            parsers.TestableBuilder
+	executableBuilder          parsers.ExecutableBuilder
 	applicationBuilder         parsers.ApplicationBuilder
 	labelSectionBuilder        parsers.LabelSectionBuilder
 	mainSectionBuilder         parsers.MainSectionBuilder
 	testSectionBuilder         parsers.TestSectionBuilder
-	languageBuilder            parsers.LanguageBuilder
 	languageApplicationBuilder parsers.LanguageApplicationBuilder
 	languageDefinitionBuilder  parsers.LanguageDefinitionBuilder
 	languageValueBuilder       parsers.LanguageValueBuilder
@@ -36,11 +37,12 @@ func createBuilder(
 	instructionAdapterBuilder InstructionAdapterBuilder,
 	stackFrameBuilder stackframes.Builder,
 	programBuilder parsers.ProgramBuilder,
+	testableBuilder parsers.TestableBuilder,
+	executableBuilder parsers.ExecutableBuilder,
 	applicationBuilder parsers.ApplicationBuilder,
 	labelSectionBuilder parsers.LabelSectionBuilder,
 	mainSectionBuilder parsers.MainSectionBuilder,
 	testSectionBuilder parsers.TestSectionBuilder,
-	languageBuilder parsers.LanguageBuilder,
 	languageApplicationBuilder parsers.LanguageApplicationBuilder,
 	languageDefinitionBuilder parsers.LanguageDefinitionBuilder,
 	languageValueBuilder parsers.LanguageValueBuilder,
@@ -57,11 +59,12 @@ func createBuilder(
 		instructionAdapterBuilder:  instructionAdapterBuilder,
 		stackFrameBuilder:          stackFrameBuilder,
 		programBuilder:             programBuilder,
+		testableBuilder:            testableBuilder,
+		executableBuilder:          executableBuilder,
 		applicationBuilder:         applicationBuilder,
 		labelSectionBuilder:        labelSectionBuilder,
 		mainSectionBuilder:         mainSectionBuilder,
 		testSectionBuilder:         testSectionBuilder,
-		languageBuilder:            languageBuilder,
 		languageApplicationBuilder: languageApplicationBuilder,
 		languageDefinitionBuilder:  languageDefinitionBuilder,
 		languageValueBuilder:       languageValueBuilder,
@@ -86,11 +89,12 @@ func (app *builder) Create() Builder {
 		app.instructionAdapterBuilder,
 		app.stackFrameBuilder,
 		app.programBuilder,
+		app.testableBuilder,
+		app.executableBuilder,
 		app.applicationBuilder,
 		app.labelSectionBuilder,
 		app.mainSectionBuilder,
 		app.testSectionBuilder,
-		app.languageBuilder,
 		app.languageApplicationBuilder,
 		app.languageDefinitionBuilder,
 		app.languageValueBuilder,
@@ -131,11 +135,12 @@ func (app *builder) Now() (Composer, error) {
 		app.instructionAdapterBuilder,
 		app.stackFrameBuilder,
 		app.programBuilder,
+		app.testableBuilder,
+		app.executableBuilder,
 		app.applicationBuilder,
 		app.labelSectionBuilder,
 		app.mainSectionBuilder,
 		app.testSectionBuilder,
-		app.languageBuilder,
 		app.languageApplicationBuilder,
 		app.languageDefinitionBuilder,
 		app.languageValueBuilder,

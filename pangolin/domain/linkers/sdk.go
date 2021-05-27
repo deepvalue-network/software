@@ -3,13 +3,13 @@ package linkers
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/lexers/grammar"
 	"github.com/deepvalue-network/software/pangolin/domain/middle"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
-	language_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions"
-	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
-	language_tests "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/tests"
+	language_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
+	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
+	language_tests "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/languages/definitions"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
@@ -22,10 +22,10 @@ const scriptName = "default"
 func NewBuilder() Builder {
 	middleAdapter := middle.NewAdapter()
 	grammarRetrieverCriteriaBuilder := grammar.NewRetrieverCriteriaBuilder()
-	applicationBuilder := NewApplicationBuilder()
-	languageBuilder := NewLanguageBuilder()
-	executableBuilder := NewExecutableBuilder()
 	programBuilder := NewProgramBuilder()
+	testableBuilder := NewTestableBuilder()
+	executableBuilder := NewExecutableBuilder()
+	applicationBuilder := NewApplicationBuilder()
 	languageDefinitionBuilder := NewLanguageDefinitionBuilder()
 	pathsBuilder := NewPathsBuilder()
 	scriptBuilder := NewScriptBuilder()
@@ -35,10 +35,10 @@ func NewBuilder() Builder {
 	return createBuilder(
 		middleAdapter,
 		grammarRetrieverCriteriaBuilder,
-		applicationBuilder,
-		languageBuilder,
-		executableBuilder,
 		programBuilder,
+		testableBuilder,
+		executableBuilder,
+		applicationBuilder,
 		languageDefinitionBuilder,
 		pathsBuilder,
 		scriptBuilder,
@@ -48,19 +48,19 @@ func NewBuilder() Builder {
 	)
 }
 
-// NewExecutableBuilder creates a new executable builder
-func NewExecutableBuilder() ExecutableBuilder {
-	return createExecutableBuilder()
-}
-
-// NewProgramBuilder creates a new program builder instance
+// NewProgramBuilder creates a new program builder
 func NewProgramBuilder() ProgramBuilder {
 	return createProgramBuilder()
 }
 
-// NewLanguageBuilder creates a new language builder instance
-func NewLanguageBuilder() LanguageBuilder {
-	return createLanguageBuilder()
+// NewTestableBuilder creates a new testable builder instance
+func NewTestableBuilder() TestableBuilder {
+	return createTestableBuilder()
+}
+
+// NewExecutableBuilder creates a new executable builder
+func NewExecutableBuilder() ExecutableBuilder {
+	return createExecutableBuilder()
 }
 
 // NewApplicationBuilder creates a new application builder
@@ -68,7 +68,7 @@ func NewApplicationBuilder() ApplicationBuilder {
 	return createApplicationBuilder()
 }
 
-// NewExternalBuilder creates a new external builder instance
+// NewExternalBuilder creates a new external builder
 func NewExternalBuilder() ExternalBuilder {
 	return createExternalBuilder()
 }
@@ -113,7 +113,39 @@ type Builder interface {
 
 // Linker represents a linker application
 type Linker interface {
-	Execute(parsed parsers.Program) (Executable, error)
+	Execute(parsed parsers.Program) (Program, error)
+}
+
+// ProgramBuilder represents a program builder
+type ProgramBuilder interface {
+	Create() ProgramBuilder
+	WithTestable(testable Testable) ProgramBuilder
+	WithLanguage(language LanguageApplication) ProgramBuilder
+	Now() (Program, error)
+}
+
+// Program represents a linked program
+type Program interface {
+	IsTestable() bool
+	Testable() Testable
+	IsLanguage() bool
+	Language() LanguageApplication
+}
+
+// TestableBuilder represents a testable builder
+type TestableBuilder interface {
+	Create() TestableBuilder
+	WithExecutable(executable Executable) TestableBuilder
+	WithLanguage(language LanguageReference) TestableBuilder
+	Now() (Testable, error)
+}
+
+// Testable represents a testable
+type Testable interface {
+	IsExecutable() bool
+	Executable() Executable
+	IsLanguage() bool
+	Language() LanguageReference
 }
 
 // ExecutableBuilder represents an executable builder
@@ -130,41 +162,6 @@ type Executable interface {
 	Application() Application
 	IsScript() bool
 	Script() Script
-}
-
-// ProgramBuilder represents a program builder
-type ProgramBuilder interface {
-	Create() ProgramBuilder
-	WithApplication(app Application) ProgramBuilder
-	WithLanguage(lang Language) ProgramBuilder
-	WithScript(script Script) ProgramBuilder
-	Now() (Program, error)
-}
-
-// Program represents a linked program
-type Program interface {
-	IsApplication() bool
-	Application() Application
-	IsLanguage() bool
-	Language() Language
-	IsScript() bool
-	Script() Script
-}
-
-// LanguageBuilder represents a language builder
-type LanguageBuilder interface {
-	Create() LanguageBuilder
-	WithReference(ref LanguageReference) LanguageBuilder
-	WithApplication(app LanguageApplication) LanguageBuilder
-	Now() (Language, error)
-}
-
-// Language represents a language
-type Language interface {
-	IsReference() bool
-	Reference() LanguageReference
-	IsApplication() bool
-	Application() LanguageApplication
 }
 
 // ApplicationBuilder represents an application builder
@@ -188,25 +185,21 @@ type Application interface {
 	Labels() labels.Labels
 	HasImports() bool
 	Imports() []External
-	Import(name string) (Application, error)
+	Import(name string) (Executable, error)
 }
 
 // ExternalBuilder represents an external builder
 type ExternalBuilder interface {
 	Create() ExternalBuilder
 	WithName(name string) ExternalBuilder
-	WithApplication(application Application) ExternalBuilder
-	WithScript(script Script) ExternalBuilder
+	WithExecutable(executable Executable) ExternalBuilder
 	Now() (External, error)
 }
 
 // External represents an imported external application
 type External interface {
 	Name() string
-	HasApplication() bool
-	Application() Application
-	HasScript() bool
-	Script() Script
+	Executable() Executable
 }
 
 // ScriptBuilder represents a script builder
@@ -236,14 +229,14 @@ type Script interface {
 type TestBuilder interface {
 	Create() TestBuilder
 	WithName(name string) TestBuilder
-	WithScript(script Script) TestBuilder
+	WithExecutable(executable Executable) TestBuilder
 	Now() (Test, error)
 }
 
 // Test represents a script test
 type Test interface {
 	Name() string
-	Script() Script
+	Executable() Executable
 }
 
 // LanguageReferenceBuilder represents a language reference builder
@@ -299,7 +292,7 @@ type LanguageApplication interface {
 	Labels() language_labels.Labels
 	HasImports() bool
 	Imports() []External
-	Import(name string) (Application, error)
+	Import(name string) (Executable, error)
 }
 
 // PathsBuilder represents a paths builder

@@ -7,14 +7,12 @@ import (
 )
 
 type builder struct {
-	lst []instruction.Instruction
-	mp  map[string]instruction.Instruction
+	list []instruction.Instruction
 }
 
 func createBuilder() Builder {
 	out := builder{
-		lst: nil,
-		mp:  nil,
+		list: nil,
 	}
 
 	return &out
@@ -25,32 +23,21 @@ func (app *builder) Create() Builder {
 	return createBuilder()
 }
 
-// WithList add list to the builder
-func (app *builder) WithList(lst []instruction.Instruction) Builder {
-	app.lst = lst
+// WithList add instructions to the builder
+func (app *builder) WithList(list []instruction.Instruction) Builder {
+	app.list = list
 	return app
 }
 
-// WithMap add map to the builder
-func (app *builder) WithMap(mp map[string]instruction.Instruction) Builder {
-	app.mp = mp
-	return app
-}
-
-// Now builds a new Instructions instance
+// Now builds a new Instructins instance
 func (app *builder) Now() (Instructions, error) {
-	if app.mp != nil {
-		lst := []instruction.Instruction{}
-		for _, oneInstruction := range app.mp {
-			lst = append(lst, oneInstruction)
-		}
-
-		app.lst = lst
+	if app.list != nil && len(app.list) <= 0 {
+		app.list = nil
 	}
 
-	if app.lst == nil {
-		return nil, errors.New("the list is mandatory in order to build a Instructions instance")
+	if app.list == nil {
+		return nil, errors.New("the []Instruction are mandatory in order to build an Instructions instance")
 	}
 
-	return createInstructions(app.lst), nil
+	return createInstructions(app.list), nil
 }

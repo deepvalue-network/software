@@ -1,22 +1,22 @@
 package tests
 
-import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test"
-)
+import "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test"
 
 type tests struct {
-	lst []test.Test
+	list []test.Test
 }
 
-func createTests(lst []test.Test) Tests {
+func createTests(
+	list []test.Test,
+) Tests {
 	out := tests{
-		lst: lst,
+		list: list,
 	}
 
 	return &out
 }
 
-// All return all the tests
+// All returns the tests
 func (obj *tests) All() []test.Test {
-	return obj.lst
+	return obj.list
 }

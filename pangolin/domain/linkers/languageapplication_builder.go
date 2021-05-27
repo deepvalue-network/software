@@ -3,9 +3,9 @@ package linkers
 import (
 	"errors"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
 )
 
 type languageApplicationBuilder struct {
@@ -94,9 +94,9 @@ func (app *languageApplicationBuilder) Now() (LanguageApplication, error) {
 	}
 
 	if app.imports != nil {
-		mp := map[string]Application{}
+		mp := map[string]Executable{}
 		for _, oneImport := range app.imports {
-			mp[oneImport.Name()] = oneImport.Application()
+			mp[oneImport.Name()] = oneImport.Executable()
 		}
 
 		return createLanguageApplicationWithImports(

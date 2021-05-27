@@ -8,13 +8,13 @@ import (
 )
 
 func TestPangolin_executeTests_Success(t *testing.T) {
-	script, err := ioutil.ReadFile("./scripts/assignment/script.pangolin")
+	script, err := ioutil.ReadFile("./language.pangolin")
 	if err != nil {
 		t.Errorf("the error was expected to be nil, error returned: %s", err)
 		return
 	}
 
-	currentDirPath := "./scripts/assignment"
+	currentDirPath := "./"
 	grammarFile := "../../pangolin/domain/parsers/grammar/grammar.json"
 	pangolin := bundles.NewPangolin(grammarFile, currentDirPath)
 	lexer, err := pangolin.Lexer().Execute(string(script))
@@ -29,13 +29,19 @@ func TestPangolin_executeTests_Success(t *testing.T) {
 		return
 	}
 
-	executable, err := pangolin.Linker().Execute(program)
+	linkedProgram, err := pangolin.Linker().Execute(program)
 	if err != nil {
 		t.Errorf("the error was expected to be nil, error returned: %s", err)
 		return
 	}
 
-	err = pangolin.Interpreter().Tests(executable)
+	if !linkedProgram.IsTestable() {
+		t.Errorf("the linked program was expected to be a testable instance")
+		return
+	}
+
+	linkedTestable := linkedProgram.Testable()
+	err = pangolin.Interpreter().Tests(linkedTestable)
 	if err != nil {
 		t.Errorf("the error was expected to be nil, error returned: %s", err)
 		return

@@ -3,10 +3,10 @@ package composers
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands"
-	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/labels"
-	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/mains"
-	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands"
+	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/labels"
+	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/mains"
+	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
@@ -15,7 +15,8 @@ func NewBuilder() Builder {
 	instructionAdapterBuilder := NewInstructionAdapterBuilder()
 	stackFrameBuilder := stackframes.NewBuilder()
 	programBuilder := parsers.NewProgramBuilder()
-	languageBuilder := parsers.NewLanguageBuilder()
+	testableBuilder := parsers.NewTestableBuilder()
+	executableBuilder := parsers.NewExecutableBuilder()
 	languageApplicationBuilder := parsers.NewLanguageApplicationBuilder()
 	languageDefinitionBuilder := parsers.NewLanguageDefinitionBuilder()
 	languageValueBuilder := parsers.NewLanguageValueBuilder()
@@ -36,11 +37,12 @@ func NewBuilder() Builder {
 		instructionAdapterBuilder,
 		stackFrameBuilder,
 		programBuilder,
+		testableBuilder,
+		executableBuilder,
 		applicationBuilder,
 		labelSectionBuilder,
 		mainSectionBuilder,
 		testSectionBuilder,
-		languageBuilder,
 		languageApplicationBuilder,
 		languageDefinitionBuilder,
 		languageValueBuilder,

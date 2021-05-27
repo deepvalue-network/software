@@ -1,6 +1,8 @@
 package test
 
-import "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions"
+import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions"
+)
 
 type test struct {
 	name string

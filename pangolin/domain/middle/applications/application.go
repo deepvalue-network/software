@@ -1,53 +1,47 @@
 package applications
 
 import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/heads"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/heads"
-	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type application struct {
-	head    heads.Head
-	main    instructions.Instructions
-	tests   tests.Tests
-	labels  labels.Labels
-	extends []parsers.ImportSingle
+	head   heads.Head
+	labels labels.Labels
+	main   instructions.Instructions
+	tests  tests.Tests
 }
 
 func createApplication(
 	head heads.Head,
-	main instructions.Instructions,
-	tests tests.Tests,
 	labels labels.Labels,
+	main instructions.Instructions,
 ) Application {
-	return createApplicationInternally(head, main, tests, labels, nil)
+	return createApplicationInternally(head, labels, main, nil)
 }
 
-func createApplicationWithExtends(
+func createApplicationWithTests(
 	head heads.Head,
+	labels labels.Labels,
 	main instructions.Instructions,
 	tests tests.Tests,
-	labels labels.Labels,
-	extends []parsers.ImportSingle,
 ) Application {
-	return createApplicationInternally(head, main, tests, labels, extends)
+	return createApplicationInternally(head, labels, main, tests)
 }
 
 func createApplicationInternally(
 	head heads.Head,
+	labels labels.Labels,
 	main instructions.Instructions,
 	tests tests.Tests,
-	labels labels.Labels,
-	extends []parsers.ImportSingle,
 ) Application {
 	out := application{
-		head:    head,
-		main:    main,
-		tests:   tests,
-		labels:  labels,
-		extends: extends,
+		head:   head,
+		labels: labels,
+		main:   main,
+		tests:  tests,
 	}
 
 	return &out
@@ -58,27 +52,22 @@ func (obj *application) Head() heads.Head {
 	return obj.head
 }
 
-// Main returns the main instructions
-func (obj *application) Main() instructions.Instructions {
-	return obj.main
-}
-
-// Tests returns the tests
-func (obj *application) Tests() tests.Tests {
-	return obj.tests
-}
-
 // Labels returns the labels
 func (obj *application) Labels() labels.Labels {
 	return obj.labels
 }
 
-// HasExtends returns true if there is an extends, false otherwise
-func (obj *application) HasExtends() bool {
-	return obj.extends != nil
+// Main returns the main
+func (obj *application) Main() instructions.Instructions {
+	return obj.main
 }
 
-// Extends returns the extends, if any
-func (obj *application) Extends() []parsers.ImportSingle {
-	return obj.extends
+// HasTests returns true if there is tests, false otherwise
+func (obj *application) HasTests() bool {
+	return obj.tests != nil
+}
+
+// Tests returns tests, if any
+func (obj *application) Tests() tests.Tests {
+	return obj.tests
 }

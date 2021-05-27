@@ -11,10 +11,10 @@ import (
 type builder struct {
 	middleAdapter                   middle.Adapter
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder
-	applicationBuilder              ApplicationBuilder
-	languageBuilder                 LanguageBuilder
-	executableBuilder               ExecutableBuilder
 	programBuilder                  ProgramBuilder
+	testableBuilder                 TestableBuilder
+	executableBuilder               ExecutableBuilder
+	applicationBuilder              ApplicationBuilder
 	languageDefinitionBuilder       LanguageDefinitionBuilder
 	pathsBuilder                    PathsBuilder
 	scriptBuilder                   ScriptBuilder
@@ -28,10 +28,10 @@ type builder struct {
 func createBuilder(
 	middleAdapter middle.Adapter,
 	grammarRetrieverCriteriaBuilder grammar.RetrieverCriteriaBuilder,
-	applicationBuilder ApplicationBuilder,
-	languageBuilder LanguageBuilder,
-	executableBuilder ExecutableBuilder,
 	programBuilder ProgramBuilder,
+	testableBuilder TestableBuilder,
+	executableBuilder ExecutableBuilder,
+	applicationBuilder ApplicationBuilder,
 	languageDefinitionBuilder LanguageDefinitionBuilder,
 	pathsBuilder PathsBuilder,
 	scriptBuilder ScriptBuilder,
@@ -42,10 +42,10 @@ func createBuilder(
 	out := builder{
 		middleAdapter:                   middleAdapter,
 		grammarRetrieverCriteriaBuilder: grammarRetrieverCriteriaBuilder,
-		applicationBuilder:              applicationBuilder,
-		languageBuilder:                 languageBuilder,
-		executableBuilder:               executableBuilder,
 		programBuilder:                  programBuilder,
+		testableBuilder:                 testableBuilder,
+		executableBuilder:               executableBuilder,
+		applicationBuilder:              applicationBuilder,
 		languageDefinitionBuilder:       languageDefinitionBuilder,
 		pathsBuilder:                    pathsBuilder,
 		scriptBuilder:                   scriptBuilder,
@@ -64,10 +64,10 @@ func (app *builder) Create() Builder {
 	return createBuilder(
 		app.middleAdapter,
 		app.grammarRetrieverCriteriaBuilder,
-		app.applicationBuilder,
-		app.languageBuilder,
-		app.executableBuilder,
 		app.programBuilder,
+		app.testableBuilder,
+		app.executableBuilder,
+		app.applicationBuilder,
 		app.languageDefinitionBuilder,
 		app.pathsBuilder,
 		app.scriptBuilder,
@@ -102,10 +102,10 @@ func (app *builder) Now() (Linker, error) {
 	return createLinker(
 		app.middleAdapter,
 		app.grammarRetrieverCriteriaBuilder,
-		app.applicationBuilder,
-		app.languageBuilder,
-		app.executableBuilder,
 		app.programBuilder,
+		app.testableBuilder,
+		app.executableBuilder,
+		app.applicationBuilder,
 		app.languageDefinitionBuilder,
 		app.pathsBuilder,
 		app.scriptBuilder,

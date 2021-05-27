@@ -10,7 +10,10 @@ type adapter struct {
 	builder            Builder
 }
 
-func createAdapter(instructionAdapter instruction.Adapter, builder Builder) Adapter {
+func createAdapter(
+	instructionAdapter instruction.Adapter,
+	builder Builder,
+) Adapter {
 	out := adapter{
 		instructionAdapter: instructionAdapter,
 		builder:            builder,
@@ -19,17 +22,17 @@ func createAdapter(instructionAdapter instruction.Adapter, builder Builder) Adap
 	return &out
 }
 
-// ToInstructions converts parsed label instructions to an optimized label Instructions
-func (app *adapter) ToInstructions(instructions []parsers.LabelInstruction) (Instructions, error) {
-	lst := []instruction.Instruction{}
-	for _, oneInstruction := range instructions {
-		ins, err := app.instructionAdapter.ToInstruction(oneInstruction)
+// ToInstructions converts parsed language label instructions to instructions instance
+func (app *adapter) ToInstructions(parsed []parsers.LanguageLabelInstruction) (Instructions, error) {
+	out := []instruction.Instruction{}
+	for _, oneParsedIns := range parsed {
+		ins, err := app.instructionAdapter.ToInstruction(oneParsedIns)
 		if err != nil {
 			return nil, err
 		}
 
-		lst = append(lst, ins)
+		out = append(out, ins)
 	}
 
-	return app.builder.Create().WithList(lst).Now()
+	return app.builder.Create().WithList(out).Now()
 }

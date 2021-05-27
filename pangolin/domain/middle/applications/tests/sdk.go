@@ -17,16 +17,15 @@ func NewBuilder() Builder {
 	return createBuilder()
 }
 
-// Adapter represents tests builder
+// Adapter represents a tests adapter
 type Adapter interface {
-	ToTests(section parsers.TestSection) (Tests, error)
+	ToTests(parsed parsers.LanguageTestSection) (Tests, error)
 }
 
 // Builder represents the tests builder
 type Builder interface {
 	Create() Builder
-	WithList(lst []test.Test) Builder
-	WithMap(mp map[string]test.Test) Builder
+	WithList(list []test.Test) Builder
 	Now() (Tests, error)
 }
 

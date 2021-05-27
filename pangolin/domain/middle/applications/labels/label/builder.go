@@ -7,16 +7,14 @@ import (
 )
 
 type builder struct {
-	instructionsBuilder instructions.Builder
-	name                string
-	ins                 instructions.Instructions
+	name string
+	ins  instructions.Instructions
 }
 
-func createBuilder(instructionsBuilder instructions.Builder) Builder {
+func createBuilder() Builder {
 	out := builder{
-		instructionsBuilder: instructionsBuilder,
-		name:                "",
-		ins:                 nil,
+		name: "",
+		ins:  nil,
 	}
 
 	return &out
@@ -24,7 +22,7 @@ func createBuilder(instructionsBuilder instructions.Builder) Builder {
 
 // Create initializes the builder
 func (app *builder) Create() Builder {
-	return createBuilder(app.instructionsBuilder)
+	return createBuilder()
 }
 
 // WithName adds a name to the builder
@@ -33,9 +31,9 @@ func (app *builder) WithName(name string) Builder {
 	return app
 }
 
-// WithName adds a name to the builder
-func (app *builder) WithInstructions(ins instructions.Instructions) Builder {
-	app.ins = ins
+// WithInstructions add instructions to the builder
+func (app *builder) WithInstructions(instructions instructions.Instructions) Builder {
+	app.ins = instructions
 	return app
 }
 
@@ -46,12 +44,7 @@ func (app *builder) Now() (Label, error) {
 	}
 
 	if app.ins == nil {
-		ins, err := app.instructionsBuilder.Create().Now()
-		if err != nil {
-			return nil, err
-		}
-
-		app.ins = ins
+		return nil, errors.New("the instructions are mandatory in order to build a Label instance")
 	}
 
 	return createLabel(app.name, app.ins), nil

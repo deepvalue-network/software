@@ -1,31 +1,29 @@
 package interpreters
 
 import (
-	"errors"
-
 	"github.com/deepvalue-network/software/pangolin/domain/lexers"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type builder struct {
-	scriptBuilder ScriptBuilder
-	application   Application
-	parser        parsers.Parser
-	linker        linkers.Linker
-	events        []lexers.Event
+	executableBuilder ExecutableBuilder
+	testableBuilder   TestableBuilder
+	parser            parsers.Parser
+	linker            linkers.Linker
+	events            []lexers.Event
 }
 
 func createBuilder(
-	scriptBuilder ScriptBuilder,
-	application Application,
+	executableBuilder ExecutableBuilder,
+	testableBuilder TestableBuilder,
 ) Builder {
 	out := builder{
-		scriptBuilder: scriptBuilder,
-		application:   application,
-		parser:        nil,
-		linker:        nil,
-		events:        nil,
+		executableBuilder: executableBuilder,
+		testableBuilder:   testableBuilder,
+		parser:            nil,
+		linker:            nil,
+		events:            nil,
 	}
 
 	return &out
@@ -33,7 +31,10 @@ func createBuilder(
 
 // Create initializes the builder
 func (app *builder) Create() Builder {
-	return createBuilder(app.scriptBuilder, app.application)
+	return createBuilder(
+		app.executableBuilder,
+		app.testableBuilder,
+	)
 }
 
 // WithParser adds a parser to the builder
@@ -56,18 +57,31 @@ func (app *builder) WithEvents(events []lexers.Event) Builder {
 
 // Now builds a new Interpreter instance
 func (app *builder) Now() (Interpreter, error) {
-	if app.parser == nil {
-		return nil, errors.New("the parser is mandatory in order to build an Interpreter instance")
+	executableBuilder := app.executableBuilder.Create()
+	testableBuilder := app.testableBuilder.Create()
+	if app.linker != nil {
+		executableBuilder.WithLinker(app.linker)
+		testableBuilder.WithLinker(app.linker)
 	}
 
-	if app.linker == nil {
-		return nil, errors.New("the linker is mandatory in order to build an Interpreter instance")
+	if app.parser != nil {
+		executableBuilder.WithParser(app.parser)
+		testableBuilder.WithParser(app.parser)
 	}
 
-	script, err := app.scriptBuilder.Create().WithEvents(app.events).WithLinker(app.linker).WithParser(app.parser).Now()
+	if app.events != nil {
+		testableBuilder.WithEvents(app.events)
+	}
+
+	executable, err := executableBuilder.Now()
 	if err != nil {
 		return nil, err
 	}
 
-	return createInterpreter(app.application, script), nil
+	testable, err := testableBuilder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	return createInterpreter(testable, executable), nil
 }

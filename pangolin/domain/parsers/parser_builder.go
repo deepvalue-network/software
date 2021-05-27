@@ -10,7 +10,8 @@ type parserBuilder struct {
 	lexerParserApplication           lexer_parser.Application
 	lexerParserBuilder               lexer_parser.Builder
 	programBuilder                   ProgramBuilder
-	languageBuilder                  LanguageBuilder
+	testableBuilder                  TestableBuilder
+	executableBuilder                ExecutableBuilder
 	scopesBuilder                    ScopesBuilder
 	scopeBuilder                     ScopeBuilder
 	commandBuilder                   CommandBuilder
@@ -98,7 +99,8 @@ func createParserBuilder(
 	lexerParserBuilder lexer_parser.Builder,
 	lexerBuilder lexers.Builder,
 	programBuilder ProgramBuilder,
-	languageBuilder LanguageBuilder,
+	testableBuilder TestableBuilder,
+	executableBuilder ExecutableBuilder,
 	scopesBuilder ScopesBuilder,
 	scopeBuilder ScopeBuilder,
 	commandBuilder CommandBuilder,
@@ -184,7 +186,8 @@ func createParserBuilder(
 		lexerParserBuilder:               lexerParserBuilder,
 		lexerBuilder:                     lexerBuilder,
 		programBuilder:                   programBuilder,
-		languageBuilder:                  languageBuilder,
+		testableBuilder:                  testableBuilder,
+		executableBuilder:                executableBuilder,
 		scopesBuilder:                    scopesBuilder,
 		scopeBuilder:                     scopeBuilder,
 		commandBuilder:                   commandBuilder,
@@ -277,7 +280,8 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.lexerParserBuilder,
 		app.lexerBuilder,
 		app.programBuilder,
-		app.languageBuilder,
+		app.testableBuilder,
+		app.executableBuilder,
 		app.scopesBuilder,
 		app.scopeBuilder,
 		app.commandBuilder,
@@ -374,7 +378,8 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.lexerParserBuilder,
 		app.lexerBuilder,
 		app.programBuilder,
-		app.languageBuilder,
+		app.testableBuilder,
+		app.executableBuilder,
 		app.scopesBuilder,
 		app.scopeBuilder,
 		app.commandBuilder,

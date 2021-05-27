@@ -1,22 +1,22 @@
 package instructions
 
-import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
-)
+import "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction"
 
 type instructions struct {
-	lst []instruction.Instruction
+	list []instruction.Instruction
 }
 
-func createInstructions(lst []instruction.Instruction) Instructions {
+func createInstructions(
+	list []instruction.Instruction,
+) Instructions {
 	out := instructions{
-		lst: lst,
+		list: list,
 	}
 
 	return &out
 }
 
-// All return all the instructions
+// All returns the instructions
 func (obj *instructions) All() []instruction.Instruction {
-	return obj.lst
+	return obj.list
 }

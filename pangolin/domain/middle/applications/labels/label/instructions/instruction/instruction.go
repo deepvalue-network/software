@@ -1,42 +1,75 @@
 package instruction
 
 import (
-	ins "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels/label/instructions/instruction"
+	language_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels/label/instructions/instruction/token"
 )
 
 type instruction struct {
-	isRet bool
-	ins   ins.Instruction
+	label label_instruction.Instruction
+	lang  language_instruction.Instruction
+	tok   token.Token
 }
 
-func createInstructionWithReturn() Instruction {
-	return createInstructionInternally(true, nil)
+func createInstructionWithLabel(
+	label label_instruction.Instruction,
+) Instruction {
+	return createInstructionInternally(label, nil, nil)
 }
 
-func createInstructionWithInstruction(ins ins.Instruction) Instruction {
-	return createInstructionInternally(false, ins)
+func createInstructionWithLanguage(
+	lang language_instruction.Instruction,
+) Instruction {
+	return createInstructionInternally(nil, lang, nil)
 }
 
-func createInstructionInternally(isRet bool, ins ins.Instruction) Instruction {
+func createInstructionWithToken(
+	tok token.Token,
+) Instruction {
+	return createInstructionInternally(nil, nil, tok)
+}
+
+func createInstructionInternally(
+	label label_instruction.Instruction,
+	lang language_instruction.Instruction,
+	tok token.Token,
+) Instruction {
 	out := instruction{
-		isRet: isRet,
-		ins:   ins,
+		label: label,
+		lang:  lang,
+		tok:   tok,
 	}
 
 	return &out
 }
 
-// IsRet returns true if the instruction is return, false otherwise
-func (obj *instruction) IsRet() bool {
-	return obj.isRet
+// IsLabel returns true if there is a label, false otherwise
+func (obj *instruction) IsLabel() bool {
+	return obj.label != nil
 }
 
-// IsInstruction returns true if there is an instruction, false otherwise
-func (obj *instruction) IsInstruction() bool {
-	return obj.ins != nil
+// Label returns the label, if any
+func (obj *instruction) Label() label_instruction.Instruction {
+	return obj.label
 }
 
-// Instruction returns the instruction, if any
-func (obj *instruction) Instruction() ins.Instruction {
-	return obj.ins
+// IsLanguage returns true if there is a language, false otherwise
+func (obj *instruction) IsLanguage() bool {
+	return obj.lang != nil
+}
+
+// Language returns the language, if any
+func (obj *instruction) Language() language_instruction.Instruction {
+	return obj.lang
+}
+
+// IsToken returns true if there is a token, false otherwise
+func (obj *instruction) IsToken() bool {
+	return obj.tok != nil
+}
+
+// Token returns the token, if any
+func (obj *instruction) Token() token.Token {
+	return obj.tok
 }

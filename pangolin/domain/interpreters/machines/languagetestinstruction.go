@@ -3,7 +3,7 @@ package machines
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/composers"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
-	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions/instruction"
+	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
 )
 
 type languageTestInstruction struct {
@@ -50,12 +50,12 @@ func (app *languageTestInstruction) Receive(testIns language_test_instruction.In
 			return false, err
 		}
 
-		reg, err := app.interpreterCallBackFn(linkedApp, app.stackFrame)
+		retStackFrame, err := app.interpreterCallBackFn(linkedApp, app.stackFrame)
 		if err != nil {
 			return false, nil
 		}
 
-		variables := reg.All()
+		variables := retStackFrame.Registry().All()
 		frame := app.frameBuilder.Create().WithVariables(variables).Now()
 		app.stackFrame.Add(frame)
 	}

@@ -3,14 +3,14 @@ package linkers
 import "errors"
 
 type testBuilder struct {
-	name   string
-	script Script
+	name       string
+	executable Executable
 }
 
 func createTestBuilder() TestBuilder {
 	out := testBuilder{
-		name:   "",
-		script: nil,
+		name:       "",
+		executable: nil,
 	}
 
 	return &out
@@ -27,9 +27,9 @@ func (app *testBuilder) WithName(name string) TestBuilder {
 	return app
 }
 
-// WithScript adds a script to the builder
-func (app *testBuilder) WithScript(script Script) TestBuilder {
-	app.script = script
+// WithExecutable adds an executable to the builder
+func (app *testBuilder) WithExecutable(executable Executable) TestBuilder {
+	app.executable = executable
 	return app
 }
 
@@ -39,9 +39,9 @@ func (app *testBuilder) Now() (Test, error) {
 		return nil, errors.New("the name is mandatory in order to build a Test instance")
 	}
 
-	if app.script == nil {
-		return nil, errors.New("the script is mandatory in order to build a Test instance")
+	if app.executable == nil {
+		return nil, errors.New("the executable is mandatory in order to build a Test instance")
 	}
 
-	return createTest(app.name, app.script), nil
+	return createTest(app.name, app.executable), nil
 }

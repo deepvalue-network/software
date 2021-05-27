@@ -3,7 +3,7 @@ package linkers
 import (
 	"errors"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/definitions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/languages/definitions"
 )
 
 type languageDefinitionBuilder struct {

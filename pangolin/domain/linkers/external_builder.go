@@ -3,16 +3,14 @@ package linkers
 import "errors"
 
 type externalBuilder struct {
-	name        string
-	application Application
-	script      Script
+	name       string
+	executable Executable
 }
 
 func createExternalBuilder() ExternalBuilder {
 	out := externalBuilder{
-		name:        "",
-		application: nil,
-		script:      nil,
+		name:       "",
+		executable: nil,
 	}
 
 	return &out
@@ -29,15 +27,9 @@ func (app *externalBuilder) WithName(name string) ExternalBuilder {
 	return app
 }
 
-// WithApplication adds an application to the builder
-func (app *externalBuilder) WithApplication(application Application) ExternalBuilder {
-	app.application = application
-	return app
-}
-
-// WithScript adds a script to the builder
-func (app *externalBuilder) WithScript(script Script) ExternalBuilder {
-	app.script = script
+// WithExecutable adds an executable to the builder
+func (app *externalBuilder) WithExecutable(executable Executable) ExternalBuilder {
+	app.executable = executable
 	return app
 }
 
@@ -47,13 +39,9 @@ func (app *externalBuilder) Now() (External, error) {
 		return nil, errors.New("the name is mandatory in order to build an External instance")
 	}
 
-	if app.application != nil {
-		return createExternalWithApplication(app.name, app.application), nil
+	if app.executable == nil {
+		return nil, errors.New("the executable is mandatory in order to build an External instance")
 	}
 
-	if app.script != nil {
-		return createExternalWithScript(app.name, app.script), nil
-	}
-
-	return nil, errors.New("the External instance is invalid")
+	return createExternal(app.name, app.executable), nil
 }

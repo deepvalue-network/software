@@ -1,73 +1,56 @@
 package instruction
 
 import (
-	ins "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
+	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/tests/test/instructions/instruction"
+	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type adapter struct {
-	builder            Builder
-	assertBuilder      AssertBuilder
-	readFileBuilder    ReadFileBuilder
-	instructionAdapter ins.Adapter
+	languageAdapter standard_instruction.Adapter
+	testAdapter     test_instruction.Adapter
+	builder         Builder
 }
 
 func createAdapter(
+	languageAdapter standard_instruction.Adapter,
+	testAdapter test_instruction.Adapter,
 	builder Builder,
-	assertBuilder AssertBuilder,
-	readFileBuilder ReadFileBuilder,
-	instructionAdapter ins.Adapter,
 ) Adapter {
 	out := adapter{
-		builder:            builder,
-		assertBuilder:      assertBuilder,
-		readFileBuilder:    readFileBuilder,
-		instructionAdapter: instructionAdapter,
+		languageAdapter: languageAdapter,
+		testAdapter:     testAdapter,
+		builder:         builder,
 	}
 
 	return &out
 }
 
-// ToInstruction converts a testInstruction to an Instruction instance
-func (app *adapter) ToInstruction(testInstruction parsers.TestInstruction) (Instruction, error) {
+// ToInstruction converts a parsed language test instruction to instruction
+func (app *adapter) ToInstruction(parsed parsers.LanguageTestInstruction) (Instruction, error) {
 	builder := app.builder.Create()
-	if testInstruction.IsInstruction() {
-		parsedIns := testInstruction.Instruction()
-		ins, err := app.instructionAdapter.ToInstruction(parsedIns)
+	if parsed.IsLanguageInstruction() {
+		parsedLangIns := parsed.LanguageInstruction()
+		langIns, err := app.languageAdapter.ToCommonInstruction(parsedLangIns)
 		if err != nil {
 			return nil, err
 		}
 
-		builder.WithInstruction(ins)
+		builder.WithLanguage(langIns)
 	}
 
-	if testInstruction.IsReadFile() {
-		parsedReadFile := testInstruction.ReadFile()
-		variable := parsedReadFile.Variable()
-		path := parsedReadFile.Path().String()
-		ins, err := app.readFileBuilder.Create().WithVariable(variable).WithPath(path).Now()
+	if parsed.IsTestInstruction() {
+		parsedTest := parsed.TestInstruction()
+		test, err := app.testAdapter.ToInstruction(parsedTest)
 		if err != nil {
 			return nil, err
 		}
 
-		builder.WithReadFile(ins)
+		builder.WithTest(test)
 	}
 
-	if testInstruction.IsAssert() {
-		parsedAssert := testInstruction.Assert()
-		index := parsedAssert.Index()
-		assertBuilder := app.assertBuilder.Create().WithIndex(index)
-		if parsedAssert.HasCondition() {
-			condition := parsedAssert.Condition()
-			assertBuilder.WithCondition(condition)
-		}
-
-		ins, err := assertBuilder.Now()
-		if err != nil {
-			return nil, err
-		}
-
-		builder.WithAssert(ins)
+	if parsed.IsInterpret() {
+		builder.IsInterpret()
 	}
 
 	return builder.Now()

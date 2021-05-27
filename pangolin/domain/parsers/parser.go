@@ -16,7 +16,8 @@ type parser struct {
 	lexerBuilder                     lexers.Builder
 	parserBuilder                    lparser.Builder
 	programBuilder                   ProgramBuilder
-	languageBuilder                  LanguageBuilder
+	testableBuilder                  TestableBuilder
+	executableBuilder                ExecutableBuilder
 	scopesBuilder                    ScopesBuilder
 	scopeBuilder                     ScopeBuilder
 	commandBuilder                   CommandBuilder
@@ -97,7 +98,8 @@ type parser struct {
 	skipBuilder                      SkipBuilder
 	intPointerBuilder                IntPointerBuilder
 	program                          map[string]Program
-	language                         map[string]Language
+	testable                         map[string]Testable
+	executable                       map[string]Executable
 	scopes                           map[string]Scopes
 	scope                            map[string]Scope
 	command                          map[string]Command
@@ -197,7 +199,8 @@ func createParser(
 	parserBuilder lparser.Builder,
 	lexerBuilder lexers.Builder,
 	programBuilder ProgramBuilder,
-	languageBuilder LanguageBuilder,
+	testableBuilder TestableBuilder,
+	executableBuilder ExecutableBuilder,
 	scopesBuilder ScopesBuilder,
 	scopeBuilder ScopeBuilder,
 	commandBuilder CommandBuilder,
@@ -284,7 +287,8 @@ func createParser(
 		lexerBuilder:                     lexerBuilder,
 		lexerAdapter:                     lexerAdapter,
 		programBuilder:                   programBuilder,
-		languageBuilder:                  languageBuilder,
+		testableBuilder:                  testableBuilder,
+		executableBuilder:                executableBuilder,
 		scopesBuilder:                    scopesBuilder,
 		scopeBuilder:                     scopeBuilder,
 		commandBuilder:                   commandBuilder,
@@ -378,8 +382,12 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			OnExit: app.exitProgram,
 		},
 		lparser.ToEventsParams{
-			Token:  "language",
-			OnExit: app.exitLanguage,
+			Token:  "testable",
+			OnExit: app.exitTestable,
+		},
+		lparser.ToEventsParams{
+			Token:  "executable",
+			OnExit: app.exitExecutable,
 		},
 		lparser.ToEventsParams{
 			Token:  "scopesWithArrow",
@@ -797,7 +805,8 @@ func (app *parser) ExecuteScript(script string) (interface{}, error) {
 
 func (app *parser) init() {
 	app.program = map[string]Program{}
-	app.language = map[string]Language{}
+	app.testable = map[string]Testable{}
+	app.executable = map[string]Executable{}
 	app.scopes = map[string]Scopes{}
 	app.scope = map[string]Scope{}
 	app.command = map[string]Command{}
@@ -894,8 +903,65 @@ func (app *parser) init() {
 func (app *parser) exitProgram(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.programBuilder.Create()
 	section, code := tree.BestMatchFromNames([]string{
+		"testable",
+		"languageApplication",
+	})
+
+	switch section {
+	case "testable":
+		if testable, ok := app.testable[code]; ok {
+			builder.WithTestable(testable)
+		}
+		break
+	case "languageApplication":
+		if lang, ok := app.languageApplication[code]; ok {
+			builder.WithLanguage(lang)
+		}
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.program[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitTestable(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.testableBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
+		"executable",
+		"languageDefinition",
+	})
+
+	switch section {
+	case "executable":
+		if app, ok := app.executable[code]; ok {
+			builder.WithExecutable(app)
+		}
+		break
+	case "languageDefinition":
+		if langDef, ok := app.languageDefinition[code]; ok {
+			builder.WithLanguage(langDef)
+		}
+		break
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.testable[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitExecutable(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.executableBuilder.Create()
+	section, code := tree.BestMatchFromNames([]string{
 		"application",
-		"language",
 		"script",
 	})
 
@@ -903,11 +969,6 @@ func (app *parser) exitProgram(tree lexers.NodeTree) (interface{}, error) {
 	case "application":
 		if app, ok := app.application[code]; ok {
 			builder.WithApplication(app)
-		}
-		break
-	case "language":
-		if lang, ok := app.language[code]; ok {
-			builder.WithLanguage(lang)
 		}
 		break
 	case "script":
@@ -922,36 +983,7 @@ func (app *parser) exitProgram(tree lexers.NodeTree) (interface{}, error) {
 		return nil, err
 	}
 
-	app.program[tree.Code()] = ins
-	return ins, nil
-}
-
-func (app *parser) exitLanguage(tree lexers.NodeTree) (interface{}, error) {
-	builder := app.languageBuilder.Create()
-	section, code := tree.BestMatchFromNames([]string{
-		"languageDefinition",
-		"languageApplication",
-	})
-
-	switch section {
-	case "languageDefinition":
-		if def, ok := app.languageDefinition[code]; ok {
-			builder.WithDefinition(def)
-		}
-		break
-	case "languageApplication":
-		if app, ok := app.languageApplication[code]; ok {
-			builder.WithApplication(app)
-		}
-		break
-	}
-
-	ins, err := builder.Now()
-	if err != nil {
-		return nil, err
-	}
-
-	app.language[tree.Code()] = ins
+	app.executable[tree.Code()] = ins
 	return ins, nil
 }
 

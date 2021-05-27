@@ -1,17 +1,17 @@
 package linkers
 
 type test struct {
-	name   string
-	script Script
+	name       string
+	executable Executable
 }
 
 func createTest(
 	name string,
-	script Script,
+	executable Executable,
 ) Test {
 	out := test{
-		name:   name,
-		script: script,
+		name:       name,
+		executable: executable,
 	}
 
 	return &out
@@ -22,7 +22,7 @@ func (obj *test) Name() string {
 	return obj.name
 }
 
-// Script returns the script
-func (obj *test) Script() Script {
-	return obj.script
+// Executable returns the executable
+func (obj *test) Executable() Executable {
+	return obj.executable
 }

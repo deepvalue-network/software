@@ -1,55 +1,24 @@
 package instruction
 
 import (
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/call"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/condition"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/exit"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/registry"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/remaining"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/stackframe"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/standard"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/value"
-	var_variable "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable"
-	var_value "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/variable/value"
+	standard_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/match"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 // NewAdapter creates a new adapter instance
 func NewAdapter() Adapter {
-	stackframeBuilder := stackframe.NewBuilder()
-	skipBuilder := stackframe.NewSkipBuilder()
-	conditionBuilder := condition.NewBuilder()
-	propositionBuilder := condition.NewPropositionBuilder()
-	remainingBuilder := remaining.NewBuilder()
-	standardBuilder := standard.NewBuilder()
-	valueBuilder := value.NewBuilder()
-	varValueAdapter := var_value.NewAdapter()
-	varValueFactory := var_value.NewFactory()
-	varVariableBuilder := var_variable.NewBuilder()
-	callBuilder := call.NewBuilder()
-	exitBuilder := exit.NewBuilder()
-	registryIndexBuilder := registry.NewIndexBuilder()
-	registryRegisterBuilder := registry.NewRegisterBuilder()
-	registerFetchBuilder := registry.NewFetchBuilder()
-	registryBuilder := registry.NewBuilder()
+	instructionAdapter := standard_instruction.NewAdapter()
+	commandAdapter := commands.NewAdapter()
+	matchAdapter := match.NewAdapter()
+	commonInstructionBuilder := NewCommonInstructionBuilder()
 	builder := NewBuilder()
 	return createAdapter(
-		stackframeBuilder,
-		skipBuilder,
-		conditionBuilder,
-		propositionBuilder,
-		remainingBuilder,
-		standardBuilder,
-		valueBuilder,
-		varValueAdapter,
-		varValueFactory,
-		varVariableBuilder,
-		callBuilder,
-		exitBuilder,
-		registryIndexBuilder,
-		registryRegisterBuilder,
-		registerFetchBuilder,
-		registryBuilder,
+		instructionAdapter,
+		commandAdapter,
+		matchAdapter,
+		commonInstructionBuilder,
 		builder,
 	)
 }
@@ -59,50 +28,45 @@ func NewBuilder() Builder {
 	return createBuilder()
 }
 
-// Adapter represents the instruction adapter
+// NewCommonInstructionBuilder creates a new common instruction builder
+func NewCommonInstructionBuilder() CommonInstructionBuilder {
+	return createCommonInstructionBuilder()
+}
+
+// Adapter represents instructions adapter
 type Adapter interface {
-	ToInstruction(instruction parsers.Instruction) (Instruction, error)
+	ToInstruction(parsed parsers.LanguageInstruction) (Instruction, error)
+	ToCommonInstruction(parsed parsers.LanguageInstructionCommon) (CommonInstruction, error)
 }
 
 // Builder represents an instruction builder
 type Builder interface {
 	Create() Builder
-	WithStackframe(stackframe stackframe.Stackframe) Builder
-	WithCondition(condition condition.Condition) Builder
-	WithStandard(standard standard.Standard) Builder
-	WithRemaining(remaining remaining.Remaining) Builder
-	WithValue(value value.Value) Builder
-	WithInsert(insert var_variable.Variable) Builder
-	WithSave(save var_variable.Variable) Builder
-	WithDelete(del string) Builder
-	WithCall(call call.Call) Builder
-	WithExit(exit exit.Exit) Builder
-	WithRegistry(reg registry.Registry) Builder
+	WithInstruction(ins CommonInstruction) Builder
+	WithCommand(command commands.Command) Builder
 	Now() (Instruction, error)
 }
 
-// Instruction represents an instruction
+// Instruction represents a language application instruction
 type Instruction interface {
-	IsStackframe() bool
-	Stackframe() stackframe.Stackframe
-	IsCondition() bool
-	Condition() condition.Condition
-	IsStandard() bool
-	Standard() standard.Standard
-	IsRemaining() bool
-	Remaining() remaining.Remaining
-	IsValue() bool
-	Value() value.Value
-	IsInsert() bool
-	Insert() var_variable.Variable
-	IsSave() bool
-	Save() var_variable.Variable
-	IsDelete() bool
-	Delete() string
-	IsCall() bool
-	Call() call.Call
-	IsExit() bool
-	Exit() exit.Exit
-	IsRegistry() bool
-	Registry() registry.Registry
+	IsInstruction() bool
+	Instruction() CommonInstruction
+	IsCommand() bool
+	Command() commands.Command
+}
+
+// CommonInstructionBuilder represents a common instruction builder
+type CommonInstructionBuilder interface {
+	Create() CommonInstructionBuilder
+	WithInstruction(ins standard_instruction.Instruction) CommonInstructionBuilder
+	WithMatch(match match.Match) CommonInstructionBuilder
+	Now() (CommonInstruction, error)
+}
+
+// CommonInstruction represents a common instruction
+type CommonInstruction interface {
+	IsInstruction() bool
+	Instruction() standard_instruction.Instruction
+	IsMatch() bool
+	Match() match.Match
 }
