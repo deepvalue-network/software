@@ -18,6 +18,7 @@ import (
 func NewAdapter() Adapter {
 	stackframeBuilder := stackframe.NewBuilder()
 	skipBuilder := stackframe.NewSkipBuilder()
+	saveBuilder := stackframe.NewSaveBuilder()
 	conditionBuilder := condition.NewBuilder()
 	propositionBuilder := condition.NewPropositionBuilder()
 	remainingBuilder := remaining.NewBuilder()
@@ -36,6 +37,7 @@ func NewAdapter() Adapter {
 	return createAdapter(
 		stackframeBuilder,
 		skipBuilder,
+		saveBuilder,
 		conditionBuilder,
 		propositionBuilder,
 		remainingBuilder,

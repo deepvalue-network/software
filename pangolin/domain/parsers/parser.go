@@ -93,6 +93,8 @@ type parser struct {
 	matchBuilder                     MatchBuilder
 	exitBuilder                      ExitBuilder
 	callBuilder                      CallBuilder
+	switchBuilder                    SwitchBuilder
+	saveBuilder                      SaveBuilder
 	stackFrameBuilder                StackFrameBuilder
 	indexBuilder                     IndexBuilder
 	skipBuilder                      SkipBuilder
@@ -187,6 +189,8 @@ type parser struct {
 	matchPattern                     map[string]string
 	exit                             map[string]Exit
 	call                             map[string]Call
+	swtch                            map[string]Switch
+	save                             map[string]Save
 	stackFrame                       map[string]StackFrame
 	index                            map[string]Index
 	skip                             map[string]Skip
@@ -276,6 +280,8 @@ func createParser(
 	matchBuilder MatchBuilder,
 	exitBuilder ExitBuilder,
 	callBuilder CallBuilder,
+	switchBuilder SwitchBuilder,
+	saveBuilder SaveBuilder,
 	stackFrameBuilder StackFrameBuilder,
 	indexBuilder IndexBuilder,
 	skipBuilder SkipBuilder,
@@ -364,6 +370,8 @@ func createParser(
 		matchBuilder:                     matchBuilder,
 		exitBuilder:                      exitBuilder,
 		callBuilder:                      callBuilder,
+		switchBuilder:                    switchBuilder,
+		saveBuilder:                      saveBuilder,
 		stackFrameBuilder:                stackFrameBuilder,
 		indexBuilder:                     indexBuilder,
 		skipBuilder:                      skipBuilder,
@@ -742,6 +750,14 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			OnExit: app.exitCall,
 		},
 		lparser.ToEventsParams{
+			Token:  "switch",
+			OnExit: app.exitSwitch,
+		},
+		lparser.ToEventsParams{
+			Token:  "save",
+			OnExit: app.exitSave,
+		},
+		lparser.ToEventsParams{
 			Token:  "match",
 			OnExit: app.exitMatch,
 		},
@@ -894,6 +910,8 @@ func (app *parser) init() {
 	app.matchPattern = map[string]string{}
 	app.exit = map[string]Exit{}
 	app.call = map[string]Call{}
+	app.swtch = map[string]Switch{}
+	app.save = map[string]Save{}
 	app.stackFrame = map[string]StackFrame{}
 	app.index = map[string]Index{}
 	app.skip = map[string]Skip{}
@@ -2414,6 +2432,8 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 		"jump",
 		"exit",
 		"call",
+		"switch",
+		"save",
 		"registry",
 	})
 
@@ -2453,6 +2473,16 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 	case "call":
 		if call, ok := app.call[code]; ok {
 			builder.WithCall(call)
+		}
+		break
+	case "switch":
+		if swtch, ok := app.swtch[code]; ok {
+			builder.WithSwitch(swtch)
+		}
+		break
+	case "save":
+		if save, ok := app.save[code]; ok {
+			builder.WithSave(save)
 		}
 		break
 	case "registry":
@@ -3380,6 +3410,50 @@ func (app *parser) exitCall(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.call[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitSwitch(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.switchBuilder.Create()
+	variable := tree.CodeFromName("VARIABLE_PATTERN")
+	if variable != "" {
+		builder.WithVariable(variable)
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.swtch[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitSave(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.saveBuilder.Create()
+	variables := tree.CodesFromName("VARIABLE_PATTERN")
+	amount := len(variables)
+	if amount > 2 {
+		str := fmt.Sprintf("the save instruction was not expecting more than 2 variables, %d provided", amount)
+		return nil, errors.New(str)
+	}
+
+	if amount <= 0 {
+		str := fmt.Sprintf("the save instruction was expecting at least 1 variable, %d provided", amount)
+		return nil, errors.New(str)
+	}
+
+	builder.To(variables[0])
+	if amount == 2 {
+		builder.From(variables[1])
+	}
+
+	ins, err := builder.Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.save[tree.Code()] = ins
 	return ins, nil
 }
 

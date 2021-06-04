@@ -17,6 +17,7 @@ import (
 type adapter struct {
 	stackFrameBuilder       stackframe.Builder
 	skipBuilder             stackframe.SkipBuilder
+	saveBuilder             stackframe.SaveBuilder
 	conditionBuilder        condition.Builder
 	propositionBuilder      condition.PropositionBuilder
 	remainingBuilder        remaining.Builder
@@ -37,6 +38,7 @@ type adapter struct {
 func createAdapter(
 	stackFrameBuilder stackframe.Builder,
 	skipBuilder stackframe.SkipBuilder,
+	saveBuilder stackframe.SaveBuilder,
 	conditionBuilder condition.Builder,
 	propositionBuilder condition.PropositionBuilder,
 	remainingBuilder remaining.Builder,
@@ -56,6 +58,7 @@ func createAdapter(
 	out := adapter{
 		stackFrameBuilder:       stackFrameBuilder,
 		skipBuilder:             skipBuilder,
+		saveBuilder:             saveBuilder,
 		conditionBuilder:        conditionBuilder,
 		propositionBuilder:      propositionBuilder,
 		remainingBuilder:        remainingBuilder,
@@ -337,6 +340,38 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 		}
 
 		builder.WithRegistry(registry)
+	}
+
+	if parsed.IsSave() {
+		save := parsed.Save()
+		to := save.To()
+		saveBuilder := app.saveBuilder.Create().To(to)
+		if save.HasFrom() {
+			from := save.From()
+			saveBuilder.From(from)
+		}
+
+		save, err := saveBuilder.Now()
+		if err != nil {
+			return nil, err
+		}
+
+		stackFrame, err := app.stackFrameBuilder.Create().WithSave(save).Now()
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithStackframe(stackFrame)
+	}
+
+	if parsed.IsSwitch() {
+		variable := parsed.Switch().Variable()
+		stackFrame, err := app.stackFrameBuilder.Create().WithSwitch(variable).Now()
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithStackframe(stackFrame)
 	}
 
 	return builder.Now()

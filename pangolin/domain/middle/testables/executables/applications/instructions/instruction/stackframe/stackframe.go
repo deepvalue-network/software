@@ -5,22 +5,32 @@ type stackframe struct {
 	isPop  bool
 	index  string
 	skip   Skip
+	save   Save
+	swtch  string
 }
 
 func createStackframeWithPush() Stackframe {
-	return createStackframeInternally(true, false, "", nil)
+	return createStackframeInternally(true, false, "", nil, nil, "")
 }
 
 func createStackframeWithPop() Stackframe {
-	return createStackframeInternally(false, true, "", nil)
+	return createStackframeInternally(false, true, "", nil, nil, "")
 }
 
 func createStackframeWithIndex(index string) Stackframe {
-	return createStackframeInternally(false, false, index, nil)
+	return createStackframeInternally(false, false, index, nil, nil, "")
 }
 
 func createStackframeWithSkip(skip Skip) Stackframe {
-	return createStackframeInternally(false, false, "", skip)
+	return createStackframeInternally(false, false, "", skip, nil, "")
+}
+
+func createStackframeWithSave(save Save) Stackframe {
+	return createStackframeInternally(false, false, "", nil, save, "")
+}
+
+func createStackframeWithSwitch(swtch string) Stackframe {
+	return createStackframeInternally(false, false, "", nil, nil, swtch)
 }
 
 func createStackframeInternally(
@@ -28,12 +38,16 @@ func createStackframeInternally(
 	isPop bool,
 	index string,
 	skip Skip,
+	save Save,
+	swtch string,
 ) Stackframe {
 	out := stackframe{
 		isPush: isPush,
 		isPop:  isPop,
 		index:  index,
 		skip:   skip,
+		save:   save,
+		swtch:  swtch,
 	}
 
 	return &out
@@ -67,4 +81,24 @@ func (obj *stackframe) IsSkip() bool {
 // Skip returns the skip, if any
 func (obj *stackframe) Skip() Skip {
 	return obj.skip
+}
+
+// IsSave retruns true if there is a save instance, false otherwise
+func (obj *stackframe) IsSave() bool {
+	return obj.save != nil
+}
+
+// Save returns the save instance, if any
+func (obj *stackframe) Save() Save {
+	return obj.save
+}
+
+// IsSwitch retruns true if there is a switch instance, false otherwise
+func (obj *stackframe) IsSwitch() bool {
+	return obj.swtch != ""
+}
+
+// Switch returns the switch instance, if any
+func (obj *stackframe) Switch() string {
+	return obj.swtch
 }

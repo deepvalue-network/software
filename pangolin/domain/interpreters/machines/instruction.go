@@ -17,7 +17,8 @@ import (
 type instruction struct {
 	computableValueBuilder computable.Builder
 	labelFn                CallLabelByNameFn
-	stackFrame             stackframes.StackFrame
+	currentStackFrameName  string
+	stackframes            map[string]stackframes.StackFrame
 }
 
 func createInstruction(
@@ -28,7 +29,10 @@ func createInstruction(
 	out := instruction{
 		computableValueBuilder: computableValueBuilder,
 		labelFn:                labelFn,
-		stackFrame:             stackFrame,
+		currentStackFrameName:  currentStackFrameName,
+		stackframes: map[string]stackframes.StackFrame{
+			currentStackFrameName: stackFrame,
+		},
 	}
 
 	return &out
@@ -39,30 +43,30 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 	if ins.IsStackframe() {
 		stkFrame := ins.Stackframe()
 		if stkFrame.IsPush() {
-			app.stackFrame.Push()
+			app.stackframes[app.currentStackFrameName].Push()
 			return nil
 		}
 
 		if stkFrame.IsPop() {
-			return app.stackFrame.Pop()
+			return app.stackframes[app.currentStackFrameName].Pop()
 		}
 
 		if stkFrame.IsIndex() {
 			indexVariable := stkFrame.Index()
-			stkFrameIndex := app.stackFrame.Index()
+			stkFrameIndex := app.stackframes[app.currentStackFrameName].Index()
 			value, err := app.computableValueBuilder.Create().WithInt64(int64(stkFrameIndex)).Now()
 			if err != nil {
 				return err
 			}
 
-			return app.stackFrame.Current().UpdateValue(indexVariable, value)
+			return app.stackframes[app.currentStackFrameName].Current().UpdateValue(indexVariable, value)
 		}
 
 		if stkFrame.IsSkip() {
 			skip := stkFrame.Skip()
 			if skip.IsVariable() {
 				variable := skip.Variable()
-				indexVariable, err := app.stackFrame.Current().Fetch(variable)
+				indexVariable, err := app.stackframes[app.currentStackFrameName].Current().Fetch(variable)
 				if err != nil {
 					return err
 				}
@@ -73,8 +77,39 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 				}
 
 				ptrIndexVal := indexVariable.IntSixtyFour()
-				return app.stackFrame.Skip(int(*ptrIndexVal))
+				return app.stackframes[app.currentStackFrameName].Skip(int(*ptrIndexVal))
 			}
+		}
+
+		if stkFrame.IsSave() {
+			save := stkFrame.Save()
+			to := save.To()
+			from := app.currentStackFrameName
+			if save.HasFrom() {
+				from = save.From()
+			}
+
+			if _, ok := app.stackframes[to]; !ok {
+				str := fmt.Sprintf("the to stackFrame (%s) does not exists", to)
+				return errors.New(str)
+			}
+
+			if fromStackFrame, ok := app.stackframes[from]; ok {
+				app.stackframes[to] = fromStackFrame
+			}
+
+			str := fmt.Sprintf("the from stackFrame (%s) does not exists", from)
+			return errors.New(str)
+		}
+
+		if stkFrame.IsSwitch() {
+			variableName := stkFrame.Switch()
+			if _, ok := app.stackframes[variableName]; !ok {
+				str := fmt.Sprintf("the stackFrame (%s) does not exists", variableName)
+				return errors.New(str)
+			}
+
+			app.currentStackFrameName = variableName
 		}
 	}
 
@@ -95,7 +130,7 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 		result := standard.Result()
 		first := standard.First()
 		second := standard.Second()
-		return app.stackFrame.Current().Standard(first, second, result, operation)
+		return app.stackframes[app.currentStackFrameName].Current().Standard(first, second, result, operation)
 	}
 
 	if ins.IsRemaining() {
@@ -105,7 +140,7 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 		result := rem.Result()
 		remaining := rem.Remaining()
 		operation := rem.Operation()
-		return app.stackFrame.Current().Remaining(first, second, result, remaining, operation)
+		return app.stackframes[app.currentStackFrameName].Current().Remaining(first, second, result, remaining, operation)
 	}
 
 	if ins.IsValue() {
@@ -121,17 +156,26 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 
 	if ins.IsInsert() {
 		vr := ins.Insert()
-		return app.stackFrame.Current().Insert(vr)
+		return app.stackframes[app.currentStackFrameName].Current().Insert(vr)
 	}
 
 	if ins.IsSave() {
 		vr := ins.Save()
-		return app.stackFrame.Current().Update(vr)
+		return app.stackframes[app.currentStackFrameName].Current().Update(vr)
 	}
 
 	if ins.IsDelete() {
 		name := ins.Delete()
-		return app.stackFrame.Current().Delete(name)
+		if _, ok := app.stackframes[name]; ok {
+			if app.currentStackFrameName == name {
+				str := fmt.Sprintf("the stackFrame (%s) cannot be deleted because it is the current stackFrame", name)
+				return errors.New(str)
+			}
+
+			delete(app.stackframes, name)
+		}
+
+		return app.stackframes[app.currentStackFrameName].Current().Delete(name)
 	}
 
 	if ins.IsCall() {
@@ -142,7 +186,7 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 		exit := ins.Exit()
 		if exit.HasCondition() {
 			condition := exit.Condition()
-			val, err := app.stackFrame.Current().Fetch(condition)
+			val, err := app.stackframes[app.currentStackFrameName].Current().Fetch(condition)
 			if err != nil {
 				return err
 			}
@@ -158,13 +202,13 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 
 			bl := val.Bool()
 			if *bl {
-				app.stackFrame.Current().Stop()
+				app.stackframes[app.currentStackFrameName].Current().Stop()
 			}
 
 			return nil
 		}
 
-		app.stackFrame.Current().Stop()
+		app.stackframes[app.currentStackFrameName].Current().Stop()
 		return nil
 	}
 
@@ -181,23 +225,23 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 					return err
 				}
 
-				currentIndex := app.stackFrame.Index()
-				err = app.stackFrame.Skip(indexInt)
+				currentIndex := app.stackframes[app.currentStackFrameName].Index()
+				err = app.stackframes[app.currentStackFrameName].Skip(indexInt)
 				if err != nil {
 					return err
 				}
 
-				fromVal, err := app.stackFrame.Registry().Fetch(from)
+				fromVal, err := app.stackframes[app.currentStackFrameName].Registry().Fetch(from)
 				if err != nil {
 					return err
 				}
 
-				err = app.stackFrame.Current().UpdateValue(to, fromVal)
+				err = app.stackframes[app.currentStackFrameName].Current().UpdateValue(to, fromVal)
 				if err != nil {
 					return err
 				}
 
-				err = app.stackFrame.Skip(currentIndex)
+				err = app.stackframes[app.currentStackFrameName].Skip(currentIndex)
 				if err != nil {
 					return err
 				}
@@ -205,12 +249,12 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 				return nil
 			}
 
-			fromVal, err := app.stackFrame.Registry().Fetch(from)
+			fromVal, err := app.stackframes[app.currentStackFrameName].Registry().Fetch(from)
 			if err != nil {
 				return err
 			}
 
-			err = app.stackFrame.Current().UpdateValue(to, fromVal)
+			err = app.stackframes[app.currentStackFrameName].Current().UpdateValue(to, fromVal)
 			if err != nil {
 				return err
 			}
@@ -228,23 +272,23 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 					return err
 				}
 
-				currentIndex := app.stackFrame.Index()
-				err = app.stackFrame.Skip(indexInt)
+				currentIndex := app.stackframes[app.currentStackFrameName].Index()
+				err = app.stackframes[app.currentStackFrameName].Skip(indexInt)
 				if err != nil {
 					return err
 				}
 
-				fromVal, err := app.stackFrame.Current().Fetch(variable)
+				fromVal, err := app.stackframes[app.currentStackFrameName].Current().Fetch(variable)
 				if err != nil {
 					return err
 				}
 
-				err = app.stackFrame.Registry().Insert(variable, fromVal)
+				err = app.stackframes[app.currentStackFrameName].Registry().Insert(variable, fromVal)
 				if err != nil {
 					return err
 				}
 
-				err = app.stackFrame.Skip(currentIndex)
+				err = app.stackframes[app.currentStackFrameName].Skip(currentIndex)
 				if err != nil {
 					return err
 				}
@@ -252,12 +296,12 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 				return nil
 			}
 
-			fromVal, err := app.stackFrame.Current().Fetch(variable)
+			fromVal, err := app.stackframes[app.currentStackFrameName].Current().Fetch(variable)
 			if err != nil {
 				return err
 			}
 
-			err = app.stackFrame.Registry().Insert(variable, fromVal)
+			err = app.stackframes[app.currentStackFrameName].Registry().Insert(variable, fromVal)
 			if err != nil {
 				return err
 			}
@@ -267,7 +311,7 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 
 		if registry.IsUnregister() {
 			variable := registry.Unregister()
-			err := app.stackFrame.Registry().Delete(variable)
+			err := app.stackframes[app.currentStackFrameName].Registry().Delete(variable)
 			if err != nil {
 				return err
 			}
@@ -280,24 +324,39 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 }
 
 func (app *instruction) registryIndexToIndex(index registry.Index) (int, error) {
-
 	if index.IsInt() {
-
+		val := index.Int()
+		return int(val), nil
 	}
 
-	if index.IsVariable() {
-
+	variable := index.Variable()
+	vr, err := app.stackframes[app.currentStackFrameName].Current().Fetch(variable)
+	if err != nil {
+		return 0, err
 	}
 
-	/*
+	if vr.IsIntHeight() {
+		ptr := vr.IntHeight()
+		return int(*ptr), nil
+	}
 
-		IsInt() bool
-		Int() int64
-		IsVariable() bool
-		Variable() string
+	if vr.IsIntSixteen() {
+		ptr := vr.IntSixteen()
+		return int(*ptr), nil
+	}
 
-	*/
-	return 0, nil
+	if vr.IsIntThirtyTwo() {
+		ptr := vr.IntThirtyTwo()
+		return int(*ptr), nil
+	}
+
+	if vr.IsIntSixtyFour() {
+		ptr := vr.IntSixtyFour()
+		return int(*ptr), nil
+	}
+
+	str := fmt.Sprintf("the registry index's variable (%s) was expected to contain an int", variable)
+	return 0, errors.New(str)
 }
 
 // ReceiveLbl receives a label instruction
@@ -330,7 +389,7 @@ func (app *instruction) labelInstructions(lblIns label_instructions.Instructions
 func (app *instruction) proposition(prop condition.Proposition) error {
 	if prop.HasCondition() {
 		cond := prop.Condition()
-		com, err := app.stackFrame.Current().Fetch(cond)
+		com, err := app.stackframes[app.currentStackFrameName].Current().Fetch(cond)
 		if err != nil {
 			return err
 		}
@@ -363,7 +422,7 @@ func (app *instruction) print(val var_value.Value) error {
 	}
 
 	name := val.Variable()
-	com, err := app.stackFrame.Current().Fetch(name)
+	com, err := app.stackframes[app.currentStackFrameName].Current().Fetch(name)
 	if err != nil {
 		return err
 	}

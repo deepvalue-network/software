@@ -87,6 +87,8 @@ EXIT: 'exit';
 EXIT_IF: 'exit_if';
 CALL: 'call';
 CALL_IF: 'call_if';
+SWITCH: 'switch';
+SAVE: 'save';
 CODE: 'code';
 CODE_MATCH: 'code_match';
 READ: 'read';

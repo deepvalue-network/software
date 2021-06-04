@@ -10,6 +10,11 @@ func NewSkipBuilder() SkipBuilder {
 	return createSkipBuilder()
 }
 
+// NewSaveBuilder creates a new save builder instance
+func NewSaveBuilder() SaveBuilder {
+	return createSaveBuilder()
+}
+
 // Builder represents the stackframe builder
 type Builder interface {
 	Create() Builder
@@ -17,6 +22,8 @@ type Builder interface {
 	IsPop() Builder
 	WithSkip(skip Skip) Builder
 	WithIndex(indexVariable string) Builder
+	WithSave(save Save) Builder
+	WithSwitch(swtch string) Builder
 	Now() (Stackframe, error)
 }
 
@@ -28,6 +35,10 @@ type Stackframe interface {
 	Index() string
 	IsSkip() bool
 	Skip() Skip
+	IsSave() bool
+	Save() Save
+	IsSwitch() bool
+	Switch() string
 }
 
 // SkipBuilder represents a skip builder
@@ -44,4 +55,19 @@ type Skip interface {
 	Int() int64
 	IsVariable() bool
 	Variable() string
+}
+
+// SaveBuilder represents a save builder
+type SaveBuilder interface {
+	Create() SaveBuilder
+	From(from string) SaveBuilder
+	To(to string) SaveBuilder
+	Now() (Save, error)
+}
+
+// Save represents a save
+type Save interface {
+	To() string
+	HasFrom() bool
+	From() string
 }

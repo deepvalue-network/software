@@ -87,6 +87,8 @@ type parserBuilder struct {
 	matchBuilder                     MatchBuilder
 	exitBuilder                      ExitBuilder
 	callBuilder                      CallBuilder
+	switchBuilder                    SwitchBuilder
+	saveBuilder                      SaveBuilder
 	stackFrameBuilder                StackFrameBuilder
 	indexBuilder                     IndexBuilder
 	skipBuilder                      SkipBuilder
@@ -176,6 +178,8 @@ func createParserBuilder(
 	matchBuilder MatchBuilder,
 	exitBuilder ExitBuilder,
 	callBuilder CallBuilder,
+	switchBuilder SwitchBuilder,
+	saveBuilder SaveBuilder,
 	stackFrameBuilder StackFrameBuilder,
 	indexBuilder IndexBuilder,
 	skipBuilder SkipBuilder,
@@ -263,6 +267,8 @@ func createParserBuilder(
 		matchBuilder:                     matchBuilder,
 		exitBuilder:                      exitBuilder,
 		callBuilder:                      callBuilder,
+		switchBuilder:                    switchBuilder,
+		saveBuilder:                      saveBuilder,
 		stackFrameBuilder:                stackFrameBuilder,
 		indexBuilder:                     indexBuilder,
 		skipBuilder:                      skipBuilder,
@@ -357,6 +363,8 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.matchBuilder,
 		app.exitBuilder,
 		app.callBuilder,
+		app.switchBuilder,
+		app.saveBuilder,
 		app.stackFrameBuilder,
 		app.indexBuilder,
 		app.skipBuilder,
@@ -455,6 +463,8 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.matchBuilder,
 		app.exitBuilder,
 		app.callBuilder,
+		app.switchBuilder,
+		app.saveBuilder,
 		app.stackFrameBuilder,
 		app.indexBuilder,
 		app.skipBuilder,

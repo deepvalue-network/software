@@ -403,6 +403,16 @@ func NewCallBuilder() CallBuilder {
 	return createCallBuilder()
 }
 
+// NewSwitchBuilder creates a new switch builder
+func NewSwitchBuilder() SwitchBuilder {
+	return createSwitchBuilder()
+}
+
+// NewSaveBuilder creates a new save builder
+func NewSaveBuilder() SaveBuilder {
+	return createSaveBuilder()
+}
+
 // NewStackFrameBuilder creates a new stack frame builder
 func NewStackFrameBuilder() StackFrameBuilder {
 	return createStackFrameBuilder()
@@ -506,6 +516,8 @@ func NewParserBuilder() ParserBuilder {
 	matchBuilder := NewMatchBuilder()
 	exitBuilder := NewExitBuilder()
 	callBuilder := NewCallBuilder()
+	switchBuilder := NewSwitchBuilder()
+	saveBuilder := NewSaveBuilder()
 	stackFrameBuilder := NewStackFrameBuilder()
 	indexBuilder := NewIndexBuilder()
 	skipBuilder := NewSkipBuilder()
@@ -593,6 +605,8 @@ func NewParserBuilder() ParserBuilder {
 		matchBuilder,
 		exitBuilder,
 		callBuilder,
+		switchBuilder,
+		saveBuilder,
 		stackFrameBuilder,
 		indexBuilder,
 		skipBuilder,
@@ -1457,6 +1471,8 @@ type InstructionBuilder interface {
 	WithExit(exit Exit) InstructionBuilder
 	WithCall(call Call) InstructionBuilder
 	WithRegistry(registry Registry) InstructionBuilder
+	WithSwitch(swtch Switch) InstructionBuilder
+	WithSave(save Save) InstructionBuilder
 	Now() (Instruction, error)
 }
 
@@ -1478,6 +1494,10 @@ type Instruction interface {
 	Call() Call
 	IsRegistry() bool
 	Registry() Registry
+	IsSwitch() bool
+	Switch() Switch
+	IsSave() bool
+	Save() Save
 }
 
 // RegistryBuilder represents a registry builder
@@ -1940,6 +1960,33 @@ type Call interface {
 	Name() string
 	HasCondition() bool
 	Condition() string
+}
+
+// SaveBuilder represents a save builder
+type SaveBuilder interface {
+	Create() SaveBuilder
+	From(from string) SaveBuilder
+	To(to string) SaveBuilder
+	Now() (Save, error)
+}
+
+// Save represents a save instruction
+type Save interface {
+	To() string
+	HasFrom() bool
+	From() string
+}
+
+// SwitchBuilder represents a switch builder
+type SwitchBuilder interface {
+	Create() SwitchBuilder
+	WithVariable(variable string) SwitchBuilder
+	Now() (Switch, error)
+}
+
+// Switch represents a switch instruction
+type Switch interface {
+	Variable() string
 }
 
 // StackFrameBuilder represents a stackFrame builder

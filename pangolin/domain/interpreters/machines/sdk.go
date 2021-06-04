@@ -19,6 +19,8 @@ import (
 	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/tests/test/instructions/instruction"
 )
 
+const currentStackFrameName = "INITIAL"
+
 // CallLabelByNameFn represents a func to call a label by name
 type CallLabelByNameFn func(name string) error
 

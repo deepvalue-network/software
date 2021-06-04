@@ -7,6 +7,8 @@ type builder struct {
 	isPop  bool
 	index  string
 	skip   Skip
+	save   Save
+	swtch  string
 }
 
 func createBuilder() Builder {
@@ -15,6 +17,8 @@ func createBuilder() Builder {
 		isPop:  false,
 		index:  "",
 		skip:   nil,
+		save:   nil,
+		swtch:  "",
 	}
 
 	return &out
@@ -49,6 +53,18 @@ func (app *builder) WithIndex(indexVariable string) Builder {
 	return app
 }
 
+// WithSave adds a save to the builder
+func (app *builder) WithSave(save Save) Builder {
+	app.save = save
+	return app
+}
+
+// WithSwitch adds a switch to the builder
+func (app *builder) WithSwitch(swtch string) Builder {
+	app.swtch = swtch
+	return app
+}
+
 // Now builds a new Stackframe instance
 func (app *builder) Now() (Stackframe, error) {
 	if app.isPop {
@@ -65,6 +81,14 @@ func (app *builder) Now() (Stackframe, error) {
 
 	if app.index != "" {
 		return createStackframeWithIndex(app.index), nil
+	}
+
+	if app.save != nil {
+		return createStackframeWithSave(app.save), nil
+	}
+
+	if app.swtch != "" {
+		return createStackframeWithSwitch(app.swtch), nil
 	}
 
 	return nil, errors.New("the Stackframe is invalid")

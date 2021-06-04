@@ -130,6 +130,42 @@ func Test_instruction_call_Success(t *testing.T) {
 	}
 }
 
+func Test_instruction_switch_Success(t *testing.T) {
+	grammarFile := "./grammar/grammar.json"
+	pars := createParserForTests("instruction", grammarFile)
+
+	file := "./tests/codes/instruction/switch.rod"
+	ins, err := pars.ExecuteFile(file)
+	if err != nil {
+		t.Errorf(err.Error())
+		return
+	}
+
+	instruction := ins.(Instruction)
+	if !instruction.IsSwitch() {
+		t.Errorf("the Instruction was expected to contain a switch")
+		return
+	}
+}
+
+func Test_instruction_save_Success(t *testing.T) {
+	grammarFile := "./grammar/grammar.json"
+	pars := createParserForTests("instruction", grammarFile)
+
+	file := "./tests/codes/instruction/save.rod"
+	ins, err := pars.ExecuteFile(file)
+	if err != nil {
+		t.Errorf(err.Error())
+		return
+	}
+
+	instruction := ins.(Instruction)
+	if !instruction.IsSave() {
+		t.Errorf("the Instruction was expected to contain a save")
+		return
+	}
+}
+
 func Test_instruction_registry_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("instruction", grammarFile)

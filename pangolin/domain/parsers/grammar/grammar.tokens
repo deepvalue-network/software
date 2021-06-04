@@ -17,7 +17,6 @@ script
     : SCRIPT COLON scriptValue+ DOT
     ;
 
-
 scriptValue
     : SCRIPT_NAME COLON NAME_PATTERN DOT
     | SCRIPT_VERSION COLON VERSION_PATTERN DOT
@@ -317,6 +316,8 @@ instruction
     | jump DOT
     | exit DOT
     | call DOT
+    | switch DOT
+    | save DOT
     | registry DOT
     ;
 
@@ -454,6 +455,15 @@ exit
 call
     : CALL COLON NAME_PATTERN
     | CALL_IF COLON VARIABLE_PATTERN COMMA NAME_PATTERN
+    ;
+
+save
+    : SAVE COLON VARIABLE_PATTERN COMMA VARIABLE_PATTERN
+    | SAVE COLON VARIABLE_PATTERN
+    ;
+
+switch
+    : SWITCH COLON VARIABLE_PATTERN
     ;
 
 stackFrame

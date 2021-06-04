@@ -13,6 +13,8 @@ type instructionBuilder struct {
 	exit       Exit
 	call       Call
 	reg        Registry
+	swtch      Switch
+	save       Save
 }
 
 func createInstructionBuilder() InstructionBuilder {
@@ -25,6 +27,8 @@ func createInstructionBuilder() InstructionBuilder {
 		exit:       nil,
 		call:       nil,
 		reg:        nil,
+		swtch:      nil,
+		save:       nil,
 	}
 
 	return &out
@@ -83,6 +87,18 @@ func (app *instructionBuilder) WithRegistry(registry Registry) InstructionBuilde
 	return app
 }
 
+// WithSwitch adds a switch to the builder
+func (app *instructionBuilder) WithSwitch(swtch Switch) InstructionBuilder {
+	app.swtch = swtch
+	return app
+}
+
+// WithSave adds a save to the builder
+func (app *instructionBuilder) WithSave(save Save) InstructionBuilder {
+	app.save = save
+	return app
+}
+
 // Now builds an instruction instance
 func (app *instructionBuilder) Now() (Instruction, error) {
 	if app.variable != nil {
@@ -115,6 +131,14 @@ func (app *instructionBuilder) Now() (Instruction, error) {
 
 	if app.reg != nil {
 		return createInstructionWithRegistry(app.reg), nil
+	}
+
+	if app.swtch != nil {
+		return createInstructionWithSwitch(app.swtch), nil
+	}
+
+	if app.save != nil {
+		return createInstructionWithSave(app.save), nil
 	}
 
 	return nil, errors.New("the Instruction is invalid")
