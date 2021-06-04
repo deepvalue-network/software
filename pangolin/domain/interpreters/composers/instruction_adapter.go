@@ -6,6 +6,9 @@ import (
 	"math"
 
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
+	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/labels"
+	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/mains"
+	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/tests"
 	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/condition"
@@ -19,9 +22,6 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value/computable"
 	label_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels/label/instructions/instruction"
 	test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/tests/test/instructions/instruction"
-	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/labels"
-	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/mains"
-	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
@@ -681,25 +681,32 @@ func (app *instructionAdapter) value(value value.Value) (parsers.Print, error) {
 }
 
 func (app *instructionAdapter) insert(variable var_variable.Variable) (parsers.Variable, error) {
-	name := variable.Name()
 	value := variable.Value()
-
-	if value.IsVariable() {
-		return nil, errors.New("the variable's value was NOT expected to contain a variable")
-	}
-
-	computable := value.Computable()
-	typ, err := app.computableToType(computable)
+	typ, err := app.valueToType(value)
 	if err != nil {
 		return nil, err
 	}
 
+	name := variable.Name()
 	decl, err := app.declarationBuilder.Create().WithVariable(name).WithType(typ).Now()
 	if err != nil {
 		return nil, err
 	}
 
 	return app.variableBuilder.Create().WithDeclaration(decl).Now()
+}
+
+func (app *instructionAdapter) valueToType(value var_value.Value) (parsers.Type, error) {
+	if value.IsVariable() {
+		return nil, errors.New("the variable's value was NOT expected to contain a variable")
+	}
+
+	if value.IsStackFrame() {
+		return app.typeBuilder.Create().IsStackFrame().Now()
+	}
+
+	computable := value.Computable()
+	return app.computableToType(computable)
 }
 
 func (app *instructionAdapter) save(variable var_variable.Variable) (parsers.Variable, error) {

@@ -7,14 +7,16 @@ import (
 )
 
 type builder struct {
-	comp     computable.Value
-	variable string
+	isStackFrame bool
+	comp         computable.Value
+	variable     string
 }
 
 func createBuilder() Builder {
 	out := builder{
-		comp:     nil,
-		variable: "",
+		isStackFrame: false,
+		comp:         nil,
+		variable:     "",
 	}
 
 	return &out
@@ -23,6 +25,12 @@ func createBuilder() Builder {
 // Create initializes the builder
 func (app *builder) Create() Builder {
 	return createBuilder()
+}
+
+// IsStackFrame flags the builder as a stackframe
+func (app *builder) IsStackFrame() Builder {
+	app.isStackFrame = true
+	return app
 }
 
 // WithComputable adds a computable to the builder
@@ -39,12 +47,16 @@ func (app *builder) WithVariable(variable string) Builder {
 
 // Now builds a new Value instance
 func (app *builder) Now() (Value, error) {
+	if app.isStackFrame {
+		return createValueWithStackFrame(), nil
+	}
+
 	if app.comp != nil {
 		return createValueWithComputable(app.comp), nil
 	}
 
 	if app.variable != "" {
-		return createValueWithVariabe(app.variable), nil
+		return createValueWithVariable(app.variable), nil
 	}
 
 	return nil, errors.New("the Value is invalid")

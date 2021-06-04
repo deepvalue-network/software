@@ -46,6 +46,7 @@ type Factory interface {
 // Builder represents a value builder
 type Builder interface {
 	Create() Builder
+	IsStackFrame() Builder
 	WithComputable(computable computable.Value) Builder
 	WithVariable(variable string) Builder
 	Now() (Value, error)
@@ -53,6 +54,7 @@ type Builder interface {
 
 // Value represents a value
 type Value interface {
+	IsStackFrame() bool
 	IsComputable() bool
 	Computable() computable.Value
 	IsVariable() bool

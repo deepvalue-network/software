@@ -402,6 +402,7 @@ type
     | UINT_THIRTY_TWO
     | UINT_SIXTY_FOUR
     | STRING
+    | STACKFRAME
     ;
 
 operation

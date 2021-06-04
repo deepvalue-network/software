@@ -116,14 +116,7 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 
 		if vr.IsDeclaration() {
 			decl := vr.Declaration()
-			name := decl.Variable()
-			typ := decl.Type()
-			val, err := app.varValueFactory.Create(typ)
-			if err != nil {
-				return nil, err
-			}
-
-			ins, err := app.varVariableBuilder.Create().WithName(name).WithValue(val).Now()
+			ins, err := app.insert(decl)
 			if err != nil {
 				return nil, err
 			}
@@ -347,6 +340,17 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 	}
 
 	return builder.Now()
+}
+
+func (app *adapter) insert(parsed parsers.Declaration) (var_variable.Variable, error) {
+	typ := parsed.Type()
+	name := parsed.Variable()
+	val, err := app.varValueFactory.Create(typ)
+	if err != nil {
+		return nil, err
+	}
+
+	return app.varVariableBuilder.Create().WithName(name).WithValue(val).Now()
 }
 
 func (app *adapter) registry(parsed parsers.Registry) (registry.Registry, error) {

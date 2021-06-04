@@ -21,59 +21,64 @@ func createFactory(computableBuilder computable.Builder, builder Builder) Factor
 
 // Create creates a value based on a type
 func (app *factory) Create(typ parsers.Type) (Value, error) {
-	builder := app.computableBuilder.Create()
+	builder := app.builder.Create()
+	if typ.IsStackFrame() {
+		return builder.IsStackFrame().Now()
+	}
+
+	computableBuilder := app.computableBuilder.Create()
 	if typ.IsBool() {
-		builder.WithBool(defaultBool)
+		computableBuilder.WithBool(defaultBool)
 	}
 
 	if typ.IsString() {
-		builder.WithString(defaultString)
+		computableBuilder.WithString(defaultString)
 	}
 
 	if typ.IsInt8() {
-		builder.WithInt8(int8(defaultInt))
+		computableBuilder.WithInt8(int8(defaultInt))
 	}
 
 	if typ.IsInt16() {
-		builder.WithInt16(int16(defaultInt))
+		computableBuilder.WithInt16(int16(defaultInt))
 	}
 
 	if typ.IsInt32() {
-		builder.WithInt32(int32(defaultInt))
+		computableBuilder.WithInt32(int32(defaultInt))
 	}
 
 	if typ.IsInt64() {
-		builder.WithInt64(int64(defaultInt))
+		computableBuilder.WithInt64(int64(defaultInt))
 	}
 
 	if typ.IsUint8() {
-		builder.WithUint8(uint8(defaultUint))
+		computableBuilder.WithUint8(uint8(defaultUint))
 	}
 
 	if typ.IsUint16() {
-		builder.WithUint16(uint16(defaultUint))
+		computableBuilder.WithUint16(uint16(defaultUint))
 	}
 
 	if typ.IsUint32() {
-		builder.WithUint32(uint32(defaultUint))
+		computableBuilder.WithUint32(uint32(defaultUint))
 	}
 
 	if typ.IsUint64() {
-		builder.WithUint64(uint64(defaultUint))
+		computableBuilder.WithUint64(uint64(defaultUint))
 	}
 
 	if typ.IsFloat32() {
-		builder.WithFloat32(float32(defaultFloat))
+		computableBuilder.WithFloat32(float32(defaultFloat))
 	}
 
 	if typ.IsFloat64() {
-		builder.WithFloat64(float64(defaultFloat))
+		computableBuilder.WithFloat64(float64(defaultFloat))
 	}
 
-	computable, err := builder.Now()
+	computable, err := computableBuilder.Now()
 	if err != nil {
 		return nil, err
 	}
 
-	return app.builder.Create().WithComputable(computable).Now()
+	return builder.WithComputable(computable).Now()
 }

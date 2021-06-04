@@ -3,34 +3,36 @@ package parsers
 import "errors"
 
 type typeBuilder struct {
-	isBool    bool
-	isInt8    bool
-	isInt16   bool
-	isInt32   bool
-	isInt64   bool
-	isFloat32 bool
-	isFloat64 bool
-	isUint8   bool
-	isUint16  bool
-	isUint32  bool
-	isUint64  bool
-	isString  bool
+	isBool       bool
+	isInt8       bool
+	isInt16      bool
+	isInt32      bool
+	isInt64      bool
+	isFloat32    bool
+	isFloat64    bool
+	isUint8      bool
+	isUint16     bool
+	isUint32     bool
+	isUint64     bool
+	isString     bool
+	isStackFrame bool
 }
 
 func createTypeBuilder() TypeBuilder {
 	out := typeBuilder{
-		isBool:    false,
-		isInt8:    false,
-		isInt16:   false,
-		isInt32:   false,
-		isInt64:   false,
-		isFloat32: false,
-		isFloat64: false,
-		isUint8:   false,
-		isUint16:  false,
-		isUint32:  false,
-		isUint64:  false,
-		isString:  false,
+		isBool:       false,
+		isInt8:       false,
+		isInt16:      false,
+		isInt32:      false,
+		isInt64:      false,
+		isFloat32:    false,
+		isFloat64:    false,
+		isUint8:      false,
+		isUint16:     false,
+		isUint32:     false,
+		isUint64:     false,
+		isString:     false,
+		isStackFrame: false,
 	}
 
 	return &out
@@ -107,9 +109,15 @@ func (app *typeBuilder) IsUint64() TypeBuilder {
 	return app
 }
 
-// IsString flags the type as char
+// IsString flags the type as string
 func (app *typeBuilder) IsString() TypeBuilder {
 	app.isString = true
+	return app
+}
+
+// IsStackFrame flags the type as stackframe
+func (app *typeBuilder) IsStackFrame() TypeBuilder {
+	app.isStackFrame = true
 	return app
 }
 
@@ -161,6 +169,10 @@ func (app *typeBuilder) Now() (Type, error) {
 
 	if app.isString {
 		return createTypeWithString(), nil
+	}
+
+	if app.isStackFrame {
+		return createTypeWithStackFrame(), nil
 	}
 
 	return nil, errors.New("the Type is invalid")

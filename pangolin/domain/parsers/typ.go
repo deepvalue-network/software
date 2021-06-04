@@ -1,66 +1,71 @@
 package parsers
 
 type typ struct {
-	isBool    bool
-	isInt8    bool
-	isInt16   bool
-	isInt32   bool
-	isInt64   bool
-	isFloat32 bool
-	isFloat64 bool
-	isUint8   bool
-	isUint16  bool
-	isUint32  bool
-	isUint64  bool
-	isString  bool
+	isBool       bool
+	isInt8       bool
+	isInt16      bool
+	isInt32      bool
+	isInt64      bool
+	isFloat32    bool
+	isFloat64    bool
+	isUint8      bool
+	isUint16     bool
+	isUint32     bool
+	isUint64     bool
+	isString     bool
+	isStackFrame bool
 }
 
 func createTypeWithBool() Type {
-	return createTypeInternally(true, false, false, false, false, false, false, false, false, false, false, false)
+	return createTypeInternally(true, false, false, false, false, false, false, false, false, false, false, false, false)
 }
 
 func createTypeWithInt8() Type {
-	return createTypeInternally(false, true, false, false, false, false, false, false, false, false, false, false)
+	return createTypeInternally(false, true, false, false, false, false, false, false, false, false, false, false, false)
 }
 
 func createTypeWithInt16() Type {
-	return createTypeInternally(false, false, true, false, false, false, false, false, false, false, false, false)
+	return createTypeInternally(false, false, true, false, false, false, false, false, false, false, false, false, false)
 }
 
 func createTypeWithInt32() Type {
-	return createTypeInternally(false, false, false, true, false, false, false, false, false, false, false, false)
+	return createTypeInternally(false, false, false, true, false, false, false, false, false, false, false, false, false)
 }
 
 func createTypeWithInt64() Type {
-	return createTypeInternally(false, false, false, false, true, false, false, false, false, false, false, false)
+	return createTypeInternally(false, false, false, false, true, false, false, false, false, false, false, false, false)
 }
 
 func createTypeWithFloat32() Type {
-	return createTypeInternally(false, false, false, false, false, true, false, false, false, false, false, false)
+	return createTypeInternally(false, false, false, false, false, true, false, false, false, false, false, false, false)
 }
 
 func createTypeWithFloat64() Type {
-	return createTypeInternally(false, false, false, false, false, false, true, false, false, false, false, false)
+	return createTypeInternally(false, false, false, false, false, false, true, false, false, false, false, false, false)
 }
 
 func createTypeWithUint8() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, true, false, false, false, false)
+	return createTypeInternally(false, false, false, false, false, false, false, true, false, false, false, false, false)
 }
 
 func createTypeWithUint16() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, false, true, false, false, false)
+	return createTypeInternally(false, false, false, false, false, false, false, false, true, false, false, false, false)
 }
 
 func createTypeWithUint32() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, false, false, true, false, false)
+	return createTypeInternally(false, false, false, false, false, false, false, false, false, true, false, false, false)
 }
 
 func createTypeWithUint64() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, true, false)
+	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, true, false, false)
 }
 
 func createTypeWithString() Type {
-	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, false, true)
+	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, false, true, false)
+}
+
+func createTypeWithStackFrame() Type {
+	return createTypeInternally(false, false, false, false, false, false, false, false, false, false, false, false, true)
 }
 
 func createTypeInternally(
@@ -76,20 +81,22 @@ func createTypeInternally(
 	isUint32 bool,
 	isUint64 bool,
 	isString bool,
+	isStackFrame bool,
 ) Type {
 	out := typ{
-		isBool:    isBool,
-		isInt8:    isInt8,
-		isInt16:   isInt16,
-		isInt32:   isInt32,
-		isInt64:   isInt64,
-		isFloat32: isFloat32,
-		isFloat64: isFloat64,
-		isUint8:   isUint8,
-		isUint16:  isUint16,
-		isUint32:  isUint32,
-		isUint64:  isUint64,
-		isString:  isString,
+		isBool:       isBool,
+		isInt8:       isInt8,
+		isInt16:      isInt16,
+		isInt32:      isInt32,
+		isInt64:      isInt64,
+		isFloat32:    isFloat32,
+		isFloat64:    isFloat64,
+		isUint8:      isUint8,
+		isUint16:     isUint16,
+		isUint32:     isUint32,
+		isUint64:     isUint64,
+		isString:     isString,
+		isStackFrame: isStackFrame,
 	}
 
 	return &out
@@ -155,6 +162,11 @@ func (obj *typ) IsString() bool {
 	return obj.isString
 }
 
+// IsStackFrame returns true if there is a stackframe, false otherwise
+func (obj *typ) IsStackFrame() bool {
+	return obj.isStackFrame
+}
+
 // String returns the type as string
 func (obj *typ) String() string {
 	if obj.IsBool() {
@@ -201,5 +213,9 @@ func (obj *typ) String() string {
 		return "float64"
 	}
 
-	return "string"
+	if obj.IsString() {
+		return "string"
+	}
+
+	return "stackframe"
 }

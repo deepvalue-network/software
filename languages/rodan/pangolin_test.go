@@ -13,7 +13,6 @@ func TestPangolin_executeTests_Success(t *testing.T) {
 		t.Errorf("the error was expected to be nil, error returned: %s", err)
 		return
 	}
-
 	currentDirPath := "./"
 	grammarFile := "../../pangolin/domain/parsers/grammar/grammar.json"
 	pangolin := bundles.NewPangolin(grammarFile, currentDirPath)

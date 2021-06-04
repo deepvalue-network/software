@@ -3,25 +3,40 @@ package value
 import "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/variable/value/computable"
 
 type value struct {
-	comp     computable.Value
-	variable string
+	isStackFrame bool
+	comp         computable.Value
+	variable     string
+}
+
+func createValueWithStackFrame() Value {
+	return createValueInternally(true, nil, "")
 }
 
 func createValueWithComputable(comp computable.Value) Value {
-	return createValueInternally(comp, "")
+	return createValueInternally(false, comp, "")
 }
 
-func createValueWithVariabe(variable string) Value {
-	return createValueInternally(nil, variable)
+func createValueWithVariable(variable string) Value {
+	return createValueInternally(false, nil, variable)
 }
 
-func createValueInternally(comp computable.Value, variable string) Value {
+func createValueInternally(
+	isStackFrame bool,
+	comp computable.Value,
+	variable string,
+) Value {
 	out := value{
-		comp:     comp,
-		variable: variable,
+		isStackFrame: isStackFrame,
+		comp:         comp,
+		variable:     variable,
 	}
 
 	return &out
+}
+
+// IsStackFrame returns true if the value is a stackframe, false otherwise
+func (obj *value) IsStackFrame() bool {
+	return obj.isStackFrame
 }
 
 // IsComputable returns true if the value is computable, false otherwise

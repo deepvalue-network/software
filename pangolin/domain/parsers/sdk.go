@@ -1755,6 +1755,7 @@ type TypeBuilder interface {
 	IsUint32() TypeBuilder
 	IsUint64() TypeBuilder
 	IsString() TypeBuilder
+	IsStackFrame() TypeBuilder
 	Now() (Type, error)
 }
 
@@ -1772,6 +1773,7 @@ type Type interface {
 	IsUint32() bool
 	IsUint64() bool
 	IsString() bool
+	IsStackFrame() bool
 	String() string
 }
 
