@@ -1951,6 +1951,7 @@ type Exit interface {
 type CallBuilder interface {
 	Create() CallBuilder
 	WithName(name string) CallBuilder
+	WithStackFrame(stackFrame string) CallBuilder
 	WithCondition(condition string) CallBuilder
 	Now() (Call, error)
 }
@@ -1958,6 +1959,7 @@ type CallBuilder interface {
 // Call represents a call instruction
 type Call interface {
 	Name() string
+	StackFrame() string
 	HasCondition() bool
 	Condition() string
 }

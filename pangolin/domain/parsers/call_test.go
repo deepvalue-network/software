@@ -21,6 +21,11 @@ func Test_call_Success(t *testing.T) {
 		return
 	}
 
+	if call.StackFrame() != "myStackFrame" {
+		t.Errorf("the call stackFrame was expected to be: %s, %s returned", "myStacKFrame", call.StackFrame())
+		return
+	}
+
 	if call.HasCondition() {
 		t.Errorf("the call was not expecting a condition")
 		return
@@ -41,6 +46,11 @@ func Test_call_withCondition_Success(t *testing.T) {
 	call := ins.(Call)
 	if call.Name() != "my_imported_app" {
 		t.Errorf("the call name was expected to be: %s, %s returned", "my_imported_app", call.Name())
+		return
+	}
+
+	if call.StackFrame() != "myStackFrame" {
+		t.Errorf("the call stackFrame was expected to be: %s, %s returned", "myStacKFrame", call.StackFrame())
 		return
 	}
 

@@ -3394,9 +3394,19 @@ func (app *parser) exitExit(tree lexers.NodeTree) (interface{}, error) {
 
 func (app *parser) exitCall(tree lexers.NodeTree) (interface{}, error) {
 	builder := app.callBuilder.Create()
-	condition := tree.CodeFromName("VARIABLE_PATTERN")
-	if condition != "" {
-		builder.WithCondition(condition)
+	variables := tree.CodesFromName("VARIABLE_PATTERN")
+	amount := len(variables)
+	if amount == 1 {
+		builder.WithStackFrame(variables[0])
+	}
+
+	if amount == 2 {
+		builder.WithStackFrame(variables[1]).WithCondition(variables[0])
+	}
+
+	if amount > 2 {
+		str := fmt.Sprintf("the call was expecting 1 or 2 variables, %d provided", amount)
+		return nil, errors.New(str)
 	}
 
 	name := tree.CodeFromName("NAME_PATTERN")

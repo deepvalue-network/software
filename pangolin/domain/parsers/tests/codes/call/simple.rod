@@ -1,1 +1,1 @@
-call: my_imported_app
+call: myStackFrame, my_imported_app

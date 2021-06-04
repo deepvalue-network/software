@@ -460,7 +460,8 @@ func (app *adapter) registryIndex(parsed parsers.IntPointer) (registry.Index, er
 
 func (app *adapter) call(parsed parsers.Call) (call.Call, error) {
 	name := parsed.Name()
-	builder := app.callBuilder.Create().WithName(name)
+	stackFrame := parsed.StackFrame()
+	builder := app.callBuilder.Create().WithName(name).WithStackFrame(stackFrame)
 	if parsed.HasCondition() {
 		condition := parsed.Condition()
 		builder.WithCondition(condition)

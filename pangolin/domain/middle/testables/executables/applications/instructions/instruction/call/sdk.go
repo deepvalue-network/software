@@ -9,6 +9,7 @@ func NewBuilder() Builder {
 type Builder interface {
 	Create() Builder
 	WithName(name string) Builder
+	WithStackFrame(stackFrame string) Builder
 	WithCondition(condition string) Builder
 	Now() (Call, error)
 }
@@ -16,6 +17,7 @@ type Builder interface {
 // Call represents a call
 type Call interface {
 	Name() string
+	StackFrame() string
 	HasCondition() bool
 	Condition() string
 }

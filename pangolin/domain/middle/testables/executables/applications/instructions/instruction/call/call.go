@@ -1,30 +1,35 @@
 package call
 
 type call struct {
-	name      string
-	condition string
+	name       string
+	stackFrame string
+	condition  string
 }
 
 func createCall(
 	name string,
+	stackFrame string,
 ) Call {
-	return createCallInternally(name, "")
+	return createCallInternally(name, stackFrame, "")
 }
 
 func createCallWithCondition(
 	name string,
+	stackFrame string,
 	condition string,
 ) Call {
-	return createCallInternally(name, condition)
+	return createCallInternally(name, stackFrame, condition)
 }
 
 func createCallInternally(
 	name string,
+	stackFrame string,
 	condition string,
 ) Call {
 	out := call{
-		name:      name,
-		condition: condition,
+		name:       name,
+		stackFrame: stackFrame,
+		condition:  condition,
 	}
 
 	return &out
@@ -33,6 +38,11 @@ func createCallInternally(
 // Name returns the name
 func (obj *call) Name() string {
 	return obj.name
+}
+
+// StackFrame returns the stackFrame
+func (obj *call) StackFrame() string {
+	return obj.stackFrame
 }
 
 // HasCondition returns true if there is a condition, false otherwise

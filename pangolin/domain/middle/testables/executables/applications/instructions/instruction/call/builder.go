@@ -3,14 +3,16 @@ package call
 import "errors"
 
 type builder struct {
-	name      string
-	condition string
+	name       string
+	stackFrame string
+	condition  string
 }
 
 func createBuilder() Builder {
 	out := builder{
-		name:      "",
-		condition: "",
+		name:       "",
+		stackFrame: "",
+		condition:  "",
 	}
 
 	return &out
@@ -27,6 +29,12 @@ func (app *builder) WithName(name string) Builder {
 	return app
 }
 
+// WithStackFrame adds a stackFrame to the builder
+func (app *builder) WithStackFrame(stackFrame string) Builder {
+	app.stackFrame = stackFrame
+	return app
+}
+
 // WithCondition adds a condition to the builder
 func (app *builder) WithCondition(condition string) Builder {
 	app.condition = condition
@@ -39,9 +47,13 @@ func (app *builder) Now() (Call, error) {
 		return nil, errors.New("the name is mandatory in order to build a Call instance")
 	}
 
-	if app.condition != "" {
-		return createCallWithCondition(app.name, app.condition), nil
+	if app.stackFrame == "" {
+		return nil, errors.New("the stackFrame is mandatory in order to build a Call instance")
 	}
 
-	return createCall(app.name), nil
+	if app.condition != "" {
+		return createCallWithCondition(app.name, app.stackFrame, app.condition), nil
+	}
+
+	return createCall(app.name, app.stackFrame), nil
 }
