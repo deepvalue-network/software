@@ -6,9 +6,9 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/tests"
-	language_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
-	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
-	language_tests "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
+	language_instructions "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions"
+	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
+	language_tests "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/languages/definitions"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )

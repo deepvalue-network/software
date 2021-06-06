@@ -3,9 +3,9 @@ package linkers
 import (
 	"errors"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests"
 )
 
 type languageApplicationBuilder struct {

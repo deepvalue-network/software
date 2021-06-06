@@ -5,13 +5,13 @@ import (
 
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/linkers"
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands"
-	command_heads "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/heads"
-	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/labels"
-	command_languages "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/languages"
-	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/mains"
-	command_scripts "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/scripts"
-	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/tests"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands"
+	command_heads "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/heads"
+	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/labels"
+	command_languages "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/languages"
+	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/mains"
+	command_scripts "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/scripts"
+	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/tests"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 

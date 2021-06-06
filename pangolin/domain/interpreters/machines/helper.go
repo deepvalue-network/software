@@ -3,7 +3,7 @@ package machines
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/labels"
-	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/applications/labels"
+	language_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/labels"
 )
 
 func fromLabelsToCallLabelByNameFunc(stackframe stackframes.StackFrame, labels labels.Labels) (CallLabelByNameFn, error) {

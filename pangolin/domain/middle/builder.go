@@ -3,7 +3,7 @@ package middle
 import (
 	"errors"
 
-	"github.com/deepvalue-network/software/pangolin/domain/middle/applications"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables"
 )
 

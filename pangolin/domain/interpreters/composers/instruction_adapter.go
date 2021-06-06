@@ -6,9 +6,9 @@ import (
 	"math"
 
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
-	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/labels"
-	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/mains"
-	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/applications/instructions/instruction/commands/tests"
+	command_labels "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/labels"
+	command_mains "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/mains"
+	command_tests "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/instructions/instruction/commands/tests"
 	application_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/condition"

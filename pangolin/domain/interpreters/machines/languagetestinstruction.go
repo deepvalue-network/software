@@ -3,7 +3,7 @@ package machines
 import (
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/composers"
 	"github.com/deepvalue-network/software/pangolin/domain/interpreters/stackframes"
-	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/applications/tests/test/instructions/instruction"
+	language_test_instruction "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications/tests/test/instructions/instruction"
 )
 
 type languageTestInstruction struct {

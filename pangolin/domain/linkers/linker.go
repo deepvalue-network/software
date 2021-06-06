@@ -12,7 +12,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/scripts"
-	language_applications "github.com/deepvalue-network/software/pangolin/domain/middle/applications"
+	language_applications "github.com/deepvalue-network/software/pangolin/domain/middle/languages/applications"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/languages/definitions"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
