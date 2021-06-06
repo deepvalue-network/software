@@ -35,6 +35,11 @@ func Test_headValue_withName_Success(t *testing.T) {
 		t.Errorf("the HeadValue was NOT expected to be an import")
 		return
 	}
+
+	if val.IsLoad() {
+		t.Errorf("the HeadValue was NOT expected to be a load")
+		return
+	}
 }
 
 func Test_headValue_withVersion_Success(t *testing.T) {
@@ -66,6 +71,11 @@ func Test_headValue_withVersion_Success(t *testing.T) {
 
 	if val.IsImport() {
 		t.Errorf("the HeadValue was NOT expected to be an import")
+		return
+	}
+
+	if val.IsLoad() {
+		t.Errorf("the HeadValue was NOT expected to be a load")
 		return
 	}
 }
@@ -102,6 +112,11 @@ func Test_headValue_withImport_Single_Success(t *testing.T) {
 		t.Errorf("%d imports were expected, %d returned", 1, len(imp))
 		return
 	}
+
+	if val.IsLoad() {
+		t.Errorf("the HeadValue was NOT expected to be a load")
+		return
+	}
 }
 
 func Test_headValue_withImport_Multiple_Success(t *testing.T) {
@@ -134,6 +149,89 @@ func Test_headValue_withImport_Multiple_Success(t *testing.T) {
 	imp := val.Import()
 	if len(imp) != 2 {
 		t.Errorf("%d imports were expected, %d returned", 2, len(imp))
+		return
+	}
+
+	if val.IsLoad() {
+		t.Errorf("the HeadValue was NOT expected to be a load")
+		return
+	}
+}
+
+func Test_headValue_loadSingle_Single_Success(t *testing.T) {
+	grammarFile := "./grammar/grammar.json"
+	pars := createParserForTests("headValue", grammarFile)
+
+	file := "./tests/codes/headvalue/loadsingle_single.rod"
+	ins, err := pars.ExecuteFile(file)
+	if err != nil {
+		t.Errorf(err.Error())
+		return
+	}
+
+	val := ins.(HeadValue)
+	if val.IsName() {
+		t.Errorf("the HeadValue was NOT expected to be a name")
+		return
+	}
+
+	if val.IsVersion() {
+		t.Errorf("the HeadValue was NOT expected to be a version")
+		return
+	}
+
+	if val.IsImport() {
+		t.Errorf("the HeadValue was NOT expected to be an import")
+		return
+	}
+
+	if !val.IsLoad() {
+		t.Errorf("the HeadValue was expected to be a load")
+		return
+	}
+
+	loads := val.Load()
+	if len(loads) != 1 {
+		t.Errorf("%d imports were expected, %d returned", 1, len(loads))
+		return
+	}
+}
+
+func Test_headValue_loadSingle_Multiple_Success(t *testing.T) {
+	grammarFile := "./grammar/grammar.json"
+	pars := createParserForTests("headValue", grammarFile)
+
+	file := "./tests/codes/headvalue/loadsingle_multiple.rod"
+	ins, err := pars.ExecuteFile(file)
+	if err != nil {
+		t.Errorf(err.Error())
+		return
+	}
+
+	val := ins.(HeadValue)
+	if val.IsName() {
+		t.Errorf("the HeadValue was NOT expected to be a name")
+		return
+	}
+
+	if val.IsVersion() {
+		t.Errorf("the HeadValue was NOT expected to be a version")
+		return
+	}
+
+	if val.IsImport() {
+		t.Errorf("the HeadValue was NOT expected to be an import")
+		return
+	}
+
+	if !val.IsLoad() {
+		t.Errorf("the HeadValue was expected to be a load")
+		return
+	}
+
+	loads := val.Load()
+	if len(loads) != 2 {
+		t.Errorf("%d imports were expected, %d returned", 2, len(loads))
 		return
 	}
 }

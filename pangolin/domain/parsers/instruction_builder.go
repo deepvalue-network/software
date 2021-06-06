@@ -12,6 +12,7 @@ type instructionBuilder struct {
 	jmp        Jump
 	exit       Exit
 	call       Call
+	module     Module
 	reg        Registry
 	swtch      Switch
 	save       Save
@@ -26,6 +27,7 @@ func createInstructionBuilder() InstructionBuilder {
 		jmp:        nil,
 		exit:       nil,
 		call:       nil,
+		module:     nil,
 		reg:        nil,
 		swtch:      nil,
 		save:       nil,
@@ -81,6 +83,12 @@ func (app *instructionBuilder) WithCall(call Call) InstructionBuilder {
 	return app
 }
 
+// WithModule adds a module to the builder
+func (app *instructionBuilder) WithModule(module Module) InstructionBuilder {
+	app.module = module
+	return app
+}
+
 // WithRegistry adds a registry to the builder
 func (app *instructionBuilder) WithRegistry(registry Registry) InstructionBuilder {
 	app.reg = registry
@@ -127,6 +135,10 @@ func (app *instructionBuilder) Now() (Instruction, error) {
 
 	if app.call != nil {
 		return createInstructionWithCall(app.call), nil
+	}
+
+	if app.module != nil {
+		return createInstructionWithModule(app.module), nil
 	}
 
 	if app.reg != nil {

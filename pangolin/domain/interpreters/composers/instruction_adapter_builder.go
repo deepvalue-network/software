@@ -16,6 +16,7 @@ type instructionAdapterBuilder struct {
 	instructionBuilder         parsers.InstructionBuilder
 	exitBuilder                parsers.ExitBuilder
 	callBuilder                parsers.CallBuilder
+	moduleBuilder              parsers.ModuleBuilder
 	printBuilder               parsers.PrintBuilder
 	operationBuilder           parsers.OperationBuilder
 	arythmeticBuilder          parsers.ArythmeticBuilder
@@ -49,6 +50,7 @@ func createInstructionAdapterBuilder(
 	instructionBuilder parsers.InstructionBuilder,
 	exitBuilder parsers.ExitBuilder,
 	callBuilder parsers.CallBuilder,
+	moduleBuilder parsers.ModuleBuilder,
 	printBuilder parsers.PrintBuilder,
 	operationBuilder parsers.OperationBuilder,
 	arythmeticBuilder parsers.ArythmeticBuilder,
@@ -79,6 +81,7 @@ func createInstructionAdapterBuilder(
 		instructionBuilder:         instructionBuilder,
 		exitBuilder:                exitBuilder,
 		callBuilder:                callBuilder,
+		moduleBuilder:              moduleBuilder,
 		printBuilder:               printBuilder,
 		operationBuilder:           operationBuilder,
 		arythmeticBuilder:          arythmeticBuilder,
@@ -117,6 +120,7 @@ func (app *instructionAdapterBuilder) Create() InstructionAdapterBuilder {
 		app.instructionBuilder,
 		app.exitBuilder,
 		app.callBuilder,
+		app.moduleBuilder,
 		app.printBuilder,
 		app.operationBuilder,
 		app.arythmeticBuilder,
@@ -171,6 +175,7 @@ func (app *instructionAdapterBuilder) Now() (InstructionAdapter, error) {
 		app.instructionBuilder,
 		app.exitBuilder,
 		app.callBuilder,
+		app.moduleBuilder,
 		app.printBuilder,
 		app.operationBuilder,
 		app.arythmeticBuilder,

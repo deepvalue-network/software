@@ -1,0 +1,4 @@
+loads:
+    first_internal:first_external.
+    second_internal:second_external.
+.

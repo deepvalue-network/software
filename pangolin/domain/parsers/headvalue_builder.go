@@ -6,6 +6,7 @@ type headValueBuilder struct {
 	name    string
 	version string
 	imports []ImportSingle
+	loads   []LoadSingle
 }
 
 func createHeadValueBuilder() HeadValueBuilder {
@@ -13,6 +14,7 @@ func createHeadValueBuilder() HeadValueBuilder {
 		name:    "",
 		version: "",
 		imports: nil,
+		loads:   nil,
 	}
 
 	return &out
@@ -41,6 +43,12 @@ func (app *headValueBuilder) WithImport(imp []ImportSingle) HeadValueBuilder {
 	return app
 }
 
+// WithLoad adds a load to the builder
+func (app *headValueBuilder) WithLoad(load []LoadSingle) HeadValueBuilder {
+	app.loads = load
+	return app
+}
+
 // Now builds a new HeadValue instance
 func (app *headValueBuilder) Now() (HeadValue, error) {
 	if app.name != "" {
@@ -57,6 +65,14 @@ func (app *headValueBuilder) Now() (HeadValue, error) {
 
 	if len(app.imports) > 0 {
 		return createHeadValueWithImport(app.imports), nil
+	}
+
+	if app.loads == nil {
+		app.loads = []LoadSingle{}
+	}
+
+	if len(app.loads) > 0 {
+		return createHeadValueWithLoad(app.loads), nil
 	}
 
 	return nil, errors.New("the HeadValue is invalid")

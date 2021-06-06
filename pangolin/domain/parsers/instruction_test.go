@@ -130,6 +130,24 @@ func Test_instruction_call_Success(t *testing.T) {
 	}
 }
 
+func Test_instruction_module_Success(t *testing.T) {
+	grammarFile := "./grammar/grammar.json"
+	pars := createParserForTests("instruction", grammarFile)
+
+	file := "./tests/codes/instruction/module.rod"
+	ins, err := pars.ExecuteFile(file)
+	if err != nil {
+		t.Errorf(err.Error())
+		return
+	}
+
+	instruction := ins.(Instruction)
+	if !instruction.IsModule() {
+		t.Errorf("the Instruction was expected to contain a module")
+		return
+	}
+}
+
 func Test_instruction_switch_Success(t *testing.T) {
 	grammarFile := "./grammar/grammar.json"
 	pars := createParserForTests("instruction", grammarFile)

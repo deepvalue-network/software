@@ -4,6 +4,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/exit"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/module"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/registry"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/stackframe"
@@ -27,6 +28,7 @@ type adapter struct {
 	varValueFactory         var_value.Factory
 	varVariableBuilder      var_variable.Builder
 	callBuilder             call.Builder
+	moduleBuilder           module.Builder
 	exitBuilder             exit.Builder
 	registryIndexBuilder    registry.IndexBuilder
 	registryRegisterBuilder registry.RegisterBuilder
@@ -48,6 +50,7 @@ func createAdapter(
 	varValueFactory var_value.Factory,
 	varVariableBuilder var_variable.Builder,
 	callBuilder call.Builder,
+	moduleBuilder module.Builder,
 	exitBuilder exit.Builder,
 	registryIndexBuilder registry.IndexBuilder,
 	registryRegisterBuilder registry.RegisterBuilder,
@@ -68,6 +71,7 @@ func createAdapter(
 		varValueFactory:         varValueFactory,
 		varVariableBuilder:      varVariableBuilder,
 		callBuilder:             callBuilder,
+		moduleBuilder:           moduleBuilder,
 		exitBuilder:             exitBuilder,
 		registryIndexBuilder:    registryIndexBuilder,
 		registryRegisterBuilder: registryRegisterBuilder,
@@ -332,6 +336,16 @@ func (app *adapter) ToInstruction(parsed parsers.Instruction) (Instruction, erro
 		builder.WithCall(call)
 	}
 
+	if parsed.IsModule() {
+		parsedModule := parsed.Module()
+		module, err := app.module(parsedModule)
+		if err != nil {
+			return nil, err
+		}
+
+		builder.WithModule(module)
+	}
+
 	if parsed.IsRegistry() {
 		parsedRegistry := parsed.Registry()
 		registry, err := app.registry(parsedRegistry)
@@ -468,6 +482,17 @@ func (app *adapter) call(parsed parsers.Call) (call.Call, error) {
 	}
 
 	return builder.Now()
+}
+
+func (app *adapter) module(parsed parsers.Module) (module.Module, error) {
+	stackFrame := parsed.StackFrame()
+	name := parsed.Name()
+	symbol := parsed.Symbol()
+	return app.moduleBuilder.Create().
+		WithName(name).
+		WithStackFrame(stackFrame).
+		WithSymbol(symbol).
+		Now()
 }
 
 func (app *adapter) exit(parsed parsers.Exit) (exit.Exit, error) {

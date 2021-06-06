@@ -13,6 +13,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/exit"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/module"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/stackframe"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/standard"
@@ -34,6 +35,7 @@ type instructionAdapter struct {
 	instructionBuilder         parsers.InstructionBuilder
 	exitBuilder                parsers.ExitBuilder
 	callBuilder                parsers.CallBuilder
+	moduleBuilder              parsers.ModuleBuilder
 	printBuilder               parsers.PrintBuilder
 	operationBuilder           parsers.OperationBuilder
 	arythmeticBuilder          parsers.ArythmeticBuilder
@@ -67,6 +69,7 @@ func createInstructionAdapter(
 	instructionBuilder parsers.InstructionBuilder,
 	exitBuilder parsers.ExitBuilder,
 	callBuilder parsers.CallBuilder,
+	moduleBuilder parsers.ModuleBuilder,
 	printBuilder parsers.PrintBuilder,
 	operationBuilder parsers.OperationBuilder,
 	arythmeticBuilder parsers.ArythmeticBuilder,
@@ -99,6 +102,7 @@ func createInstructionAdapter(
 		instructionBuilder:         instructionBuilder,
 		exitBuilder:                exitBuilder,
 		callBuilder:                callBuilder,
+		moduleBuilder:              moduleBuilder,
 		printBuilder:               printBuilder,
 		operationBuilder:           operationBuilder,
 		arythmeticBuilder:          arythmeticBuilder,
@@ -423,6 +427,16 @@ func (app *instructionAdapter) mainInstruction(appIns application_instruction.In
 		builder.WithCall(parsedCall)
 	}
 
+	if appIns.IsModule() {
+		module := appIns.Module()
+		parsedModule, err := app.module(module)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		builder.WithModule(parsedModule)
+	}
+
 	if appIns.IsExit() {
 		exit := appIns.Exit()
 		parsedExit, err := app.exit(exit)
@@ -739,6 +753,17 @@ func (app *instructionAdapter) call(call call.Call) (parsers.Call, error) {
 	}
 
 	return builder.Now()
+}
+
+func (app *instructionAdapter) module(module module.Module) (parsers.Module, error) {
+	stackFrame := module.StackFrame()
+	name := module.Name()
+	symbol := module.Symbol()
+	return app.moduleBuilder.Create().
+		WithName(name).
+		WithStackFrame(stackFrame).
+		WithSymbol(symbol).
+		Now()
 }
 
 func (app *instructionAdapter) exit(exit exit.Exit) (parsers.Exit, error) {

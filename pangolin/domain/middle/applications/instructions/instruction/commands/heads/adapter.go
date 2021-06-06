@@ -1,21 +1,25 @@
 package heads
 
 import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/heads"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
 type adapter struct {
-	builder      Builder
-	valueBuilder ValueBuilder
+	builder           Builder
+	valueBuilder      ValueBuilder
+	loadSingleBuilder heads.LoadSingleBuilder
 }
 
 func createAdapter(
 	builder Builder,
 	valueBuilder ValueBuilder,
+	loadSingleBuilder heads.LoadSingleBuilder,
 ) Adapter {
 	out := adapter{
-		builder:      builder,
-		valueBuilder: valueBuilder,
+		builder:           builder,
+		valueBuilder:      valueBuilder,
+		loadSingleBuilder: loadSingleBuilder,
 	}
 
 	return &out
@@ -40,6 +44,23 @@ func (app *adapter) ToHead(parsed parsers.HeadCommand) (Head, error) {
 		if oneHeadValue.IsImport() {
 			imports := oneHeadValue.Import()
 			valueBuilder.WithImports(imports)
+		}
+
+		if oneHeadValue.IsLoad() {
+			loads := []heads.LoadSingle{}
+			parsedLoads := oneHeadValue.Load()
+			for _, oneParsedLoad := range parsedLoads {
+				internal := oneParsedLoad.Internal()
+				external := oneParsedLoad.External()
+				load, err := app.loadSingleBuilder.Create().WithInternal(internal).WithExternal(external).Now()
+				if err != nil {
+					return nil, err
+				}
+
+				loads = append(loads, load)
+			}
+
+			valueBuilder.WithLoads(loads)
 		}
 
 		value, err := valueBuilder.Now()

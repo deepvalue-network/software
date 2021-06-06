@@ -60,6 +60,7 @@ type parser struct {
 	readFileBuilder                  ReadFileBuilder
 	headSectionBuilder               HeadSectionBuilder
 	headValueBuilder                 HeadValueBuilder
+	loadSingleBuilder                LoadSingleBuilder
 	importSingleBuilder              ImportSingleBuilder
 	labelSectionBuilder              LabelSectionBuilder
 	labelDeclarationBuilder          LabelDeclarationBuilder
@@ -93,6 +94,7 @@ type parser struct {
 	matchBuilder                     MatchBuilder
 	exitBuilder                      ExitBuilder
 	callBuilder                      CallBuilder
+	moduleBuilder                    ModuleBuilder
 	switchBuilder                    SwitchBuilder
 	saveBuilder                      SaveBuilder
 	stackFrameBuilder                StackFrameBuilder
@@ -147,6 +149,7 @@ type parser struct {
 	readFile                         map[string]ReadFile
 	headSection                      map[string]HeadSection
 	headValue                        map[string]HeadValue
+	loadSingle                       map[string]LoadSingle
 	importSingle                     map[string]ImportSingle
 	labelSection                     map[string]LabelSection
 	labelDeclaration                 map[string]LabelDeclaration
@@ -189,6 +192,7 @@ type parser struct {
 	matchPattern                     map[string]string
 	exit                             map[string]Exit
 	call                             map[string]Call
+	module                           map[string]Module
 	swtch                            map[string]Switch
 	save                             map[string]Save
 	stackFrame                       map[string]StackFrame
@@ -247,6 +251,7 @@ func createParser(
 	readFileBuilder ReadFileBuilder,
 	headSectionBuilder HeadSectionBuilder,
 	headValueBuilder HeadValueBuilder,
+	loadSingleBuilder LoadSingleBuilder,
 	importSingleBuilder ImportSingleBuilder,
 	labelSectionBuilder LabelSectionBuilder,
 	labelDeclarationBuilder LabelDeclarationBuilder,
@@ -280,6 +285,7 @@ func createParser(
 	matchBuilder MatchBuilder,
 	exitBuilder ExitBuilder,
 	callBuilder CallBuilder,
+	moduleBuilder ModuleBuilder,
 	switchBuilder SwitchBuilder,
 	saveBuilder SaveBuilder,
 	stackFrameBuilder StackFrameBuilder,
@@ -337,6 +343,7 @@ func createParser(
 		readFileBuilder:                  readFileBuilder,
 		headSectionBuilder:               headSectionBuilder,
 		headValueBuilder:                 headValueBuilder,
+		loadSingleBuilder:                loadSingleBuilder,
 		importSingleBuilder:              importSingleBuilder,
 		labelSectionBuilder:              labelSectionBuilder,
 		labelDeclarationBuilder:          labelDeclarationBuilder,
@@ -370,6 +377,7 @@ func createParser(
 		matchBuilder:                     matchBuilder,
 		exitBuilder:                      exitBuilder,
 		callBuilder:                      callBuilder,
+		moduleBuilder:                    moduleBuilder,
 		switchBuilder:                    switchBuilder,
 		saveBuilder:                      saveBuilder,
 		stackFrameBuilder:                stackFrameBuilder,
@@ -590,6 +598,10 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			OnExit: app.exitHeadValue,
 		},
 		lparser.ToEventsParams{
+			Token:  "loadSingle",
+			OnExit: app.exitLoadSingle,
+		},
+		lparser.ToEventsParams{
 			Token:  "importSingle",
 			OnExit: app.exitImportSingle,
 		},
@@ -750,6 +762,10 @@ func (app *parser) Execute(lexer lexers.Lexer) (interface{}, error) {
 			OnExit: app.exitCall,
 		},
 		lparser.ToEventsParams{
+			Token:  "module",
+			OnExit: app.exitModule,
+		},
+		lparser.ToEventsParams{
 			Token:  "switch",
 			OnExit: app.exitSwitch,
 		},
@@ -868,6 +884,7 @@ func (app *parser) init() {
 	app.readFile = map[string]ReadFile{}
 	app.headSection = map[string]HeadSection{}
 	app.headValue = map[string]HeadValue{}
+	app.loadSingle = map[string]LoadSingle{}
 	app.importSingle = map[string]ImportSingle{}
 	app.labelSection = map[string]LabelSection{}
 	app.labelDeclaration = map[string]LabelDeclaration{}
@@ -910,6 +927,7 @@ func (app *parser) init() {
 	app.matchPattern = map[string]string{}
 	app.exit = map[string]Exit{}
 	app.call = map[string]Call{}
+	app.module = map[string]Module{}
 	app.swtch = map[string]Switch{}
 	app.save = map[string]Save{}
 	app.stackFrame = map[string]StackFrame{}
@@ -2288,6 +2306,7 @@ func (app *parser) exitHeadValue(tree lexers.NodeTree) (interface{}, error) {
 		"NAME_PATTERN",
 		"VERSION_PATTERN",
 		"IMPORTS",
+		"LOADS",
 	})
 
 	switch section {
@@ -2307,6 +2326,17 @@ func (app *parser) exitHeadValue(tree lexers.NodeTree) (interface{}, error) {
 		}
 
 		builder.WithImport(imports)
+		break
+	case "LOADS":
+		loads := []LoadSingle{}
+		codes := tree.CodesFromName("loadSingle")
+		for _, oneCode := range codes {
+			if imp, ok := app.loadSingle[oneCode]; ok {
+				loads = append(loads, imp)
+			}
+		}
+
+		builder.WithLoad(loads)
 		break
 	}
 
@@ -2337,6 +2367,23 @@ func (app *parser) exitImportSingle(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.importSingle[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitLoadSingle(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.loadSingleBuilder.Create()
+	names := tree.CodesFromName("NAME_PATTERN")
+	if len(names) != 2 {
+		str := fmt.Sprintf("the loadSingle instruction was expecting %d names, %d provided", 2, len(names))
+		return nil, errors.New(str)
+	}
+
+	ins, err := builder.WithInternal(names[0]).WithExternal(names[1]).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.loadSingle[tree.Code()] = ins
 	return ins, nil
 }
 
@@ -2432,6 +2479,7 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 		"jump",
 		"exit",
 		"call",
+		"module",
 		"switch",
 		"save",
 		"registry",
@@ -2473,6 +2521,11 @@ func (app *parser) exitInstruction(tree lexers.NodeTree) (interface{}, error) {
 	case "call":
 		if call, ok := app.call[code]; ok {
 			builder.WithCall(call)
+		}
+		break
+	case "module":
+		if module, ok := app.module[code]; ok {
+			builder.WithModule(module)
 		}
 		break
 	case "switch":
@@ -3420,6 +3473,28 @@ func (app *parser) exitCall(tree lexers.NodeTree) (interface{}, error) {
 	}
 
 	app.call[tree.Code()] = ins
+	return ins, nil
+}
+
+func (app *parser) exitModule(tree lexers.NodeTree) (interface{}, error) {
+	builder := app.moduleBuilder.Create()
+	variable := tree.CodeFromName("VARIABLE_PATTERN")
+	if variable != "" {
+		builder.WithStackFrame(variable)
+	}
+
+	names := tree.CodesFromName("NAME_PATTERN")
+	if len(names) != 2 {
+		str := fmt.Sprintf("%d names were expected, %d provided", 2, len(names))
+		return nil, errors.New(str)
+	}
+
+	ins, err := builder.WithName(names[0]).WithSymbol(names[1]).Now()
+	if err != nil {
+		return nil, err
+	}
+
+	app.module[tree.Code()] = ins
 	return ins, nil
 }
 

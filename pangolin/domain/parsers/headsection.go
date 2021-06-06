@@ -4,13 +4,14 @@ type headSection struct {
 	name    string
 	version string
 	imports []ImportSingle
+	load    []LoadSingle
 }
 
 func createHeadSection(
 	name string,
 	version string,
 ) HeadSection {
-	return createHeadSectionInternally(name, version, nil)
+	return createHeadSectionInternally(name, version, nil, nil)
 }
 
 func createHeadSectionWithImport(
@@ -18,18 +19,28 @@ func createHeadSectionWithImport(
 	version string,
 	imports []ImportSingle,
 ) HeadSection {
-	return createHeadSectionInternally(name, version, imports)
+	return createHeadSectionInternally(name, version, imports, nil)
+}
+
+func createHeadSectionWithLoad(
+	name string,
+	version string,
+	load []LoadSingle,
+) HeadSection {
+	return createHeadSectionInternally(name, version, nil, load)
 }
 
 func createHeadSectionInternally(
 	name string,
 	version string,
 	imports []ImportSingle,
+	load []LoadSingle,
 ) HeadSection {
 	out := headSection{
 		name:    name,
 		version: version,
 		imports: imports,
+		load:    load,
 	}
 
 	return &out
@@ -53,4 +64,14 @@ func (obj *headSection) HasImport() bool {
 // Import returns the import, if any
 func (obj *headSection) Import() []ImportSingle {
 	return obj.imports
+}
+
+// HasLoad returns true if there is a load, false otherwise
+func (obj *headSection) HasLoad() bool {
+	return obj.load != nil
+}
+
+// Load returns the load, if any
+func (obj *headSection) Load() []LoadSingle {
+	return obj.load
 }

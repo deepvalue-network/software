@@ -8,49 +8,54 @@ type instruction struct {
 	jmp        Jump
 	exit       Exit
 	call       Call
+	module     Module
 	reg        Registry
 	swtch      Switch
 	save       Save
 }
 
 func createInstructionWithVariable(variable Variable) Instruction {
-	return createInstructionInternally(variable, nil, nil, nil, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(variable, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithOperation(operation Operation) Instruction {
-	return createInstructionInternally(nil, operation, nil, nil, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, operation, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithPrint(print Print) Instruction {
-	return createInstructionInternally(nil, nil, print, nil, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, print, nil, nil, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithStackFrame(stackFrame StackFrame) Instruction {
-	return createInstructionInternally(nil, nil, nil, stackFrame, nil, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, stackFrame, nil, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithJump(jmp Jump) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, jmp, nil, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, jmp, nil, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithExit(exit Exit) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, exit, nil, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, exit, nil, nil, nil, nil, nil)
 }
 
 func createInstructionWithCall(call Call) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, call, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, call, nil, nil, nil, nil)
+}
+
+func createInstructionWithModule(module Module) Instruction {
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, module, nil, nil, nil)
 }
 
 func createInstructionWithRegistry(reg Registry) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, reg, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, reg, nil, nil)
 }
 
 func createInstructionWithSwitch(swtch Switch) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, swtch, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, swtch, nil)
 }
 
 func createInstructionWithSave(save Save) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, save)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, save)
 }
 
 func createInstructionInternally(
@@ -61,6 +66,7 @@ func createInstructionInternally(
 	jmp Jump,
 	exit Exit,
 	call Call,
+	module Module,
 	reg Registry,
 	swtch Switch,
 	save Save,
@@ -73,6 +79,7 @@ func createInstructionInternally(
 		jmp:        jmp,
 		exit:       exit,
 		call:       call,
+		module:     module,
 		reg:        reg,
 		swtch:      swtch,
 		save:       save,
@@ -149,6 +156,16 @@ func (obj *instruction) IsCall() bool {
 // Call returns the call, if any
 func (obj *instruction) Call() Call {
 	return obj.call
+}
+
+// IsModule returns true if there is a module, false otherwise
+func (obj *instruction) IsModule() bool {
+	return obj.module != nil
+}
+
+// Module returns the module, if any
+func (obj *instruction) Module() Module {
+	return obj.module
 }
 
 // IsRegistry retruns true if the instruction is a registry, false otherwise

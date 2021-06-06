@@ -1,6 +1,7 @@
 package heads
 
 import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/heads"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
@@ -8,7 +9,8 @@ import (
 func NewAdapter() Adapter {
 	builder := NewBuilder()
 	valueBuilder := NewValueBuilder()
-	return createAdapter(builder, valueBuilder)
+	loadSingleBuilder := heads.NewLoadSingleBuilder()
+	return createAdapter(builder, valueBuilder, loadSingleBuilder)
 }
 
 // NewBuilder creates a new builder instance
@@ -46,6 +48,7 @@ type ValueBuilder interface {
 	WithName(name string) ValueBuilder
 	WithVersion(version string) ValueBuilder
 	WithImports(imports []parsers.ImportSingle) ValueBuilder
+	WithLoads(loads []heads.LoadSingle) ValueBuilder
 	Now() (Value, error)
 }
 
@@ -57,4 +60,6 @@ type Value interface {
 	Version() string
 	IsImports() bool
 	Imports() []parsers.ImportSingle
+	IsLoads() bool
+	Loads() []heads.LoadSingle
 }

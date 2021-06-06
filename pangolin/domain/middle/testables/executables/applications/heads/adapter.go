@@ -5,7 +5,8 @@ import (
 )
 
 type adapter struct {
-	builder Builder
+	loadSingleBuilder LoadSingleBuilder
+	builder           Builder
 }
 
 func createAdapter(
@@ -26,6 +27,23 @@ func (app *adapter) ToHead(parsed parsers.HeadSection) (Head, error) {
 	if parsed.HasImport() {
 		parsedImports := parsed.Import()
 		builder.WithImports(parsedImports)
+	}
+
+	if parsed.HasLoad() {
+		parsedLoads := parsed.Load()
+		loads := []LoadSingle{}
+		for _, oneParsedLoad := range parsedLoads {
+			internal := oneParsedLoad.Internal()
+			external := oneParsedLoad.External()
+			load, err := app.loadSingleBuilder.Create().WithInternal(internal).WithExternal(external).Now()
+			if err != nil {
+				return nil, err
+			}
+
+			loads = append(loads, load)
+		}
+
+		builder.WithLoads(loads)
 	}
 
 	return builder.Now()

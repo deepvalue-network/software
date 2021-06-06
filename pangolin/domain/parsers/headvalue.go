@@ -4,35 +4,44 @@ type headValue struct {
 	name    string
 	version string
 	imports []ImportSingle
+	loads   []LoadSingle
 }
 
 func createHeadValueWithName(
 	name string,
 ) HeadValue {
-	return createHeadValueInternally(name, "", nil)
+	return createHeadValueInternally(name, "", nil, nil)
 }
 
 func createHeadValueWithVersion(
 	version string,
 ) HeadValue {
-	return createHeadValueInternally("", version, nil)
+	return createHeadValueInternally("", version, nil, nil)
 }
 
 func createHeadValueWithImport(
 	imports []ImportSingle,
 ) HeadValue {
-	return createHeadValueInternally("", "", imports)
+	return createHeadValueInternally("", "", imports, nil)
+}
+
+func createHeadValueWithLoad(
+	loads []LoadSingle,
+) HeadValue {
+	return createHeadValueInternally("", "", nil, loads)
 }
 
 func createHeadValueInternally(
 	name string,
 	version string,
 	imports []ImportSingle,
+	loads []LoadSingle,
 ) HeadValue {
 	out := headValue{
 		name:    name,
 		version: version,
 		imports: imports,
+		loads:   loads,
 	}
 
 	return &out
@@ -66,4 +75,14 @@ func (obj *headValue) IsImport() bool {
 // Import returns the import, if any
 func (obj *headValue) Import() []ImportSingle {
 	return obj.imports
+}
+
+// IsLoad returns true if there is a load, false otherwise
+func (obj *headValue) IsLoad() bool {
+	return obj.loads != nil
+}
+
+// Load returns the load, if any
+func (obj *headValue) Load() []LoadSingle {
+	return obj.loads
 }

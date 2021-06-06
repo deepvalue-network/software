@@ -47,12 +47,14 @@ LABELS: 'labels';
 SEARCH: 'search';
 EXTENDS: 'extends';
 IMPORTS: 'imports';
+LOADS: 'loads';
 PATTERNS: 'patterns';
 CHANNELS: 'channels';
 RULES: 'rules';
 MAIN: 'main';
 TESTS: 'tests';
 TEST: 'test';
+MODULE: 'module';
 
 // instructions:
 DELETE: 'del';

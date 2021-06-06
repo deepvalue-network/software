@@ -3,6 +3,7 @@ package heads
 import (
 	"errors"
 
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/heads"
 	"github.com/deepvalue-network/software/pangolin/domain/parsers"
 )
 
@@ -10,6 +11,7 @@ type valueBuilder struct {
 	name    string
 	version string
 	imports []parsers.ImportSingle
+	loads   []heads.LoadSingle
 }
 
 func createValueBuilder() ValueBuilder {
@@ -17,6 +19,7 @@ func createValueBuilder() ValueBuilder {
 		name:    "",
 		version: "",
 		imports: nil,
+		loads:   nil,
 	}
 
 	return &out
@@ -45,21 +48,35 @@ func (app *valueBuilder) WithImports(imports []parsers.ImportSingle) ValueBuilde
 	return app
 }
 
+// WithLoads add loads to the builder
+func (app *valueBuilder) WithLoads(loads []heads.LoadSingle) ValueBuilder {
+	app.loads = loads
+	return app
+}
+
 // Now builds a new Value instance
 func (app *valueBuilder) Now() (Value, error) {
-	if app.name == "" {
+	if app.name != "" {
 		return createValueWithName(app.name), nil
 	}
 
-	if app.version == "" {
+	if app.version != "" {
 		return createValueWithVersion(app.version), nil
+	}
+
+	if app.loads != nil && len(app.loads) <= 0 {
+		app.loads = nil
+	}
+
+	if app.loads != nil {
+		return createValueWithLoads(app.loads), nil
 	}
 
 	if app.imports != nil && len(app.imports) <= 0 {
 		app.imports = nil
 	}
 
-	if app.imports == nil {
+	if app.imports != nil {
 		return createValueWithImports(app.imports), nil
 	}
 

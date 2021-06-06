@@ -6,6 +6,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/exit"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/module"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/registry"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/stackframe"
@@ -24,6 +25,7 @@ type builder struct {
 	save       variable.Variable
 	del        string
 	call       call.Call
+	module     module.Module
 	exit       exit.Exit
 	reg        registry.Registry
 }
@@ -39,6 +41,7 @@ func createBuilder() Builder {
 		save:       nil,
 		del:        "",
 		call:       nil,
+		module:     nil,
 		exit:       nil,
 		reg:        nil,
 	}
@@ -105,6 +108,12 @@ func (app *builder) WithCall(call call.Call) Builder {
 	return app
 }
 
+// WithModule adds a module to the builder
+func (app *builder) WithModule(module module.Module) Builder {
+	app.module = module
+	return app
+}
+
 // WithExit adds an exit to the builder
 func (app *builder) WithExit(exit exit.Exit) Builder {
 	app.exit = exit
@@ -153,6 +162,10 @@ func (app *builder) Now() (Instruction, error) {
 
 	if app.call != nil {
 		return createInstructionWithCall(app.call), nil
+	}
+
+	if app.module != nil {
+		return createInstructionWithModule(app.module), nil
 	}
 
 	if app.exit != nil {

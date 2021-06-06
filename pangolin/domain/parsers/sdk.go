@@ -243,6 +243,11 @@ func NewImportSingleBuilder() ImportSingleBuilder {
 	return createImportSingleBuilder()
 }
 
+// NewLoadSingleBuilder creates a new load single builder
+func NewLoadSingleBuilder() LoadSingleBuilder {
+	return createLoadSingleBuilder()
+}
+
 // NewLabelSectionBuilder creates a new label section builder
 func NewLabelSectionBuilder() LabelSectionBuilder {
 	return createLabelSectionBuilder()
@@ -403,6 +408,11 @@ func NewCallBuilder() CallBuilder {
 	return createCallBuilder()
 }
 
+// NewModuleBuilder creates a new module builder
+func NewModuleBuilder() ModuleBuilder {
+	return createModuleBuilder()
+}
+
 // NewSwitchBuilder creates a new switch builder
 func NewSwitchBuilder() SwitchBuilder {
 	return createSwitchBuilder()
@@ -483,6 +493,7 @@ func NewParserBuilder() ParserBuilder {
 	readFileBuilder := NewReadFileBuilder()
 	headSectionBuilder := NewHeadSectionBuilder()
 	headValueBuilder := NewHeadValueBuilder()
+	loadSingleBuilder := NewLoadSingleBuilder()
 	importSingleBuilder := NewImportSingleBuilder()
 	labelSectionBuilder := NewLabelSectionBuilder()
 	labelDeclarationBuilder := NewLabelDeclarationBuilder()
@@ -516,6 +527,7 @@ func NewParserBuilder() ParserBuilder {
 	matchBuilder := NewMatchBuilder()
 	exitBuilder := NewExitBuilder()
 	callBuilder := NewCallBuilder()
+	moduleBuilder := NewModuleBuilder()
 	switchBuilder := NewSwitchBuilder()
 	saveBuilder := NewSaveBuilder()
 	stackFrameBuilder := NewStackFrameBuilder()
@@ -572,6 +584,7 @@ func NewParserBuilder() ParserBuilder {
 		readFileBuilder,
 		headSectionBuilder,
 		headValueBuilder,
+		loadSingleBuilder,
 		importSingleBuilder,
 		labelSectionBuilder,
 		labelDeclarationBuilder,
@@ -605,6 +618,7 @@ func NewParserBuilder() ParserBuilder {
 		matchBuilder,
 		exitBuilder,
 		callBuilder,
+		moduleBuilder,
 		switchBuilder,
 		saveBuilder,
 		stackFrameBuilder,
@@ -1372,6 +1386,8 @@ type HeadSection interface {
 	Version() string
 	HasImport() bool
 	Import() []ImportSingle
+	HasLoad() bool
+	Load() []LoadSingle
 }
 
 // HeadValueBuilder represents the headValue builder
@@ -1380,6 +1396,7 @@ type HeadValueBuilder interface {
 	WithName(name string) HeadValueBuilder
 	WithVersion(version string) HeadValueBuilder
 	WithImport(imp []ImportSingle) HeadValueBuilder
+	WithLoad(load []LoadSingle) HeadValueBuilder
 	Now() (HeadValue, error)
 }
 
@@ -1391,6 +1408,8 @@ type HeadValue interface {
 	Version() string
 	IsImport() bool
 	Import() []ImportSingle
+	IsLoad() bool
+	Load() []LoadSingle
 }
 
 // LabelSectionBuilder represents the labelSection builder
@@ -1446,6 +1465,20 @@ type MainSection interface {
 	Instructions() []Instruction
 }
 
+// LoadSingleBuilder represents a load single builder
+type LoadSingleBuilder interface {
+	Create() LoadSingleBuilder
+	WithInternal(internal string) LoadSingleBuilder
+	WithExternal(external string) LoadSingleBuilder
+	Now() (LoadSingle, error)
+}
+
+// LoadSingle represents a load single
+type LoadSingle interface {
+	Internal() string
+	External() string
+}
+
 // ImportSingleBuilder represents an import single builder
 type ImportSingleBuilder interface {
 	Create() ImportSingleBuilder
@@ -1470,6 +1503,7 @@ type InstructionBuilder interface {
 	WithJump(jmp Jump) InstructionBuilder
 	WithExit(exit Exit) InstructionBuilder
 	WithCall(call Call) InstructionBuilder
+	WithModule(module Module) InstructionBuilder
 	WithRegistry(registry Registry) InstructionBuilder
 	WithSwitch(swtch Switch) InstructionBuilder
 	WithSave(save Save) InstructionBuilder
@@ -1492,6 +1526,8 @@ type Instruction interface {
 	Exit() Exit
 	IsCall() bool
 	Call() Call
+	IsModule() bool
+	Module() Module
 	IsRegistry() bool
 	Registry() Registry
 	IsSwitch() bool
@@ -1945,6 +1981,22 @@ type ExitBuilder interface {
 type Exit interface {
 	HasCondition() bool
 	Condition() string
+}
+
+// ModuleBuilder represents a module builder
+type ModuleBuilder interface {
+	Create() ModuleBuilder
+	WithStackFrame(stackFrame string) ModuleBuilder
+	WithName(name string) ModuleBuilder
+	WithSymbol(symbol string) ModuleBuilder
+	Now() (Module, error)
+}
+
+// Module represents a module
+type Module interface {
+	StackFrame() string
+	Name() string
+	Symbol() string
 }
 
 // CallBuilder represents a call builder

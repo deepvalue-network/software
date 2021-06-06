@@ -182,6 +182,10 @@ func (app *instruction) Receive(ins application_instruction.Instruction) error {
 		panic(errors.New("finish call in instruction (interpreter)"))
 	}
 
+	if ins.IsModule() {
+		panic(errors.New("finish module in instruction (interpreter)"))
+	}
+
 	if ins.IsExit() {
 		exit := ins.Exit()
 		if exit.HasCondition() {

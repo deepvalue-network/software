@@ -29,6 +29,7 @@ func NewBuilder() Builder {
 	testDeclarationBuilder := parsers.NewTestDeclarationBuilder()
 	headSectionBuilder := parsers.NewHeadSectionBuilder()
 	headValueBuilder := parsers.NewHeadValueBuilder()
+	loadSingleBuilder := parsers.NewLoadSingleBuilder()
 	labelSectionBuilder := parsers.NewLabelSectionBuilder()
 	labelDeclarationBuilder := parsers.NewLabelDeclarationBuilder()
 	mainSectionBuilder := parsers.NewMainSectionBuilder()
@@ -52,6 +53,7 @@ func NewBuilder() Builder {
 		scriptValueBuilder,
 		headSectionBuilder,
 		headValueBuilder,
+		loadSingleBuilder,
 		testDeclarationBuilder,
 		labelDeclarationBuilder,
 	)
@@ -83,6 +85,7 @@ func NewInstructionAdapterBuilder() InstructionAdapterBuilder {
 	jumpBuilder := parsers.NewJumpBuilder()
 	exitBuilder := parsers.NewExitBuilder()
 	callBuilder := parsers.NewCallBuilder()
+	moduleBuilder := parsers.NewModuleBuilder()
 	stackFrameBuilder := parsers.NewStackFrameBuilder()
 	indexBuilder := parsers.NewIndexBuilder()
 	skipBuilder := parsers.NewSkipBuilder()
@@ -97,6 +100,7 @@ func NewInstructionAdapterBuilder() InstructionAdapterBuilder {
 		instructionBuilder,
 		exitBuilder,
 		callBuilder,
+		moduleBuilder,
 		printBuilder,
 		operationBuilder,
 		arythmeticBuilder,

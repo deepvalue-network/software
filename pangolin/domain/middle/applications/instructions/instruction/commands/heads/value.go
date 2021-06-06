@@ -1,34 +1,44 @@
 package heads
 
-import "github.com/deepvalue-network/software/pangolin/domain/parsers"
+import (
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/heads"
+	"github.com/deepvalue-network/software/pangolin/domain/parsers"
+)
 
 type value struct {
 	name    string
 	version string
 	imports []parsers.ImportSingle
+	loads   []heads.LoadSingle
 }
 
 func createValueWithName(name string) Value {
-	return createValueInternally(name, "", nil)
+	return createValueInternally(name, "", nil, nil)
 }
 
 func createValueWithVersion(version string) Value {
-	return createValueInternally("", version, nil)
+	return createValueInternally("", version, nil, nil)
 }
 
 func createValueWithImports(imports []parsers.ImportSingle) Value {
-	return createValueInternally("", "", imports)
+	return createValueInternally("", "", imports, nil)
+}
+
+func createValueWithLoads(loads []heads.LoadSingle) Value {
+	return createValueInternally("", "", nil, loads)
 }
 
 func createValueInternally(
 	name string,
 	version string,
 	imports []parsers.ImportSingle,
+	loads []heads.LoadSingle,
 ) Value {
 	out := value{
 		name:    name,
 		version: version,
 		imports: imports,
+		loads:   loads,
 	}
 
 	return &out
@@ -62,4 +72,14 @@ func (obj *value) IsImports() bool {
 // Imports returns the imports, if any
 func (obj *value) Imports() []parsers.ImportSingle {
 	return obj.imports
+}
+
+// IsLoads returns true if there is loads, false otherwise
+func (obj *value) IsLoads() bool {
+	return obj.loads != nil
+}
+
+// Loads returns the loads, if any
+func (obj *value) Loads() []heads.LoadSingle {
+	return obj.loads
 }

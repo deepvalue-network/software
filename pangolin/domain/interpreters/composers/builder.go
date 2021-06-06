@@ -27,6 +27,7 @@ type builder struct {
 	scriptValueBuilder         parsers.ScriptValueBuilder
 	headSectionBuilder         parsers.HeadSectionBuilder
 	headValueBuilder           parsers.HeadValueBuilder
+	loadSingleBuilder          parsers.LoadSingleBuilder
 	testDeclarationBuilder     parsers.TestDeclarationBuilder
 	labelDeclarationBuilder    parsers.LabelDeclarationBuilder
 	stackFrame                 stackframes.StackFrame
@@ -52,6 +53,7 @@ func createBuilder(
 	scriptValueBuilder parsers.ScriptValueBuilder,
 	headSectionBuilder parsers.HeadSectionBuilder,
 	headValueBuilder parsers.HeadValueBuilder,
+	loadSingleBuilder parsers.LoadSingleBuilder,
 	testDeclarationBuilder parsers.TestDeclarationBuilder,
 	labelDeclarationBuilder parsers.LabelDeclarationBuilder,
 ) Builder {
@@ -74,6 +76,7 @@ func createBuilder(
 		scriptValueBuilder:         scriptValueBuilder,
 		headSectionBuilder:         headSectionBuilder,
 		headValueBuilder:           headValueBuilder,
+		loadSingleBuilder:          loadSingleBuilder,
 		testDeclarationBuilder:     testDeclarationBuilder,
 		labelDeclarationBuilder:    labelDeclarationBuilder,
 		stackFrame:                 nil,
@@ -104,6 +107,7 @@ func (app *builder) Create() Builder {
 		app.scriptValueBuilder,
 		app.headSectionBuilder,
 		app.headValueBuilder,
+		app.loadSingleBuilder,
 		app.testDeclarationBuilder,
 		app.labelDeclarationBuilder,
 	)
@@ -150,6 +154,7 @@ func (app *builder) Now() (Composer, error) {
 		app.scriptValueBuilder,
 		app.headSectionBuilder,
 		app.headValueBuilder,
+		app.loadSingleBuilder,
 		app.testDeclarationBuilder,
 		app.labelDeclarationBuilder,
 		app.stackFrame,

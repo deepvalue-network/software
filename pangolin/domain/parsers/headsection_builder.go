@@ -34,6 +34,7 @@ func (app *headSectionBuilder) Now() (HeadSection, error) {
 	name := ""
 	version := ""
 	imports := []ImportSingle{}
+	loads := []LoadSingle{}
 	for _, oneValue := range app.values {
 		if oneValue.IsName() {
 			name = oneValue.Name()
@@ -49,6 +50,11 @@ func (app *headSectionBuilder) Now() (HeadSection, error) {
 			imports = oneValue.Import()
 			continue
 		}
+
+		if oneValue.IsLoad() {
+			loads = oneValue.Load()
+			continue
+		}
 	}
 
 	if name == "" {
@@ -61,6 +67,10 @@ func (app *headSectionBuilder) Now() (HeadSection, error) {
 
 	if len(imports) > 0 {
 		return createHeadSectionWithImport(name, version, imports), nil
+	}
+
+	if len(loads) > 0 {
+		return createHeadSectionWithLoad(name, version, loads), nil
 	}
 
 	return createHeadSection(name, version), nil

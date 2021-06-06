@@ -4,6 +4,7 @@ import (
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/call"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/condition"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/exit"
+	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/module"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/registry"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/remaining"
 	"github.com/deepvalue-network/software/pangolin/domain/middle/testables/executables/applications/instructions/instruction/stackframe"
@@ -22,52 +23,57 @@ type instruction struct {
 	save       variable.Variable
 	del        string
 	call       call.Call
+	module     module.Module
 	exit       exit.Exit
 	reg        registry.Registry
 }
 
 func createInstructionWithStackframe(stackframe stackframe.Stackframe) Instruction {
-	return createInstructionInternally(stackframe, nil, nil, nil, nil, nil, nil, "", nil, nil, nil)
+	return createInstructionInternally(stackframe, nil, nil, nil, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithCondition(condition condition.Condition) Instruction {
-	return createInstructionInternally(nil, condition, nil, nil, nil, nil, nil, "", nil, nil, nil)
+	return createInstructionInternally(nil, condition, nil, nil, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithStandard(standard standard.Standard) Instruction {
-	return createInstructionInternally(nil, nil, standard, nil, nil, nil, nil, "", nil, nil, nil)
+	return createInstructionInternally(nil, nil, standard, nil, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithRemaining(remaining remaining.Remaining) Instruction {
-	return createInstructionInternally(nil, nil, nil, remaining, nil, nil, nil, "", nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, remaining, nil, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithValue(value value.Value) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, value, nil, nil, "", nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, value, nil, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithInsert(insert variable.Variable) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, insert, nil, "", nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, insert, nil, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithSave(save variable.Variable) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, save, "", nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, save, "", nil, nil, nil, nil)
 }
 
 func createInstructionWithDelete(del string) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, del, nil, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, del, nil, nil, nil, nil)
 }
 
 func createInstructionWithCall(call call.Call) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, "", call, nil, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, "", call, nil, nil, nil)
+}
+
+func createInstructionWithModule(module module.Module) Instruction {
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, "", nil, module, nil, nil)
 }
 
 func createInstructionWithExit(exit exit.Exit) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, "", nil, exit, nil)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, "", nil, nil, exit, nil)
 }
 
 func createInstructionWithRegistry(reg registry.Registry) Instruction {
-	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, "", nil, nil, reg)
+	return createInstructionInternally(nil, nil, nil, nil, nil, nil, nil, "", nil, nil, nil, reg)
 }
 
 func createInstructionInternally(
@@ -80,6 +86,7 @@ func createInstructionInternally(
 	save variable.Variable,
 	del string,
 	call call.Call,
+	module module.Module,
 	exit exit.Exit,
 	reg registry.Registry,
 ) Instruction {
@@ -93,6 +100,7 @@ func createInstructionInternally(
 		save:       save,
 		del:        del,
 		call:       call,
+		module:     module,
 		exit:       exit,
 		reg:        reg,
 	}
@@ -188,6 +196,16 @@ func (obj *instruction) IsCall() bool {
 // Call returns the call, if any
 func (obj *instruction) Call() call.Call {
 	return obj.call
+}
+
+// IsModule returns true if there is a module, false otherwise
+func (obj *instruction) IsModule() bool {
+	return obj.module != nil
+}
+
+// Module returns the module, if any
+func (obj *instruction) Module() module.Module {
+	return obj.module
 }
 
 // IsExit returns true if there is an exit, false otherwise

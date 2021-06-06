@@ -285,6 +285,11 @@ headValue
     : NAME COLON NAME_PATTERN DOT
     | VERSION COLON VERSION_PATTERN DOT
     | IMPORTS COLON importSingle+ DOT
+    | LOADS COLON loadSingle+ DOT
+    ;
+
+loadSingle
+    : NAME_PATTERN COLON NAME_PATTERN DOT
     ;
 
 importSingle
@@ -316,6 +321,7 @@ instruction
     | jump DOT
     | exit DOT
     | call DOT
+    | module DOT
     | switch DOT
     | save DOT
     | registry DOT
@@ -455,6 +461,10 @@ exit
 call
     : CALL COLON VARIABLE_PATTERN COMMA NAME_PATTERN
     | CALL_IF COLON VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA NAME_PATTERN
+    ;
+
+module
+    : MODULE COLON VARIABLE_PATTERN COMMA NAME_PATTERN COMMA NAME_PATTERN
     ;
 
 save

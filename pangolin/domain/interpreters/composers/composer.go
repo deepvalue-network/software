@@ -34,6 +34,7 @@ type composer struct {
 	scriptValueBuilder         parsers.ScriptValueBuilder
 	headSectionBuilder         parsers.HeadSectionBuilder
 	headValueBuilder           parsers.HeadValueBuilder
+	loadSingleBuilder          parsers.LoadSingleBuilder
 	testDeclarationBuilder     parsers.TestDeclarationBuilder
 	labelDeclarationBuilder    parsers.LabelDeclarationBuilder
 	stackFrame                 stackframes.StackFrame
@@ -67,6 +68,7 @@ func createComposer(
 	scriptValueBuilder parsers.ScriptValueBuilder,
 	headSectionBuilder parsers.HeadSectionBuilder,
 	headValueBuilder parsers.HeadValueBuilder,
+	loadSingleBuilder parsers.LoadSingleBuilder,
 	testDeclarationBuilder parsers.TestDeclarationBuilder,
 	labelDeclarationBuilder parsers.LabelDeclarationBuilder,
 	stackFrame stackframes.StackFrame,
@@ -91,6 +93,7 @@ func createComposer(
 		scriptValueBuilder:         scriptValueBuilder,
 		headSectionBuilder:         headSectionBuilder,
 		headValueBuilder:           headValueBuilder,
+		loadSingleBuilder:          loadSingleBuilder,
 		testDeclarationBuilder:     testDeclarationBuilder,
 		labelDeclarationBuilder:    labelDeclarationBuilder,
 		stackFrame:                 stackFrame,
@@ -344,6 +347,23 @@ func (app *composer) receiveHeadValue(value command_heads.Value) error {
 	if value.IsImports() {
 		imports := value.Imports()
 		valueBuilder.WithImport(imports)
+	}
+
+	if value.IsLoads() {
+		loads := value.Loads()
+		parsedLoads := []parsers.LoadSingle{}
+		for _, oneLoad := range loads {
+			internal := oneLoad.Internal()
+			external := oneLoad.External()
+			load, err := app.loadSingleBuilder.Create().WithInternal(internal).WithExternal(external).Now()
+			if err != nil {
+				return err
+			}
+
+			parsedLoads = append(parsedLoads, load)
+		}
+
+		valueBuilder.WithLoad(parsedLoads)
 	}
 
 	val, err := valueBuilder.Now()

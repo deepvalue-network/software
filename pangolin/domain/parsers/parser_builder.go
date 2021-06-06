@@ -54,6 +54,7 @@ type parserBuilder struct {
 	readFileBuilder                  ReadFileBuilder
 	headSectionBuilder               HeadSectionBuilder
 	headValueBuilder                 HeadValueBuilder
+	loadSingleBuilder                LoadSingleBuilder
 	importSingleBuilder              ImportSingleBuilder
 	labelSectionBuilder              LabelSectionBuilder
 	labelDeclarationBuilder          LabelDeclarationBuilder
@@ -87,6 +88,7 @@ type parserBuilder struct {
 	matchBuilder                     MatchBuilder
 	exitBuilder                      ExitBuilder
 	callBuilder                      CallBuilder
+	moduleBuilder                    ModuleBuilder
 	switchBuilder                    SwitchBuilder
 	saveBuilder                      SaveBuilder
 	stackFrameBuilder                StackFrameBuilder
@@ -145,6 +147,7 @@ func createParserBuilder(
 	readFileBuilder ReadFileBuilder,
 	headSectionBuilder HeadSectionBuilder,
 	headValueBuilder HeadValueBuilder,
+	loadSingleBuilder LoadSingleBuilder,
 	importSingleBuilder ImportSingleBuilder,
 	labelSectionBuilder LabelSectionBuilder,
 	labelDeclarationBuilder LabelDeclarationBuilder,
@@ -178,6 +181,7 @@ func createParserBuilder(
 	matchBuilder MatchBuilder,
 	exitBuilder ExitBuilder,
 	callBuilder CallBuilder,
+	moduleBuilder ModuleBuilder,
 	switchBuilder SwitchBuilder,
 	saveBuilder SaveBuilder,
 	stackFrameBuilder StackFrameBuilder,
@@ -234,6 +238,7 @@ func createParserBuilder(
 		readFileBuilder:                  readFileBuilder,
 		headSectionBuilder:               headSectionBuilder,
 		headValueBuilder:                 headValueBuilder,
+		loadSingleBuilder:                loadSingleBuilder,
 		importSingleBuilder:              importSingleBuilder,
 		labelSectionBuilder:              labelSectionBuilder,
 		labelDeclarationBuilder:          labelDeclarationBuilder,
@@ -267,6 +272,7 @@ func createParserBuilder(
 		matchBuilder:                     matchBuilder,
 		exitBuilder:                      exitBuilder,
 		callBuilder:                      callBuilder,
+		moduleBuilder:                    moduleBuilder,
 		switchBuilder:                    switchBuilder,
 		saveBuilder:                      saveBuilder,
 		stackFrameBuilder:                stackFrameBuilder,
@@ -330,6 +336,7 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.readFileBuilder,
 		app.headSectionBuilder,
 		app.headValueBuilder,
+		app.loadSingleBuilder,
 		app.importSingleBuilder,
 		app.labelSectionBuilder,
 		app.labelDeclarationBuilder,
@@ -363,6 +370,7 @@ func (app *parserBuilder) Create() ParserBuilder {
 		app.matchBuilder,
 		app.exitBuilder,
 		app.callBuilder,
+		app.moduleBuilder,
 		app.switchBuilder,
 		app.saveBuilder,
 		app.stackFrameBuilder,
@@ -430,6 +438,7 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.readFileBuilder,
 		app.headSectionBuilder,
 		app.headValueBuilder,
+		app.loadSingleBuilder,
 		app.importSingleBuilder,
 		app.labelSectionBuilder,
 		app.labelDeclarationBuilder,
@@ -463,6 +472,7 @@ func (app *parserBuilder) Now() (Parser, error) {
 		app.matchBuilder,
 		app.exitBuilder,
 		app.callBuilder,
+		app.moduleBuilder,
 		app.switchBuilder,
 		app.saveBuilder,
 		app.stackFrameBuilder,
