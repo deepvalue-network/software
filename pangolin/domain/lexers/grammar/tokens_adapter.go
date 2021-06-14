@@ -94,7 +94,7 @@ func (app *tokensAdapter) createTokenBlocks(str string, rules []Rule, grammarNam
 		return nil, err
 	}
 
-	tokPattern := fmt.Sprintf("((%s)\\.)?(%s)", grammarNamePattern, tokenPattern)
+	tokPattern := fmt.Sprintf("((%s)\\.)?(%s)(\\@(%s))?", grammarNamePattern, tokenPattern, tokenPattern)
 	tokens, err := app.buildRawTokensWithPotentialGrammar(tokPattern, str, grammarName, extends)
 	if err != nil {
 		return nil, err
@@ -178,7 +178,8 @@ func (app *tokensAdapter) filterRules(str string, rules []Rule, grammarName stri
 		return true
 	}
 
-	rawTokens, err := app.buildRawTokens(rulePattern, str, grammarName, validate)
+	ruleWithLocalNamePattern := fmt.Sprintf("(%s)(\\@(%s))?", rulePattern, rulePattern)
+	rawTokens, err := app.buildRawTokens(ruleWithLocalNamePattern, str, grammarName, validate)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +191,6 @@ func (app *tokensAdapter) buildRawTokensWithPotentialGrammar(patternStr string, 
 	pattern := regexp.MustCompile(patternStr)
 	matches := pattern.FindAllStringSubmatch(str, -1)
 	indexes := pattern.FindAllStringSubmatchIndex(str, -1)
-
 	tokens := []RawToken{}
 	for index, oneMatch := range matches {
 		grName := oneMatch[2]
@@ -205,7 +205,15 @@ func (app *tokensAdapter) buildRawTokensWithPotentialGrammar(patternStr string, 
 		}
 
 		trimmedValue := strings.TrimSpace(oneMatch[3])
-		rawToken, err := tokenBuilder.WithCode(str).WithValue(trimmedValue).WithIndex(indexes[index][0]).Now()
+		rawTokenBuilder := tokenBuilder.WithCode(str).WithValue(trimmedValue).WithIndex(indexes[index][0])
+		if len(oneMatch) >= 5 {
+			trimmedName := strings.TrimSpace(oneMatch[5])
+			if trimmedName != "" {
+				rawTokenBuilder.WithName(trimmedName)
+			}
+		}
+
+		rawToken, err := rawTokenBuilder.Now()
 		if err != nil {
 			return nil, err
 		}
@@ -228,7 +236,23 @@ func (app *tokensAdapter) buildRawTokens(patternStr string, str string, grammarN
 		}
 
 		trimmedValue := strings.TrimSpace(oneMatch[0])
-		rawToken, err := app.rawTokenBuilder.Create().WithCode(str).WithValue(trimmedValue).WithIndex(indexes[index][0]).WithGrammar(grammarName).Now()
+		rawTokenBuilder := app.rawTokenBuilder.Create().WithCode(str).WithValue(trimmedValue).WithIndex(indexes[index][0]).WithGrammar(grammarName)
+		if len(oneMatch) > 1 {
+			trimmedValue := strings.TrimSpace(oneMatch[1])
+			if trimmedValue != "" {
+				rawTokenBuilder.WithValue(trimmedValue)
+			}
+
+		}
+
+		if len(oneMatch) >= 3 {
+			trimmedName := strings.TrimSpace(oneMatch[3])
+			if trimmedName != "" {
+				rawTokenBuilder.WithName(trimmedName)
+			}
+		}
+
+		rawToken, err := rawTokenBuilder.Now()
 		if err != nil {
 			return nil, err
 		}

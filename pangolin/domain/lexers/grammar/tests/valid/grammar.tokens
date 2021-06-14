@@ -1,5 +1,14 @@
 codes
     : code+
+    | multipleElements
+    ;
+
+multipleElements
+    : multipleElement@firstToken DOT multipleElement@secondToken
+    ;
+
+multipleElement
+    : INT@FIRST_RULE DOT INT@SECOND_RULE
     ;
 
 code
@@ -138,7 +147,7 @@ operator
     | logicalOP
     ;
 
-arythmeticOP
+arythmeticOPFLOAT
     : PLUS
     | MINUS
     | MUL

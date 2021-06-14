@@ -24,7 +24,7 @@ func (obj *tokenBlocks) SubTokenNames() []string {
 		section := oneBlock.Section()
 		if section.HasToken() {
 			isUnique := true
-			val := section.Token().Value()
+			val := section.Token().Name()
 			for _, oneName := range names {
 				if oneName == val {
 					isUnique = false
@@ -33,7 +33,7 @@ func (obj *tokenBlocks) SubTokenNames() []string {
 			}
 
 			if isUnique {
-				names = append(names, section.Token().Value())
+				names = append(names, section.Token().Name())
 			}
 		}
 	}

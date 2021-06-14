@@ -148,7 +148,7 @@ token
     ;
 
 codeMatch
-    : VARIABLE_PATTERN COMMA VARIABLE_PATTERN COMMA callPatterns
+    : VARIABLE_PATTERN@CONTENT COMMA VARIABLE_PATTERN@SECTION COMMA callPatterns
     ;
 
 tokenSection

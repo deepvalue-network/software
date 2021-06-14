@@ -2696,6 +2696,9 @@ func (app *parser) exitCodeMatch(tree lexers.NodeTree) (interface{}, error) {
 		return nil, errors.New(str)
 	}
 
+	content := tree.CodeFromName("CONTENT")
+	fmt.Printf("\n->%s\n", content)
+
 	builder := app.codeMatchBuilder.Create().WithContent(variableNameCodes[0]).WithSection(variableNameCodes[1])
 	callPatternsCode := tree.CodeFromName("callPatterns")
 	if callPatternsCode != "" {

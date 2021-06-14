@@ -73,8 +73,10 @@ func (obj *nodeTree) CodesFromName(name string) []string {
 	out := []string{}
 	sub := obj.NextNodeTrees()
 	for _, oneNodeTree := range sub {
-		if oneNodeTree.Token().Name() == name {
+		token := oneNodeTree.Token()
+		if token.Name() == name {
 			out = append(out, oneNodeTree.Code())
+			continue
 		}
 	}
 

@@ -118,7 +118,7 @@ func (app *ruleTreeAdapter) tokenBlock(tokenBlock TokenBlock, grammar Grammar, c
 	}
 
 	if node == nil {
-		recursiveName := fmt.Sprintf("%s.%s", grammar.Name(), section.Token().Value())
+		recursiveName := fmt.Sprintf("%s.%s", grammar.Name(), section.Token().Name())
 		builder.WithRecursiveName(recursiveName)
 	}
 
@@ -167,7 +167,7 @@ func (app *ruleTreeAdapter) ruleTreesByToken(tok RawToken, grammar Grammar, call
 		return nil, err
 	}
 
-	tokenName := tok.Value()
+	tokenName := tok.Name()
 	callName := fmt.Sprintf("%s.%s", gr.Name(), tokenName)
 	for _, oneCallStack := range callStack {
 		if oneCallStack == callName {

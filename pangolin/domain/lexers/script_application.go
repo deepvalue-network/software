@@ -152,6 +152,7 @@ func (app *scriptApplication) section(tokenName string, section grammar.TokenSec
 	}
 
 	reference := section.Token().Reference()
+	fmt.Printf("\n%s\n", reference)
 	return app.findToken(reference, script)
 }
 
@@ -191,8 +192,8 @@ func (app *scriptApplication) findToken(reference string, script string) ([]*pos
 
 func (app *scriptApplication) findRulePattern(section grammar.RuleSection) string {
 	if section.HasConstant() {
-		return section.Constant().Value()
+		return section.Constant().Name()
 	}
 
-	return section.Pattern().Value()
+	return section.Pattern().Name()
 }

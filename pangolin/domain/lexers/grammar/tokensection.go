@@ -48,5 +48,5 @@ func (obj *tokenSection) NextRuleToken() (Rule, string) {
 		return obj.rule.Rule(), ""
 	}
 
-	return nil, obj.token.Value()
+	return nil, obj.token.Name()
 }

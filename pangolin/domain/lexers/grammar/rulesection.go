@@ -50,7 +50,7 @@ func (obj *ruleSection) Pattern() RawToken {
 // FindFirst finds the first occurence of the string, using the rule pattern
 func (obj *ruleSection) FindFirst(str string) (string, error) {
 	if obj.HasPattern() {
-		regexp, err := regexp.Compile(obj.pattern.Value())
+		regexp, err := regexp.Compile(obj.pattern.Name())
 		if err != nil {
 			return "", nil
 		}
@@ -58,7 +58,7 @@ func (obj *ruleSection) FindFirst(str string) (string, error) {
 		return regexp.FindString(str), nil
 	}
 
-	constant := obj.Constant().Value()
+	constant := obj.Constant().Name()
 	pos := strings.Index(str, constant)
 	if pos != -1 {
 		return constant, nil

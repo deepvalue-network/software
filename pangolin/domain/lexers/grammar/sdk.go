@@ -11,6 +11,7 @@ const (
 	multipleMandatory    = "+"
 	constantBegin        = "'"
 	constantEnd          = "'"
+	localNameDelimiter   = "@"
 	grammarNamePattern   = "[a-z]{1}[a-zA-Z]*"
 	rulePattern          = "[A-Z\\_]+"
 	tokenPattern         = "[a-z]{1}[a-zA-Z]*"
@@ -431,6 +432,7 @@ type RuleSection interface {
 // RawTokenBuilder represents a rawToken builder
 type RawTokenBuilder interface {
 	Create() RawTokenBuilder
+	WithName(name string) RawTokenBuilder
 	WithValue(value string) RawTokenBuilder
 	WithCode(code string) RawTokenBuilder
 	WithIndex(index int) RawTokenBuilder
@@ -440,6 +442,7 @@ type RawTokenBuilder interface {
 
 // RawToken represents a raw token
 type RawToken interface {
+	Name() string
 	Value() string
 	Reference() string
 	Code() string

@@ -77,7 +77,7 @@ func (app *builder) Now() (Lexer, error) {
 			return nil, err
 		}
 
-		// execute teh script events:
+		// execute the script events:
 		script, err := scriptApplication.Execute(app.script)
 		if err != nil {
 			return nil, err

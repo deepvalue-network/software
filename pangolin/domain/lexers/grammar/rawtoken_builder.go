@@ -6,6 +6,7 @@ import (
 )
 
 type rawTokenBuilder struct {
+	name  string
 	value string
 	code  string
 	index int
@@ -14,6 +15,7 @@ type rawTokenBuilder struct {
 
 func createRawTokenBuilder() RawTokenBuilder {
 	out := rawTokenBuilder{
+		name:  "",
 		value: "",
 		code:  "",
 		index: -1,
@@ -26,6 +28,12 @@ func createRawTokenBuilder() RawTokenBuilder {
 // Create initializes the builder
 func (app *rawTokenBuilder) Create() RawTokenBuilder {
 	return createRawTokenBuilder()
+}
+
+// WithName adds name to the builder
+func (app *rawTokenBuilder) WithName(name string) RawTokenBuilder {
+	app.name = name
+	return app
 }
 
 // WithValue adds value to the builder
@@ -75,5 +83,9 @@ func (app *rawTokenBuilder) Now() (RawToken, error) {
 		return nil, errors.New("the grammar is mandatory in order to build a RawToken instance")
 	}
 
-	return createRawToken(app.value, app.code, app.index, app.gr), nil
+	if app.name == "" {
+		app.name = app.value
+	}
+
+	return createRawToken(app.name, app.value, app.code, app.index, app.gr), nil
 }
