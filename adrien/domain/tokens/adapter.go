@@ -112,8 +112,7 @@ func (app *adapter) ToTokens(content string) (Tokens, error) {
 		return nil, err
 	}
 
-	fmt.Printf("\n%v\n", list)
-	return nil, nil
+	return app.builder.Create().WithTokens(list).Now()
 }
 
 func (app *adapter) tokens(content string) ([]Token, error) {
