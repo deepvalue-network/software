@@ -1,0 +1,5 @@
+{
+    "root": "sections",
+    "tokens": "./contents/grammar.tokens",
+    "rules": "./contents/grammar.rules"
+}

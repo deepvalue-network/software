@@ -1,0 +1,43 @@
+sections
+    : section+
+    ;
+
+section
+    : anyAmountExceptTenOrFifteen PIPE
+    ;
+
+anyAmountExceptTenOrFifteen
+    : emailList
+    ---
+    : emailList -> email{10} <-
+    | emailList -> email{15} <-
+    ;
+
+atMostTenEmails
+    : emailList -> email{0,10} <-
+    ;
+
+atLeastThreeEmails
+    : emailList -> email{3,} <-
+    ;
+
+threeToNineEmails
+    : emailList -> email{3,9} <-
+    ;
+
+fiveEmailsAndForCommas
+    : emailList -> email{5} COMMA{4} <-
+    ;
+
+emailList
+    : email emailWithCommaPrefix*
+    ;
+
+emailWithCommaPrefix
+    : COMMA email
+    ;
+
+email
+    : NAME COMMERCIAL_A DOMAIN DOT EXTENSION
+    | QUOTATION_MARK email QUOTATION_MARK
+    ;

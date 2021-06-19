@@ -1,0 +1,6 @@
+{
+    "root": "sections",
+    "tokens": "./contents/grammar.tokens",
+    "channels": "./contents/grammar.channels",
+    "rules": "./contents/grammar.rules"
+}
